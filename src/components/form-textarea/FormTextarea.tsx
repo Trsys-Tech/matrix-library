@@ -1,7 +1,7 @@
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "../form/Form";
 import { SlotProps } from "@radix-ui/react-slot";
 import { Control, ControllerProps, FieldPath, FieldValues } from "react-hook-form";
-import { Textarea, TextareaProps } from "../textarea/textarea";
+import { Textarea, TextareaProps } from "../textarea/Textarea";
 
 type FormTextareaProps<TFieldValues extends FieldValues, TName extends FieldPath<TFieldValues>> = Omit<
   ControllerProps<TFieldValues, TName>,

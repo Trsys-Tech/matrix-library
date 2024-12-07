@@ -5,7 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 import { Form } from "../form/Form";
 import { Button } from "../button/Button";
-import { FormTextarea } from "./FormTextArea";
+import { FormTextarea } from "./FormTextarea";
 
 const meta = {
   title: "Form/FormTextarea",
