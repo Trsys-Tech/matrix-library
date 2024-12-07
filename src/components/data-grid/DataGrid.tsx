@@ -32,6 +32,8 @@ type DataGridContext = {
   setQuickFilterText: (value: string) => void;
   actionbarExists: boolean;
   setActionbarExists: (value: boolean) => void;
+  actionbarHeight: number;
+  setActionbarHeight: (value: number) => void;
 };
 
 const DataGridContext = React.createContext<DataGridContext | null>(null);
@@ -54,6 +56,7 @@ const DataGrid: React.FC<DataGridProps> = ({ children }) => {
   const gridId = React.useId();
   const [api, setApi] = React.useState<GridApi | null>(null);
   const [rowData, setRowData] = React.useState<any[] | null | undefined>([]);
+  const [actionbarHeight, setActionbarHeight] = React.useState(0);
 
   const [quickFilterText, setQuickFilterText] = React.useState("");
   const [actionbarExists, setActionbarExists] = React.useState(false);
@@ -69,6 +72,8 @@ const DataGrid: React.FC<DataGridProps> = ({ children }) => {
         setQuickFilterText,
         actionbarExists,
         setActionbarExists,
+        actionbarHeight,
+        setActionbarHeight,
       }}
     >
       {children}
@@ -91,7 +96,7 @@ const DataGridContent: React.FC<DataGridContentProps> = ({
   if (!context) {
     throw new Error("DataGridContent should be used within <DataGrid>");
   }
-  const { rowData, setRowData, actionbarExists, setApi, setQuickFilterText, quickFilterText, gridId } = context;
+  const { rowData, setRowData, actionbarExists, setApi, setQuickFilterText, quickFilterText, gridId, actionbarHeight } = context;
 
   const theme = appTheme.withParams({
     headerHeight: 40,
@@ -120,7 +125,7 @@ const DataGridContent: React.FC<DataGridContentProps> = ({
       rowData={rowData}
       quickFilterText={quickFilterText}
       onGridReady={handleGridReady}
-      containerStyle={{ height: `calc(100% - ${actionbarExists ? 3 : 0}rem)`, ...containerStyle }}
+      containerStyle={{ height: `calc(100% - ${actionbarHeight}px)`, ...containerStyle }}
       {...props}
     />
   );
@@ -134,7 +139,8 @@ const DataGridActionBar: React.FC<DatagridActionBarProps> = ({ className, ...pro
   if (!context) {
     throw new Error("DataGridActionBar should be used within <DataGrid>");
   }
-  const { setActionbarExists } = context;
+  const ref = React.useRef<HTMLDivElement | null>(null);
+  const { setActionbarExists, setActionbarHeight } = context;
   const { children } = props;
 
   React.useEffect(() => {
@@ -142,12 +148,19 @@ const DataGridActionBar: React.FC<DatagridActionBarProps> = ({ className, ...pro
     return () => setActionbarExists(false);
   }, [setActionbarExists]);
 
+  React.useEffect(() => {
+    if (ref.current) {
+      setActionbarHeight(ref.current.clientHeight);
+    }
+  }, [setActionbarHeight]);
+
   return (
     <div
       className={cn(
         "relative flex items-center p-2 h-12 w-full bg-gray-0 border border-gray-200 border-b-0 -mb-[1px] z-10 rounded-t-[8px]",
         className,
       )}
+      ref={ref}
     >
       {children}
     </div>
