@@ -52,6 +52,24 @@ export {
 } from "./components/date-picker/TimePicker";
 export { Calendar, type CalendarProps } from "./components/date-picker/calendar";
 export {
+  DataGrid,
+  DataGridContent,
+  DataGridActionBar,
+  SearchAction,
+  FreezeAction,
+  PrintAction,
+  RefreshAction,
+  ExtraActions,
+  type DataGridProps,
+  type DataGridContentProps,
+  type DatagridActionBarProps,
+  type SearchActionProps,
+  type FreezeActionProps,
+  type RefreshActionProps,
+  type ExtraActionsProps,
+  useDataGrid,
+} from "./components/data-grid/DataGrid";
+export {
   Dialog,
   DialogClose,
   DialogContent,

@@ -14,7 +14,7 @@ const buttonVariants = cva(
           "bg-primary text-primary-foreground hover:bg-primary-600 focus:bg-primary focus:border-primary focus:ring focus:ring-primary-300 active:bg-primary active:ring active:ring-1 active:ring-primary active:ring-offset-2",
         outline:
           "border border-primary text-primary hover:bg-primary-50 focus:bg-primary-50 focus:border-primary-100 focus:ring focus:ring-primary-100 active:bg-primary-50 active:border-primary active:ring-1 active:ring-primary active:ring-offset-2 disabled:border-gray-400",
-        text: "text-text [&>svg]:text-primary border border-transparent hover:bg-primary-50 focus:border focus:border-primary-300 focus:border-3 active:border-none active:outline-primary active:outline active:outline-1 disabled:text-text-300 [&>svg]:disabled:text-text-300 disabled:bg-transparent",
+        text: "text-text [&>svg]:text-primary border border-transparent hover:bg-primary-50 focus:border-primary-300 focus:ring-primary-300 focus:ring-2 active:border-primary disabled:text-text-300 [&>svg]:disabled:text-text-300 disabled:bg-transparent",
         danger:
           "bg-danger text-danger-foreground hover:bg-danger-600 focus:bg-danger focus:ring focus:ring-danger-400 active:bg-danger active:ring-1 active:ring-danger active:ring-offset-2",
         warning:

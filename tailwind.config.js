@@ -226,6 +226,14 @@ export default {
           "0%": { transform: "translateY(0)" },
           "100%": { transform: "translateY(100%)" },
         },
+        "input-open": {
+          "0%": { width: "0" },
+          "100%": { width: "100%" },
+        },
+        "input-close": {
+          "0%": { width: "100%" },
+          "100%": { width: "0", opacity: 0 },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -234,6 +242,8 @@ export default {
         "collapsible-up": "collapsible-up 0.2s ease-out",
         "slide-from-bottom": "slide-from-bottom 0.50s cubic-bezier(0.32,0.72,0,1) forwards",
         "slide-to-bottom": "slide-to-bottom 0.50s cubic-bezier(0.32,0.72,0,1) forwards",
+        "input-open": "input-open 0.20s ease-out forwards",
+        "input-close": "input-close 0.20s ease-out forwards",
       },
       backdropContrast: {
         300: "3",

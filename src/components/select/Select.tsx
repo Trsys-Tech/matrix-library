@@ -33,41 +33,44 @@ const SelectGroup = SelectPrimitive.Group;
 
 const SelectValue = SelectPrimitive.Value;
 
-const SelectTrigger = React.forwardRef<
-  React.ElementRef<typeof SelectPrimitive.Trigger>,
-  React.ComponentPropsWithoutRef<typeof SelectPrimitive.Trigger>
->(({ className, children, ...props }: SelectPrimitive.SelectTriggerProps, ref) => {
-  const { onClear, value } = React.useContext(SelectContext);
+type SelectTriggerProps = React.ComponentProps<typeof SelectPrimitive.Trigger> & {
+  clearable?: boolean;
+};
 
-  const handlePointerDown = (e: React.PointerEvent) => {
-    e.stopPropagation();
-  };
+const SelectTrigger = React.forwardRef<React.ElementRef<typeof SelectPrimitive.Trigger>, SelectTriggerProps>(
+  ({ className, children, clearable, ...props }: SelectTriggerProps, ref) => {
+    const { onClear, value } = React.useContext(SelectContext);
 
-  return (
-    <SelectPrimitive.Trigger
-      ref={ref}
-      className={cn(
-        "flex h-9 w-full items-center justify-between whitespace-nowrap rounded-sm border border-input bg-transparent px-3 py-2 text-sm shadow-sm ring-offset-background placeholder:text-muted-foreground hover:border hover:border-primary focus:border focus:border-primary focus:outline-none focus:ring focus:ring-primary-100 disabled:cursor-not-allowed disabled:bg-gray-100 disabled:text-text-300 disabled:border-none [&>span]:line-clamp-1 [&_svg]:disabled:text-text-300",
-        className,
-      )}
-      {...props}
-    >
-      {children}
-      <div className="flex items-center gap-2">
-        {value && (
-          <SelectPrimitive.Icon asChild onPointerDown={handlePointerDown} onClickCapture={onClear}>
-            <CloseIcon className="h-4 w-4" />
-          </SelectPrimitive.Icon>
+    const handlePointerDown = (e: React.PointerEvent) => {
+      e.stopPropagation();
+    };
+
+    return (
+      <SelectPrimitive.Trigger
+        ref={ref}
+        className={cn(
+          "flex h-9 w-full items-center justify-between whitespace-nowrap rounded-sm border border-input bg-transparent px-3 py-2 text-sm shadow-sm ring-offset-background placeholder:text-muted-foreground hover:border hover:border-primary focus:border focus:border-primary focus:outline-none focus:ring focus:ring-primary-100 disabled:cursor-not-allowed disabled:bg-gray-100 disabled:text-text-300 disabled:border-none [&>span]:line-clamp-1 [&_svg]:disabled:text-text-300",
+          className,
         )}
-        <SelectPrimitive.Icon asChild>
-          <ChevronDownIcon className="h-4 w-4 text-primary " />
-        </SelectPrimitive.Icon>
-      </div>
-    </SelectPrimitive.Trigger>
-  );
-});
+        {...props}
+      >
+        {children}
+        <div className="flex items-center gap-2">
+          {clearable && value ? (
+            <SelectPrimitive.Icon asChild onPointerDown={handlePointerDown} onClickCapture={onClear}>
+              <CloseIcon className="h-4 w-4" />
+            </SelectPrimitive.Icon>
+          ) : null}
+          <SelectPrimitive.Icon asChild>
+            <ChevronDownIcon className="h-4 w-4 text-primary " />
+          </SelectPrimitive.Icon>
+        </div>
+      </SelectPrimitive.Trigger>
+    );
+  },
+);
 SelectTrigger.displayName = SelectPrimitive.Trigger.displayName;
-type SelectTriggerProps = React.ComponentProps<typeof SelectTrigger>;
+// type SelectTriggerProps = React.ComponentProps<typeof SelectTrigger>;
 
 const SelectScrollUpButton = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.ScrollUpButton>,

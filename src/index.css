@@ -6,7 +6,7 @@
   font-family: "DMSans";
   font-style: "normal";
   font-weight: 100 900;
-  src: url(/fonts/DMSans.ttf) format("truetype");
+  src: url(./assets/fonts/DMSans.ttf) format("truetype");
 }
 
 @layer base {
@@ -153,13 +153,17 @@
     /* --shadow-card: 0px 2px 1px -1px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0, 0, 0, 0.12); */
 
     --drawer-width: 16rem;
+
+    --ag-background-color: hsl(var(--gray-0));
+    --ag-accent-color: hsl(var(--primary-300));
+    --ag-header-background-color: hsl(var(--primary-25));
+    --ag-foreground-color: hsl(var(--text-500));
+    --ag-cell-text-color: hsl(var(--text-500));
   }
 
   /* Make scrollbar thinner */
   /* width */
 
-
-  
   .dark {
     --background: 222.2 84% 4.9%;
     --foreground: 210 40% 98%;
@@ -199,23 +203,23 @@
       width: 8px;
       height: 8px;
     }
-  
+
     /* Track */
     .thin-scrollbar::-webkit-scrollbar-track {
       box-shadow: inset 0 0 5px #c9cacc;
       border-radius: 10px;
       border-radius: 10px;
     }
-  
+
     /* Handle */
     .thin-scrollbar::-webkit-scrollbar-thumb {
       background: #c9cacc;
       border-radius: 10px;
     }
-  
+
     /* Handle on hover */
     .thin-scrollbar::-webkit-scrollbar-thumb:hover {
       background: #dcddde;
-    }    
+    }
   }
 }
