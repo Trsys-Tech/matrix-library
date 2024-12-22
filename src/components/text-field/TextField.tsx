@@ -20,6 +20,7 @@ const textFieldVariants = cva(
 );
 
 interface TextFieldProps extends React.HTMLAttributes<HTMLDivElement>, VariantProps<typeof textFieldVariants> {
+  type?: React.HTMLInputTypeAttribute;
   suffix?: React.ReactNode;
   endButton?: React.ReactNode;
   startButton?: React.ReactNode;
@@ -32,11 +33,12 @@ interface TextFieldProps extends React.HTMLAttributes<HTMLDivElement>, VariantPr
 }
 
 const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
-  ({ className, slotProps, suffix, endButton, startButton, size, value, onChange, defaultValue, ...props }, ref) => {
+  ({ className, slotProps, suffix, endButton, startButton, size, value, onChange, defaultValue, type, ...props }, ref) => {
     return (
       <div {...props} className={cn(textFieldVariants({ size, className }))}>
         {startButton}
         <input
+          type={type}
           ref={ref}
           onChange={onChange}
           value={value}

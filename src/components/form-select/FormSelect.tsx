@@ -10,24 +10,24 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from ".
 type FormSelectProps<TFieldValues extends FieldValues, TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>> = Omit<
   ControllerProps<TFieldValues, TName>,
   "render"
-> & {
-  label: string;
-  options: { value: string | number; label: string | number }[];
-  loading?: boolean;
-  loadingText?: string;
-  emptyOptionsText?: string;
-  placeholder?: string;
-  slotProps?: {
-    formItemProps?: React.HTMLAttributes<HTMLDivElement> & React.RefAttributes<HTMLDivElement>;
-    formLabelProps?: React.HTMLAttributes<HTMLLabelElement> & React.RefAttributes<HTMLLabelElement>;
-    formMessageProps?: React.HTMLAttributes<HTMLParagraphElement> & React.RefAttributes<HTMLParagraphElement>;
-    selectProps?: SelectProps;
-    selectTriggerProps?: SelectTriggerProps;
-    selectValueProps?: Omit<SelectValueProps, "placeholder">;
-    selectContentProps?: SelectContentProps;
-    selectItemProps?: SelectItemProps;
+> &
+  React.ComponentProps<typeof FormItem> & {
+    label: string;
+    options: { value: string | number; label: string | number }[];
+    loading?: boolean;
+    loadingText?: string;
+    emptyOptionsText?: string;
+    placeholder?: string;
+    slotProps?: {
+      formLabelProps?: React.HTMLAttributes<HTMLLabelElement> & React.RefAttributes<HTMLLabelElement>;
+      formMessageProps?: React.HTMLAttributes<HTMLParagraphElement> & React.RefAttributes<HTMLParagraphElement>;
+      selectProps?: SelectProps;
+      selectTriggerProps?: SelectTriggerProps;
+      selectValueProps?: Omit<SelectValueProps, "placeholder">;
+      selectContentProps?: SelectContentProps;
+      selectItemProps?: SelectItemProps;
+    };
   };
-};
 
 const FormSelect = <TFieldValues extends FieldValues, TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>>(
   props: FormSelectProps<TFieldValues, TName>,
@@ -46,6 +46,7 @@ const FormSelect = <TFieldValues extends FieldValues, TName extends FieldPath<TF
     emptyOptionsText,
     placeholder,
     slotProps,
+    ...formItemProps
   } = props;
 
   const { field } = useController({ name, control, rules, defaultValue, disabled, shouldUnregister });
@@ -70,7 +71,7 @@ const FormSelect = <TFieldValues extends FieldValues, TName extends FieldPath<TF
       shouldUnregister={shouldUnregister}
       render={({ field }) => {
         return (
-          <FormItem {...(slotProps?.formItemProps ?? {})}>
+          <FormItem {...formItemProps}>
             <FormLabel {...(slotProps?.formLabelProps ?? {})}>{label}</FormLabel>
             <Select
               {...(slotProps?.selectProps ?? {})}

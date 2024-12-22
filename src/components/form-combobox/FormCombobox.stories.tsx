@@ -88,10 +88,8 @@ export const Default: Story = {
     name: "name",
     disabled: false,
     placeholder: "Select a car...",
+    className: "w-full",
     slotProps: {
-      formItemProps: {
-        className: "w-full",
-      },
       comboboxValueProps: {
         className: "w-56 justify-start",
       },
@@ -109,11 +107,7 @@ export const InForm: Story = {
     label: "Label",
     name: "name",
     disabled: false,
-    slotProps: {
-      formItemProps: {
-        className: "w-full",
-      },
-    },
+    className: "w-full",
   },
   render: ({ ...args }) => (
     <FormWrapper>

@@ -6,20 +6,20 @@ import { Textarea, TextareaProps } from "../textarea/Textarea";
 type FormTextareaProps<TFieldValues extends FieldValues, TName extends FieldPath<TFieldValues>> = Omit<
   ControllerProps<TFieldValues, TName>,
   "render"
-> & {
-  label: string;
-  control: Control<TFieldValues>;
-  slotProps?: {
-    formItemProps?: React.HTMLAttributes<HTMLDivElement> & React.RefAttributes<HTMLDivElement>;
-    formLabelProps?: React.HTMLAttributes<HTMLLabelElement> & React.RefAttributes<HTMLLabelElement>;
-    formMessageProps?: React.HTMLAttributes<HTMLParagraphElement> & React.RefAttributes<HTMLParagraphElement>;
-    formControlProps?: Omit<SlotProps & React.RefAttributes<HTMLElement>, "ref"> & React.RefAttributes<HTMLElement>;
-    textareaProps?: TextareaProps;
+> &
+  React.ComponentProps<typeof FormItem> & {
+    label: string;
+    control: Control<TFieldValues>;
+    slotProps?: {
+      formLabelProps?: React.HTMLAttributes<HTMLLabelElement> & React.RefAttributes<HTMLLabelElement>;
+      formMessageProps?: React.HTMLAttributes<HTMLParagraphElement> & React.RefAttributes<HTMLParagraphElement>;
+      formControlProps?: Omit<SlotProps & React.RefAttributes<HTMLElement>, "ref"> & React.RefAttributes<HTMLElement>;
+      textareaProps?: TextareaProps;
+    };
   };
-};
 
 const FormTextarea = <TFieldValues extends FieldValues, TName extends FieldPath<TFieldValues>>(props: FormTextareaProps<TFieldValues, TName>) => {
-  const { name, control, defaultValue, disabled, rules, shouldUnregister, label, slotProps } = props;
+  const { name, control, defaultValue, disabled, rules, shouldUnregister, label, slotProps, ...formItemProps } = props;
 
   return (
     <FormField
@@ -31,7 +31,7 @@ const FormTextarea = <TFieldValues extends FieldValues, TName extends FieldPath<
       shouldUnregister={shouldUnregister}
       render={({ field }) => {
         return (
-          <FormItem {...(slotProps?.formItemProps ?? {})}>
+          <FormItem {...formItemProps}>
             <FormLabel {...(slotProps?.formLabelProps ?? {})}>{label}</FormLabel>
             <FormControl {...(slotProps?.formControlProps ?? {})}>
               <Textarea {...(slotProps?.textareaProps ?? {})} {...field} />

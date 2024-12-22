@@ -63,11 +63,7 @@ export const Default: Story = {
       { label: "Option 2", value: "2" },
       { label: "Option 3", value: "3" },
     ],
-    slotProps: {
-      formItemProps: {
-        className: "w-96",
-      },
-    },
+    className: "w-96",
   },
   render: ({ ...args }) => (
     <FormSelectWrapper>

@@ -11,24 +11,24 @@ import { Combobox, ComboboxContent, ComboboxEmpty, ComboboxInput, ComboboxItem, 
 type FormComboboxProps<TFieldValues extends FieldValues, TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>> = Omit<
   ControllerProps<TFieldValues, TName>,
   "render"
-> & {
-  label: string;
-  options: { value: string | number; label: string | number }[];
-  loading?: boolean;
-  loadingText?: string;
-  emptyOptionsText?: string;
-  placeholder?: string;
-  slotProps?: {
-    formItemProps?: React.HTMLAttributes<HTMLDivElement> & React.RefAttributes<HTMLDivElement>;
-    formLabelProps?: React.HTMLAttributes<HTMLLabelElement> & React.RefAttributes<HTMLLabelElement>;
-    formMessageProps?: React.HTMLAttributes<HTMLParagraphElement> & React.RefAttributes<HTMLParagraphElement>;
-    comboboxProps?: React.ComponentProps<typeof Combobox>;
-    comboboxTriggerProps?: React.ComponentProps<typeof ComboboxTrigger>;
-    comboboxValueProps?: ButtonProps;
-    comboboxContentProps?: React.ComponentProps<typeof ComboboxContent>;
-    comboboxItemProps?: React.ComponentProps<typeof ComboboxItem>;
+> &
+  React.ComponentProps<typeof FormItem> & {
+    label: string;
+    options: { value: string | number; label: string | number }[];
+    loading?: boolean;
+    loadingText?: string;
+    emptyOptionsText?: string;
+    placeholder?: string;
+    slotProps?: {
+      formLabelProps?: React.HTMLAttributes<HTMLLabelElement> & React.RefAttributes<HTMLLabelElement>;
+      formMessageProps?: React.HTMLAttributes<HTMLParagraphElement> & React.RefAttributes<HTMLParagraphElement>;
+      comboboxProps?: React.ComponentProps<typeof Combobox>;
+      comboboxTriggerProps?: React.ComponentProps<typeof ComboboxTrigger>;
+      comboboxValueProps?: ButtonProps;
+      comboboxContentProps?: React.ComponentProps<typeof ComboboxContent>;
+      comboboxItemProps?: React.ComponentProps<typeof ComboboxItem>;
+    };
   };
-};
 
 const FormCombobox = <TFieldValues extends FieldValues, TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>>(
   props: FormComboboxProps<TFieldValues, TName>,
@@ -47,6 +47,7 @@ const FormCombobox = <TFieldValues extends FieldValues, TName extends FieldPath<
     emptyOptionsText,
     placeholder,
     slotProps,
+    ...formItemProps
   } = props;
 
   const { field } = useController({ name, control, rules, defaultValue, disabled, shouldUnregister });
@@ -67,7 +68,7 @@ const FormCombobox = <TFieldValues extends FieldValues, TName extends FieldPath<
       shouldUnregister={shouldUnregister}
       render={({ field }) => {
         return (
-          <FormItem {...(slotProps?.formItemProps ?? {})}>
+          <FormItem {...formItemProps}>
             <FormLabel {...(slotProps?.formLabelProps ?? {})}>{label}</FormLabel>
             <Combobox {...(slotProps?.comboboxProps ?? {})} open={open} onOpenChange={setOpen}>
               <FormControl>

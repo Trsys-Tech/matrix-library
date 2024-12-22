@@ -57,11 +57,7 @@ export const Default: Story = {
     label: "Label",
     name: "name",
     disabled: false,
-    slotProps: {
-      formItemProps: {
-        className: "w-full",
-      },
-    },
+    className: "w-full",
   },
   render: ({ ...args }) => (
     <FormWrapper>
@@ -75,11 +71,7 @@ export const InForm: Story = {
     label: "Label",
     name: "name",
     disabled: false,
-    slotProps: {
-      formItemProps: {
-        className: "w-full",
-      },
-    },
+    className: "w-full",
   },
   render: ({ ...args }) => (
     <FormWrapper>
