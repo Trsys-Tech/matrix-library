@@ -6,23 +6,31 @@ import { InfoCircleIcon } from "../Icons/InfoCircleIcon";
 import { SuccessCircleIcon } from "../Icons/SuccessCircleIcon";
 import { WarningCircleIcon } from "../Icons/WarningCircleIcon";
 import { DangerCircleIcon } from "../Icons/DangerCircleIcon";
+import { ToastProviderProps, ToastViewportProps } from "@radix-ui/react-toast";
 
 type ToastProps = {
   limit?: number;
   duration?: number;
+  slotProps?: {
+    providerProps?: ToastProviderProps;
+    viewportProps?: ToastViewportProps;
+    itemProps?: React.ComponentProps<typeof Root>;
+    closeProps?: React.ComponentProps<typeof ToastClose>;
+    titleProps?: React.ComponentProps<typeof ToastTitle>;
+  };
 };
 
-function Toast({ limit = 3, duration = 5000 }: ToastProps) {
+function Toast({ limit = 3, duration = 5000, slotProps }: ToastProps) {
   const { toasts, removeToast } = useToasts();
 
   useEffect(() => {
     if (limit !== undefined) {
       toastParams.limit = limit;
     }
-  }, [limit, duration]);
+  }, [limit]);
 
   return (
-    <ToastProvider duration={duration}>
+    <ToastProvider duration={duration} {...(slotProps?.providerProps ?? {})}>
       {Array.from(toasts).map(([key, { message, variant }]) => {
         return (
           <Root
@@ -33,6 +41,7 @@ function Toast({ limit = 3, duration = 5000 }: ToastProps) {
                 setTimeout(() => removeToast(key), 100); // let the animation finish then remove the toast
               }
             }}
+            {...(slotProps?.itemProps ?? {})}
           >
             <div className="flex gap-2 items-center">
               <div>
@@ -41,9 +50,9 @@ function Toast({ limit = 3, duration = 5000 }: ToastProps) {
                 {variant === "info" && <InfoCircleIcon className="w-5 h-5" />}
                 {variant === "warning" && <WarningCircleIcon className="w-5 h-5" />}
               </div>
-              {message && <ToastTitle>{message}</ToastTitle>}
+              {message && <ToastTitle {...(slotProps?.titleProps ?? {})}>{message}</ToastTitle>}
             </div>
-            <ToastClose />
+            <ToastClose {...(slotProps?.closeProps ?? {})} />
             {/* {action} */}
           </Root>
         );
