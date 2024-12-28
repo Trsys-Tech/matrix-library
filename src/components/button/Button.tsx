@@ -6,7 +6,7 @@ import { cn } from "../../lib/utils";
 import { SpinnerIcon } from "../Icons/SpinnerIcon";
 
 const buttonVariants = cva(
-  "m-1 inline-flex items-center justify-center gap-1 whitespace-nowrap rounded-sm text-xs font-normal transition-colors focus-visible:outline-none disabled:pointer-events-none disabled:bg-muted disabled:text-gray-500",
+  "inline-flex items-center justify-center gap-1 whitespace-nowrap rounded-sm text-xs font-normal transition-colors focus-visible:outline-none disabled:pointer-events-none disabled:bg-muted disabled:text-gray-500",
   {
     variants: {
       variant: {
