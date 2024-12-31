@@ -2,6 +2,15 @@ import "./index.css";
 
 export { Button, type ButtonProps } from "./components/button/Button";
 export {
+  Breadcrumb,
+  BreadcrumbEllipsis,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "./components/breadcrumb/Breadcrumb";
+export {
   Card,
   CardHeader,
   CardFooter,
