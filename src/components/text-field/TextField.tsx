@@ -45,7 +45,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
           defaultValue={defaultValue}
           {...(slotProps?.inputProps ?? {})}
           className={cn(
-            "focus:outline-none w-full h-full px-3 py-1 rounded-sm file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-text-300 ",
+            "focus:outline-none w-full h-full px-3 py-1 rounded-sm file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-text-300",
             slotProps?.inputProps?.className,
           )}
         />

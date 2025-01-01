@@ -75,14 +75,16 @@ const FormCombobox = <TFieldValues extends FieldValues, TName extends FieldPath<
                 <ComboboxTrigger
                   {...(slotProps?.comboboxTriggerProps ?? {})}
                   className={cn("*:truncate [&>span]:inline-block", slotProps?.comboboxTriggerProps?.className)}
+                  disabled={disabled ?? loading}
                   asChild
                 >
                   <Button
                     variant="text"
                     {...(slotProps?.comboboxValueProps ?? {})}
-                    className={cn("border border-gray-300", slotProps?.comboboxValueProps?.className)}
+                    className={cn("border border-gray-300 disabled:bg-gray-100", slotProps?.comboboxValueProps?.className)}
+                    loading={loading}
                   >
-                    {field.value || placeholder || label}
+                    {loading && loadingText ? loadingText : field.value || placeholder || label}
                   </Button>
                 </ComboboxTrigger>
               </FormControl>

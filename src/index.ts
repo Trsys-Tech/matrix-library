@@ -1,6 +1,7 @@
 import "./index.css";
 
-export { Button, type ButtonProps } from "./components/button/Button";
+export { Badge, type BadgeProps } from "./components/badge/Badge";
+export { Button, type ButtonProps, buttonVariants } from "./components/button/Button";
 export {
   Breadcrumb,
   BreadcrumbEllipsis,
@@ -120,6 +121,7 @@ export {
 export { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "./components/form/Form";
 export { FormInput, type FormInputProps } from "./components/form-input/FormInput";
 export { FormSelect, type FormSelectProps } from "./components/form-select/FormSelect";
+export { FormMultiSelect, type FormMultiSelectProps } from "./components/form-multi-select/FormMultiSelect";
 export { IconButton, type IconButtonProps } from "./components/icon-botton/IconButton";
 export { Label, type LabelProps } from "./components/label/Label";
 export { Modal, ModalFooter, type ModalProps, type ModalFooterProps } from "./components/modal/Modal";
