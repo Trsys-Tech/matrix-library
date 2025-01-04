@@ -43,7 +43,7 @@ const buttonVariants = cva(
 );
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement>, VariantProps<typeof buttonVariants> {
-  asChild?: boolean;
+  asChild?: boolean; // todo: aschild does not work because of these icons i've added, need to fix this
   loading?: boolean;
   startIcon?: React.ReactNode;
   endIcon?: React.ReactNode;

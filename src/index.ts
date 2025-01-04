@@ -119,6 +119,7 @@ export {
   type SwipableDrawerDescriptionProps,
 } from "./components/drawer/SwipableDrawer";
 export { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "./components/form/Form";
+export { FormCheckbox, type FormCheckboxProps } from "./components/form-checkbox/FormCheckbox";
 export { FormInput, type FormInputProps } from "./components/form-input/FormInput";
 export { FormSelect, type FormSelectProps } from "./components/form-select/FormSelect";
 export { FormMultiSelect, type FormMultiSelectProps } from "./components/form-multi-select/FormMultiSelect";
