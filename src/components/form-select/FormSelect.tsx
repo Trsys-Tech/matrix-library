@@ -87,6 +87,7 @@ const FormSelect = <TFieldValues extends FieldValues, TName extends FieldPath<TF
               <FormControl>
                 <SelectTrigger
                   aria-required={required}
+                  disabled={disabled}
                   {...(slotProps?.selectTriggerProps ?? {})}
                   className={cn("*:truncate [&>span]:inline-block", slotProps?.selectTriggerProps?.className)}
                 >

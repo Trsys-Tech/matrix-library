@@ -71,6 +71,7 @@ const FormMultiSelect = <TFieldValues extends FieldValues, TName extends FieldPa
                 value={field.value}
                 loading={loading}
                 loadingText={loadingText}
+                disabled={disabled}
                 {...(slotProps?.multiSelectProps ?? {})}
               />
             </FormControl>

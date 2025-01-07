@@ -50,6 +50,7 @@ const FormCheckbox = <TFieldValues extends FieldValues, TName extends FieldPath<
                 checked={field.value}
                 onCheckedChange={handleCheckChanged}
                 aria-required={required}
+                disabled={disabled}
               />
             </FormControl>
             <FormLabel {...(slotProps?.formLabelProps ?? {})} className={cn("text-text", slotProps?.formLabelProps?.className)}>

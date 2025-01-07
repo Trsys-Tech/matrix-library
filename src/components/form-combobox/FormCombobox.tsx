@@ -78,11 +78,11 @@ const FormCombobox = <TFieldValues extends FieldValues, TName extends FieldPath<
             <Combobox {...(slotProps?.comboboxProps ?? {})} open={open} onOpenChange={setOpen}>
               <FormControl>
                 <ComboboxTrigger
-                  {...(slotProps?.comboboxTriggerProps ?? {})}
                   className={cn("*:truncate [&>span]:inline-block", slotProps?.comboboxTriggerProps?.className)}
                   disabled={disabled ?? loading}
                   asChild
                   aria-required={required}
+                  {...(slotProps?.comboboxTriggerProps ?? {})}
                 >
                   <Button
                     variant="text"

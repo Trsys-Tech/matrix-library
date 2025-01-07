@@ -38,7 +38,7 @@ const FormTextarea = <TFieldValues extends FieldValues, TName extends FieldPath<
               {required && <span className="text-danger text-sm">*</span>}
             </FormLabel>
             <FormControl {...(slotProps?.formControlProps ?? {})}>
-              <Textarea {...(slotProps?.textareaProps ?? {})} {...field} aria-required={required} />
+              <Textarea aria-required={required} disabled={disabled} {...(slotProps?.textareaProps ?? {})} {...field} />
             </FormControl>
             <FormMessage {...(slotProps?.formMessageProps ?? {})} />
           </FormItem>
