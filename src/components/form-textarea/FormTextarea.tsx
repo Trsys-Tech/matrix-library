@@ -10,6 +10,7 @@ type FormTextareaProps<TFieldValues extends FieldValues, TName extends FieldPath
   React.ComponentProps<typeof FormItem> & {
     label: string;
     control: Control<TFieldValues>;
+    required?: boolean;
     slotProps?: {
       formLabelProps?: React.HTMLAttributes<HTMLLabelElement> & React.RefAttributes<HTMLLabelElement>;
       formMessageProps?: React.HTMLAttributes<HTMLParagraphElement> & React.RefAttributes<HTMLParagraphElement>;
@@ -19,7 +20,7 @@ type FormTextareaProps<TFieldValues extends FieldValues, TName extends FieldPath
   };
 
 const FormTextarea = <TFieldValues extends FieldValues, TName extends FieldPath<TFieldValues>>(props: FormTextareaProps<TFieldValues, TName>) => {
-  const { name, control, defaultValue, disabled, rules, shouldUnregister, label, slotProps, ...formItemProps } = props;
+  const { name, control, defaultValue, disabled, rules, shouldUnregister, label, slotProps, required, ...formItemProps } = props;
 
   return (
     <FormField
@@ -32,9 +33,12 @@ const FormTextarea = <TFieldValues extends FieldValues, TName extends FieldPath<
       render={({ field }) => {
         return (
           <FormItem {...formItemProps}>
-            <FormLabel {...(slotProps?.formLabelProps ?? {})}>{label}</FormLabel>
+            <FormLabel {...(slotProps?.formLabelProps ?? {})}>
+              {label}
+              {required && <span className="text-danger text-sm">*</span>}
+            </FormLabel>
             <FormControl {...(slotProps?.formControlProps ?? {})}>
-              <Textarea {...(slotProps?.textareaProps ?? {})} {...field} />
+              <Textarea {...(slotProps?.textareaProps ?? {})} {...field} aria-required={required} />
             </FormControl>
             <FormMessage {...(slotProps?.formMessageProps ?? {})} />
           </FormItem>

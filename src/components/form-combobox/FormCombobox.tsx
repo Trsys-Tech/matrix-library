@@ -19,6 +19,7 @@ type FormComboboxProps<TFieldValues extends FieldValues, TName extends FieldPath
     loadingText?: string;
     emptyOptionsText?: string;
     placeholder?: string;
+    required?: boolean;
     slotProps?: {
       formLabelProps?: React.HTMLAttributes<HTMLLabelElement> & React.RefAttributes<HTMLLabelElement>;
       formMessageProps?: React.HTMLAttributes<HTMLParagraphElement> & React.RefAttributes<HTMLParagraphElement>;
@@ -47,6 +48,7 @@ const FormCombobox = <TFieldValues extends FieldValues, TName extends FieldPath<
     emptyOptionsText,
     placeholder,
     slotProps,
+    required,
     ...formItemProps
   } = props;
 
@@ -69,7 +71,10 @@ const FormCombobox = <TFieldValues extends FieldValues, TName extends FieldPath<
       render={({ field }) => {
         return (
           <FormItem {...formItemProps}>
-            <FormLabel {...(slotProps?.formLabelProps ?? {})}>{label}</FormLabel>
+            <FormLabel {...(slotProps?.formLabelProps ?? {})}>
+              {label}
+              {required && <span className="text-danger text-sm">*</span>}
+            </FormLabel>
             <Combobox {...(slotProps?.comboboxProps ?? {})} open={open} onOpenChange={setOpen}>
               <FormControl>
                 <ComboboxTrigger
@@ -77,6 +82,7 @@ const FormCombobox = <TFieldValues extends FieldValues, TName extends FieldPath<
                   className={cn("*:truncate [&>span]:inline-block", slotProps?.comboboxTriggerProps?.className)}
                   disabled={disabled ?? loading}
                   asChild
+                  aria-required={required}
                 >
                   <Button
                     variant="text"

@@ -18,6 +18,7 @@ type FormSelectProps<TFieldValues extends FieldValues, TName extends FieldPath<T
     loadingText?: string;
     emptyOptionsText?: string;
     placeholder?: string;
+    required?: boolean;
     slotProps?: {
       formLabelProps?: React.HTMLAttributes<HTMLLabelElement> & React.RefAttributes<HTMLLabelElement>;
       formMessageProps?: React.HTMLAttributes<HTMLParagraphElement> & React.RefAttributes<HTMLParagraphElement>;
@@ -46,6 +47,7 @@ const FormSelect = <TFieldValues extends FieldValues, TName extends FieldPath<TF
     emptyOptionsText,
     placeholder,
     slotProps,
+    required,
     ...formItemProps
   } = props;
 
@@ -72,7 +74,10 @@ const FormSelect = <TFieldValues extends FieldValues, TName extends FieldPath<TF
       render={({ field }) => {
         return (
           <FormItem {...formItemProps}>
-            <FormLabel {...(slotProps?.formLabelProps ?? {})}>{label}</FormLabel>
+            <FormLabel {...(slotProps?.formLabelProps ?? {})}>
+              {label}
+              {required && <span className="text-danger text-sm">*</span>}
+            </FormLabel>
             <Select
               {...(slotProps?.selectProps ?? {})}
               disabled={disabled}
@@ -81,6 +86,7 @@ const FormSelect = <TFieldValues extends FieldValues, TName extends FieldPath<TF
             >
               <FormControl>
                 <SelectTrigger
+                  aria-required={required}
                   {...(slotProps?.selectTriggerProps ?? {})}
                   className={cn("*:truncate [&>span]:inline-block", slotProps?.selectTriggerProps?.className)}
                 >

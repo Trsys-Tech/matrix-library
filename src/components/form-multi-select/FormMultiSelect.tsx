@@ -13,6 +13,7 @@ type FormMultiSelectProps<TFieldValues extends FieldValues, TName extends FieldP
     loadingText?: string;
     options: MultiSelectProps["options"];
     placeholder?: string;
+    required?: boolean;
     slotProps?: {
       multiSelectProps?: Partial<MultiSelectProps>;
       formLabelProps?: React.HTMLAttributes<HTMLLabelElement> & React.RefAttributes<HTMLLabelElement>;
@@ -36,6 +37,7 @@ const FormMultiSelect = <TFieldValues extends FieldValues, TName extends FieldPa
     loadingText,
     placeholder,
     slotProps,
+    required,
     ...formItemProps
   } = props;
 
@@ -56,9 +58,13 @@ const FormMultiSelect = <TFieldValues extends FieldValues, TName extends FieldPa
       render={({ field }) => {
         return (
           <FormItem {...formItemProps}>
-            <FormLabel {...(slotProps?.formLabelProps ?? {})}>{label}</FormLabel>
+            <FormLabel {...(slotProps?.formLabelProps ?? {})}>
+              {label}
+              {required && <span className="text-danger text-sm">*</span>}
+            </FormLabel>
             <FormControl>
               <MultiSelect
+                aria-required={required}
                 options={options}
                 onValueChange={handleChange}
                 placeholder={placeholder}

@@ -12,6 +12,7 @@ type FormCheckboxProps<TFieldValues extends FieldValues, TName extends FieldPath
   React.ComponentProps<typeof FormItem> & {
     label: string;
     control: Control<TFieldValues>;
+    required?: boolean;
     slotProps?: {
       formLabelProps?: React.HTMLAttributes<HTMLLabelElement> & React.RefAttributes<HTMLLabelElement>;
       formMessageProps?: React.HTMLAttributes<HTMLParagraphElement> & React.RefAttributes<HTMLParagraphElement>;
@@ -21,7 +22,7 @@ type FormCheckboxProps<TFieldValues extends FieldValues, TName extends FieldPath
   };
 
 const FormCheckbox = <TFieldValues extends FieldValues, TName extends FieldPath<TFieldValues>>(props: FormCheckboxProps<TFieldValues, TName>) => {
-  const { name, control, defaultValue, disabled, rules, shouldUnregister, label, slotProps, ...formItemProps } = props;
+  const { name, control, defaultValue, disabled, rules, shouldUnregister, label, slotProps, required, ...formItemProps } = props;
   const { field } = useController({ name, control, rules, defaultValue, disabled, shouldUnregister });
 
   const handleCheckChanged = useCallback(
@@ -43,10 +44,17 @@ const FormCheckbox = <TFieldValues extends FieldValues, TName extends FieldPath<
         return (
           <FormItem {...formItemProps} className="flex items-center gap-2 justify-start space-y-0">
             <FormControl {...(slotProps?.formControlProps ?? {})}>
-              <Checkbox {...(slotProps?.checkboxProps ?? {})} {...field} checked={field.value} onCheckedChange={handleCheckChanged} />
+              <Checkbox
+                {...(slotProps?.checkboxProps ?? {})}
+                {...field}
+                checked={field.value}
+                onCheckedChange={handleCheckChanged}
+                aria-required={required}
+              />
             </FormControl>
             <FormLabel {...(slotProps?.formLabelProps ?? {})} className={cn("text-text", slotProps?.formLabelProps?.className)}>
               {label}
+              {required && <span className="text-danger text-sm">*</span>}
             </FormLabel>
             <FormMessage {...(slotProps?.formMessageProps ?? {})} />
           </FormItem>
