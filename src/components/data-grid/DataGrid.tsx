@@ -390,6 +390,22 @@ const RefreshAction: React.FC<RefreshActionProps> = ({ className, refreshRowData
   );
 };
 
+type DeleteActionProps = Omit<ButtonProps, "onClick"> & {
+  onDelete: () => void;
+};
+
+const DeleteAction: React.FC<DeleteActionProps> = ({ onDelete, children, ...props }) => {
+  const handleDelete = () => {
+    onDelete();
+  };
+
+  return (
+    <Button variant="danger" onClick={handleDelete} startIcon={<CloseCircleIcon className="w-4.5 h-4.5" />} {...props}>
+      {children}
+    </Button>
+  );
+};
+
 type ExtraActionsProps = PopoverContentProps & {
   children: React.ReactNode;
   slotProps?: {
@@ -420,6 +436,7 @@ export {
   PrintAction,
   RefreshAction,
   ExtraActions,
+  DeleteAction,
   type DataGridProps,
   type DataGridContentProps,
   type DatagridActionBarProps,
@@ -427,5 +444,6 @@ export {
   type FreezeActionProps,
   type RefreshActionProps,
   type ExtraActionsProps,
+  type DeleteActionProps,
   useDataGrid,
 };
