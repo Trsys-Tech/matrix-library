@@ -14,6 +14,7 @@ import { CloseCircleIcon } from "../Icons/CloseCircleIcon";
 import { ElipsisVerticalIcon } from "../Icons/ElipsisVerticalIcon";
 import { IconButton, IconButtonProps } from "../icon-botton/IconButton";
 import { Popover, PopoverContent, PopoverContentProps, PopoverProps, PopoverTrigger, PopoverTriggerProps } from "../popover/Popover";
+import { TrashcanIcon } from "../Icons/TrashcanIcon";
 
 const appTheme = themeQuartz.withParams({
   fontFamily: "DMSans",
@@ -372,7 +373,7 @@ type RefreshActionProps = Omit<IconButtonProps, "onClick"> & {
   refreshRowData: () => void;
 };
 
-const RefreshAction: React.FC<RefreshActionProps> = ({ className, refreshRowData, children, ...props }) => {
+const RefreshAction: React.FC<RefreshActionProps> = ({ className, refreshRowData, children, loading, ...props }) => {
   const context = React.useContext(DataGridContext);
 
   if (!context) {
@@ -384,8 +385,14 @@ const RefreshAction: React.FC<RefreshActionProps> = ({ className, refreshRowData
   };
 
   return (
-    <IconButton className={cn("p-0 w-6 h-6", className)} variant="toolbar" onClick={handleRefresh} {...props}>
-      {children ?? <RefreshIcon className="w-4.5 h-4.5" />}
+    <IconButton
+      className={cn("p-0 w-6 h-6", loading && "disabled:bg-transparent", className)}
+      variant="toolbar"
+      onClick={handleRefresh}
+      disabled={loading}
+      {...props}
+    >
+      {children ?? <RefreshIcon className={cn("w-4.5 h-4.5", loading && "animate-spin")} />}
     </IconButton>
   );
 };
@@ -400,7 +407,7 @@ const DeleteAction: React.FC<DeleteActionProps> = ({ onDelete, children, ...prop
   };
 
   return (
-    <Button variant="danger" onClick={handleDelete} startIcon={<CloseCircleIcon className="w-4.5 h-4.5" />} {...props}>
+    <Button variant="danger" onClick={handleDelete} startIcon={<TrashcanIcon className="w-4.5 h-4.5" />} {...props}>
       {children}
     </Button>
   );
