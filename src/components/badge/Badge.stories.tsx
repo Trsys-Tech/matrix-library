@@ -31,9 +31,12 @@ export const Variants: Story = {
     return (
       <div className="flex gap-2">
         <Badge {...args} />
-        <Badge {...args} variant="destructive" />
-        <Badge {...args} variant="outline" />
         <Badge {...args} variant="secondary" />
+        <Badge {...args} variant="outline" />
+        <Badge {...args} variant="danger" />
+        <Badge {...args} variant="success" />
+        <Badge {...args} variant="warning" />
+        <Badge {...args} variant="info" />
       </div>
     );
   },
