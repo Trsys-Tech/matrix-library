@@ -2,7 +2,7 @@
   "name": "matrix-library",
   "description": "UI Library for Linahl",
   "private": false,
-  "version": "0.1.5",
+  "version": "0.1.6",
   "type": "module",
   "main": "dist/index.js",
   "module": "dist/index.es.js",
@@ -61,16 +61,17 @@
     "lucide-react": "^0.454.0",
     "react-day-picker": "^9.3.0",
     "tailwind-merge": "^2.5.4",
+    "tailwind-variants": "^0.3.0",
     "tailwindcss-animate": "^1.0.7",
     "vaul": "^1.1.1"
   },
   "peerDependencies": {
     "@hookform/resolvers": "^3.9.1",
+    "class-variance-authority": "^0.7.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-hook-form": "^7.53.1",
-    "zod": "^3.23.8",
-    "class-variance-authority": "^0.7.0"
+    "zod": "^3.23.8"
   },
   "devDependencies": {
     "@chromatic-com/storybook": "^1.9.0",
