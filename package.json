@@ -2,7 +2,7 @@
   "name": "matrix-library",
   "description": "UI Library for Linahl",
   "private": false,
-  "version": "0.1.4",
+  "version": "0.1.5",
   "type": "module",
   "main": "dist/index.js",
   "module": "dist/index.es.js",
@@ -69,7 +69,8 @@
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-hook-form": "^7.53.1",
-    "zod": "^3.23.8"
+    "zod": "^3.23.8",
+    "class-variance-authority": "^0.7.0"
   },
   "devDependencies": {
     "@chromatic-com/storybook": "^1.9.0",

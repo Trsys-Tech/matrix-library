@@ -13,12 +13,12 @@ function getComponentName(entryName: string): string {
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [
+    dts({
+      include: ["src"],
+      exclude: ["src/**/*.stories.ts", "src/**/*.stories.tsx"],
+    }),
     react({
       jsxRuntime: "automatic",
-    }),
-    dts({
-      include: ["src/**/*.ts", "src/**/*.tsx"],
-      exclude: ["src/**/*.stories.ts", "src/**/*.stories.tsx"],
     }),
   ],
   build: {
