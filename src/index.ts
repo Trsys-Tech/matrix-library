@@ -70,6 +70,7 @@ export {
   PrintAction,
   RefreshAction,
   ExtraActions,
+  DeleteAction,
   type DataGridProps,
   type DataGridContentProps,
   type DatagridActionBarProps,
@@ -77,6 +78,7 @@ export {
   type FreezeActionProps,
   type RefreshActionProps,
   type ExtraActionsProps,
+  type DeleteActionProps,
   useDataGrid,
 } from "./components/data-grid/DataGrid";
 export {
