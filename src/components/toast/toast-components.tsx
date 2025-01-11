@@ -1,6 +1,6 @@
 import * as React from "react";
 import * as ToastPrimitives from "@radix-ui/react-toast";
-import { cva, type VariantProps } from "class-variance-authority";
+import { tv, type VariantProps } from "tailwind-variants";
 
 import { cn } from "../../lib/utils";
 import { CloseIcon } from "../Icons/CloseIcon";
@@ -19,23 +19,21 @@ const ToastViewport = React.forwardRef<
 ));
 ToastViewport.displayName = ToastPrimitives.Viewport.displayName;
 
-const toastVariants = cva(
-  "group pointer-events-auto relative flex w-full items-center justify-between space-x-2 overflow-hidden rounded-lg border p-4 shadow-lg transition-all data-[swipe=cancel]:translate-x-0 data-[swipe=end]:translate-x-[var(--radix-toast-swipe-end-x)] data-[swipe=move]:translate-x-[var(--radix-toast-swipe-move-x)] data-[swipe=move]:transition-none data-[state=open]:animate-in data-[state=closed]:animate-out data-[swipe=end]:animate-out data-[state=closed]:fade-out-80 data-[state=closed]:slide-out-to-right-full data-[state=open]:slide-in-from-top-full", // data-[state=open]:sm:slide-in-from-bottom-full
-  {
-    variants: {
-      variant: {
-        default: "border bg-background text-foreground",
-        danger: "danger group border-danger bg-danger-400 text-danger-800",
-        success: "success group border-success bg-success-400 text-success-800",
-        warning: "warning group border-warning bg-warning-400 text-warning-800",
-        info: "info group border-info bg-info-400 text-info-700",
-      },
-    },
-    defaultVariants: {
-      variant: "default",
+const toastVariants = tv({
+  base: "group pointer-events-auto relative flex w-full items-center justify-between space-x-2 overflow-hidden rounded-lg border p-4 shadow-lg transition-all data-[swipe=cancel]:translate-x-0 data-[swipe=end]:translate-x-[var(--radix-toast-swipe-end-x)] data-[swipe=move]:translate-x-[var(--radix-toast-swipe-move-x)] data-[swipe=move]:transition-none data-[state=open]:animate-in data-[state=closed]:animate-out data-[swipe=end]:animate-out data-[state=closed]:fade-out-80 data-[state=closed]:slide-out-to-right-full data-[state=open]:slide-in-from-top-full", // data-[state=open]:sm:slide-in-from-bottom-full
+  variants: {
+    variant: {
+      default: "border bg-background text-foreground",
+      danger: "danger group border-danger bg-danger-400 text-danger-800",
+      success: "success group border-success bg-success-400 text-success-800",
+      warning: "warning group border-warning bg-warning-400 text-warning-800",
+      info: "info group border-info bg-info-400 text-info-700",
     },
   },
-);
+  defaultVariants: {
+    variant: "default",
+  },
+});
 
 type ToastVariant = VariantProps<typeof toastVariants>["variant"];
 

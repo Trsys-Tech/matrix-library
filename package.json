@@ -2,7 +2,7 @@
   "name": "matrix-library",
   "description": "UI Library for Linahl",
   "private": false,
-  "version": "0.1.6",
+  "version": "0.1.8",
   "type": "module",
   "main": "dist/index.js",
   "module": "dist/index.es.js",
@@ -15,7 +15,8 @@
       "types": "./dist/index.d.ts"
     },
     "./package.json": "./package.json",
-    "./dist/*": "./dist/*"
+    "./dist/*": "./dist/*",
+    "./style.css": "./dist/style.css"
   },
   "files": [
     "dist"
@@ -55,7 +56,6 @@
     "@radix-ui/react-visually-hidden": "^1.1.0",
     "ag-grid-community": "^32.3.3",
     "ag-grid-react": "^32.3.3",
-    "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "cmdk": "^1.0.4",
     "lucide-react": "^0.454.0",
@@ -67,7 +67,6 @@
   },
   "peerDependencies": {
     "@hookform/resolvers": "^3.9.1",
-    "class-variance-authority": "^0.7.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-hook-form": "^7.53.1",

@@ -1,5 +1,5 @@
 import * as React from "react";
-import { cva, type VariantProps } from "class-variance-authority";
+import { tv, type VariantProps } from "tailwind-variants";
 
 import { cn } from "../../lib/utils";
 import { Badge } from "../badge/Badge";
@@ -14,9 +14,10 @@ import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, Command
 
 /**
  * Variants for the multi-select component to handle different styles.
- * Uses class-variance-authority (cva) to define different styles based on "variant" prop.
+ * Uses tailwind-variants (cva) to define different styles based on "variant" prop.
  */
-const multiSelectVariants = cva("flex gap-1 items-center py-0.5 px-2 rounded-xl", {
+const multiSelectVariants = tv({
+  base: "flex gap-1 items-center py-0.5 px-2 rounded-xl",
   variants: {
     variant: {
       default: "border-none shadow-none bg-primary-50 text-primary hover:bg-primary-50",

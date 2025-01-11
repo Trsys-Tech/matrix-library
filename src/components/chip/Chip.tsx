@@ -1,11 +1,12 @@
 import React from "react";
 import { Slot } from "@radix-ui/react-slot";
-import { cva, VariantProps } from "class-variance-authority";
+import { tv, VariantProps } from "tailwind-variants";
 
 import { cn } from "../../lib/utils";
 import { CloseIcon } from "../Icons/CloseIcon";
 
-const chipVariants = cva("inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full text-xs font-medium", {
+const chipVariants = tv({
+  base: "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full text-xs font-medium",
   variants: {
     variant: {
       primary: "bg-primary-100 text-primary-700 border border-primary",

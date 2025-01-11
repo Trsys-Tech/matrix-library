@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { Slot } from "@radix-ui/react-slot";
-import { VariantProps, cva } from "class-variance-authority";
+import { VariantProps, tv } from "tailwind-variants";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 
 import { cn } from "../../lib/utils";
@@ -421,32 +421,30 @@ const SidebarMenuItem = React.forwardRef<HTMLLIElement, React.ComponentProps<"li
 SidebarMenuItem.displayName = "SidebarMenuItem";
 type SidebarMenuItemProps = React.ComponentProps<typeof SidebarMenuItem>;
 
-const sidebarMenuButtonVariants = cva(
-  [
+const sidebarMenuButtonVariants = tv({
+  base: [
     "peer/menu-button flex w-full items-center gap-2 overflow-hidden rounded-s-md rounded-e-none p-2 text-left text-sm text-text-400 font-medium outline-none transition-[width,height,padding] hover:bg-gray-50 disabled:pointer-events-none disabled:opacity-50 group-has-[[data-sidebar=menu-action]]/menu-item:pr-8 aria-disabled:pointer-events-none aria-disabled:opacity-50",
     "data-[active=true]:bg-primary data-[active=true]:text-gray-0 data-[active=true]:font-bold group-data-[collapsible=icon]:size-10 group-data-[collapsible=icon]:w-14 group-data-[collapsible=icon]:p-2 group-data-[collapsible=icon]:pl-4 [&>span:last-child]:truncate",
     "[&>svg]:size-6 [&>svg]:shrink-0 [&>svg]:data-[active=true]:text-secondary group-data-[collapsible=icon]:[&>svg]:me-2",
     "data-[active=true]:before:[content:''] data-[active=true]:before:absolute data-[active=true]:before:start-0 data-[active=true]:before:h-10 data-[active=true]:before:w-1 data-[active=true]:before:bg-secondary data-[active=true]:before:rounded-e-md",
     "overflow-ellipsis whitespace-nowrap",
   ].join(" "),
-  {
-    variants: {
-      variant: {
-        default: "hover:bg-gray-50",
-        outline: "bg-background shadow-[0_0_0_1px_hsl(var(--gray--300))] hover:bg-gray-50 hover:shadow-[0_0_0_1px_hsl(var(--gray-400))]",
-      },
-      size: {
-        default: "h-10 text-sm",
-        sm: "h-7 text-xs",
-        lg: "h-12 text-sm group-data-[collapsible=icon]:!p-0",
-      },
+  variants: {
+    variant: {
+      default: "hover:bg-gray-50",
+      outline: "bg-background shadow-[0_0_0_1px_hsl(var(--gray--300))] hover:bg-gray-50 hover:shadow-[0_0_0_1px_hsl(var(--gray-400))]",
     },
-    defaultVariants: {
-      variant: "default",
-      size: "default",
+    size: {
+      default: "h-10 text-sm",
+      sm: "h-7 text-xs",
+      lg: "h-12 text-sm group-data-[collapsible=icon]:!p-0",
     },
   },
-);
+  defaultVariants: {
+    variant: "default",
+    size: "default",
+  },
+});
 
 const SidebarMenuButton = React.forwardRef<
   HTMLButtonElement,
