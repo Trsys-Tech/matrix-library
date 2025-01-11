@@ -16,6 +16,7 @@ export default defineConfig({
     dts({
       include: ["src"],
       exclude: ["src/**/*.stories.ts", "src/**/*.stories.tsx"],
+      staticImport: true,
     }),
     react({
       jsxRuntime: "automatic",
