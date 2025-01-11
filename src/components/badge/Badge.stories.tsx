@@ -25,7 +25,7 @@ export const Default: Story = {
 export const Variants: Story = {
   args: {
     children: "Badge",
-    variant: "default",
+    variant: "primary",
   },
   render: args => {
     return (
@@ -37,6 +37,11 @@ export const Variants: Story = {
         <Badge {...args} variant="success" />
         <Badge {...args} variant="warning" />
         <Badge {...args} variant="info" />
+        <Badge {...args} variant="primaryInverse" />
+        <Badge {...args} variant="dangerInverse" />
+        <Badge {...args} variant="successInverse" />
+        <Badge {...args} variant="warningInverse" />
+        <Badge {...args} variant="infoInverse" />
       </div>
     );
   },
