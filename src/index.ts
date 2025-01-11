@@ -1,7 +1,6 @@
 import "./index.css";
 
 export { Badge, type BadgeProps } from "./components/badge/Badge";
-export { Bach, type BachProps } from "./components/bach/Bach";
 export { Button, type ButtonProps, buttonVariants } from "./components/button/Button";
 export {
   Breadcrumb,
