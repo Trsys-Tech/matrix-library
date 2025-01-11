@@ -35,6 +35,7 @@ export {
   type CollapsibleContentProps,
   type CollapsibleTriggerProps,
 } from "./components/collapsible/Collapsible";
+export { ConfirmProvider, useConfirm } from "./components/confirm/Confirm";
 export {
   DatePicker,
   DesktopDatePicker,
