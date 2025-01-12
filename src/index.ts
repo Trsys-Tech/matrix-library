@@ -126,6 +126,7 @@ export { FormCheckbox, type FormCheckboxProps } from "./components/form-checkbox
 export { FormInput, type FormInputProps } from "./components/form-input/FormInput";
 export { FormSelect, type FormSelectProps } from "./components/form-select/FormSelect";
 export { FormMultiSelect, type FormMultiSelectProps } from "./components/form-multi-select/FormMultiSelect";
+export { FormSwitch, type FormSwitchProps } from "./components/form-switch/FormSwitch";
 export { IconButton, type IconButtonProps } from "./components/icon-botton/IconButton";
 export { Label, type LabelProps } from "./components/label/Label";
 export { Modal, ModalFooter, type ModalProps, type ModalFooterProps } from "./components/modal/Modal";
