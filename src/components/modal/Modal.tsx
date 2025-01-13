@@ -81,7 +81,7 @@ const Modal = React.forwardRef<React.ElementRef<typeof DialogPrimitive.Content>,
             <ModalClose
               {...(slotProps?.close ?? {})}
               className={cn(
-                "disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground mt-0",
+                "rounded-sm hover:bg-primary-50 hover:ring-2 hover:ring-primary-50 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground mt-0",
                 slotProps?.close?.className,
               )}
             >

@@ -243,6 +243,7 @@ const MultiSelect = React.forwardRef<HTMLButtonElement, MultiSelectProps>(
                       <Badge className={cn(multiSelectVariants({ variant }))}>
                         {`+ ${selectedValues.length - maxCount} ${moreText}`}
                         <CloseCircleIcon
+                          role="button"
                           className="ml-2 h-4 w-4 cursor-pointer"
                           onClick={event => {
                             event.stopPropagation();
@@ -253,31 +254,35 @@ const MultiSelect = React.forwardRef<HTMLButtonElement, MultiSelectProps>(
                     )}
                     {loading && loadingText ? loadingText : null}
                   </div>
-                  <div className="flex items-center justify-between">
+                  <div className="flex items-center justify-between gap-1">
                     <CloseIcon
-                      className="h-4 mx-2 cursor-pointer text-muted-foreground"
+                      role="button"
+                      className="h-4.5 w-4.5 text-muted-foreground cursor-pointer"
                       onClick={event => {
                         event.stopPropagation();
                         handleClear();
                       }}
+                      aria-label="Clear"
                     />
                     <Separator orientation="vertical" className="flex min-h-5 h-full" />
-                    <ChevronDownIcon className="h-4 mx-2 cursor-pointer text-muted-foreground" />
+
+                    <ChevronDownIcon role="button" aria-label="Expand dropdown" className="h-5 w-5 text-muted-foreground cursor-pointer" />
                   </div>
                 </div>
               ) : (
                 <div className="flex items-center justify-between w-full mx-auto">
                   <span className="text-sm text-muted-foreground mx-3">{loading && loadingText ? loadingText : placeholder}</span>
-                  <ChevronDownIcon className="h-4 cursor-pointer text-muted-foreground mx-2" />
+
+                  <ChevronDownIcon role="button" aria-label="Expand dropdown" className="h-5 w-5 text-muted-foreground cursor-pointer" />
                 </div>
               )}
             </>
           </Button>
         </PopoverTrigger>
         <PopoverContent className="w-auto p-0" align="start" onEscapeKeyDown={() => setIsPopoverOpen(false)}>
-          <Command>
+          <Command className="w-[--radix-popper-anchor-width]">
             <CommandInput placeholder="Search..." onKeyDown={handleInputKeyDown} />
-            <CommandList>
+            <CommandList className="max-h-[--radix-popper-available-height]">
               <CommandEmpty>{noResultsText}</CommandEmpty>
               <CommandGroup>
                 <CommandItem key="all" onSelect={toggleAll} className="cursor-pointer">

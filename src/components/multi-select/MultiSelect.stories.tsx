@@ -34,6 +34,7 @@ export const UnControlled: StoryObj<typeof meta> = {
     placeholder: "Select your favorite frameworks",
     onValueChange: () => {},
     maxCount: 3,
+    className: "w-96",
   },
 };
 

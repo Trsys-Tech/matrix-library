@@ -159,7 +159,7 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({ onConfirm, open, options, o
   );
 
   return (
-    <Modal open={open} title={title} {...modalProps}>
+    <Modal open={open} onOpenChange={onCancel} title={title} role="alertdialog" {...modalProps}>
       <p {...descriptionProps}>{description}</p>
       <ModalFooter>{actions}</ModalFooter>
     </Modal>
