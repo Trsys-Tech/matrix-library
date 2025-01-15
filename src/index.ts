@@ -124,8 +124,9 @@ export {
 export { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "./components/form/Form";
 export { FormCheckbox, type FormCheckboxProps } from "./components/form-checkbox/FormCheckbox";
 export { FormInput, type FormInputProps } from "./components/form-input/FormInput";
-export { FormSelect, type FormSelectProps } from "./components/form-select/FormSelect";
 export { FormMultiSelect, type FormMultiSelectProps } from "./components/form-multi-select/FormMultiSelect";
+export { FormRating, type FormRatingProps } from "./components/form-rating/FormRating";
+export { FormSelect, type FormSelectProps } from "./components/form-select/FormSelect";
 export { FormSwitch, type FormSwitchProps } from "./components/form-switch/FormSwitch";
 export { IconButton, type IconButtonProps } from "./components/icon-botton/IconButton";
 export { Label, type LabelProps } from "./components/label/Label";
@@ -140,6 +141,7 @@ export {
   type PopoverProps,
   type PopoverTriggerProps,
 } from "./components/popover/Popover";
+export { Rating, RatingItem, type RatingProps, type RatingItemProps } from "./components/rating/Rating";
 export { RadioGroup, RadioGroupItem, type RadioGroupItemProps, type RadioGroupProps } from "./components/radio-group/RadioGroup";
 export {
   Select,

@@ -11,6 +11,7 @@ type FormRatingProps<TFieldValues extends FieldValues, TName extends FieldPath<T
     control: Control<TFieldValues>;
     required?: boolean;
     Icon?: React.JSXElementConstructor<React.SVGProps<SVGSVGElement>>;
+    max?: number;
     slotProps?: {
       formLabelProps?: React.HTMLAttributes<HTMLLabelElement> & React.RefAttributes<HTMLLabelElement>;
       formMessageProps?: React.HTMLAttributes<HTMLParagraphElement> & React.RefAttributes<HTMLParagraphElement>;
@@ -20,7 +21,20 @@ type FormRatingProps<TFieldValues extends FieldValues, TName extends FieldPath<T
   };
 
 const FormRating = <TFieldValues extends FieldValues, TName extends FieldPath<TFieldValues>>(props: FormRatingProps<TFieldValues, TName>) => {
-  const { name, control, defaultValue, disabled, rules, shouldUnregister, label, slotProps, required, Icon = StarIcon, ...formItemProps } = props;
+  const {
+    name,
+    control,
+    defaultValue,
+    disabled,
+    rules,
+    shouldUnregister,
+    label,
+    slotProps,
+    required,
+    Icon = StarIcon,
+    max = 5,
+    ...formItemProps
+  } = props;
 
   return (
     <FormField
@@ -39,7 +53,7 @@ const FormRating = <TFieldValues extends FieldValues, TName extends FieldPath<TF
             </FormLabel>
             <FormControl {...(slotProps?.formControlProps ?? {})}>
               <Rating {...(slotProps?.ratingProps ?? {})} value={field.value} onValueChange={field.onChange} disabled={disabled}>
-                {Array.from({ length: 5 }).map((_, index) => (
+                {Array.from({ length: max }).map((_, index) => (
                   <RatingItem Icon={Icon} index={index} key={index} />
                 ))}
               </Rating>
