@@ -117,6 +117,7 @@ const RatingItem = ({ Icon, index }: RatingItemProps) => {
       >
         <Icon className={cn("stroke-gray-500")} />
         <button
+          type="button"
           className={cn(
             "absolute top-0 w-[calc(50%+2px)] left-0 overflow-hidden h-full",
             readOnly && "cursor-default",
@@ -135,6 +136,7 @@ const RatingItem = ({ Icon, index }: RatingItemProps) => {
           />
         </button>
         <button
+          type="button"
           className={cn(
             "absolute top-0 w-[calc(50%+2px)] right-0 overflow-hidden h-full",
             readOnly && "cursor-default",
@@ -158,6 +160,7 @@ const RatingItem = ({ Icon, index }: RatingItemProps) => {
 
   return (
     <button
+      type="button"
       onClick={() => onValueChange(index + 1)}
       onMouseEnter={() => onHover(index + 1)}
       onMouseLeave={() => onHover(null)}
