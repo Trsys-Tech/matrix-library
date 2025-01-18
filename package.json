@@ -2,7 +2,7 @@
   "name": "matrix-library",
   "description": "UI Library for Linahl",
   "private": false,
-  "version": "0.2.4",
+  "version": "0.2.5",
   "type": "module",
   "main": "dist/index.js",
   "module": "dist/index.es.js",
@@ -63,6 +63,7 @@
     "tailwind-merge": "^2.5.4",
     "tailwind-variants": "^0.3.0",
     "tailwindcss-animate": "^1.0.7",
+    "uuid": "^11.0.5",
     "vaul": "^1.1.1"
   },
   "peerDependencies": {

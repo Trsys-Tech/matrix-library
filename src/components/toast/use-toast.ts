@@ -1,4 +1,5 @@
 import React from "react";
+import { v4 as uuidv4 } from "uuid";
 
 import { ToastVariant } from "./toast-components";
 
@@ -18,7 +19,8 @@ const addToast = (toast: ToastInfo) => {
   if (toasts.size >= toastParams.limit) {
     toasts.delete(toasts.keys().next().value!);
   }
-  toasts.set(String(Date.now()), toast);
+
+  toasts.set(uuidv4(), toast);
 
   listener.setState(new Map(toasts));
 
