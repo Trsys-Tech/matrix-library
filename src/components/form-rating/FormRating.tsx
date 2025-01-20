@@ -2,7 +2,7 @@ import { SlotProps } from "@radix-ui/react-slot";
 import { Control, ControllerProps, FieldPath, FieldValues } from "react-hook-form";
 
 import { StarIcon } from "../Icons/StartIcon";
-import { Rating, RatingItem, RatingProps } from "../rating/Rating";
+import { Rating, RatingProps } from "../rating/Rating";
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "../form/Form";
 
 type FormRatingProps<TFieldValues extends FieldValues, TName extends FieldPath<TFieldValues>> = Omit<ControllerProps<TFieldValues, TName>, "render"> &
@@ -52,11 +52,14 @@ const FormRating = <TFieldValues extends FieldValues, TName extends FieldPath<TF
               {required && <span className="text-danger text-sm">*</span>}
             </FormLabel>
             <FormControl {...(slotProps?.formControlProps ?? {})}>
-              <Rating {...(slotProps?.ratingProps ?? {})} value={field.value} onValueChange={field.onChange} disabled={disabled}>
-                {Array.from({ length: max }).map((_, index) => (
-                  <RatingItem Icon={Icon} index={index} key={index} />
-                ))}
-              </Rating>
+              <Rating
+                {...(slotProps?.ratingProps ?? {})}
+                value={field.value}
+                max={max}
+                Icon={Icon}
+                onValueChange={field.onChange}
+                disabled={disabled}
+              ></Rating>
             </FormControl>
             <FormMessage {...(slotProps?.formMessageProps ?? {})} />
           </FormItem>

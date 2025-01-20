@@ -4,6 +4,7 @@ import React from "react";
 
 import { cn } from "../../lib/utils";
 import { tv, VariantProps } from "tailwind-variants";
+import { StarIcon } from "../Icons/StartIcon";
 
 const ratingVariants = tv({
   base: "flex items-center gap-0",
@@ -29,17 +30,6 @@ const ratingVariants = tv({
   },
 });
 
-type RatingContext = {
-  onHover: (value: number | null) => void;
-  onValueChange: (value: number) => void;
-  displayedValue: number;
-  precision: "half" | "full";
-  readOnly: boolean;
-  disabled?: boolean;
-};
-
-const RatingContext = React.createContext<RatingContext | null>(null);
-
 interface RatingProps extends React.HTMLAttributes<HTMLDivElement> {
   precision?: "half" | "full";
   variant?: VariantProps<typeof ratingVariants>["variant"];
@@ -47,8 +37,10 @@ interface RatingProps extends React.HTMLAttributes<HTMLDivElement> {
   readOnly?: boolean;
   value?: number;
   onValueChange?: (value: number) => void;
-  children: React.ReactNode;
+  children?: React.ReactNode;
   disabled?: boolean;
+  max?: number;
+  Icon?: React.JSXElementConstructor<React.SVGProps<SVGSVGElement>>;
 }
 
 const Rating = React.forwardRef<HTMLDivElement, RatingProps>((props, ref) => {
@@ -61,6 +53,8 @@ const Rating = React.forwardRef<HTMLDivElement, RatingProps>((props, ref) => {
     value: _value = 0,
     className,
     children,
+    max = 5,
+    Icon = StarIcon,
     disabled,
     ...restProps
   } = props;
@@ -86,26 +80,47 @@ const Rating = React.forwardRef<HTMLDivElement, RatingProps>((props, ref) => {
   };
 
   return (
-    <RatingContext.Provider value={{ onHover: handleHover, onValueChange: handleValueChange, displayedValue, precision, readOnly, disabled }}>
-      <div className={cn(ratingVariants({ variant, size, className }))} {...restProps} ref={ref}>
-        {children}
-      </div>
-    </RatingContext.Provider>
+    <div
+      className={cn(ratingVariants({ variant, size, className }))}
+      role="slider"
+      data-value={value}
+      aria-valuenow={displayedValue}
+      aria-valuemin={0}
+      aria-valuemax={max}
+      aria-valuetext={`${displayedValue} out of ${max}`}
+      {...restProps}
+      ref={ref}
+    >
+      {Array.from({ length: max }).map((_, index) => (
+        <RatingItem
+          Icon={Icon}
+          index={index}
+          key={index}
+          displayedValue={displayedValue}
+          onHover={handleHover}
+          onValueChange={handleValueChange}
+          precision={precision}
+          readOnly={readOnly}
+          disabled={disabled}
+        />
+      ))}
+      {children}
+    </div>
   );
 });
 
 type RatingItemProps = {
   Icon: React.JSXElementConstructor<React.SVGProps<SVGSVGElement>>;
   index: number;
+  onHover: (value: number | null) => void;
+  onValueChange: (value: number) => void;
+  displayedValue: number;
+  precision: "half" | "full";
+  readOnly: boolean;
+  disabled?: boolean;
 };
 
-const RatingItem = ({ Icon, index }: RatingItemProps) => {
-  const context = React.useContext(RatingContext);
-  if (!context) {
-    throw new Error("RatingItem should be used inside Rating component");
-  }
-  const { displayedValue, onHover, onValueChange, precision, readOnly, disabled } = context;
-
+const RatingItem = ({ Icon, index, displayedValue, onHover, onValueChange, precision, readOnly, disabled }: RatingItemProps) => {
   if (precision === "half") {
     return (
       <div
@@ -127,6 +142,7 @@ const RatingItem = ({ Icon, index }: RatingItemProps) => {
           onMouseEnter={() => onHover(index + 0.5)}
           onMouseLeave={() => onHover(null)}
           disabled={disabled}
+          aria-label={`Set rating to ${index + 0.5}`}
         >
           <Icon
             className={cn(
@@ -146,6 +162,7 @@ const RatingItem = ({ Icon, index }: RatingItemProps) => {
           onMouseEnter={() => onHover(index + 1)}
           onMouseLeave={() => onHover(null)}
           disabled={disabled}
+          aria-label={`Set rating to ${index + 1}`}
         >
           <Icon
             className={cn(
@@ -170,10 +187,11 @@ const RatingItem = ({ Icon, index }: RatingItemProps) => {
         disabled && "cursor-default hover:scale-100 opacity-70",
       )}
       disabled={disabled}
+      aria-label={`Set rating to ${index + 1}`}
     >
       <Icon className={cn("stroke-gray-500", displayedValue >= index + 1 && "stroke-current fill-current")} />
     </button>
   );
 };
 
-export { Rating, RatingItem, type RatingProps, type RatingItemProps };
+export { Rating, type RatingProps };
