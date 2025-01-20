@@ -141,7 +141,7 @@ export {
   type PopoverProps,
   type PopoverTriggerProps,
 } from "./components/popover/Popover";
-export { Rating, RatingItem, type RatingProps, type RatingItemProps } from "./components/rating/Rating";
+export { Rating, type RatingProps } from "./components/rating/Rating";
 export { RadioGroup, RadioGroupItem, type RadioGroupItemProps, type RadioGroupProps } from "./components/radio-group/RadioGroup";
 export {
   Select,
