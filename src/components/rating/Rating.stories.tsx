@@ -1,5 +1,5 @@
 import { Meta, StoryObj } from "@storybook/react/*";
-import { Rating, RatingItem } from "./Rating";
+import { Rating } from "./Rating";
 
 // import { StarIcon } from "lucide-react";
 import { StarIcon } from "../Icons/StartIcon";
@@ -32,13 +32,7 @@ export const Default: Story = {
     disabled: false,
   },
   render: ({ ...args }) => {
-    return (
-      <Rating {...args}>
-        {Array.from({ length: 5 }).map((_, index) => (
-          <RatingItem Icon={StarIcon} index={index} key={index} />
-        ))}
-      </Rating>
-    );
+    return <Rating {...args} Icon={StarIcon} />;
   },
 };
 
