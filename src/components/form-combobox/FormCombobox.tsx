@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { ControllerProps, FieldPath, FieldValues, useController } from "react-hook-form";
 
 import { cn } from "../../lib/utils";
@@ -61,6 +61,8 @@ const FormCombobox = <TFieldValues extends FieldValues, TName extends FieldPath<
     setOpen(false);
   };
 
+  const value = useMemo(() => options.find(option => option.value === field.value), [field.value, options]);
+
   return (
     <FormField
       control={control}
@@ -88,16 +90,23 @@ const FormCombobox = <TFieldValues extends FieldValues, TName extends FieldPath<
                   <Button
                     variant="text"
                     {...(slotProps?.comboboxValueProps ?? {})}
-                    className={cn("w-full border text-sm border-gray-300 disabled:bg-gray-100", slotProps?.comboboxValueProps?.className)}
+                    className={cn(
+                      "group flex h-9 w-full border text-sm border-gray-300 disabled:bg-gray-100",
+                      slotProps?.comboboxValueProps?.className,
+                    )}
                     endIcon={
-                      <ChevronDownIcon role="button" aria-label="Expand dropdown" className="ms-auto h-5 w-5 !text-muted-foreground cursor-pointer" />
+                      <ChevronDownIcon
+                        role="button"
+                        aria-label="Expand dropdown"
+                        className="ms-auto h-5 w-5 !text-muted-foreground cursor-pointer group-data-[state=open]:rotate-180 transition-transform"
+                      />
                     }
                     loading={loading}
                   >
                     {loading && loadingText ? (
                       <span className="text-muted-foreground">{loadingText}</span>
                     ) : (
-                      field.value || <span className="text-muted-foreground">{placeholder || label}</span>
+                      value?.label || <span className="text-muted-foreground">{placeholder || label}</span>
                     )}
                   </Button>
                 </ComboboxTrigger>

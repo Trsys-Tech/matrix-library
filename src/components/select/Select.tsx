@@ -49,7 +49,7 @@ const SelectTrigger = React.forwardRef<React.ElementRef<typeof SelectPrimitive.T
       <SelectPrimitive.Trigger
         ref={ref}
         className={cn(
-          "flex h-9 w-full items-center justify-between whitespace-nowrap rounded-sm border border-input bg-transparent px-3 py-2 text-sm shadow-sm ring-offset-background placeholder:text-muted-foreground hover:border hover:border-primary focus:border focus:border-primary focus:outline-none focus:ring focus:ring-primary-100 disabled:cursor-not-allowed disabled:bg-gray-100 disabled:text-text-300 disabled:border-none [&>span]:line-clamp-1 [&_svg]:disabled:text-text-300",
+          "group flex h-9 w-full items-center justify-between whitespace-nowrap rounded-sm border border-input bg-transparent px-3 py-2 text-sm ring-offset-background data-[placeholder]:text-muted-foreground hover:border hover:border-primary focus:border focus:border-primary focus:outline-none focus:ring focus:ring-primary-100 disabled:cursor-not-allowed disabled:bg-gray-100 disabled:text-text-300 disabled:border-none [&>span]:line-clamp-1 [&_svg]:disabled:text-text-300",
           className,
         )}
         data-value={value}
@@ -59,11 +59,11 @@ const SelectTrigger = React.forwardRef<React.ElementRef<typeof SelectPrimitive.T
         <div className="flex items-center gap-2">
           {clearable && value ? (
             <SelectPrimitive.Icon asChild onPointerDown={handlePointerDown} onClickCapture={onClear}>
-              <CloseIcon className="h-4 w-4" />
+              <CloseIcon className="h-4.5 w-4.5" />
             </SelectPrimitive.Icon>
           ) : null}
           <SelectPrimitive.Icon asChild>
-            <ChevronDownIcon className="h-4 w-4 text-primary " />
+            <ChevronDownIcon className="h-5 w-5 text-primary group-data-[state=open]:rotate-180 transition-transform" />
           </SelectPrimitive.Icon>
         </div>
       </SelectPrimitive.Trigger>
