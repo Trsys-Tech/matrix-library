@@ -123,6 +123,7 @@ export {
 } from "./components/drawer/SwipableDrawer";
 export { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "./components/form/Form";
 export { FormCheckbox, type FormCheckboxProps } from "./components/form-checkbox/FormCheckbox";
+export { FormCombobox, type FormComboboxProps } from "./components/form-combobox/FormCombobox";
 export { FormInput, type FormInputProps } from "./components/form-input/FormInput";
 export { FormMultiSelect, type FormMultiSelectProps } from "./components/form-multi-select/FormMultiSelect";
 export { FormRating, type FormRatingProps } from "./components/form-rating/FormRating";
