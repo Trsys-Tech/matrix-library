@@ -13,7 +13,7 @@ ComboboxTrigger.displayName = "ComboboxTrigger";
 const ComboboxContent = React.forwardRef<React.ElementRef<typeof PopoverContent>, React.ComponentPropsWithoutRef<typeof PopoverContent>>(
   ({ className, children, ...props }, ref) => {
     return (
-      <PopoverContent ref={ref} className={cn("w-[200px] p-0", className)} {...props}>
+      <PopoverContent ref={ref} className={cn("w-[--radix-popper-anchor-width] p-0", className)} {...props}>
         <Command>{children}</Command>
       </PopoverContent>
     );

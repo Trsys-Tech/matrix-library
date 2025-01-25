@@ -7,6 +7,7 @@ import { SpinnerIcon } from "../Icons/SpinnerIcon";
 import { Button, ButtonProps } from "../button/Button";
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "../form/Form";
 import { Combobox, ComboboxContent, ComboboxEmpty, ComboboxInput, ComboboxItem, ComboboxList, ComboboxTrigger } from "../combobox/Combobox";
+import { ChevronDownIcon } from "../Icons/ChevronDownIcon";
 
 type FormComboboxProps<TFieldValues extends FieldValues, TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>> = Omit<
   ControllerProps<TFieldValues, TName>,
@@ -87,10 +88,17 @@ const FormCombobox = <TFieldValues extends FieldValues, TName extends FieldPath<
                   <Button
                     variant="text"
                     {...(slotProps?.comboboxValueProps ?? {})}
-                    className={cn("border border-gray-300 disabled:bg-gray-100", slotProps?.comboboxValueProps?.className)}
+                    className={cn("w-full border text-sm border-gray-300 disabled:bg-gray-100", slotProps?.comboboxValueProps?.className)}
+                    endIcon={
+                      <ChevronDownIcon role="button" aria-label="Expand dropdown" className="ms-auto h-5 w-5 !text-muted-foreground cursor-pointer" />
+                    }
                     loading={loading}
                   >
-                    {loading && loadingText ? loadingText : field.value || placeholder || label}
+                    {loading && loadingText ? (
+                      <span className="text-muted-foreground">{loadingText}</span>
+                    ) : (
+                      field.value || <span className="text-muted-foreground">{placeholder || label}</span>
+                    )}
                   </Button>
                 </ComboboxTrigger>
               </FormControl>

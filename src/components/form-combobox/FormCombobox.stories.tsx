@@ -91,7 +91,7 @@ export const Default: Story = {
     className: "w-full",
     slotProps: {
       comboboxValueProps: {
-        className: "w-56 justify-start",
+        className: "w-96 justify-start",
       },
     },
   },

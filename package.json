@@ -2,7 +2,7 @@
   "name": "matrix-library",
   "description": "UI Library for Linahl",
   "private": false,
-  "version": "0.2.7",
+  "version": "0.2.8",
   "type": "module",
   "main": "dist/index.js",
   "module": "dist/index.es.js",
