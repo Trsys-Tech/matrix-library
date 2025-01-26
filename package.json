@@ -1,8 +1,8 @@
 {
-  "name": "matrix-library",
-  "description": "UI Library for Linahl",
+  "name": "@trsys-tech/matrix-library",
+  "description": "MatrixUI Library",
   "private": false,
-  "version": "0.2.9",
+  "version": "0.3.0",
   "type": "module",
   "main": "dist/index.js",
   "module": "dist/index.es.js",
@@ -36,6 +36,26 @@
       "prettier --write"
     ]
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Trsys-Tech/matrix-library.git"
+  },
+  "license": "MIT",
+  "author": "Ako Veysinejad <a.veysinejad@gmail.com>",
+  "keywords": [
+    "matrix",
+    "ui",
+    "library",
+    "react",
+    "typescript"
+  ],
+  "homepage": "https://github.com/Trsys-Tech/matrix-library#readme",
+  "bugs": {
+    "url": "https://github.com/Trsys-Tech/matrix-library/issues"
+  },
+  "contributors": [
+    "Ako Veysinejad <a.veysinejad@gmail.com>"
+  ],
   "dependencies": {
     "@radix-ui/react-accordion": "^1.2.1",
     "@radix-ui/react-avatar": "^1.1.1",
@@ -108,6 +128,5 @@
     "extends": [
       "plugin:storybook/recommended"
     ]
-  },
-  "packageManager": "pnpm@9.4.0+sha512.f549b8a52c9d2b8536762f99c0722205efc5af913e77835dbccc3b0b0b2ca9e7dc8022b78062c17291c48e88749c70ce88eb5a74f1fa8c4bf5e18bb46c8bd83a"
+  }
 }
