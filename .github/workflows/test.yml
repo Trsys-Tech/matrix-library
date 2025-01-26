@@ -22,11 +22,6 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-      - name: Verify Auth NODE_AUTH_TOKEN
-        run: echo $NODE_AUTH_TOKEN
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-
       - name: Authenticate with npm registry
         run: npm whoami --scope=@trsys-tech
         with:
