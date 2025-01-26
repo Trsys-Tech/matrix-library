@@ -17,9 +17,6 @@ jobs:
         with:
           node-version: 20.10.0
 
-      - name: Install latest npm
-        run: npm install -g npm
-
       - name: Install dependencies
         run: npm install
 
