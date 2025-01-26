@@ -23,6 +23,13 @@ jobs:
       - name: Build library
         run: npm run build
 
+      - name: Verify NODE_AUTH_TOKEN
+        run: |
+          echo "NODE_AUTH_TOKEN length: ${#NODE_AUTH_TOKEN}"; |
+          echo $NODE_AUTH_TOKEN
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
       - name: Authenticate with npm registry
         run: npm whoami
         env:
