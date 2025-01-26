@@ -17,6 +17,9 @@ jobs:
         with:
           node-version: 20.10.0
 
+      - name: Install latest npm
+        run: npm install -g npm
+
       - name: Install dependencies
         run: npm install
 
@@ -24,11 +27,12 @@ jobs:
         run: npm run build
 
       - name: Verify NODE_AUTH_TOKEN
-        run: echo $NODE_AUTH_TOKEN
+        run: |
+          echo "NODE_AUTH_TOKEN length: ${#NODE_AUTH_TOKEN}"
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Push to npm
-        run: npm publish
+        run: npm publish --registry=https://registry.npmjs.org/ --loglevel verbose
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
