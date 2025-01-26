@@ -9,6 +9,23 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Verify NODE_AUTH_TOKEN
+        run: |
+          echo "NODE_AUTH_TOKEN length: ${#NODE_AUTH_TOKEN}"
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Verify Auth NODE_AUTH_TOKEN
+        run: echo $NODE_AUTH_TOKEN
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Authenticate with npm registry
+        run: npm whoami
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
       - name: Checkout repository
         uses: actions/checkout@v4
 
@@ -22,19 +39,6 @@ jobs:
 
       - name: Build library
         run: npm run build
-
-      - name: Verify NODE_AUTH_TOKEN
-        run: |
-          echo "NODE_AUTH_TOKEN length: ${#NODE_AUTH_TOKEN}"; |
-          echo $NODE_AUTH_TOKEN
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-
-      - name: Authenticate with npm registry
-        run: npm whoami
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Push to npm
         run: npm publish
