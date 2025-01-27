@@ -128,8 +128,5 @@
     "extends": [
       "plugin:storybook/recommended"
     ]
-  },
-  "publishConfig": {
-    "registry": "http://localhost:4873"
   }
 }
