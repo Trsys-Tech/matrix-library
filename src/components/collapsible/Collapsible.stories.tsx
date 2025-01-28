@@ -1,6 +1,6 @@
+import { ChevronDown } from "@trsys-tech/matrix-icons";
 import { Meta, StoryObj, Decorator } from "@storybook/react/*";
 
-import { ChevronDownIcon } from "../Icons/ChevronDownIcon";
 import { Collapsible, CollapsibleTrigger, CollapsibleContent } from "./Collapsible";
 
 const withCustomClass: Decorator = Story => (
@@ -27,7 +27,7 @@ export const Default: Story = {
     <Collapsible {...props}>
       <CollapsibleTrigger className="group flex justify-between w-full">
         Collapsibe title
-        <ChevronDownIcon className="text-primary w-6 h-6 group-data-[state='open']:rotate-180 transition-transform ms-auto" />
+        <ChevronDown className="text-primary w-6 h-6 group-data-[state='open']:rotate-180 transition-transform ms-auto" />
       </CollapsibleTrigger>
       <CollapsibleContent>
         <div>

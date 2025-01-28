@@ -1,9 +1,9 @@
 import React from "react";
-import { Slot } from "@radix-ui/react-slot";
+import { Slot, Slottable } from "@radix-ui/react-slot";
 import { tv, VariantProps } from "tailwind-variants";
 
 import { cn } from "../../lib/utils";
-import { SpinnerIcon } from "../Icons/SpinnerIcon";
+import { Spinner } from "@trsys-tech/matrix-icons";
 
 const iconButtonVariants = tv({
   base: "inline-flex items-center justify-center gap-1 p-2 rounded-sm text-xs font-normal transition-colors focus-visible:outline-none disabled:pointer-events-none disabled:bg-muted disabled:text-gray-500",
@@ -39,8 +39,8 @@ const IconButton = React.forwardRef<HTMLButtonElement, IconButtonProps>(
     const Comp = asChild ? Slot : "button";
     return (
       <Comp className={cn(iconButtonVariants({ variant, size, className }))} disabled={disabled || loading} ref={ref} {...props}>
-        {loading ? <SpinnerIcon /> : null}
-        {children}
+        {loading ? <Spinner /> : null}
+        <Slottable>{children}</Slottable>
       </Comp>
     );
   },

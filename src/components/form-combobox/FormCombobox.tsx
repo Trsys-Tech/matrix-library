@@ -1,13 +1,11 @@
 import { useMemo, useState } from "react";
+import { Check, ChevronDown, Spinner } from "@trsys-tech/matrix-icons";
 import { ControllerProps, FieldPath, FieldValues, useController } from "react-hook-form";
 
 import { cn } from "../../lib/utils";
-import { CheckIcon } from "../Icons/CheckIcon";
-import { SpinnerIcon } from "../Icons/SpinnerIcon";
 import { Button, ButtonProps } from "../button/Button";
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "../form/Form";
 import { Combobox, ComboboxContent, ComboboxEmpty, ComboboxInput, ComboboxItem, ComboboxList, ComboboxTrigger } from "../combobox/Combobox";
-import { ChevronDownIcon } from "../Icons/ChevronDownIcon";
 
 type FormComboboxProps<TFieldValues extends FieldValues, TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>> = Omit<
   ControllerProps<TFieldValues, TName>,
@@ -95,7 +93,7 @@ const FormCombobox = <TFieldValues extends FieldValues, TName extends FieldPath<
                       slotProps?.comboboxValueProps?.className,
                     )}
                     endIcon={
-                      <ChevronDownIcon
+                      <ChevronDown
                         role="button"
                         aria-label="Expand dropdown"
                         className="ms-auto h-5 w-5 !text-muted-foreground cursor-pointer group-data-[state=open]:rotate-180 transition-transform"
@@ -116,7 +114,7 @@ const FormCombobox = <TFieldValues extends FieldValues, TName extends FieldPath<
                 <ComboboxList>
                   {loading && (
                     <ComboboxEmpty>
-                      <SpinnerIcon className="inline-block mb-0.5" /> {loadingText || "Loading..."}
+                      <Spinner className="inline-block mb-0.5" /> {loadingText || "Loading..."}
                     </ComboboxEmpty>
                   )}
                   {!loading && !options.length ? (
@@ -136,7 +134,7 @@ const FormCombobox = <TFieldValues extends FieldValues, TName extends FieldPath<
                       onSelect={() => handleChange(value)}
                     >
                       {label}
-                      <CheckIcon className={cn("ml-auto", value === field.value ? "opacity-100" : "opacity-0")} />
+                      <Check className={cn("ml-auto", value === field.value ? "opacity-100" : "opacity-0")} />
                     </ComboboxItem>
                   ))}
                 </ComboboxList>

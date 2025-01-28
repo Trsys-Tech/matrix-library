@@ -4,7 +4,7 @@ import React from "react";
 
 import { cn } from "../../lib/utils";
 import { tv, VariantProps } from "tailwind-variants";
-import { StarIcon } from "../Icons/StartIcon";
+import { Star } from "@trsys-tech/matrix-icons";
 
 const ratingVariants = tv({
   base: "flex items-center gap-0",
@@ -54,7 +54,7 @@ const Rating = React.forwardRef<HTMLDivElement, RatingProps>((props, ref) => {
     className,
     children,
     max = 5,
-    Icon = StarIcon,
+    Icon = Star,
     disabled,
     ...restProps
   } = props;

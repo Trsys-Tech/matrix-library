@@ -3,12 +3,12 @@
 import * as React from "react";
 import { format } from "date-fns";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
+import { Calendar as CalendarIcon } from "@trsys-tech/matrix-icons";
 import { PropsBase, PropsRange, DateRange, DayEventHandler } from "react-day-picker";
 
 import { cn } from "../../lib/utils";
 import { Calendar } from "./calendar";
 import { Button } from "../button/Button";
-import { CalendarIcon } from "../Icons/CalendarIcon";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "../dialog/Dialog";
 
 type MobileDateRangePickerProps = PropsBase &

@@ -1,14 +1,11 @@
 import * as React from "react";
 import { tv, type VariantProps } from "tailwind-variants";
+import { Check, ChevronDown, CircleXmark, XMark } from "@trsys-tech/matrix-icons";
 
 import { cn } from "../../lib/utils";
 import { Badge } from "../badge/Badge";
 import { Button } from "../button/Button";
-import { CheckIcon } from "../Icons/CheckIcon";
-import { CloseIcon } from "../Icons/CloseIcon";
 import { Separator } from "../separator/Separator";
-import { CloseCircleIcon } from "../Icons/CloseCircleIcon";
-import { ChevronDownIcon } from "../Icons/ChevronDownIcon";
 import { Popover, PopoverContent, PopoverTrigger } from "../popover/Popover";
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList, CommandSeparator } from "../command/Command";
 
@@ -227,7 +224,7 @@ const MultiSelect = React.forwardRef<HTMLButtonElement, MultiSelectProps>(
                       const IconComponent = option?.icon;
                       return (
                         <Badge key={value} className={cn(multiSelectVariants({ variant }), { "text-gray-400 bg-gray-200": disabled || loading })}>
-                          <CloseIcon
+                          <XMark
                             className="h-4 w-4 cursor-pointer"
                             onClick={event => {
                               event.stopPropagation();
@@ -242,7 +239,7 @@ const MultiSelect = React.forwardRef<HTMLButtonElement, MultiSelectProps>(
                     {selectedValues.length > maxCount && (
                       <Badge className={cn(multiSelectVariants({ variant }))}>
                         {`+ ${selectedValues.length - maxCount} ${moreText}`}
-                        <CloseCircleIcon
+                        <CircleXmark
                           role="button"
                           className="ml-2 h-4 w-4 cursor-pointer"
                           onClick={event => {
@@ -255,7 +252,7 @@ const MultiSelect = React.forwardRef<HTMLButtonElement, MultiSelectProps>(
                     {loading && loadingText ? loadingText : null}
                   </div>
                   <div className="flex items-center justify-between gap-1">
-                    <CloseIcon
+                    <XMark
                       role="button"
                       className="h-4.5 w-4.5 text-muted-foreground cursor-pointer"
                       onClick={event => {
@@ -266,14 +263,14 @@ const MultiSelect = React.forwardRef<HTMLButtonElement, MultiSelectProps>(
                     />
                     <Separator orientation="vertical" className="flex min-h-5 h-full" />
 
-                    <ChevronDownIcon role="button" aria-label="Expand dropdown" className="h-5 w-5 text-muted-foreground cursor-pointer" />
+                    <ChevronDown role="button" aria-label="Expand dropdown" className="h-4 w-4 text-muted-foreground cursor-pointer" />
                   </div>
                 </div>
               ) : (
                 <div className="flex items-center justify-between w-full mx-auto">
                   <span className="text-sm text-muted-foreground mx-3">{loading && loadingText ? loadingText : placeholder}</span>
 
-                  <ChevronDownIcon role="button" aria-label="Expand dropdown" className="h-5 w-5 text-muted-foreground cursor-pointer" />
+                  <ChevronDown role="button" aria-label="Expand dropdown" className="h-4 w-4 text-muted-foreground cursor-pointer" />
                 </div>
               )}
             </>
@@ -292,7 +289,7 @@ const MultiSelect = React.forwardRef<HTMLButtonElement, MultiSelectProps>(
                       selectedValues.length === options.length ? "bg-primary text-primary-foreground" : "opacity-50 [&_svg]:invisible",
                     )}
                   >
-                    <CheckIcon className="h-4 w-4" />
+                    <Check className="h-4 w-4" />
                   </div>
                   <span>({selectAllText})</span>
                 </CommandItem>
@@ -306,7 +303,7 @@ const MultiSelect = React.forwardRef<HTMLButtonElement, MultiSelectProps>(
                           isSelected ? "bg-primary text-primary-foreground" : "opacity-50 [&_svg]:invisible",
                         )}
                       >
-                        <CheckIcon className="h-4 w-4" />
+                        <Check className="h-4 w-4" />
                       </div>
                       {option.icon && <option.icon className="mr-2 h-4 w-4 text-muted-foreground" />}
                       <span>{option.label}</span>

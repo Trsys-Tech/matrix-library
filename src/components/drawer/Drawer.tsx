@@ -3,12 +3,12 @@
 import * as React from "react";
 import { Slot } from "@radix-ui/react-slot";
 import defaultTheme from "tailwindcss/defaultTheme";
+import { ChevronsRight } from "@trsys-tech/matrix-icons";
 import { createContextScope, Scope } from "@radix-ui/react-context";
 
 import { cn } from "../../lib/utils";
 import { Modal } from "../modal/Modal";
 import { IconButton } from "../icon-botton/IconButton";
-import { ChevronsRightIcon } from "../Icons/ChevronsRightIcon";
 
 type ScopedProps<P> = P & { __scopeDrawer?: Scope };
 
@@ -177,7 +177,7 @@ const DrawerContent = React.forwardRef<HTMLDivElement, ScopedProps<DrawerContent
               )}
             >
               <IconButton onClick={onClose} className="w-5 h-5 p-0">
-                <ChevronsRightIcon className={cn("w-5 h-5", anchor === "right" ? "rtl:-scale-100" : "-scale-100 rtl:scale-100")} />
+                <ChevronsRight className={cn("w-5 h-5", anchor === "right" ? "rtl:-scale-100" : "-scale-100 rtl:scale-100")} />
               </IconButton>
               {typeof title === "string" || typeof title === "number" ? <h2 className="text-lg font-bold text-text">{title}</h2> : title}
             </div>

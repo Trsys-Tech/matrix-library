@@ -1,9 +1,9 @@
 import * as React from "react";
-import { Slot } from "@radix-ui/react-slot";
+import { Spinner } from "@trsys-tech/matrix-icons";
+import { Slot, Slottable } from "@radix-ui/react-slot";
 import { tv, type VariantProps } from "tailwind-variants";
 
 import { cn } from "../../lib/utils";
-import { SpinnerIcon } from "../Icons/SpinnerIcon";
 
 const buttonVariants = tv({
   base: "inline-flex items-center justify-center gap-1 whitespace-nowrap rounded-sm text-xs font-normal transition-colors focus-visible:outline-none disabled:pointer-events-none disabled:bg-muted disabled:text-gray-500",
@@ -29,9 +29,9 @@ const buttonVariants = tv({
         "text-gray-0 hover:bg-primary-50 hover:text-text [&>svg]:hover:text-primary focus:text-text focus:bg-transparent focus:border-none [&>svg]:focus:text-primary-100 focus:ring focus:ring-primary-100 active:ring-0 active:bg-primary-50 active:text-text [&>svg]:active:text-primary active:outline active:outline-1 active:outline-gray-0 active:outline-offset-1",
     },
     size: {
-      md: "h-8 p-2",
-      sm: "h-6 p-1",
-      lg: "h-10 rounded-md p-4 text-sm",
+      md: "h-8 p-2 [&>svg]:h-5 [&>svg]:w-5",
+      sm: "h-6 p-1 [&>svg]:h-4 [&>svg]:w-4",
+      lg: "h-10 rounded-md p-4 text-sm [&>svg]:h-6 [&>svg]:w-6",
     },
   },
   defaultVariants: {
@@ -44,7 +44,7 @@ export type ButtonVariant = VariantProps<typeof buttonVariants>["variant"];
 export type ButtonSize = VariantProps<typeof buttonVariants>["size"];
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  asChild?: boolean; // todo: aschild does not work because of these icons i've added, need to fix this
+  asChild?: boolean;
   loading?: boolean;
   startIcon?: React.ReactNode;
   endIcon?: React.ReactNode;
@@ -57,9 +57,9 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     const Comp = asChild ? Slot : "button";
     return (
       <Comp className={cn(buttonVariants({ variant, size, className }))} ref={ref} disabled={disabled || loading} {...props}>
-        {loading ? <SpinnerIcon /> : null}
+        {loading ? <Spinner /> : null}
         {startIcon}
-        {children}
+        <Slottable>{children}</Slottable>
         {endIcon}
       </Comp>
     );

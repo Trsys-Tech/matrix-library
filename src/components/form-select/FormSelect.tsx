@@ -1,9 +1,9 @@
+import { Spinner } from "@trsys-tech/matrix-icons";
 import { ControllerProps, FieldPath, FieldValues, useController } from "react-hook-form";
 import { SelectContentProps, SelectItemProps, SelectProps, SelectTriggerProps, SelectValueProps } from "@radix-ui/react-select";
 
 import { cn } from "../../lib/utils";
 
-import { SpinnerIcon } from "../Icons/SpinnerIcon";
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "../form/Form";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../select/Select";
 
@@ -97,7 +97,7 @@ const FormSelect = <TFieldValues extends FieldValues, TName extends FieldPath<TF
               <SelectContent {...(slotProps?.selectContentProps ?? {})}>
                 {loading && (
                   <SelectItem {...(slotProps?.selectItemProps ?? {})} value="-1" disabled>
-                    <SpinnerIcon className="inline-block mb-0.5" /> {loadingText || "Loading..."}
+                    <Spinner className="inline-block mb-0.5" /> {loadingText || "Loading..."}
                   </SelectItem>
                 )}
                 {!loading && !options.length ? (

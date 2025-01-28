@@ -1,20 +1,14 @@
 import React, { HTMLAttributes } from "react";
 import { AgGridReact, AgGridReactProps } from "ag-grid-react";
 import { GridApi, GridReadyEvent, themeQuartz } from "ag-grid-community";
+import { CircleXmark, ElipsisVertical, Magnifier, Print, Refresh, Snowflake, Trashcan } from "@trsys-tech/matrix-icons";
 
 import { cn } from "../../lib/utils";
-import { PrintIcon } from "../Icons/PrintIcon";
 import { printHtml } from "../../lib/printHtml";
-import { SearchIcon } from "../Icons/SearchIcon";
-import { RefreshIcon } from "../Icons/RefreshIcon";
 import { TextField } from "../text-field/TextField";
-import { SnowflakeIcon } from "../Icons/SnowflakeIcon";
 import { Button, ButtonProps } from "../button/Button";
-import { CloseCircleIcon } from "../Icons/CloseCircleIcon";
-import { ElipsisVerticalIcon } from "../Icons/ElipsisVerticalIcon";
 import { IconButton, IconButtonProps } from "../icon-botton/IconButton";
 import { Popover, PopoverContent, PopoverContentProps, PopoverProps, PopoverTrigger, PopoverTriggerProps } from "../popover/Popover";
-import { TrashcanIcon } from "../Icons/TrashcanIcon";
 
 const appTheme = themeQuartz.withParams({
   fontFamily: "DMSans",
@@ -220,21 +214,21 @@ const SearchAction: React.FC<SearchActionProps> = ({ defaultOpen = false }) => {
           onChange={e => setQuickFilterText(e.target.value)}
           value={quickFilterText}
           startButton={
-            <Button variant="text" className="p-0 h-6 w-6 border-none mx-1" onClick={handleClose}>
-              <SearchIcon className="w-6 h-6" />
-            </Button>
+            <IconButton variant="toolbar" className="p-0.5 h-6 w-6 border-none mx-1" onClick={handleClose}>
+              <Magnifier className="w-5 h-5" />
+            </IconButton>
           }
           endButton={
             quickFilterText && (
-              <Button variant="text" className="p-1 w-6 h-6 border-none mx-1" onClick={handleClear}>
-                <CloseCircleIcon className="w-5 h-5" />
-              </Button>
+              <IconButton variant="toolbar" className="p-0.5 w-6 h-6 border-none mx-1" onClick={handleClear}>
+                <CircleXmark className="w-5 h-5" />
+              </IconButton>
             )
           }
         />
       ) : (
-        <IconButton variant="toolbar" className="p-0 w-6 h-6 m-1" onClick={handleOpen}>
-          <SearchIcon className="w-6 h-6" />
+        <IconButton variant="toolbar" className="p-0.5 w-6 h-6 m-1" onClick={handleOpen}>
+          <Magnifier className="w-5 h-5" />
         </IconButton>
       )}
     </div>
@@ -326,7 +320,7 @@ const FreezeAction: React.FC<FreezeActionProps> = ({ freezeText, unFreezeText, o
     <Button
       variant="text"
       onClick={handleFreezing}
-      startIcon={<SnowflakeIcon className="w-4.5 h-4.5" />}
+      startIcon={<Snowflake className="w-4.5 h-4.5" />}
       disabled={(!pinnedRowCount && !selectedRowsCount) || disabled}
       {...props}
     >
@@ -363,8 +357,8 @@ const PrintAction: React.FC<PrintActionProps> = ({ children, className, onClick,
   };
 
   return (
-    <IconButton variant="toolbar" className={cn("p-0 w-6 h-6", className)} onClick={handlePrint} {...props}>
-      {children ?? <PrintIcon className="w-4.5 h-4.5" />}
+    <IconButton variant="toolbar" className={cn("p-0.5 w-6 h-6", className)} onClick={handlePrint} {...props}>
+      {children ?? <Print className="w-5 h-5" />}
     </IconButton>
   );
 };
@@ -386,13 +380,13 @@ const RefreshAction: React.FC<RefreshActionProps> = ({ className, refreshRowData
 
   return (
     <IconButton
-      className={cn("p-0 w-6 h-6", loading && "disabled:bg-transparent", className)}
+      className={cn("p-0.5 w-6 h-6", loading && "disabled:bg-transparent", className)}
       variant="toolbar"
       onClick={handleRefresh}
       disabled={loading}
       {...props}
     >
-      {children ?? <RefreshIcon className={cn("w-4.5 h-4.5", loading && "animate-spin")} />}
+      {children ?? <Refresh className={cn("w-4.5 h-4.5", loading && "animate-spin")} />}
     </IconButton>
   );
 };
@@ -407,7 +401,7 @@ const DeleteAction: React.FC<DeleteActionProps> = ({ onDelete, children, ...prop
   };
 
   return (
-    <Button variant="danger" onClick={handleDelete} startIcon={<TrashcanIcon className="w-4.5 h-4.5" />} {...props}>
+    <Button variant="danger" onClick={handleDelete} startIcon={<Trashcan className="w-4.5 h-4.5" />} {...props}>
       {children}
     </Button>
   );
@@ -425,7 +419,7 @@ const ExtraActions: React.FC<ExtraActionsProps> = ({ children, slotProps, classN
   return (
     <Popover {...(slotProps?.popoverProps ?? {})}>
       <PopoverTrigger {...(slotProps?.triggerProps ?? {})}>
-        <ElipsisVerticalIcon className="w-4.5 h-4.5 text-primary" />
+        <ElipsisVertical className="w-4.5 h-4.5 text-primary" />
       </PopoverTrigger>
       <PopoverContent align="end" className={cn("w-40", className)} {...props}>
         {children}

@@ -4,8 +4,7 @@ import * as React from "react";
 import * as CheckboxPrimitive from "@radix-ui/react-checkbox";
 
 import { cn } from "../../lib/utils";
-import { CheckIcon } from "../Icons/CheckIcon";
-import { MinusIcon } from "../Icons/MinusIcon";
+import { Check, Minus } from "@trsys-tech/matrix-icons";
 
 const Checkbox = React.forwardRef<React.ElementRef<typeof CheckboxPrimitive.Root>, React.ComponentPropsWithoutRef<typeof CheckboxPrimitive.Root>>(
   ({ className, ...props }, ref) => {
@@ -19,8 +18,8 @@ const Checkbox = React.forwardRef<React.ElementRef<typeof CheckboxPrimitive.Root
         {...props}
       >
         <CheckboxPrimitive.Indicator className={cn("flex items-center justify-center text-current group")}>
-          <CheckIcon className="w-full h-full group-data-[state=indeterminate]:hidden" />
-          <MinusIcon className="w-full h-full group-data-[state=checked]:hidden" />
+          <Check className="w-full h-full group-data-[state=indeterminate]:hidden" />
+          <Minus className="w-full h-full group-data-[state=checked]:hidden" />
         </CheckboxPrimitive.Indicator>
       </CheckboxPrimitive.Root>
     );

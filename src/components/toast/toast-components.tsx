@@ -3,7 +3,7 @@ import * as ToastPrimitives from "@radix-ui/react-toast";
 import { tv, type VariantProps } from "tailwind-variants";
 
 import { cn } from "../../lib/utils";
-import { CloseIcon } from "../Icons/CloseIcon";
+import { XMark } from "@trsys-tech/matrix-icons";
 
 const ToastProvider = ToastPrimitives.Provider;
 
@@ -62,7 +62,7 @@ ToastAction.displayName = ToastPrimitives.Action.displayName;
 const ToastClose = React.forwardRef<React.ElementRef<typeof ToastPrimitives.Close>, React.ComponentPropsWithoutRef<typeof ToastPrimitives.Close>>(
   ({ className, ...props }, ref) => (
     <ToastPrimitives.Close ref={ref} className={cn("focus:outline-none focus:ring-none", className)} toast-close="" {...props}>
-      <CloseIcon className="h-4 w-4" />
+      <XMark className="h-5 w-5" />
     </ToastPrimitives.Close>
   ),
 );

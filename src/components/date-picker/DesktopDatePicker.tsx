@@ -2,13 +2,13 @@
 
 import * as React from "react";
 import { format } from "date-fns";
+import { Calendar as CalendarIcon } from "@trsys-tech/matrix-icons";
 import { PropsBase, PropsSingle, DayEventHandler } from "react-day-picker";
 
 import { cn } from "../../lib/utils";
 import { Calendar } from "./calendar";
 import { Button } from "../button/Button";
 import { Popover, PopoverContent, PopoverTrigger } from "../popover/Popover";
-import { CalendarIcon } from "../Icons/CalendarIcon";
 
 type DesktopDatePickerProps = PropsBase &
   Omit<PropsSingle, "mode"> & {
@@ -49,7 +49,7 @@ const DesktopDatePicker: React.FC<DesktopDatePickerProps> = ({
           )}
         >
           {selected ? format(selected, formatStr ?? "yyyy/MM/dd") : <span>{placeholder ?? "Pick a date"}</span>}
-          <CalendarIcon className="mr-2 h-5 w-5 ms-auto" />
+          <CalendarIcon className="mr-2 ms-auto" />
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-auto p-0">

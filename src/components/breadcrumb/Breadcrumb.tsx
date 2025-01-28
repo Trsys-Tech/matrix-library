@@ -2,8 +2,7 @@ import * as React from "react";
 import { Slot } from "@radix-ui/react-slot";
 
 import { cn } from "../../lib/utils";
-import { ChevronRightIcon } from "../Icons/ChevronRightIcon";
-import { ElipsisHorizontalIcon } from "../Icons/ElipsisHorizontal";
+import { ChevronRight, Elipsis } from "@trsys-tech/matrix-icons";
 
 const Breadcrumb = React.forwardRef<
   HTMLElement,
@@ -42,14 +41,14 @@ BreadcrumbPage.displayName = "BreadcrumbPage";
 
 const BreadcrumbSeparator = ({ children, className, ...props }: React.ComponentProps<"li">) => (
   <li role="presentation" aria-hidden="true" className={cn("[&>svg]:w-3.5 [&>svg]:h-3", className)} {...props}>
-    {children ?? <ChevronRightIcon />}
+    {children ?? <ChevronRight />}
   </li>
 );
 BreadcrumbSeparator.displayName = "BreadcrumbSeparator";
 
 const BreadcrumbEllipsis = ({ className, ...props }: React.ComponentProps<"span">) => (
   <span role="presentation" aria-hidden="true" className={cn("flex h-9 w-9 items-center justify-center", className)} {...props}>
-    <ElipsisHorizontalIcon className="h-4 w-4" />
+    <Elipsis className="h-4 w-4" />
     <span className="sr-only">More</span>
   </span>
 );

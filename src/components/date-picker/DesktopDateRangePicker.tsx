@@ -3,11 +3,11 @@
 import * as React from "react";
 import { format } from "date-fns";
 import { PropsBase, PropsRange, DateRange } from "react-day-picker";
+import { Calendar as CalendarIcon } from "@trsys-tech/matrix-icons";
 
 import { cn } from "../../lib/utils";
 import { Calendar } from "./calendar";
 import { Button } from "../button/Button";
-import { CalendarIcon } from "../Icons/CalendarIcon";
 import { Popover, PopoverContent, PopoverTrigger } from "../popover/Popover";
 
 type DesktopDateRangePickerProps = PropsBase &

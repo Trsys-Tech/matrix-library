@@ -1,7 +1,7 @@
+import { Plus } from "@trsys-tech/matrix-icons";
 import type { Meta, StoryObj } from "@storybook/react";
 
 import { IconButton } from "./IconButton";
-import { PlusIcon } from "../Icons/PlusIcon";
 
 const meta = {
   title: "Components/IconButton",
@@ -18,7 +18,7 @@ type Story = StoryObj<typeof meta>;
 export const Primary: Story = {
   args: {
     variant: "table",
-    children: <PlusIcon />,
+    children: <Plus />,
     loading: false,
     disabled: false,
     asChild: false,
@@ -28,7 +28,7 @@ export const Primary: Story = {
 export const Variants: Story = {
   args: {
     variant: "table",
-    children: <PlusIcon />,
+    children: <Plus />,
     asChild: false,
     loading: false,
   },
@@ -49,7 +49,7 @@ export const Large: Story = {
   args: {
     variant: "table",
     size: "lg",
-    children: <PlusIcon />,
+    children: <Plus />,
     asChild: false,
     loading: false,
   },
@@ -69,7 +69,7 @@ export const Large: Story = {
 export const Small: Story = {
   args: {
     size: "sm",
-    children: <PlusIcon />,
+    children: <Plus />,
     asChild: false,
     loading: false,
   },

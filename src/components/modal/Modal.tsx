@@ -1,8 +1,8 @@
 import * as React from "react";
+import { XMark } from "@trsys-tech/matrix-icons";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 
 import { cn } from "../../lib/utils";
-import { CloseIcon } from "../Icons/CloseIcon";
 
 const ModalPortal = DialogPrimitive.Portal;
 
@@ -85,7 +85,7 @@ const Modal = React.forwardRef<React.ElementRef<typeof DialogPrimitive.Content>,
                 slotProps?.close?.className,
               )}
             >
-              <CloseIcon className="h-5 w-5" />
+              <XMark className="h-5 w-5" />
               <span className="sr-only">Close</span>
             </ModalClose>
           </ModalHeader>

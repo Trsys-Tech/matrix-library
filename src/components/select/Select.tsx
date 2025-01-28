@@ -1,12 +1,9 @@
 import * as React from "react";
+import { Check, ChevronDown, ChevronUp, XMark } from "@trsys-tech/matrix-icons";
 import * as SelectPrimitive from "@radix-ui/react-select";
 import type { SelectValueProps, SelectGroupProps } from "@radix-ui/react-select";
 
 import { cn } from "../../lib/utils";
-import { CheckIcon } from "../Icons/CheckIcon";
-import { ChevronUpIcon } from "../Icons/ChevronUpIcon";
-import { ChevronDownIcon } from "../Icons/ChevronDownIcon";
-import { CloseIcon } from "../Icons/CloseIcon";
 
 type ClearSelectContextValue = {
   onClear: () => void;
@@ -59,11 +56,11 @@ const SelectTrigger = React.forwardRef<React.ElementRef<typeof SelectPrimitive.T
         <div className="flex items-center gap-2">
           {clearable && value ? (
             <SelectPrimitive.Icon asChild onPointerDown={handlePointerDown} onClickCapture={onClear}>
-              <CloseIcon className="h-4.5 w-4.5" />
+              <XMark className="h-4.5 w-4.5" />
             </SelectPrimitive.Icon>
           ) : null}
           <SelectPrimitive.Icon asChild>
-            <ChevronDownIcon className="h-5 w-5 text-primary group-data-[state=open]:rotate-180 transition-transform" />
+            <ChevronDown className="h-4.5 w-4.5 text-primary group-data-[state=open]:rotate-180 transition-transform" />
           </SelectPrimitive.Icon>
         </div>
       </SelectPrimitive.Trigger>
@@ -78,7 +75,7 @@ const SelectScrollUpButton = React.forwardRef<
   React.ComponentPropsWithoutRef<typeof SelectPrimitive.ScrollUpButton>
 >(({ className, ...props }, ref) => (
   <SelectPrimitive.ScrollUpButton ref={ref} className={cn("flex cursor-default items-center justify-center py-1", className)} {...props}>
-    <ChevronUpIcon />
+    <ChevronUp />
   </SelectPrimitive.ScrollUpButton>
 ));
 SelectScrollUpButton.displayName = SelectPrimitive.ScrollUpButton.displayName;
@@ -89,7 +86,7 @@ const SelectScrollDownButton = React.forwardRef<
   React.ComponentPropsWithoutRef<typeof SelectPrimitive.ScrollDownButton>
 >(({ className, ...props }, ref) => (
   <SelectPrimitive.ScrollDownButton ref={ref} className={cn("flex cursor-default items-center justify-center py-1", className)} {...props}>
-    <ChevronDownIcon />
+    <ChevronDown />
   </SelectPrimitive.ScrollDownButton>
 ));
 SelectScrollDownButton.displayName = SelectPrimitive.ScrollDownButton.displayName;
@@ -142,7 +139,7 @@ const SelectItem = React.forwardRef<React.ElementRef<typeof SelectPrimitive.Item
     >
       <span className="absolute right-2 flex h-3.5 w-3.5 items-center justify-center">
         <SelectPrimitive.ItemIndicator>
-          <CheckIcon className="h-4 w-4" />
+          <Check className="h-4 w-4" />
         </SelectPrimitive.ItemIndicator>
       </span>
       <SelectPrimitive.ItemText>{children}</SelectPrimitive.ItemText>

@@ -2,10 +2,10 @@
 
 import * as React from "react";
 import { Command as CommandPrimitive } from "cmdk";
+import { Magnifier } from "@trsys-tech/matrix-icons";
 import { type DialogProps } from "@radix-ui/react-dialog";
 
 import { cn } from "../../lib/utils";
-import { SearchIcon } from "../Icons/SearchIcon";
 import { Dialog, DialogContent } from "../dialog/Dialog";
 
 const Command = React.forwardRef<React.ElementRef<typeof CommandPrimitive>, React.ComponentPropsWithoutRef<typeof CommandPrimitive>>(
@@ -34,7 +34,7 @@ const CommandDialog = ({ children, ...props }: DialogProps) => {
 const CommandInput = React.forwardRef<React.ElementRef<typeof CommandPrimitive.Input>, React.ComponentPropsWithoutRef<typeof CommandPrimitive.Input>>(
   ({ className, ...props }, ref) => (
     <div className="flex items-center border-b px-3" cmdk-input-wrapper="">
-      <SearchIcon className="mr-2 h-4 w-4 shrink-0 opacity-50" />
+      <Magnifier className="mr-2 h-4 w-4 shrink-0 opacity-50" />
       <CommandPrimitive.Input
         ref={ref}
         className={cn(

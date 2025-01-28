@@ -1,8 +1,6 @@
 import { Meta, StoryObj } from "@storybook/react/*";
 import { Rating } from "./Rating";
-
-// import { StarIcon } from "lucide-react";
-import { StarIcon } from "../Icons/StartIcon";
+import { Star } from "@trsys-tech/matrix-icons";
 
 const meta: Meta<typeof Rating> = {
   title: "Components/Rating",
@@ -32,7 +30,7 @@ export const Default: Story = {
     disabled: false,
   },
   render: ({ ...args }) => {
-    return <Rating {...args} Icon={StarIcon} />;
+    return <Rating {...args} Icon={Star} />;
   },
 };
 

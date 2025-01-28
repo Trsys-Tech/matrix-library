@@ -10,9 +10,9 @@ import type {
   DialogOverlayProps,
   DialogDescriptionProps,
 } from "@radix-ui/react-dialog";
+import { XMark } from "@trsys-tech/matrix-icons";
 
 import { cn } from "../../lib/utils";
-import { CloseIcon } from "../Icons/CloseIcon";
 
 const Dialog = DialogPrimitive.Root;
 
@@ -53,7 +53,7 @@ const DialogContent = React.forwardRef<
     >
       {children}
       <DialogPrimitive.Close className="absolute right-4 top-4 rounded-sm disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground">
-        <CloseIcon className="h-5 w-5" />
+        <XMark className="h-5 w-5" />
         <span className="sr-only">Close</span>
       </DialogPrimitive.Close>
     </DialogPrimitive.Content>

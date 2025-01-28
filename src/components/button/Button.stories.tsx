@@ -1,9 +1,8 @@
-import type { Meta, StoryObj } from "@storybook/react";
 import { fn } from "@storybook/test";
+import type { Meta, StoryObj } from "@storybook/react";
+import { ChevronDown, Plus } from "@trsys-tech/matrix-icons";
 
 import { Button } from "./Button";
-import { PlusIcon } from "../Icons/PlusIcon";
-import { ChevronDownIcon } from "../Icons/ChevronDownIcon";
 
 const meta = {
   title: "Components/Button",
@@ -21,10 +20,11 @@ type Story = StoryObj<typeof meta>;
 export const Primary: Story = {
   args: {
     variant: "primary",
-    children: "Button",
+    children: <span>Button</span>,
     asChild: false,
     loading: false,
   },
+  render: props => <Button {...props} startIcon={<Plus />} endIcon={<ChevronDown className="w-4.5 h-4.5" />} />,
 };
 
 export const Variants: Story = {
@@ -36,13 +36,13 @@ export const Variants: Story = {
   },
   render: props => (
     <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 w-full lg:min-w-[600px]">
-      <Button {...props} startIcon={<PlusIcon />} endIcon={<ChevronDownIcon className="w-4.5 h-4.5" />} />
-      <Button {...props} variant="outline" startIcon={<PlusIcon />} endIcon={<ChevronDownIcon />} />
-      <Button {...props} variant="text" startIcon={<PlusIcon />} endIcon={<ChevronDownIcon />} />
-      <Button {...props} variant="danger" startIcon={<PlusIcon />} endIcon={<ChevronDownIcon />} />
-      <Button {...props} variant="warning" startIcon={<PlusIcon />} endIcon={<ChevronDownIcon />} />
-      <Button {...props} variant="success" startIcon={<PlusIcon />} endIcon={<ChevronDownIcon />} />
-      <Button {...props} variant="info" startIcon={<PlusIcon />} endIcon={<ChevronDownIcon />} />
+      <Button {...props} startIcon={<Plus />} endIcon={<ChevronDown className="w-4.5 h-4.5" />} />
+      <Button {...props} variant="outline" startIcon={<Plus />} endIcon={<ChevronDown />} />
+      <Button {...props} variant="text" startIcon={<Plus />} endIcon={<ChevronDown />} />
+      <Button {...props} variant="danger" startIcon={<Plus />} endIcon={<ChevronDown />} />
+      <Button {...props} variant="warning" startIcon={<Plus />} endIcon={<ChevronDown />} />
+      <Button {...props} variant="success" startIcon={<Plus />} endIcon={<ChevronDown />} />
+      <Button {...props} variant="info" startIcon={<Plus />} endIcon={<ChevronDown />} />
     </div>
   ),
 };
@@ -57,13 +57,13 @@ export const Large: Story = {
   },
   render: props => (
     <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 w-full lg:min-w-[650px]">
-      <Button {...props} startIcon={<PlusIcon />} endIcon={<ChevronDownIcon className="w-4.5 h-4.5" />} />
-      <Button {...props} variant="outline" startIcon={<PlusIcon />} endIcon={<ChevronDownIcon />} />
-      <Button {...props} variant="text" startIcon={<PlusIcon />} endIcon={<ChevronDownIcon />} />
-      <Button {...props} variant="danger" startIcon={<PlusIcon />} endIcon={<ChevronDownIcon />} />
-      <Button {...props} variant="warning" startIcon={<PlusIcon />} endIcon={<ChevronDownIcon />} />
-      <Button {...props} variant="success" startIcon={<PlusIcon />} endIcon={<ChevronDownIcon />} />
-      <Button {...props} variant="info" startIcon={<PlusIcon />} endIcon={<ChevronDownIcon />} />
+      <Button {...props} startIcon={<Plus />} endIcon={<ChevronDown className="w-4.5 h-4.5" />} />
+      <Button {...props} variant="outline" startIcon={<Plus />} endIcon={<ChevronDown />} />
+      <Button {...props} variant="text" startIcon={<Plus />} endIcon={<ChevronDown />} />
+      <Button {...props} variant="danger" startIcon={<Plus />} endIcon={<ChevronDown />} />
+      <Button {...props} variant="warning" startIcon={<Plus />} endIcon={<ChevronDown />} />
+      <Button {...props} variant="success" startIcon={<Plus />} endIcon={<ChevronDown />} />
+      <Button {...props} variant="info" startIcon={<Plus />} endIcon={<ChevronDown />} />
     </div>
   ),
 };
@@ -78,13 +78,13 @@ export const Small: Story = {
   },
   render: props => (
     <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 w-full lg:min-w-[650px]">
-      <Button {...props} startIcon={<PlusIcon />} endIcon={<ChevronDownIcon className="w-4.5 h-4.5" />} />
-      <Button {...props} variant="outline" startIcon={<PlusIcon />} endIcon={<ChevronDownIcon />} />
-      <Button {...props} variant="text" startIcon={<PlusIcon />} endIcon={<ChevronDownIcon />} />
-      <Button {...props} variant="danger" startIcon={<PlusIcon />} endIcon={<ChevronDownIcon />} />
-      <Button {...props} variant="warning" startIcon={<PlusIcon />} endIcon={<ChevronDownIcon />} />
-      <Button {...props} variant="success" startIcon={<PlusIcon />} endIcon={<ChevronDownIcon />} />
-      <Button {...props} variant="info" startIcon={<PlusIcon />} endIcon={<ChevronDownIcon />} />
+      <Button {...props} startIcon={<Plus />} endIcon={<ChevronDown className="w-4.5 h-4.5" />} />
+      <Button {...props} variant="outline" startIcon={<Plus />} endIcon={<ChevronDown />} />
+      <Button {...props} variant="text" startIcon={<Plus />} endIcon={<ChevronDown />} />
+      <Button {...props} variant="danger" startIcon={<Plus />} endIcon={<ChevronDown />} />
+      <Button {...props} variant="warning" startIcon={<Plus />} endIcon={<ChevronDown />} />
+      <Button {...props} variant="success" startIcon={<Plus />} endIcon={<ChevronDown />} />
+      <Button {...props} variant="info" startIcon={<Plus />} endIcon={<ChevronDown />} />
     </div>
   ),
 };
@@ -98,13 +98,13 @@ export const OnDark: Story = {
   },
   render: props => (
     <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 w-full lg:min-w-[650px] bg-gray-400 p-4">
-      <Button {...props} variant="primaryOnDark" startIcon={<PlusIcon />} endIcon={<ChevronDownIcon className="w-4.5 h-4.5" />} />
-      <Button {...props} variant="outlineOnDark" startIcon={<PlusIcon />} endIcon={<ChevronDownIcon />} />
-      <Button {...props} variant="textOnDark" startIcon={<PlusIcon />} endIcon={<ChevronDownIcon />} />
-      <Button {...props} variant="danger" startIcon={<PlusIcon />} endIcon={<ChevronDownIcon />} />
-      <Button {...props} variant="warning" startIcon={<PlusIcon />} endIcon={<ChevronDownIcon />} />
-      <Button {...props} variant="success" startIcon={<PlusIcon />} endIcon={<ChevronDownIcon />} />
-      <Button {...props} variant="info" startIcon={<PlusIcon />} endIcon={<ChevronDownIcon />} />
+      <Button {...props} variant="primaryOnDark" startIcon={<Plus />} endIcon={<ChevronDown className="w-4.5 h-4.5" />} />
+      <Button {...props} variant="outlineOnDark" startIcon={<Plus />} endIcon={<ChevronDown />} />
+      <Button {...props} variant="textOnDark" startIcon={<Plus />} endIcon={<ChevronDown />} />
+      <Button {...props} variant="danger" startIcon={<Plus />} endIcon={<ChevronDown />} />
+      <Button {...props} variant="warning" startIcon={<Plus />} endIcon={<ChevronDown />} />
+      <Button {...props} variant="success" startIcon={<Plus />} endIcon={<ChevronDown />} />
+      <Button {...props} variant="info" startIcon={<Plus />} endIcon={<ChevronDown />} />
     </div>
   ),
 };

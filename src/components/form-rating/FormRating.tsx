@@ -1,7 +1,7 @@
+import { Star } from "@trsys-tech/matrix-icons";
 import { SlotProps } from "@radix-ui/react-slot";
 import { Control, ControllerProps, FieldPath, FieldValues } from "react-hook-form";
 
-import { StarIcon } from "../Icons/StartIcon";
 import { Rating, RatingProps } from "../rating/Rating";
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "../form/Form";
 
@@ -31,7 +31,7 @@ const FormRating = <TFieldValues extends FieldValues, TName extends FieldPath<TF
     label,
     slotProps,
     required,
-    Icon = StarIcon,
+    Icon = Star,
     max = 5,
     ...formItemProps
   } = props;

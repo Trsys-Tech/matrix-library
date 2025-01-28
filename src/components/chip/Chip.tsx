@@ -3,7 +3,7 @@ import { Slot } from "@radix-ui/react-slot";
 import { tv, VariantProps } from "tailwind-variants";
 
 import { cn } from "../../lib/utils";
-import { CloseIcon } from "../Icons/CloseIcon";
+import { XMark } from "@trsys-tech/matrix-icons";
 
 const chipVariants = tv({
   base: "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full text-xs font-medium",
@@ -42,7 +42,7 @@ const Chip = React.forwardRef<HTMLSpanElement, ChipProps>(({ className, variant,
             { "-me-1 [&>svg]:w-4 [&>svg]:h-4": size === "sm" },
           )}
         >
-          <CloseIcon />
+          <XMark />
         </button>
       ) : null}
     </Comp>

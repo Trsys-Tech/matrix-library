@@ -3,9 +3,8 @@ import { Meta } from "@storybook/react/*";
 
 import { cn } from "../../lib/utils";
 import { Button } from "../button/Button";
-import { CheckIcon } from "../Icons/CheckIcon";
-import { ChevronDownIcon } from "../Icons/ChevronDownIcon";
 import { Combobox, ComboboxContent, ComboboxEmpty, ComboboxGroup, ComboboxInput, ComboboxItem, ComboboxList, ComboboxTrigger } from "./Combobox";
+import { Check, ChevronDown } from "@trsys-tech/matrix-icons";
 
 const meta: Meta<typeof Combobox> = {
   title: "Components/Combobox",
@@ -57,7 +56,7 @@ export const Default = () => {
           className="flex h-9 w-full items-center justify-between whitespace-nowrap rounded-sm border border-input bg-transparent px-3 py-2 text-sm shadow-sm ring-offset-background placeholder:text-muted-foreground hover:border hover:border-primary hover:bg-transparent focus:border focus:border-primary focus:outline-none focus:ring focus:ring-primary-100 disabled:cursor-not-allowed disabled:bg-gray-100 disabled:text-text-300 disabled:border-none [&>span]:line-clamp-1 [&_svg]:disabled:text-text-300"
         >
           {value ? cars.find(car => car.value === value)?.label : "Select a car..."}
-          <ChevronDownIcon className="opacity-50" />
+          <ChevronDown className="opacity-50" />
         </Button>
       </ComboboxTrigger>
       <ComboboxContent>
@@ -75,7 +74,7 @@ export const Default = () => {
                 }}
               >
                 {car.label}
-                <CheckIcon className={cn("ml-auto", value === car.value ? "opacity-100" : "opacity-0")} />
+                <Check className={cn("ml-auto", value === car.value ? "opacity-100" : "opacity-0")} />
               </ComboboxItem>
             ))}
           </ComboboxGroup>

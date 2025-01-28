@@ -1,13 +1,11 @@
 /* eslint-disable camelcase */
 import * as React from "react";
 import { Chevron, DayPicker, DayPickerProps } from "react-day-picker";
+import { ChevronDown, ChevronLeft, ChevronRight } from "@trsys-tech/matrix-icons";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@radix-ui/react-collapsible";
 
 import { cn } from "../../lib/utils";
 import { Button } from "../button/Button";
-import { ChevronLeftIcon } from "../Icons/ChevronLeftIcon";
-import { ChevronDownIcon } from "../Icons/ChevronDownIcon";
-import { ChevronRightIcon } from "../Icons/ChevronRightIcon";
 
 export type CalendarProps = DayPickerProps & {};
 
@@ -67,9 +65,9 @@ function Calendar({ className, classNames, showOutsideDays = true, ...props }: C
       components={{
         Chevron: props => {
           if (props.orientation === "left") {
-            return <ChevronLeftIcon {...props} className="h-6 w-6" />;
+            return <ChevronLeft {...props} className="h-6 w-6" />;
           } else if (props.orientation === "right") {
-            return <ChevronRightIcon {...props} className="h-6 w-6" />;
+            return <ChevronRight {...props} className="h-6 w-6" />;
           }
           return <Chevron {...props} />;
         },
@@ -79,8 +77,8 @@ function Calendar({ className, classNames, showOutsideDays = true, ...props }: C
           };
           return (
             <Collapsible ref={yearCollapseRef}>
-              <CollapsibleTrigger className="group flex gap-1">
-                {props.value} <ChevronDownIcon className="text-primary w-6 h-6 group-data-[state='open']:rotate-180 transition-transform ms-auto" />
+              <CollapsibleTrigger className="group flex items-center gap-1">
+                {props.value} <ChevronDown className="text-primary w-5 h-5 group-data-[state='open']:rotate-180 transition-transform ms-auto" />
               </CollapsibleTrigger>
               <CollapsibleContent
                 className="overflow-auto z-50 absolute bg-popover left-2 top-11 p-1"

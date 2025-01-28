@@ -1,10 +1,8 @@
 import React from "react";
 import { Meta } from "@storybook/react/*";
+import { Calendar, ChevronRight, House } from "@trsys-tech/matrix-icons";
 
 import { Button } from "../button/Button";
-import { HomeIcon } from "../Icons/HomeIcon";
-import { CalendarIcon } from "../Icons/CalendarIcon";
-import { ChevronRightIcon } from "../Icons/ChevronRightIcon";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "../collapsible/Collapsible";
 import {
   Sidebar,
@@ -47,7 +45,7 @@ export const WithRightAndLeft = () => {
                 <SidebarMenu>
                   <SidebarMenuItem>
                     <SidebarMenuButton tooltip="dashboard">
-                      <HomeIcon />
+                      <House />
                       Dashboard
                     </SidebarMenuButton>
                   </SidebarMenuItem>
@@ -90,20 +88,20 @@ export const WithLeft = () => {
         <Sidebar collapsible="icon" variant="sidebar" side="left" width="12rem" widthIcon="4rem">
           <SidebarContent className="relative bg-gray-0 pt-8">
             <SidebarTrigger className="absolute end-0 top-0 flex items-center justify-center bg-gray-100 rounded-sm z-10 transition-transform rotate-180 group-data-[state=collapsed]:rotate-0">
-              <ChevronRightIcon className="w-4 h-4" />
+              <ChevronRight className="w-4 h-4" />
             </SidebarTrigger>
             <SidebarGroup>
               <SidebarGroupLabel>Platform</SidebarGroupLabel>
               <SidebarMenu>
                 <SidebarMenuItem>
                   <SidebarMenuButton tooltip="dashboard" isActive>
-                    <HomeIcon />
+                    <House />
                     Home and children
                   </SidebarMenuButton>
                 </SidebarMenuItem>
                 <SidebarMenuItem>
                   <SidebarMenuButton tooltip="calendar">
-                    <CalendarIcon />
+                    <Calendar />
                     Calendar
                   </SidebarMenuButton>
                 </SidebarMenuItem>
@@ -116,8 +114,8 @@ export const WithLeft = () => {
                   <SidebarMenuItem>
                     <CollapsibleTrigger asChild className="p-2">
                       <SidebarMenuButton tooltip="Users & Access">
-                        <HomeIcon /> Users & Access
-                        <ChevronRightIcon className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
+                        <House /> Users & Access
+                        <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
                       </SidebarMenuButton>
                     </CollapsibleTrigger>
                     <CollapsibleContent className="p-0">
