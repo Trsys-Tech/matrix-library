@@ -76,7 +76,7 @@ const MobileDateRangePicker: React.FC<MobileDateRangePickerProps> = ({
       <Button
         variant={"outline"}
         className={cn(
-          "border-gray-300 text-text focus:ring-0 active:ring-transparent justify-start",
+          "w-full border-gray-300 text-text focus:ring-0 active:ring-transparent justify-start",
           !selected && "text-muted-foreground",
           className,
         )}

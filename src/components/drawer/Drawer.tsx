@@ -2,13 +2,13 @@
 
 import * as React from "react";
 import { Slot } from "@radix-ui/react-slot";
-import defaultTheme from "tailwindcss/defaultTheme";
 import { ChevronsRight } from "@trsys-tech/matrix-icons";
 import { createContextScope, Scope } from "@radix-ui/react-context";
 
 import { cn } from "../../lib/utils";
 import { Modal } from "../modal/Modal";
 import { IconButton } from "../icon-botton/IconButton";
+import { useIsMobile } from "../../lib/hooks/use-mobile";
 
 type ScopedProps<P> = P & { __scopeDrawer?: Scope };
 
@@ -46,37 +46,13 @@ const [DrawerProvider, useDrawerProvider] = createDrawerContext<DrawerContextVal
  * @param {number} width - Drawer width
  * @param {React.ReactNode} children - Drawer children
  * @param {boolean} asChild - Render as child component
- * @param {number} mobileBreakpoint - Mobile breakpoint
  * @returns {React.ReactElement}
  */
 const Drawer = React.forwardRef<React.ElementRef<"div">, ScopedProps<DrawerProps>>((props, ref) => {
-  const { asChild, anchor = "right", children, open, width = 240, className, onClose, __scopeDrawer, mobileBreakpoint, ...restProps } = props;
+  const { asChild, anchor = "right", children, open, width = 240, className, onClose, __scopeDrawer, ...restProps } = props;
   const Comp = asChild ? Slot : "div";
 
-  // re render to show proper modal on resize
-  const [windowSize, setWindowSize] = React.useState(0);
-  React.useEffect(() => {
-    const observer = new ResizeObserver(() => {
-      setWindowSize(window.innerWidth);
-    });
-
-    observer.observe(document.documentElement);
-
-    return () => {
-      observer.disconnect();
-    };
-  }, []);
-
-  const isMobile = React.useMemo(() => {
-    if (window !== undefined) {
-      if (mobileBreakpoint) {
-        return !window?.matchMedia?.(`(min-width: ${mobileBreakpoint})`)?.matches;
-      }
-      return !window?.matchMedia?.(`(min-width: ${defaultTheme.screens.md})`)?.matches;
-    }
-    return false;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [mobileBreakpoint, windowSize]);
+  const isMobile = useIsMobile();
 
   return (
     <Comp ref={ref} className={cn("flex", className)} {...restProps}>

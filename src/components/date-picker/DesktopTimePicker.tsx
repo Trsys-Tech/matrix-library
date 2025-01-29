@@ -21,7 +21,7 @@ const DesktopTimePicker: React.FC<DesktopTimePickerProps> = ({ time, onTimeChang
       <PopoverTrigger asChild>
         <Button
           variant={"outline"}
-          className={cn("border-gray-300 text-text focus:ring-0 active:ring-transparent justify-start", className)}
+          className={cn("w-full border-gray-300 text-text focus:ring-0 active:ring-transparent justify-start", className)}
           {...restProps}
         >
           {`${time?.hour?.toString()?.padStart(2, "0") ?? "--"} : ${time?.minute?.toString()?.padStart(2, "0") ?? "--"} ${time?.ampm ?? "--"}`}

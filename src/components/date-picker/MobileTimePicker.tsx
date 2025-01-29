@@ -27,7 +27,7 @@ const MobileTimePicker: React.FC<MobileTimePickerProps> = ({ time, onTimeChange,
     <SwipableDrawer open={isOpen} onOpenChange={setIsOpen}>
       <Button
         variant={"outline"}
-        className={cn("border-gray-300 text-text focus:ring-0 active:ring-transparent justify-start", className)}
+        className={cn("w-full border-gray-300 text-text focus:ring-0 active:ring-transparent justify-start", className)}
         onClick={() => setIsOpen(true)}
         {...restProps}
       >
