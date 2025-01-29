@@ -15,12 +15,20 @@ import {
 type MobileTimePickerProps = HTMLAttributes<HTMLButtonElement> & {
   time: Time | undefined;
   onTimeChange: (time: Time | undefined) => void;
+  placeholder?: string;
   slotsProps?: {
     content?: HTMLAttributes<HTMLDivElement>;
   };
 };
 
-const MobileTimePicker: React.FC<MobileTimePickerProps> = ({ time, onTimeChange, className, slotsProps, ...restProps }) => {
+const MobileTimePicker: React.FC<MobileTimePickerProps> = ({
+  time,
+  onTimeChange,
+  className,
+  slotsProps,
+  placeholder = "Pick a time",
+  ...restProps
+}) => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -29,6 +37,7 @@ const MobileTimePicker: React.FC<MobileTimePickerProps> = ({ time, onTimeChange,
         variant={"outline"}
         className={cn("w-full border-gray-300 text-text focus:ring-0 active:ring-transparent justify-start", className)}
         onClick={() => setIsOpen(true)}
+        aria-label={time?.hour ? `Selected time: ${time.hour}:${time.minute} ${time.ampm}` : placeholder}
         {...restProps}
       >
         {`${time?.hour?.toString()?.padStart(2, "0") ?? "--"} : ${time?.minute?.toString()?.padStart(2, "0") ?? "--"} ${time?.ampm ?? "--"}`}

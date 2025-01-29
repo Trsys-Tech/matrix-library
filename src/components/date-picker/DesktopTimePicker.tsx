@@ -8,12 +8,20 @@ import { Popover, PopoverContent, PopoverTrigger } from "../popover/Popover";
 type DesktopTimePickerProps = HTMLAttributes<HTMLButtonElement> & {
   time: Time | undefined;
   onTimeChange: (time: Time | undefined) => void;
+  placeholder?: string;
   slotsProps?: {
     content?: HTMLAttributes<HTMLDivElement>;
   };
 };
 
-const DesktopTimePicker: React.FC<DesktopTimePickerProps> = ({ time, onTimeChange, className, slotsProps, ...restProps }) => {
+const DesktopTimePicker: React.FC<DesktopTimePickerProps> = ({
+  time,
+  onTimeChange,
+  className,
+  slotsProps,
+  placeholder = "Pick a Time",
+  ...restProps
+}) => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -22,6 +30,7 @@ const DesktopTimePicker: React.FC<DesktopTimePickerProps> = ({ time, onTimeChang
         <Button
           variant={"outline"}
           className={cn("w-full border-gray-300 text-text focus:ring-0 active:ring-transparent justify-start", className)}
+          aria-label={time?.hour ? `Selected time: ${time.hour}:${time.minute} ${time.ampm}` : placeholder}
           {...restProps}
         >
           {`${time?.hour?.toString()?.padStart(2, "0") ?? "--"} : ${time?.minute?.toString()?.padStart(2, "0") ?? "--"} ${time?.ampm ?? "--"}`}

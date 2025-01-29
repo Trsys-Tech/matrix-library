@@ -17,6 +17,8 @@ type DesktopDateRangePickerProps = PropsBase &
     calendarClassName?: string;
     selected?: DateRange;
     required?: boolean;
+    fromText?: string;
+    toText?: string;
   };
 
 const DesktopDateRangePicker: React.FC<DesktopDateRangePickerProps> = ({
@@ -25,6 +27,8 @@ const DesktopDateRangePicker: React.FC<DesktopDateRangePickerProps> = ({
   placeholder,
   className,
   calendarClassName,
+  fromText,
+  toText,
   ...props
 }) => {
   const [isOpen, setIsOpen] = React.useState(false);
@@ -44,11 +48,20 @@ const DesktopDateRangePicker: React.FC<DesktopDateRangePickerProps> = ({
             !selected && "text-muted-foreground",
             className,
           )}
+          aria-label={
+            selected
+              ? `Selected date: ${selected?.from ? format(selected.from, formatStr ?? "yyyy/MM/dd") : ""} - ${selected?.to ? format(selected.to, formatStr ?? "yyyy/MM/dd") : ""}`
+              : placeholder
+          }
         >
           {selected ? (
             <div className="grid grid-cols-2 flex-1 justify-items-start">
-              <span>From: {selected?.from ? format(selected.from, formatStr ?? "yyyy/MM/dd") : "-"}</span>{" "}
-              <span>To: {selected?.to ? format(selected.to, formatStr ?? "yyyy/MM/dd") : "-"}</span>
+              <span>
+                {fromText ?? "From"}: {selected?.from ? format(selected.from, formatStr ?? "yyyy/MM/dd") : "-"}
+              </span>{" "}
+              <span>
+                {toText ?? "To"}: {selected?.to ? format(selected.to, formatStr ?? "yyyy/MM/dd") : "-"}
+              </span>
             </div>
           ) : (
             <span>{placeholder ?? "Pick a Range"}</span>

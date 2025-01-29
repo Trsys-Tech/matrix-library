@@ -57,6 +57,7 @@ const MobileDatePicker: React.FC<MobileDatePickerProps> = ({
           className,
         )}
         onClick={() => setIsOpen(true)}
+        aria-label={selected ? `Selected date: ${format(selected, formatStr ?? "yyyy/MM/dd")}` : "Pick a date"}
       >
         {selected ? format(selected, formatStr ?? "eee, MMM dd") : <span>{placeholder ?? "Pick a date"}</span>}
         <CalendarIcon className="mr-2 h-5 w-5 ms-auto" />

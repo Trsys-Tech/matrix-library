@@ -21,6 +21,8 @@ type MobileDateRangePickerProps = PropsBase &
     cancelText?: string;
     applyText?: string;
     onSelect?: (date: DateRange | undefined) => void;
+    fromText?: string;
+    toText?: string;
   };
 
 const MobileDateRangePicker: React.FC<MobileDateRangePickerProps> = ({
@@ -33,7 +35,8 @@ const MobileDateRangePicker: React.FC<MobileDateRangePickerProps> = ({
   cancelText,
   applyText,
   onSelect,
-
+  fromText,
+  toText,
   ...props
 }) => {
   const [isOpen, setIsOpen] = React.useState(false);
@@ -81,11 +84,20 @@ const MobileDateRangePicker: React.FC<MobileDateRangePickerProps> = ({
           className,
         )}
         onClick={() => setIsOpen(true)}
+        aria-label={
+          selected
+            ? `Selected date: ${selected?.from ? format(selected.from, formatStr ?? "yyyy/MM/dd") : ""} - ${selected?.to ? format(selected.to, formatStr ?? "yyyy/MM/dd") : ""}`
+            : placeholder
+        }
       >
         {selected ? (
           <div className="grid grid-cols-2 flex-1 justify-items-start">
-            <span>From: {selected?.from ? format(selected.from, formatStr ?? "yyyy/MM/dd") : "-"}</span>{" "}
-            <span>To: {selected?.to ? format(selected.to, formatStr ?? "yyyy/MM/dd") : "-"}</span>
+            <span>
+              {fromText ?? "From"}: {selected?.from ? format(selected.from, formatStr ?? "yyyy/MM/dd") : "-"}
+            </span>{" "}
+            <span>
+              {toText ?? "To"}: {selected?.to ? format(selected.to, formatStr ?? "yyyy/MM/dd") : "-"}
+            </span>
           </div>
         ) : (
           <span>{placeholder ?? "Pick a Range"}</span>

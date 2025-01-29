@@ -47,6 +47,7 @@ const DesktopDatePicker: React.FC<DesktopDatePickerProps> = ({
             !selected && "text-muted-foreground",
             className,
           )}
+          aria-label={selected ? `Selected date: ${format(selected, formatStr ?? "yyyy/MM/dd")}` : "Pick a date"}
         >
           {selected ? format(selected, formatStr ?? "yyyy/MM/dd") : <span>{placeholder ?? "Pick a date"}</span>}
           <CalendarIcon className="mr-2 ms-auto" />
