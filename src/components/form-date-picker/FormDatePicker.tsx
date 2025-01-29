@@ -11,6 +11,7 @@ type FormDatePickerProps<TFieldValues extends FieldValues, TName extends FieldPa
     label: string;
     control: Control<TFieldValues>;
     required?: boolean;
+    disabled?: boolean;
     slotProps?: {
       formLabelProps?: React.HTMLAttributes<HTMLLabelElement> & React.RefAttributes<HTMLLabelElement>;
       formMessageProps?: React.HTMLAttributes<HTMLParagraphElement> & React.RefAttributes<HTMLParagraphElement>;
@@ -38,7 +39,7 @@ const FormDatePicker = <TFieldValues extends FieldValues, TName extends FieldPat
               {required && <span className="text-danger text-sm">*</span>}
             </FormLabel>
             <FormControl {...(slotProps?.formControlProps ?? {})}>
-              <DatePicker {...(slotProps?.datepickerProps ?? {})} selected={field.value} onSelect={field.onChange} />
+              <DatePicker {...(slotProps?.datepickerProps ?? {})} selected={field.value} onSelect={field.onChange} disabled={disabled} />
             </FormControl>
             <FormMessage {...(slotProps?.formMessageProps ?? {})} />
           </FormItem>

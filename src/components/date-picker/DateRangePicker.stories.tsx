@@ -21,6 +21,7 @@ const meta: Meta<typeof DateRangePicker> = {
         disable: true,
       },
     },
+    disabled: { control: "boolean" },
   },
 };
 

@@ -21,6 +21,7 @@ type MobileDatePickerProps = PropsBase &
     cancelText?: string;
     applyText?: string;
     onSelect?: (date: Date | undefined) => void;
+    disabled?: boolean;
   };
 
 const MobileDatePicker: React.FC<MobileDatePickerProps> = ({
@@ -32,6 +33,7 @@ const MobileDatePicker: React.FC<MobileDatePickerProps> = ({
   cancelText,
   applyText,
   onSelect,
+  disabled,
   ...props
 }) => {
   const [isOpen, setIsOpen] = React.useState(false);
@@ -52,12 +54,13 @@ const MobileDatePicker: React.FC<MobileDatePickerProps> = ({
       <Button
         variant={"outline"}
         className={cn(
-          "w-full border-gray-300 text-text focus:ring-0 active:ring-transparent justify-start",
+          "w-full border-gray-300 text-text focus:ring-0 active:ring-transparent justify-start disabled:bg-gray-100",
           !selected && "text-muted-foreground",
           className,
         )}
         onClick={() => setIsOpen(true)}
         aria-label={selected ? `Selected date: ${format(selected, formatStr ?? "yyyy/MM/dd")}` : "Pick a date"}
+        disabled={disabled}
       >
         {selected ? format(selected, formatStr ?? "eee, MMM dd") : <span>{placeholder ?? "Pick a date"}</span>}
         <CalendarIcon className="mr-2 h-5 w-5 ms-auto" />

@@ -9,6 +9,7 @@ type DesktopTimePickerProps = HTMLAttributes<HTMLButtonElement> & {
   time: Time | undefined;
   onTimeChange: (time: Time | undefined) => void;
   placeholder?: string;
+  disabled?: boolean;
   slotsProps?: {
     content?: HTMLAttributes<HTMLDivElement>;
   };
@@ -29,7 +30,7 @@ const DesktopTimePicker: React.FC<DesktopTimePickerProps> = ({
       <PopoverTrigger asChild>
         <Button
           variant={"outline"}
-          className={cn("w-full border-gray-300 text-text focus:ring-0 active:ring-transparent justify-start", className)}
+          className={cn("w-full border-gray-300 text-text focus:ring-0 active:ring-transparent justify-start disabled:bg-gray-100", className)}
           aria-label={time?.hour ? `Selected time: ${time.hour}:${time.minute} ${time.ampm}` : placeholder}
           {...restProps}
         >

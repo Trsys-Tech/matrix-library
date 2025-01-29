@@ -18,6 +18,7 @@ type DesktopDatePickerProps = PropsBase &
     selected?: Date;
     required?: boolean;
     closeOnSelect?: boolean;
+    disabled?: boolean;
   };
 
 const DesktopDatePicker: React.FC<DesktopDatePickerProps> = ({
@@ -28,6 +29,7 @@ const DesktopDatePicker: React.FC<DesktopDatePickerProps> = ({
   calendarClassName,
   closeOnSelect,
   onDayClick,
+  disabled,
   ...props
 }) => {
   const [isOpen, setIsOpen] = React.useState(false);
@@ -43,11 +45,12 @@ const DesktopDatePicker: React.FC<DesktopDatePickerProps> = ({
         <Button
           variant={"outline"}
           className={cn(
-            "w-full border-gray-300 text-text focus:ring-0 active:ring-transparent justify-start",
+            "w-full border-gray-300 text-text focus:ring-0 active:ring-transparent justify-start disabled:bg-gray-100",
             !selected && "text-muted-foreground",
             className,
           )}
           aria-label={selected ? `Selected date: ${format(selected, formatStr ?? "yyyy/MM/dd")}` : "Pick a date"}
+          disabled={disabled}
         >
           {selected ? format(selected, formatStr ?? "yyyy/MM/dd") : <span>{placeholder ?? "Pick a date"}</span>}
           <CalendarIcon className="mr-2 ms-auto" />

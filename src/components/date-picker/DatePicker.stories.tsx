@@ -22,6 +22,7 @@ const meta: Meta<typeof DatePicker> = {
         disable: true,
       },
     },
+    disabled: { control: "boolean" },
   },
 };
 

@@ -10,7 +10,9 @@ const meta: Meta<typeof TimePicker> = {
   args: {
     className: "w-72",
   },
-  argTypes: {},
+  argTypes: {
+    disabled: { control: "boolean" },
+  },
 };
 
 export const Default: StoryObj<typeof meta> = {

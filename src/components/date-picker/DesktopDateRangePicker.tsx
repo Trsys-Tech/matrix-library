@@ -19,6 +19,7 @@ type DesktopDateRangePickerProps = PropsBase &
     required?: boolean;
     fromText?: string;
     toText?: string;
+    disabled?: boolean;
   };
 
 const DesktopDateRangePicker: React.FC<DesktopDateRangePickerProps> = ({
@@ -29,6 +30,7 @@ const DesktopDateRangePicker: React.FC<DesktopDateRangePickerProps> = ({
   calendarClassName,
   fromText,
   toText,
+  disabled,
   ...props
 }) => {
   const [isOpen, setIsOpen] = React.useState(false);
@@ -44,7 +46,7 @@ const DesktopDateRangePicker: React.FC<DesktopDateRangePickerProps> = ({
         <Button
           variant={"outline"}
           className={cn(
-            "w-full border-gray-300 text-text focus:ring-0 active:ring-transparent justify-start",
+            "w-full border-gray-300 text-text focus:ring-0 active:ring-transparent justify-start disabled:bg-gray-100",
             !selected && "text-muted-foreground",
             className,
           )}
@@ -53,6 +55,7 @@ const DesktopDateRangePicker: React.FC<DesktopDateRangePickerProps> = ({
               ? `Selected date: ${selected?.from ? format(selected.from, formatStr ?? "yyyy/MM/dd") : ""} - ${selected?.to ? format(selected.to, formatStr ?? "yyyy/MM/dd") : ""}`
               : placeholder
           }
+          disabled={disabled}
         >
           {selected ? (
             <div className="grid grid-cols-2 flex-1 justify-items-start">

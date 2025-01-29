@@ -38,7 +38,7 @@ const FormTimePicker = <TFieldValues extends FieldValues, TName extends FieldPat
               {required && <span className="text-danger text-sm">*</span>}
             </FormLabel>
             <FormControl {...(slotProps?.formControlProps ?? {})}>
-              <TimePicker {...(slotProps?.datepickerProps ?? {})} time={field.value} onTimeChange={field.onChange} />
+              <TimePicker {...(slotProps?.datepickerProps ?? {})} time={field.value} onTimeChange={field.onChange} disabled={disabled} />
             </FormControl>
             <FormMessage {...(slotProps?.formMessageProps ?? {})} />
           </FormItem>

@@ -41,7 +41,7 @@ const FormDateRangePicker = <TFieldValues extends FieldValues, TName extends Fie
               {required && <span className="text-danger text-sm">*</span>}
             </FormLabel>
             <FormControl {...(slotProps?.formControlProps ?? {})}>
-              <DateRangePicker {...(slotProps?.datepickerProps ?? {})} selected={field.value} onSelect={field.onChange} />
+              <DateRangePicker {...(slotProps?.datepickerProps ?? {})} selected={field.value} onSelect={field.onChange} disabled={disabled} />
             </FormControl>
             <FormMessage {...(slotProps?.formMessageProps ?? {})} />
           </FormItem>
