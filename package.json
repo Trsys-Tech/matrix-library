@@ -2,7 +2,7 @@
   "name": "@trsys-tech/matrix-library",
   "description": "MatrixUI Library",
   "private": false,
-  "version": "0.3.2",
+  "version": "0.3.3",
   "type": "module",
   "main": "dist/index.js",
   "module": "dist/index.es.js",
