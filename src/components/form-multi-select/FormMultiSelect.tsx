@@ -60,7 +60,7 @@ const FormMultiSelect = <TFieldValues extends FieldValues, TName extends FieldPa
           <FormItem {...formItemProps}>
             <FormLabel {...(slotProps?.formLabelProps ?? {})}>
               {label}
-              {required && <span className="text-danger text-sm">*</span>}
+              {required && <span className="text-danger text-sm leading-4">*</span>}
             </FormLabel>
             <FormControl>
               <MultiSelect

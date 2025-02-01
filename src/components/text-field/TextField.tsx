@@ -8,7 +8,7 @@ const textFieldVariants = tv({
   variants: {
     size: {
       sm: "h-7",
-      md: "h-9",
+      md: "h-8",
       lg: "h-11",
     },
   },
@@ -20,8 +20,8 @@ const textFieldVariants = tv({
 interface TextFieldProps extends React.HTMLAttributes<HTMLDivElement>, VariantProps<typeof textFieldVariants> {
   type?: React.HTMLInputTypeAttribute;
   suffix?: React.ReactNode;
-  endButton?: React.ReactNode;
-  startButton?: React.ReactNode;
+  endAdornment?: React.ReactNode;
+  startAdornment?: React.ReactNode;
   onChange?: React.ChangeEventHandler<HTMLInputElement>;
   value?: string | number;
   defaultValue?: string | number;
@@ -31,10 +31,10 @@ interface TextFieldProps extends React.HTMLAttributes<HTMLDivElement>, VariantPr
 }
 
 const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
-  ({ className, slotProps, suffix, endButton, startButton, size, value, onChange, defaultValue, type, ...props }, ref) => {
+  ({ className, slotProps, suffix, endAdornment, startAdornment, size, value, onChange, defaultValue, type, ...props }, ref) => {
     return (
       <div {...props} className={cn(textFieldVariants({ size, className }))}>
-        {startButton}
+        {startAdornment}
         <input
           type={type}
           ref={ref}
@@ -43,7 +43,8 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
           defaultValue={defaultValue}
           {...(slotProps?.inputProps ?? {})}
           className={cn(
-            "focus:outline-none w-full h-full px-3 py-1 rounded-sm file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-text-300",
+            "focus:outline-none w-full h-full py-1 rounded-sm file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-text-300",
+            !startAdornment ? "px-3" : "ps-1 pe-3",
             slotProps?.inputProps?.className,
           )}
         />
@@ -52,7 +53,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
         ) : (
           suffix
         )}
-        {endButton}
+        {endAdornment}
       </div>
     );
   },

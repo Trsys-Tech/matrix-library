@@ -55,7 +55,7 @@ const FormCheckbox = <TFieldValues extends FieldValues, TName extends FieldPath<
             </FormControl>
             <FormLabel {...(slotProps?.formLabelProps ?? {})} className={cn("text-text", slotProps?.formLabelProps?.className)}>
               {label}
-              {required && <span className="text-danger text-sm">*</span>}
+              {required && <span className="text-danger text-sm leading-4">*</span>}
             </FormLabel>
             <FormMessage {...(slotProps?.formMessageProps ?? {})} />
           </FormItem>

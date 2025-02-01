@@ -74,7 +74,7 @@ const FormCombobox = <TFieldValues extends FieldValues, TName extends FieldPath<
           <FormItem {...formItemProps}>
             <FormLabel {...(slotProps?.formLabelProps ?? {})}>
               {label}
-              {required && <span className="text-danger text-sm">*</span>}
+              {required && <span className="text-danger text-sm leading-4">*</span>}
             </FormLabel>
             <Combobox {...(slotProps?.comboboxProps ?? {})} open={open} onOpenChange={setOpen}>
               <FormControl>

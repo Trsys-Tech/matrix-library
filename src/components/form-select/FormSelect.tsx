@@ -76,7 +76,7 @@ const FormSelect = <TFieldValues extends FieldValues, TName extends FieldPath<TF
           <FormItem {...formItemProps}>
             <FormLabel {...(slotProps?.formLabelProps ?? {})}>
               {label}
-              {required && <span className="text-danger text-sm">*</span>}
+              {required && <span className="text-danger text-sm leading-4">*</span>}
             </FormLabel>
             <Select
               {...(slotProps?.selectProps ?? {})}

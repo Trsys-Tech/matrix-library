@@ -213,12 +213,12 @@ const SearchAction: React.FC<SearchActionProps> = ({ defaultOpen = false }) => {
           className={cn("relative h-7.5", isSearchInputOpen && !isClosing ? "animate-input-open" : "", isClosing && "animate-input-close")}
           onChange={e => setQuickFilterText(e.target.value)}
           value={quickFilterText}
-          startButton={
+          startAdornment={
             <IconButton variant="toolbar" className="p-0.5 h-6 w-6 border-none mx-1" onClick={handleClose}>
               <Magnifier className="w-5 h-5" />
             </IconButton>
           }
-          endButton={
+          endAdornment={
             quickFilterText && (
               <IconButton variant="toolbar" className="p-0.5 w-6 h-6 border-none mx-1" onClick={handleClear}>
                 <CircleXmark className="w-5 h-5" />

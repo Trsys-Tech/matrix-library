@@ -28,6 +28,17 @@ export {
 export { Checkbox, type CheckboxProps } from "./components/checkbox/Checkbox";
 export { Chip, type ChipProps } from "./components/chip/Chip";
 export {
+  Command,
+  CommandDialog,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+  CommandSeparator,
+  CommandShortcut,
+} from "./components/command/Command";
+export {
   Collapsible,
   CollapsibleTrigger,
   CollapsibleContent,
