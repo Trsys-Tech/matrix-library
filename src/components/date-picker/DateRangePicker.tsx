@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 
 import { useIsMobile } from "../../lib/hooks/use-mobile";

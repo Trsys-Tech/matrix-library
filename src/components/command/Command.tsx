@@ -84,18 +84,36 @@ const CommandSeparator = React.forwardRef<
 >(({ className, ...props }, ref) => <CommandPrimitive.Separator ref={ref} className={cn("-mx-1 h-px bg-border", className)} {...props} />);
 CommandSeparator.displayName = CommandPrimitive.Separator.displayName;
 
-const CommandItem = React.forwardRef<React.ElementRef<typeof CommandPrimitive.Item>, React.ComponentPropsWithoutRef<typeof CommandPrimitive.Item>>(
-  ({ className, ...props }, ref) => (
+const CommandItem = React.forwardRef<
+  React.ElementRef<typeof CommandPrimitive.Item>,
+  Omit<React.ComponentPropsWithoutRef<typeof CommandPrimitive.Item>, "value" | "onSelect"> & {
+    value?: string | number;
+    onSelect?: (value: string | number) => void;
+  }
+>(({ className, value, onSelect, ...props }, ref) => {
+  const handleSelect = React.useCallback(
+    (selectedValue: string) => {
+      if (typeof value === "number") {
+        onSelect?.(Number(selectedValue));
+      } else {
+        onSelect?.(selectedValue);
+      }
+    },
+    [value, onSelect],
+  );
+  return (
     <CommandPrimitive.Item
       ref={ref}
       className={cn(
         "relative flex cursor-default gap-2 select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none data-[disabled=true]:pointer-events-none data-[selected=true]:bg-gray-300 data-[selected=true]:text-accent-foreground data-[disabled=true]:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
         className,
       )}
+      value={value !== undefined ? String(value) : undefined}
+      onSelect={handleSelect}
       {...props}
     />
-  ),
-);
+  );
+});
 
 CommandItem.displayName = CommandPrimitive.Item.displayName;
 

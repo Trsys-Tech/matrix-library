@@ -1,3 +1,5 @@
+"use client";
+
 /* eslint-disable camelcase */
 import * as React from "react";
 import { Chevron, DayPicker, DayPickerProps } from "react-day-picker";

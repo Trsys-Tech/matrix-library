@@ -1,3 +1,5 @@
+"use client";
+
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "../form/Form";
 import { SlotProps } from "@radix-ui/react-slot";
 import { Control, ControllerProps, FieldPath, FieldValues, useController } from "react-hook-form";

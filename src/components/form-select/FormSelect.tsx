@@ -1,3 +1,5 @@
+"use client";
+
 import { Spinner } from "@trsys-tech/matrix-icons";
 import { ControllerProps, FieldPath, FieldValues, useController } from "react-hook-form";
 import { SelectContentProps, SelectItemProps, SelectProps, SelectTriggerProps, SelectValueProps } from "@radix-ui/react-select";

@@ -27,6 +27,7 @@ export {
 } from "./components/card/Card";
 export { Checkbox, type CheckboxProps } from "./components/checkbox/Checkbox";
 export { Chip, type ChipProps } from "./components/chip/Chip";
+export { Combobox, type ComboboxProps } from "./components/combobox/Combobox";
 export {
   Command,
   CommandDialog,

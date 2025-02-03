@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useCallback, useEffect } from "react";
 import { Modal, ModalFooter } from "../modal/Modal";
 import { Button } from "../button/Button";

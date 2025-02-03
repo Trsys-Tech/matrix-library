@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import { Slot, Slottable } from "@radix-ui/react-slot";
 import { tv, VariantProps } from "tailwind-variants";

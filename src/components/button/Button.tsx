@@ -1,3 +1,5 @@
+"use client";
+
 import * as React from "react";
 import { Spinner } from "@trsys-tech/matrix-icons";
 import { Slot, Slottable } from "@radix-ui/react-slot";

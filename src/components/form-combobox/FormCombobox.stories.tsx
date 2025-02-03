@@ -67,7 +67,7 @@ const meta = {
 export type Story = StoryObj<typeof meta>;
 
 const formSchema = z.object({
-  name: z.string().min(3),
+  name: z.string().min(1, { message: "Name is required" }),
 });
 
 const FormWrapper = ({ children }: { children: React.ReactNode }) => {
@@ -89,11 +89,7 @@ export const Default: Story = {
     disabled: false,
     placeholder: "Select a car...",
     className: "w-full",
-    slotProps: {
-      comboboxValueProps: {
-        className: "w-96 justify-start",
-      },
-    },
+    slotProps: {},
   },
   render: ({ ...args }) => (
     <FormWrapper>

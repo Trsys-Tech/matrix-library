@@ -1,3 +1,5 @@
+"use client";
+
 import * as React from "react";
 import { Check, ChevronDown, ChevronUp, XMark } from "@trsys-tech/matrix-icons";
 import * as SelectPrimitive from "@radix-ui/react-select";

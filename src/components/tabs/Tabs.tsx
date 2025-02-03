@@ -1,3 +1,5 @@
+"use client";
+
 import * as React from "react";
 import { Content, List, Root, TabsContentProps, TabsListProps, TabsProps, TabsTriggerProps, Trigger } from "@radix-ui/react-tabs";
 import { cn } from "../../lib/utils";

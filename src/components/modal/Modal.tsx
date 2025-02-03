@@ -1,3 +1,5 @@
+"use client";
+
 import * as React from "react";
 import { XMark } from "@trsys-tech/matrix-icons";
 import * as DialogPrimitive from "@radix-ui/react-dialog";

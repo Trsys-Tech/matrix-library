@@ -1,3 +1,5 @@
+"use client";
+
 import React, { HTMLAttributes } from "react";
 import { AgGridReact, AgGridReactProps } from "ag-grid-react";
 import { GridApi, GridReadyEvent, themeQuartz } from "ag-grid-community";

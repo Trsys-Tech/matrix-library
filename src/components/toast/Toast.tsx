@@ -1,3 +1,5 @@
+"use client";
+
 import { useEffect } from "react";
 import { Toast as Root, ToastClose, ToastProvider, ToastTitle, ToastViewport } from "./toast-components";
 

@@ -1,3 +1,5 @@
+"use client";
+
 import { Star } from "@trsys-tech/matrix-icons";
 import { SlotProps } from "@radix-ui/react-slot";
 import { Control, ControllerProps, FieldPath, FieldValues } from "react-hook-form";

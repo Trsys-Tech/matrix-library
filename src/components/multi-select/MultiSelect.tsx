@@ -1,3 +1,5 @@
+"use client";
+
 import * as React from "react";
 import { tv, type VariantProps } from "tailwind-variants";
 import { Check, ChevronDown, CircleXmark, XMark } from "@trsys-tech/matrix-icons";
@@ -153,6 +155,8 @@ const MultiSelect = React.forwardRef<HTMLButtonElement, MultiSelectProps>(
   ) => {
     const [selectedValues, setSelectedValues] = React.useState<string[]>(defaultValue ?? value);
     const [isPopoverOpen, setIsPopoverOpen] = React.useState(false);
+    const containerRef = React.useRef<HTMLDivElement>(null);
+    const [isWrapped, setIsWrapped] = React.useState(false);
 
     React.useEffect(() => {
       setSelectedValues(value ?? []);
@@ -200,6 +204,16 @@ const MultiSelect = React.forwardRef<HTMLButtonElement, MultiSelectProps>(
       }
     };
 
+    React.useLayoutEffect(() => {
+      if (containerRef.current) {
+        if ((containerRef?.current?.firstChild as HTMLElement)?.offsetTop < (containerRef?.current?.lastChild as HTMLElement)?.offsetTop) {
+          setIsWrapped(true);
+        } else {
+          setIsWrapped(false);
+        }
+      }
+    }, [selectedValues]);
+
     return (
       <Popover open={isPopoverOpen} onOpenChange={setIsPopoverOpen} modal={modalPopover}>
         <PopoverTrigger asChild>
@@ -211,14 +225,23 @@ const MultiSelect = React.forwardRef<HTMLButtonElement, MultiSelectProps>(
             {...props}
             onClick={handleTogglePopover}
             className={cn(
-              "flex max-h-14 h-auto w-full items-center justify-between whitespace-nowrap rounded-sm border border-input bg-transparent px-3 py-1.5 text-sm shadow-sm ring-offset-background placeholder:text-muted-foreground hover:border hover:border-primary hover:bg-transparent focus:border focus:border-primary focus:outline-none focus:ring focus:ring-primary-100 disabled:cursor-not-allowed disabled:bg-gray-100 disabled:text-text-300 disabled:border-gray-100 [&>span]:line-clamp-1 [&_svg]:disabled:text-text-300",
+              "group flex max-h-14 h-8 w-full items-center justify-between whitespace-nowrap rounded-sm border border-input bg-transparent px-3 py-1.5 text-sm ring-offset-background data-[placeholder]:text-muted-foreground hover:border hover:border-primary hover:bg-transparent focus:border focus:border-primary focus:outline-none focus:ring focus:ring-primary-100 disabled:cursor-not-allowed disabled:bg-gray-100 disabled:text-text-300 disabled:border-gray-100 [&>span]:line-clamp-1 [&_svg]:disabled:text-text-300",
+              isWrapped && "h-auto",
               className,
             )}
+            data-placeholder={!selectedValues.length ? "" : undefined}
+            endIcon={
+              <ChevronDown
+                role="button"
+                aria-label="Expand dropdown"
+                className="!h-4.5 !w-4.5 cursor-pointer group-data-[state=open]:rotate-180 transition-transform"
+              />
+            }
           >
             <>
               {selectedValues.length > 0 ? (
                 <div className="flex justify-between items-center w-full">
-                  <div className="flex flex-wrap items-center gap-2">
+                  <div className="flex flex-wrap items-center gap-2" ref={containerRef}>
                     {selectedValues.slice(0, maxCount).map(value => {
                       const option = options.find(o => o.value === value);
                       const IconComponent = option?.icon;
@@ -241,7 +264,7 @@ const MultiSelect = React.forwardRef<HTMLButtonElement, MultiSelectProps>(
                         {`+ ${selectedValues.length - maxCount} ${moreText}`}
                         <CircleXmark
                           role="button"
-                          className="ml-2 h-4 w-4 cursor-pointer"
+                          className="ml-2 h-4.5 w-4.5 cursor-pointer"
                           onClick={event => {
                             event.stopPropagation();
                             clearExtraOptions();
@@ -254,7 +277,7 @@ const MultiSelect = React.forwardRef<HTMLButtonElement, MultiSelectProps>(
                   <div className="flex items-center justify-between gap-1">
                     <XMark
                       role="button"
-                      className="h-4.5 w-4.5 text-muted-foreground cursor-pointer"
+                      className="h-5 w-5 text-muted-foreground cursor-pointer"
                       onClick={event => {
                         event.stopPropagation();
                         handleClear();
@@ -262,16 +285,10 @@ const MultiSelect = React.forwardRef<HTMLButtonElement, MultiSelectProps>(
                       aria-label="Clear"
                     />
                     <Separator orientation="vertical" className="flex min-h-5 h-full" />
-
-                    <ChevronDown role="button" aria-label="Expand dropdown" className="h-4 w-4 text-muted-foreground cursor-pointer" />
                   </div>
                 </div>
               ) : (
-                <div className="flex items-center justify-between w-full mx-auto">
-                  <span className="text-sm text-muted-foreground mx-3">{loading && loadingText ? loadingText : placeholder}</span>
-
-                  <ChevronDown role="button" aria-label="Expand dropdown" className="h-4 w-4 text-muted-foreground cursor-pointer" />
-                </div>
+                <>{loading && loadingText ? loadingText : placeholder}</>
               )}
             </>
           </Button>
@@ -285,11 +302,11 @@ const MultiSelect = React.forwardRef<HTMLButtonElement, MultiSelectProps>(
                 <CommandItem key="all" onSelect={toggleAll} className="cursor-pointer">
                   <div
                     className={cn(
-                      "mr-2 flex h-4 w-4 items-center justify-center rounded-sm border border-primary",
+                      "mr-2 flex h-4.5 w-4.5 items-center justify-center rounded-sm border border-primary",
                       selectedValues.length === options.length ? "bg-primary text-primary-foreground" : "opacity-50 [&_svg]:invisible",
                     )}
                   >
-                    <Check className="h-4 w-4" />
+                    <Check className="h-4.5 w-4.5" />
                   </div>
                   <span>({selectAllText})</span>
                 </CommandItem>
@@ -299,13 +316,13 @@ const MultiSelect = React.forwardRef<HTMLButtonElement, MultiSelectProps>(
                     <CommandItem key={option.value} onSelect={() => toggleOption(option.value)} className="cursor-pointer">
                       <div
                         className={cn(
-                          "mr-2 flex h-4 w-4 items-center justify-center rounded-sm border border-primary",
+                          "mr-2 flex h-4.5 w-4.5 items-center justify-center rounded-sm border border-primary",
                           isSelected ? "bg-primary text-primary-foreground" : "opacity-50 [&_svg]:invisible",
                         )}
                       >
-                        <Check className="h-4 w-4" />
+                        <Check className="h-4.5 w-4.5" />
                       </div>
-                      {option.icon && <option.icon className="mr-2 h-4 w-4 text-muted-foreground" />}
+                      {option.icon && <option.icon className="mr-2 h-4.5 w-4.5 text-muted-foreground" />}
                       <span>{option.label}</span>
                     </CommandItem>
                   );
