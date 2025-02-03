@@ -1,7 +1,8 @@
 import "./index.css";
 
+export { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "./components/accordion/Accordion";
+export { Avatar, AvatarFallback, AvatarImage } from "./components/avatar/Avatar";
 export { Badge, type BadgeProps } from "./components/badge/Badge";
-export { Button, type ButtonProps, buttonVariants } from "./components/button/Button";
 export {
   Breadcrumb,
   BreadcrumbEllipsis,
@@ -11,6 +12,8 @@ export {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "./components/breadcrumb/Breadcrumb";
+export { Button, type ButtonProps, buttonVariants } from "./components/button/Button";
+export { Calendar, type CalendarProps } from "./components/date-picker/calendar";
 export {
   Card,
   CardHeader,
@@ -27,6 +30,14 @@ export {
 } from "./components/card/Card";
 export { Checkbox, type CheckboxProps } from "./components/checkbox/Checkbox";
 export { Chip, type ChipProps } from "./components/chip/Chip";
+export {
+  Collapsible,
+  CollapsibleTrigger,
+  CollapsibleContent,
+  type CollapsibleProps,
+  type CollapsibleContentProps,
+  type CollapsibleTriggerProps,
+} from "./components/collapsible/Collapsible";
 export { Combobox, type ComboboxProps } from "./components/combobox/Combobox";
 export {
   Command,
@@ -39,15 +50,44 @@ export {
   CommandSeparator,
   CommandShortcut,
 } from "./components/command/Command";
-export {
-  Collapsible,
-  CollapsibleTrigger,
-  CollapsibleContent,
-  type CollapsibleProps,
-  type CollapsibleContentProps,
-  type CollapsibleTriggerProps,
-} from "./components/collapsible/Collapsible";
 export { ConfirmProvider, useConfirm } from "./components/confirm/Confirm";
+export {
+  ContextMenu,
+  ContextMenuCheckboxItem,
+  ContextMenuContent,
+  ContextMenuGroup,
+  ContextMenuItem,
+  ContextMenuLabel,
+  ContextMenuPortal,
+  ContextMenuRadioGroup,
+  ContextMenuRadioItem,
+  ContextMenuSeparator,
+  ContextMenuShortcut,
+  ContextMenuSub,
+  ContextMenuSubContent,
+  ContextMenuSubTrigger,
+  ContextMenuTrigger,
+} from "./components/context-menu/ContextMenu";
+export {
+  DataGrid,
+  DataGridContent,
+  DataGridActionBar,
+  SearchAction,
+  FreezeAction,
+  PrintAction,
+  RefreshAction,
+  ExtraActions,
+  DeleteAction,
+  type DataGridProps,
+  type DataGridContentProps,
+  type DatagridActionBarProps,
+  type SearchActionProps,
+  type FreezeActionProps,
+  type RefreshActionProps,
+  type ExtraActionsProps,
+  type DeleteActionProps,
+  useDataGrid,
+} from "./components/data-grid/DataGrid";
 export {
   DatePicker,
   DesktopDatePicker,
@@ -73,27 +113,7 @@ export {
   type MobileTimePickerProps,
   type DesktopTimePickerProps,
 } from "./components/date-picker/TimePicker";
-export { Calendar, type CalendarProps } from "./components/date-picker/calendar";
-export {
-  DataGrid,
-  DataGridContent,
-  DataGridActionBar,
-  SearchAction,
-  FreezeAction,
-  PrintAction,
-  RefreshAction,
-  ExtraActions,
-  DeleteAction,
-  type DataGridProps,
-  type DataGridContentProps,
-  type DatagridActionBarProps,
-  type SearchActionProps,
-  type FreezeActionProps,
-  type RefreshActionProps,
-  type ExtraActionsProps,
-  type DeleteActionProps,
-  useDataGrid,
-} from "./components/data-grid/DataGrid";
+
 export {
   Dialog,
   DialogClose,
@@ -148,6 +168,7 @@ export { FormTimePicker, type FormTimePickerProps } from "./components/form-time
 export { IconButton, type IconButtonProps } from "./components/icon-botton/IconButton";
 export { Label, type LabelProps } from "./components/label/Label";
 export { Modal, ModalFooter, type ModalProps, type ModalFooterProps } from "./components/modal/Modal";
+export { MultiSelect, type MultiSelectProps } from "./components/multi-select/MultiSelect";
 export {
   Popover,
   PopoverAnchor,
@@ -158,8 +179,8 @@ export {
   type PopoverProps,
   type PopoverTriggerProps,
 } from "./components/popover/Popover";
-export { Rating, type RatingProps } from "./components/rating/Rating";
 export { RadioGroup, RadioGroupItem, type RadioGroupItemProps, type RadioGroupProps } from "./components/radio-group/RadioGroup";
+export { Rating, type RatingProps } from "./components/rating/Rating";
 export {
   Select,
   SelectContent,
@@ -265,6 +286,7 @@ export {
   type TabsContentProps,
 } from "./components/tabs/Tabs";
 export { TextField, type TextFieldProps } from "./components/text-field/TextField";
+export { Textarea, type TextareaProps } from "./components/textarea/Textarea";
 export { Toast, type ToastProps } from "./components/toast/Toast";
 export { toast } from "./components/toast/use-toast";
 export {
