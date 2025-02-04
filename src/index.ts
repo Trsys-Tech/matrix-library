@@ -179,6 +179,7 @@ export {
   type PopoverProps,
   type PopoverTriggerProps,
 } from "./components/popover/Popover";
+export { Progress, type ProgressProps } from "./components/progress/Progress";
 export { RadioGroup, RadioGroupItem, type RadioGroupItemProps, type RadioGroupProps } from "./components/radio-group/RadioGroup";
 export { Rating, type RatingProps } from "./components/rating/Rating";
 export {
