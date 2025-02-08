@@ -29,7 +29,7 @@ export const Variants: Story = {
   },
   render: args => {
     return (
-      <div className="flex gap-2">
+      <div className="flex flex-wrap gap-2">
         <Badge {...args} />
         <Badge {...args} variant="secondary" />
         <Badge {...args} variant="outline" />
@@ -42,6 +42,11 @@ export const Variants: Story = {
         <Badge {...args} variant="successInverse" />
         <Badge {...args} variant="warningInverse" />
         <Badge {...args} variant="infoInverse" />
+        <Badge {...args} variant="purpleInverce" />
+        <Badge {...args} variant="coralInverce" />
+        <Badge {...args} variant="turquoiseInverce" />
+        <Badge {...args} variant="limeInverce" />
+        <Badge {...args} variant="grayInverce" />
       </div>
     );
   },
