@@ -63,7 +63,7 @@ const FormCombobox = <TFieldValues extends FieldValues, TName extends FieldPath<
             <FormControl>
               <Combobox
                 options={options}
-                selectedValue={field.value}
+                value={field.value}
                 onValueChange={field.onChange}
                 loading={loading}
                 loadingText={loadingText}

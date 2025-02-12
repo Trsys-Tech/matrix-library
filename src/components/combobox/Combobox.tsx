@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 
 import { cn } from "../../lib/utils";
 import { Button } from "../button/Button";
@@ -20,7 +20,7 @@ type ComboboxProps<T extends string | number> = React.HTMLAttributes<HTMLButtonE
   /**
    * The value of the combobox.
    */
-  selectedValue?: T;
+  value?: T;
 
   /**
    * A function that is called when the value of the combobox changes.
@@ -87,7 +87,7 @@ type ComboboxProps<T extends string | number> = React.HTMLAttributes<HTMLButtonE
 const Combobox = <T extends string | number>({
   onValueChange,
   options,
-  selectedValue,
+  value,
   className,
   closeOnSelect = true,
   loading,
@@ -101,7 +101,7 @@ const Combobox = <T extends string | number>({
 }: ComboboxProps<T>) => {
   const [isPopoverOpen, setIsPopoverOpen] = React.useState(false);
 
-  const [currentSelectedValue, setCurrentSelectedValue] = React.useState<T | undefined>(selectedValue);
+  const [currentSelectedValue, setCurrentSelectedValue] = React.useState<T | undefined>(value);
 
   const handleInputKeyDown = React.useCallback(
     (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -128,6 +128,10 @@ const Combobox = <T extends string | number>({
   const handleFilter = React.useCallback((value: string, search: string, keywords: string[] = [""]) => {
     return keywords.join("").toLocaleLowerCase().includes(search.toLocaleLowerCase()) ? 1 : 0;
   }, []);
+
+  useEffect(() => {
+    setCurrentSelectedValue(value);
+  }, [value]);
 
   const showPlaceholder = currentSelectedValue === undefined || currentSelectedValue === "";
 
@@ -178,7 +182,7 @@ const Combobox = <T extends string | number>({
                   onSelect={handleSelect as React.ComponentProps<typeof CommandItem>["onSelect"]}
                 >
                   {option.label}
-                  <Check className={cn("ml-auto", selectedValue === option.value ? "opacity-100" : "opacity-0")} />
+                  <Check className={cn("ml-auto", value === option.value ? "opacity-100" : "opacity-0")} />
                 </CommandItem>
               ))}
             </CommandGroup>
