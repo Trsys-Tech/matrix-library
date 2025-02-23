@@ -27,7 +27,7 @@ const DesktopDatePicker: React.FC<DesktopDatePickerProps> = ({
   placeholder,
   className,
   calendarClassName,
-  closeOnSelect,
+  closeOnSelect = true,
   onDayClick,
   disabled,
   ...props

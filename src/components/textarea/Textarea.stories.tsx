@@ -4,7 +4,12 @@ import { Textarea } from "./Textarea";
 const meta: Meta<typeof Textarea> = {
   title: "Components/Textarea",
   component: Textarea,
-  parameters: {},
+
+  argTypes: {
+    disabled: {
+      control: "boolean",
+    },
+  },
   tags: ["autodocs"],
 };
 
@@ -14,6 +19,7 @@ export const Default: Story = {
   args: {
     rows: 4,
     className: "w-full",
+    value: "This is a text area",
   },
 };
 

@@ -14,7 +14,7 @@ const meta: Meta<typeof DatePicker> = {
   argTypes: {
     selected: {
       table: {
-        disable: true,
+        disable: false,
       },
     },
     calendarClassName: {
@@ -27,9 +27,12 @@ const meta: Meta<typeof DatePicker> = {
 };
 
 export const Default: StoryObj<typeof meta> = {
+  args: {
+    selected: new Date(),
+  },
   render: args => {
     const Component = () => {
-      const [selected, setSelected] = React.useState<Date | undefined>(undefined);
+      const [selected, setSelected] = React.useState<Date | undefined>(args.selected);
       return <DatePicker {...args} selected={selected} onSelect={day => setSelected(day)} />;
     };
     return <Component />;
