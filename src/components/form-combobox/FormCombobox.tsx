@@ -15,12 +15,16 @@ type FormComboboxProps<TFieldValues extends FieldValues, TName extends FieldPath
     loading?: boolean;
     loadingText?: string;
     emptyOptionsText?: string;
+    showSearchInput?: boolean;
     placeholder?: string;
     required?: boolean;
     slotProps?: {
       formLabelProps?: React.HTMLAttributes<HTMLLabelElement> & React.RefAttributes<HTMLLabelElement>;
       formMessageProps?: React.HTMLAttributes<HTMLParagraphElement> & React.RefAttributes<HTMLParagraphElement>;
-      comboboxProps?: React.ComponentProps<typeof Combobox>;
+      comboboxProps?: Omit<
+        React.ComponentPropsWithoutRef<typeof Combobox>,
+        "options" | "value" | "onValueChange" | "loading" | "loadingText" | "emptyOptionsText" | "placeholder" | "disabled" | "showSearchInput"
+      >;
     };
   };
 
@@ -39,6 +43,7 @@ const FormCombobox = <TFieldValues extends FieldValues, TName extends FieldPath<
     loading,
     loadingText,
     emptyOptionsText,
+    showSearchInput,
     placeholder,
     slotProps,
     required,
@@ -70,6 +75,8 @@ const FormCombobox = <TFieldValues extends FieldValues, TName extends FieldPath<
                 emptyOptionsText={emptyOptionsText}
                 placeholder={placeholder}
                 disabled={disabled}
+                showSearchInput={showSearchInput}
+                {...(slotProps?.comboboxProps ?? {})}
               />
             </FormControl>
 
