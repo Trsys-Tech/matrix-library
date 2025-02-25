@@ -18,6 +18,7 @@ type FormComboboxProps<TFieldValues extends FieldValues, TName extends FieldPath
     showSearchInput?: boolean;
     placeholder?: string;
     required?: boolean;
+    readOnly?: boolean;
     slotProps?: {
       formLabelProps?: React.HTMLAttributes<HTMLLabelElement> & React.RefAttributes<HTMLLabelElement>;
       formMessageProps?: React.HTMLAttributes<HTMLParagraphElement> & React.RefAttributes<HTMLParagraphElement>;
@@ -36,6 +37,7 @@ const FormCombobox = <TFieldValues extends FieldValues, TName extends FieldPath<
     control,
     defaultValue,
     disabled,
+    readOnly,
     rules,
     shouldUnregister,
     label,
@@ -74,7 +76,7 @@ const FormCombobox = <TFieldValues extends FieldValues, TName extends FieldPath<
                 loadingText={loadingText}
                 emptyOptionsText={emptyOptionsText}
                 placeholder={placeholder}
-                disabled={disabled}
+                disabled={disabled || readOnly}
                 showSearchInput={showSearchInput}
                 {...(slotProps?.comboboxProps ?? {})}
               />

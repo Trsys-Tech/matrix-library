@@ -15,6 +15,7 @@ type FormCheckboxProps<TFieldValues extends FieldValues, TName extends FieldPath
     label: string;
     control: Control<TFieldValues>;
     required?: boolean;
+    readOnly?: boolean;
     slotProps?: {
       formLabelProps?: React.HTMLAttributes<HTMLLabelElement> & React.RefAttributes<HTMLLabelElement>;
       formMessageProps?: React.HTMLAttributes<HTMLParagraphElement> & React.RefAttributes<HTMLParagraphElement>;
@@ -24,7 +25,7 @@ type FormCheckboxProps<TFieldValues extends FieldValues, TName extends FieldPath
   };
 
 const FormCheckbox = <TFieldValues extends FieldValues, TName extends FieldPath<TFieldValues>>(props: FormCheckboxProps<TFieldValues, TName>) => {
-  const { name, control, defaultValue, disabled, rules, shouldUnregister, label, slotProps, required, ...formItemProps } = props;
+  const { name, control, defaultValue, disabled, readOnly, rules, shouldUnregister, label, slotProps, required, ...formItemProps } = props;
   const { field } = useController({ name, control, rules, defaultValue, disabled, shouldUnregister });
 
   const handleCheckChanged = useCallback(
@@ -52,7 +53,7 @@ const FormCheckbox = <TFieldValues extends FieldValues, TName extends FieldPath<
                 checked={field.value}
                 onCheckedChange={handleCheckChanged}
                 aria-required={required}
-                disabled={disabled}
+                disabled={disabled || readOnly}
               />
             </FormControl>
             <FormLabel {...(slotProps?.formLabelProps ?? {})} className={cn("text-text", slotProps?.formLabelProps?.className)}>

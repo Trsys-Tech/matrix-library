@@ -21,6 +21,7 @@ type FormSelectProps<TFieldValues extends FieldValues, TName extends FieldPath<T
     emptyOptionsText?: string;
     placeholder?: string;
     required?: boolean;
+    readOnly?: boolean;
     slotProps?: {
       formLabelProps?: React.HTMLAttributes<HTMLLabelElement> & React.RefAttributes<HTMLLabelElement>;
       formMessageProps?: React.HTMLAttributes<HTMLParagraphElement> & React.RefAttributes<HTMLParagraphElement>;
@@ -40,6 +41,7 @@ const FormSelect = <TFieldValues extends FieldValues, TName extends FieldPath<TF
     control,
     defaultValue,
     disabled,
+    readOnly,
     rules,
     shouldUnregister,
     label,
@@ -82,7 +84,7 @@ const FormSelect = <TFieldValues extends FieldValues, TName extends FieldPath<TF
             </FormLabel>
             <Select
               {...(slotProps?.selectProps ?? {})}
-              disabled={disabled}
+              disabled={disabled || readOnly}
               onValueChange={handleChange}
               value={field.value !== undefined ? String(field.value) : undefined}
             >

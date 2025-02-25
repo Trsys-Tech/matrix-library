@@ -10,6 +10,7 @@ type FormInputProps<TFieldValues extends FieldValues, TName extends FieldPath<TF
     label: string;
     control: Control<TFieldValues>;
     required?: boolean;
+    readOnly?: boolean;
     slotProps?: {
       formLabelProps?: React.HTMLAttributes<HTMLLabelElement> & React.RefAttributes<HTMLLabelElement>;
       formMessageProps?: React.HTMLAttributes<HTMLParagraphElement> & React.RefAttributes<HTMLParagraphElement>;
@@ -19,7 +20,7 @@ type FormInputProps<TFieldValues extends FieldValues, TName extends FieldPath<TF
   };
 
 const FormInput = <TFieldValues extends FieldValues, TName extends FieldPath<TFieldValues>>(props: FormInputProps<TFieldValues, TName>) => {
-  const { name, control, defaultValue, disabled, rules, shouldUnregister, label, slotProps, required, ...formItemProps } = props;
+  const { name, control, defaultValue, disabled, readOnly, rules, shouldUnregister, label, slotProps, required, ...formItemProps } = props;
 
   return (
     <FormField
@@ -39,7 +40,7 @@ const FormInput = <TFieldValues extends FieldValues, TName extends FieldPath<TFi
             <FormControl {...(slotProps?.formControlProps ?? {})}>
               <TextField
                 {...(slotProps?.textFieldProps ?? {})}
-                disabled={disabled}
+                disabled={disabled || readOnly}
                 slotProps={{ inputProps: { ...slotProps?.textFieldProps?.slotProps?.inputProps, ...field, "aria-required": required } }}
               />
             </FormControl>

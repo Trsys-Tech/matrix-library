@@ -14,6 +14,7 @@ type FormDatePickerProps<TFieldValues extends FieldValues, TName extends FieldPa
     control: Control<TFieldValues>;
     required?: boolean;
     disabled?: boolean;
+    readOnly?: boolean;
     slotProps?: {
       formLabelProps?: React.HTMLAttributes<HTMLLabelElement> & React.RefAttributes<HTMLLabelElement>;
       formMessageProps?: React.HTMLAttributes<HTMLParagraphElement> & React.RefAttributes<HTMLParagraphElement>;
@@ -23,7 +24,7 @@ type FormDatePickerProps<TFieldValues extends FieldValues, TName extends FieldPa
   };
 
 const FormDatePicker = <TFieldValues extends FieldValues, TName extends FieldPath<TFieldValues>>(props: FormDatePickerProps<TFieldValues, TName>) => {
-  const { name, control, defaultValue, disabled, rules, shouldUnregister, label, slotProps, required, ...formItemProps } = props;
+  const { name, control, defaultValue, disabled, readOnly, rules, shouldUnregister, label, slotProps, required, ...formItemProps } = props;
 
   return (
     <FormField
@@ -41,7 +42,7 @@ const FormDatePicker = <TFieldValues extends FieldValues, TName extends FieldPat
               {required && <span className="text-danger text-sm leading-4">*</span>}
             </FormLabel>
             <FormControl {...(slotProps?.formControlProps ?? {})}>
-              <DatePicker {...(slotProps?.datepickerProps ?? {})} selected={field.value} onSelect={field.onChange} disabled={disabled} />
+              <DatePicker {...(slotProps?.datepickerProps ?? {})} selected={field.value} onSelect={field.onChange} disabled={disabled || readOnly} />
             </FormControl>
             <FormMessage {...(slotProps?.formMessageProps ?? {})} />
           </FormItem>

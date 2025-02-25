@@ -16,6 +16,7 @@ type FormMultiSelectProps<TFieldValues extends FieldValues, TName extends FieldP
     options: MultiSelectProps["options"];
     placeholder?: string;
     required?: boolean;
+    readOnly?: boolean;
     slotProps?: {
       multiSelectProps?: Partial<MultiSelectProps>;
       formLabelProps?: React.HTMLAttributes<HTMLLabelElement> & React.RefAttributes<HTMLLabelElement>;
@@ -31,6 +32,7 @@ const FormMultiSelect = <TFieldValues extends FieldValues, TName extends FieldPa
     control,
     defaultValue,
     disabled,
+    readOnly,
     rules,
     shouldUnregister,
     label,
@@ -73,7 +75,7 @@ const FormMultiSelect = <TFieldValues extends FieldValues, TName extends FieldPa
                 value={field.value}
                 loading={loading}
                 loadingText={loadingText}
-                disabled={disabled}
+                disabled={disabled || readOnly}
                 {...(slotProps?.multiSelectProps ?? {})}
               />
             </FormControl>

@@ -14,6 +14,7 @@ type FormRatingProps<TFieldValues extends FieldValues, TName extends FieldPath<T
     required?: boolean;
     Icon?: React.JSXElementConstructor<React.SVGProps<SVGSVGElement>>;
     max?: number;
+    readOnly?: boolean;
     slotProps?: {
       formLabelProps?: React.HTMLAttributes<HTMLLabelElement> & React.RefAttributes<HTMLLabelElement>;
       formMessageProps?: React.HTMLAttributes<HTMLParagraphElement> & React.RefAttributes<HTMLParagraphElement>;
@@ -28,6 +29,7 @@ const FormRating = <TFieldValues extends FieldValues, TName extends FieldPath<TF
     control,
     defaultValue,
     disabled,
+    readOnly,
     rules,
     shouldUnregister,
     label,
@@ -60,7 +62,7 @@ const FormRating = <TFieldValues extends FieldValues, TName extends FieldPath<TF
                 max={max}
                 Icon={Icon}
                 onValueChange={field.onChange}
-                disabled={disabled}
+                disabled={disabled || readOnly}
               ></Rating>
             </FormControl>
             <FormMessage {...(slotProps?.formMessageProps ?? {})} />
