@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 
 import { cn } from "../../lib/utils";
 import { Button } from "../button/Button";
@@ -82,6 +82,12 @@ type ComboboxProps<T extends string | number> = React.HTMLAttributes<HTMLButtonE
    * @default "No Items"
    */
   emptyOptionsText?: string;
+
+  /**
+   * Whether to show the search input.
+   * @default true
+   */
+  showSearchInput?: boolean;
 };
 
 const Combobox = <T extends string | number>({
@@ -97,9 +103,11 @@ const Combobox = <T extends string | number>({
   noResultsText = "No results found",
   loadingText = "Loading...",
   emptyOptionsText = "No Items",
+  showSearchInput = true,
   ...props
 }: ComboboxProps<T>) => {
   const [isPopoverOpen, setIsPopoverOpen] = React.useState(false);
+  const commandRef = useRef<HTMLDivElement>(null);
 
   const [currentSelectedValue, setCurrentSelectedValue] = React.useState<T | undefined>(value);
 
@@ -128,6 +136,17 @@ const Combobox = <T extends string | number>({
   const handleFilter = React.useCallback((value: string, search: string, keywords: string[] = [""]) => {
     return keywords.join("").toLocaleLowerCase().includes(search.toLocaleLowerCase()) ? 1 : 0;
   }, []);
+
+  // when search input is not shown, we need to focus on the command manually to enable keyboard navigation
+  const handleOpenAutoFocus = React.useCallback(
+    (e: Event) => {
+      if (!showSearchInput) {
+        e.preventDefault();
+        commandRef.current?.focus();
+      }
+    },
+    [showSearchInput],
+  );
 
   useEffect(() => {
     setCurrentSelectedValue(value);
@@ -163,9 +182,14 @@ const Combobox = <T extends string | number>({
           {!showPlaceholder ? options.find(option => option.value === currentSelectedValue)?.label : loading ? loadingText : placeholder}
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-auto p-0" align="start" onEscapeKeyDown={() => setIsPopoverOpen(false)}>
-        <Command className="w-[--radix-popper-anchor-width]" filter={handleFilter}>
-          <CommandInput placeholder={searchText} onKeyDown={handleInputKeyDown} />
+      <PopoverContent className="w-auto p-0" align="start" onEscapeKeyDown={() => setIsPopoverOpen(false)} onOpenAutoFocus={handleOpenAutoFocus}>
+        <Command
+          className="w-[--radix-popper-anchor-width] focus-visible:outline-none"
+          filter={handleFilter}
+          defaultValue={currentSelectedValue !== undefined ? String(currentSelectedValue) : undefined} // highlight selected value on open
+          ref={commandRef}
+        >
+          {showSearchInput && <CommandInput placeholder={searchText} onKeyDown={handleInputKeyDown} />}
           <CommandList>
             {!loading && <CommandEmpty>{noResultsText}</CommandEmpty>}
             {!loading && !options.length ? (
@@ -182,7 +206,7 @@ const Combobox = <T extends string | number>({
                   onSelect={handleSelect as React.ComponentProps<typeof CommandItem>["onSelect"]}
                 >
                   {option.label}
-                  <Check className={cn("ml-auto", value === option.value ? "opacity-100" : "opacity-0")} />
+                  <Check className={cn("ml-auto", currentSelectedValue === option.value ? "opacity-100" : "opacity-0")} />
                 </CommandItem>
               ))}
             </CommandGroup>

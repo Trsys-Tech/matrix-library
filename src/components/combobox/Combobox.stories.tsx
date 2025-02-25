@@ -52,6 +52,15 @@ export const Default: StoryObj<typeof meta> = {
   },
 };
 
+export const WithoutSearchInput: StoryObj<typeof meta> = {
+  args: {
+    showSearchInput: false,
+  },
+  render: ({ ...props }) => {
+    return <Combobox {...props} />;
+  },
+};
+
 const options = [
   { value: 1, label: "one" },
   { value: 2, label: "two" },
