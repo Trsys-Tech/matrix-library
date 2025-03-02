@@ -178,7 +178,7 @@ const Combobox = <T extends string | number>({
           }
           {...props}
         >
-          <span className="text-ellipsis whitespace-nowrap overflow-hidden flex-1 max-w-[calc(100%-24px)]">
+          <span className="text-start text-ellipsis whitespace-nowrap overflow-hidden flex-1 max-w-[calc(100%-24px)]">
             {!showPlaceholder ? options.find(option => option.value === currentSelectedValue)?.label : loading ? loadingText : placeholder}
           </span>
         </Button>
