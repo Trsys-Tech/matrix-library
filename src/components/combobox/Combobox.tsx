@@ -162,8 +162,7 @@ const Combobox = <T extends string | number>({
           role="combobox"
           aria-expanded={isPopoverOpen}
           className={cn(
-            "group flex h-8 w-full items-center justify-between whitespace-nowrap rounded-sm border border-input bg-transparent px-3 py-1.5 text-sm ring-offset-background data-[placeholder]:text-muted-foreground hover:border hover:border-primary hover:bg-transparent focus:border focus:border-primary focus:outline-none focus:ring focus:ring-primary-100 disabled:cursor-not-allowed disabled:bg-gray-100 disabled:text-text-300 disabled:border-gray-100 [&>span]:line-clamp-1 [&_svg]:disabled:text-text-300",
-            // showPlaceholder ? "text-muted-foreground" : "",
+            "group flex h-8 w-full items-center justify-between whitespace-nowrap overflow-hidden rounded-sm border border-input bg-transparent px-3 py-1.5 text-sm ring-offset-background data-[placeholder]:text-muted-foreground hover:border hover:border-primary hover:bg-transparent focus:border focus:border-primary focus:outline-none focus:ring focus:ring-primary-100 disabled:cursor-not-allowed disabled:bg-gray-100 disabled:text-text-300 disabled:border-gray-100 [&_svg]:disabled:text-text-300",
             className,
           )}
           data-value={currentSelectedValue}
@@ -179,7 +178,9 @@ const Combobox = <T extends string | number>({
           }
           {...props}
         >
-          {!showPlaceholder ? options.find(option => option.value === currentSelectedValue)?.label : loading ? loadingText : placeholder}
+          <span className="text-ellipsis whitespace-nowrap overflow-hidden flex-1 max-w-[calc(100%-24px)]">
+            {!showPlaceholder ? options.find(option => option.value === currentSelectedValue)?.label : loading ? loadingText : placeholder}
+          </span>
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-auto p-0" align="start" onEscapeKeyDown={() => setIsPopoverOpen(false)} onOpenAutoFocus={handleOpenAutoFocus}>
