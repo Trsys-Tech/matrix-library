@@ -126,7 +126,7 @@ export const WithActionbar = () => {
           <FreezeAction className="ms-auto" />
           <PrintAction />
           <RefreshAction
-            refreshRowData={() => {
+            onRefresh={() => {
               alert("data refreshed");
             }}
           />
@@ -160,7 +160,7 @@ export const WithPagination = () => {
           <FreezeAction className="ms-auto" />
           <PrintAction />
           <RefreshAction
-            refreshRowData={() => {
+            onRefresh={() => {
               alert("data refreshed");
             }}
           />

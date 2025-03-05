@@ -164,11 +164,11 @@ const DataGridActionBar: React.FC<DatagridActionBarProps> = ({ className, ...pro
   );
 };
 
-type SearchActionProps = {
+type SearchActionProps = HTMLAttributes<HTMLDivElement> & {
   defaultOpen?: boolean;
 };
 
-const SearchAction: React.FC<SearchActionProps> = ({ defaultOpen = false }) => {
+const SearchAction: React.FC<SearchActionProps> = ({ defaultOpen = false, className, ...props }) => {
   const context = React.useContext(DataGridContext);
 
   if (!context) {
@@ -208,7 +208,7 @@ const SearchAction: React.FC<SearchActionProps> = ({ defaultOpen = false }) => {
   };
 
   return (
-    <div className="max-w-60">
+    <div className={cn("max-w-60", className)} {...props}>
       {isSearchInputOpen || isClosing ? (
         <TextField
           ref={inputRef}
@@ -366,10 +366,10 @@ const PrintAction: React.FC<PrintActionProps> = ({ children, className, onClick,
 };
 
 type RefreshActionProps = Omit<IconButtonProps, "onClick"> & {
-  refreshRowData: () => void;
+  onRefresh: () => void;
 };
 
-const RefreshAction: React.FC<RefreshActionProps> = ({ className, refreshRowData, children, loading, ...props }) => {
+const RefreshAction: React.FC<RefreshActionProps> = ({ className, onRefresh, children, loading, ...props }) => {
   const context = React.useContext(DataGridContext);
 
   if (!context) {
@@ -377,7 +377,7 @@ const RefreshAction: React.FC<RefreshActionProps> = ({ className, refreshRowData
   }
 
   const handleRefresh = () => {
-    refreshRowData();
+    onRefresh();
   };
 
   return (
