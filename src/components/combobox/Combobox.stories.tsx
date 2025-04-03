@@ -76,4 +76,13 @@ export const WithNumbers: StoryObj<typeof meta> = {
   },
 };
 
+export const Clearable: StoryObj<typeof meta> = {
+  args: {
+    clearable: true,
+  },
+  render: ({ ...props }) => {
+    return <Combobox {...props} />;
+  },
+};
+
 export default meta;

@@ -16,6 +16,7 @@ type FormComboboxProps<TFieldValues extends FieldValues, TName extends FieldPath
     loadingText?: string;
     emptyOptionsText?: string;
     showSearchInput?: boolean;
+    clearable?: boolean;
     placeholder?: string;
     required?: boolean;
     readOnly?: boolean;
@@ -35,6 +36,7 @@ const FormCombobox = <TFieldValues extends FieldValues, TName extends FieldPath<
   const {
     name,
     control,
+    clearable = false,
     defaultValue,
     disabled,
     readOnly,
@@ -78,6 +80,7 @@ const FormCombobox = <TFieldValues extends FieldValues, TName extends FieldPath<
                 placeholder={placeholder}
                 disabled={disabled || readOnly}
                 showSearchInput={showSearchInput}
+                clearable={clearable}
                 {...(slotProps?.comboboxProps ?? {})}
               />
             </FormControl>

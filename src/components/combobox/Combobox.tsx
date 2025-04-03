@@ -4,9 +4,10 @@ import React, { useEffect, useRef } from "react";
 
 import { cn } from "../../lib/utils";
 import { Button } from "../button/Button";
-import { Check, ChevronDown } from "@trsys-tech/matrix-icons";
+import { Check, ChevronDown, XMark } from "@trsys-tech/matrix-icons";
 import { Popover, PopoverContent, PopoverTrigger } from "../popover/Popover";
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "../command/Command";
+import { IconButton } from "../icon-botton/IconButton";
 
 type ComboboxProps<T extends string | number> = React.HTMLAttributes<HTMLButtonElement> & {
   /**
@@ -88,6 +89,12 @@ type ComboboxProps<T extends string | number> = React.HTMLAttributes<HTMLButtonE
    * @default true
    */
   showSearchInput?: boolean;
+
+  /**
+   * Whether to show the clear button.
+   * @default false
+   */
+  clearable?: boolean;
 };
 
 const Combobox = <T extends string | number>({
@@ -95,6 +102,7 @@ const Combobox = <T extends string | number>({
   options,
   value,
   className,
+  clearable = false,
   closeOnSelect = true,
   loading,
   disabled,
@@ -133,6 +141,15 @@ const Combobox = <T extends string | number>({
     [onValueChange, closeOnSelect],
   );
 
+  const handleClear = React.useCallback(
+    (e: React.MouseEvent) => {
+      e.stopPropagation();
+      setCurrentSelectedValue(undefined);
+      onValueChange?.(undefined as unknown as T);
+    },
+    [onValueChange],
+  );
+
   const handleFilter = React.useCallback((value: string, search: string, keywords: string[] = [""]) => {
     return keywords.join("").toLocaleLowerCase().includes(search.toLocaleLowerCase()) ? 1 : 0;
   }, []);
@@ -160,6 +177,7 @@ const Combobox = <T extends string | number>({
         <Button
           variant="text"
           role="combobox"
+          type="button"
           aria-expanded={isPopoverOpen}
           className={cn(
             "group flex h-8 w-full items-center justify-between whitespace-nowrap overflow-hidden rounded-sm border border-input bg-transparent px-3 py-1.5 text-sm ring-offset-background data-[placeholder]:text-muted-foreground hover:border hover:border-primary hover:bg-transparent focus:border focus:border-primary focus:outline-none focus:ring focus:ring-primary-100 disabled:cursor-not-allowed disabled:bg-gray-100 disabled:text-text-300 disabled:border-gray-100 [&_svg]:disabled:text-text-300",
@@ -181,6 +199,18 @@ const Combobox = <T extends string | number>({
           <span className="text-start text-ellipsis whitespace-nowrap overflow-hidden flex-1 max-w-[calc(100%-24px)]">
             {!showPlaceholder ? options.find(option => option.value === currentSelectedValue)?.label : loading ? loadingText : placeholder}
           </span>
+          {clearable && currentSelectedValue !== undefined ? (
+            <IconButton
+              onClick={handleClear}
+              className="p-0 [&>svg]:h-4.5 [&>svg]:w-4.5"
+              type="button"
+              size="sm"
+              variant="toolbar"
+              aria-label="Clear selection"
+            >
+              <XMark />
+            </IconButton>
+          ) : null}
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-auto p-0" align="start" onEscapeKeyDown={() => setIsPopoverOpen(false)} onOpenAutoFocus={handleOpenAutoFocus}>
