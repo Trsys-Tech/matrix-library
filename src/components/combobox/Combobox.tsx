@@ -204,6 +204,7 @@ const Combobox = <T extends string | number>({
               onClick={handleClear}
               className="p-0 [&>svg]:h-4.5 [&>svg]:w-4.5"
               type="button"
+              role="presentation"
               size="sm"
               variant="toolbar"
               aria-label="Clear selection"
