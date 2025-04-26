@@ -6,6 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Form } from "../form/Form";
 import { FormCombobox } from "./FormCombobox";
 import { Button } from "../button/Button";
+import { useMemo } from "react";
 
 const cars = [
   { label: "Tesla", value: "Tesla" },
@@ -113,6 +114,55 @@ export const InForm: Story = {
       </Button>
     </FormWrapper>
   ),
+};
+
+export const ProgrammaticChanges = () => {
+  const formSchema = useMemo(
+    () =>
+      z.object({
+        name: z.number({ message: "Name is required" }),
+      }),
+    [],
+  );
+  const options = useMemo(
+    () => [
+      { value: 1, label: "one" },
+      { value: 2, label: "two" },
+      { value: 3, label: "three" },
+    ],
+    [],
+  );
+  const form = useForm<z.infer<typeof formSchema>>({ defaultValues: { name: undefined as unknown as number }, resolver: zodResolver(formSchema) });
+  const handleSubmit = form.handleSubmit(data => console.log(data));
+
+  return (
+    <Form {...form}>
+      <form onSubmit={handleSubmit} className="w-96 flex flex-col gap-2 items-end">
+        <FormCombobox label="Label" name="name" disabled={false} options={options} className="w-full" clearable={true} />
+        <Button type="submit" className="w-24">
+          Submit
+        </Button>
+        <Button
+          type="button"
+          className="w-24"
+          onClick={() => {
+            form.setValue("name", 1);
+          }}
+        >
+          Set One
+        </Button>
+        <Button
+          type="button"
+          className="w-24"
+          onClick={() => {
+            form.setValue("name", undefined as unknown as number);
+          }}
+        >
+          Clear Name
+        </Button>
+      </form>
+    </Form>
+  );
 };
 
 export default meta;

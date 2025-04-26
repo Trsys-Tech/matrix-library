@@ -1,6 +1,7 @@
 import { Meta, StoryObj } from "@storybook/react/*";
 
 import { Combobox } from "./Combobox";
+import { useState } from "react";
 
 const cars: { label: string; value: string }[] = [
   { label: "Tesla", value: "tesla" },
@@ -83,6 +84,31 @@ export const Clearable: StoryObj<typeof meta> = {
   render: ({ ...props }) => {
     return <Combobox {...props} />;
   },
+};
+
+export const ProgrammaticChanges = () => {
+  const [value, setValue] = useState<string | undefined>(undefined);
+  const [options, setOptions] = useState<{ label: string; value: string }[]>(cars);
+
+  const handleChange = (newValue: string | undefined) => {
+    setValue(newValue);
+  };
+
+  const handleAddOption = () => {
+    setOptions(prev => [...prev, { label: "New Option", value: "new-option" }]);
+  };
+
+  return (
+    <div>
+      <button onClick={handleAddOption} className="m-4 bg-gray-200 p-2 rounded-md">
+        Add Option
+      </button>
+      <button onClick={() => setValue(undefined)} className="m-4 bg-red-200 p-2 rounded-md">
+        Clear Selection
+      </button>
+      <Combobox options={options} value={value} onValueChange={handleChange} />
+    </div>
+  );
 };
 
 export default meta;

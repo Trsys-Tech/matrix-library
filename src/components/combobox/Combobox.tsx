@@ -1,13 +1,12 @@
 "use client";
 
 import React, { useEffect, useRef } from "react";
+import { Check, ChevronDown, XMark } from "@trsys-tech/matrix-icons";
 
 import { cn } from "../../lib/utils";
 import { Button } from "../button/Button";
-import { Check, ChevronDown, XMark } from "@trsys-tech/matrix-icons";
 import { Popover, PopoverContent, PopoverTrigger } from "../popover/Popover";
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "../command/Command";
-import { IconButton } from "../icon-botton/IconButton";
 
 type ComboboxProps<T extends string | number> = React.HTMLAttributes<HTMLButtonElement> & {
   /**
@@ -144,8 +143,8 @@ const Combobox = <T extends string | number>({
   const handleClear = React.useCallback(
     (e: React.MouseEvent) => {
       e.stopPropagation();
-      setCurrentSelectedValue(undefined);
       onValueChange?.(undefined as unknown as T);
+      setCurrentSelectedValue(undefined);
     },
     [onValueChange],
   );
@@ -199,18 +198,15 @@ const Combobox = <T extends string | number>({
           <span className="text-start text-ellipsis whitespace-nowrap overflow-hidden flex-1 max-w-[calc(100%-24px)]">
             {!showPlaceholder ? options.find(option => option.value === currentSelectedValue)?.label : loading ? loadingText : placeholder}
           </span>
-          {clearable && currentSelectedValue !== undefined ? (
-            <IconButton
+          {clearable && currentSelectedValue !== undefined && currentSelectedValue !== null ? (
+            <span
               onClick={handleClear}
-              className="p-0 [&>svg]:h-4.5 [&>svg]:w-4.5"
-              type="button"
-              role="presentation"
-              size="sm"
-              variant="toolbar"
+              className="p-0 rounded-sm text-xs font-normal transition-colors focus-visible:outline-none disabled:pointer-events-none disabled:bg-muted disabled:text-gray-500 text-primary hover:bg-primary-50 focus:bg-transparent focus:ring active:bg-primary-50 active:text-primary-700 [&>svg]:h-4.5 [&>svg]:w-4.5"
+              role="button"
               aria-label="Clear selection"
             >
               <XMark />
-            </IconButton>
+            </span>
           ) : null}
         </Button>
       </PopoverTrigger>
@@ -218,7 +214,7 @@ const Combobox = <T extends string | number>({
         <Command
           className="w-[--radix-popper-anchor-width] focus-visible:outline-none"
           filter={handleFilter}
-          defaultValue={currentSelectedValue !== undefined ? String(currentSelectedValue) : undefined} // highlight selected value on open
+          defaultValue={currentSelectedValue !== undefined && currentSelectedValue !== null ? String(currentSelectedValue) : undefined} // highlight selected value on open
           ref={commandRef}
         >
           {showSearchInput && <CommandInput placeholder={searchText} onKeyDown={handleInputKeyDown} />}
