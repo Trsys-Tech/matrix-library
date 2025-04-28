@@ -111,6 +111,7 @@ const Combobox = <T extends string | number>({
   loadingText = "Loading...",
   emptyOptionsText = "No Items",
   showSearchInput = true,
+  modalPopover,
   ...props
 }: ComboboxProps<T>) => {
   const [isPopoverOpen, setIsPopoverOpen] = React.useState(false);
@@ -171,7 +172,7 @@ const Combobox = <T extends string | number>({
   const showPlaceholder = currentSelectedValue === undefined || currentSelectedValue === "";
 
   return (
-    <Popover open={isPopoverOpen} onOpenChange={setIsPopoverOpen}>
+    <Popover open={isPopoverOpen} onOpenChange={setIsPopoverOpen} modal={modalPopover}>
       <PopoverTrigger asChild>
         <Button
           variant="text"

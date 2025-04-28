@@ -2,6 +2,8 @@ import { Meta, StoryObj } from "@storybook/react/*";
 
 import { Combobox } from "./Combobox";
 import { useState } from "react";
+import { Modal } from "../modal/Modal";
+import { Button } from "../button/Button";
 
 const cars: { label: string; value: string }[] = [
   { label: "Tesla", value: "tesla" },
@@ -107,6 +109,21 @@ export const ProgrammaticChanges = () => {
         Clear Selection
       </button>
       <Combobox options={options} value={value} onValueChange={handleChange} />
+    </div>
+  );
+};
+
+export const InModal = () => {
+  const [open, setOpen] = useState(false);
+  const handleOpenChange = (open: boolean) => {
+    setOpen(open);
+  };
+  return (
+    <div>
+      <Button onClick={() => setOpen(true)}>Open Modal</Button>
+      <Modal open={open} onOpenChange={handleOpenChange} title="Modal Title">
+        <Combobox options={cars} modalPopover />
+      </Modal>
     </div>
   );
 };
