@@ -16,7 +16,7 @@ import { Popover, PopoverContent, PopoverContentProps, PopoverProps, PopoverTrig
 // Todo: Register only the required features
 ModuleRegistry.registerModules([AllCommunityModule]);
 
-const defaultTheme = themeQuartz.withParams({
+const dataGridDefaultTheme = themeQuartz.withParams({
   fontFamily: "DMSans",
   fontSize: "12px",
   headerFontSize: "12px",
@@ -107,7 +107,7 @@ const DataGridContent: React.FC<DataGridContentProps> = ({
   const { rowData, setRowData, actionbarExists, setApi, setQuickFilterText, quickFilterText, gridId, actionbarHeight } = context;
 
   const theme = useMemo(() => {
-    return defaultTheme.withParams({
+    return dataGridDefaultTheme.withParams({
       headerHeight: 40,
       wrapperBorderRadius: actionbarExists ? "0px 0px 8px 8px" : "8px",
     });
@@ -462,5 +462,5 @@ export {
   type ExtraActionsProps,
   type DeleteActionProps,
   useDataGrid,
-  defaultTheme,
+  dataGridDefaultTheme,
 };

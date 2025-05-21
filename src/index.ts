@@ -87,6 +87,7 @@ export {
   type ExtraActionsProps,
   type DeleteActionProps,
   useDataGrid,
+  dataGridDefaultTheme,
 } from "./components/data-grid/DataGrid";
 export {
   DatePicker,
