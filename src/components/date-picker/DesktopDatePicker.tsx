@@ -58,6 +58,9 @@ const DesktopDatePicker: React.FC<DesktopDatePickerProps> = ({
       </PopoverTrigger>
       <PopoverContent className="w-auto p-0">
         <Calendar
+          defaultMonth={selected}
+          startMonth={new Date(2000, 0, 1)}
+          endMonth={new Date(new Date().getFullYear() + 2, 11, 31)}
           {...props}
           mode="single"
           selected={selected}

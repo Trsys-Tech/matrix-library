@@ -97,7 +97,16 @@ const DesktopDateRangePicker: React.FC<DesktopDateRangePickerProps> = ({
         </div> */}
       </PopoverTrigger>
       <PopoverContent className="w-auto p-0" align="start">
-        <Calendar {...props} mode="range" selected={selected} className={cn(calendarClassName, "md:max-w-full md:w-[36rem]")} numberOfMonths={2} />
+        <Calendar
+          defaultMonth={selected?.from}
+          startMonth={new Date(2000, 0, 1)}
+          endMonth={new Date(new Date().getFullYear() + 2, 11, 31)}
+          {...props}
+          mode="range"
+          selected={selected}
+          className={cn(calendarClassName, "md:max-w-full md:w-[36rem]")}
+          numberOfMonths={2}
+        />
       </PopoverContent>
     </Popover>
   );

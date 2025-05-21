@@ -127,7 +127,16 @@ const MobileDateRangePicker: React.FC<MobileDateRangePickerProps> = ({
             </VisuallyHidden>
           </DialogHeader>
           <div className="flex-1 flex flex-col items-center p-4">
-            <Calendar {...props} mode="range" selected={selected} onDayClick={handleDayClick} className={cn("p-0", calendarClassName)} />
+            <Calendar
+              defaultMonth={selected?.from}
+              startMonth={new Date(2000, 0, 1)}
+              endMonth={new Date(new Date().getFullYear() + 2, 11, 31)}
+              {...props}
+              mode="range"
+              selected={selected}
+              onDayClick={handleDayClick}
+              className={cn("p-0", calendarClassName)}
+            />
 
             <div className="flex justify-center items-center gap-4 mt-auto w-full">
               <Button variant="text" className="flex-1 h-10" onClick={handleCancel}>

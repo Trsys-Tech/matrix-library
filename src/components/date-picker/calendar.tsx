@@ -73,32 +73,36 @@ function Calendar({ className, classNames, showOutsideDays = true, ...props }: C
           }
           return <Chevron {...props} />;
         },
-        YearsDropdown: props => {
+        YearsDropdown: params => {
           const handleChange = (value: string) => {
-            props.onChange?.({ target: { value: value } } as unknown as React.ChangeEvent<HTMLSelectElement>);
+            params.onChange?.({ target: { value: value } } as unknown as React.ChangeEvent<HTMLSelectElement>);
           };
           return (
             <Collapsible ref={yearCollapseRef}>
               <CollapsibleTrigger className="group flex items-center gap-1">
-                {props.value} <ChevronDown className="text-primary w-5 h-5 group-data-[state='open']:rotate-180 transition-transform ms-auto" />
+                {params.value} <ChevronDown className="text-primary w-5 h-5 group-data-[state='open']:rotate-180 transition-transform ms-auto" />
               </CollapsibleTrigger>
               <CollapsibleContent
                 className="overflow-auto z-50 absolute bg-popover left-2 top-11 p-1"
                 style={{ width: size.width, height: size.height - 44 }}
               >
                 <div className="flex flex-row flex-wrap gap-4">
-                  {props.options?.reverse()?.map(option => (
-                    <CollapsibleTrigger asChild key={option.label}>
-                      <Button
-                        data-value={option.value}
-                        variant="text"
-                        className={cn("h-6 w-14 py-1 px-3 rounded-full font-bold", props.value === option.value && "bg-secondary")}
-                        onClick={() => handleChange(option.value.toString())}
-                      >
-                        {option.label}
-                      </Button>
-                    </CollapsibleTrigger>
-                  ))}
+                  {params.options
+                    ? [...params.options]
+                        .sort((a, b) => Number(b.value) - Number(a.value)) // Sort in descending order (newest year first)
+                        .map(option => (
+                          <CollapsibleTrigger asChild key={option.label}>
+                            <Button
+                              data-value={option.value}
+                              variant="text"
+                              className={cn("h-6 w-14 py-1 px-3 rounded-full font-bold", params.value === option.value && "bg-secondary")}
+                              onClick={() => handleChange(option.value.toString())}
+                            >
+                              {option.label}
+                            </Button>
+                          </CollapsibleTrigger>
+                        ))
+                    : null}
                 </div>
               </CollapsibleContent>
             </Collapsible>

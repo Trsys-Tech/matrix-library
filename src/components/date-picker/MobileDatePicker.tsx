@@ -79,7 +79,16 @@ const MobileDatePicker: React.FC<MobileDatePickerProps> = ({
             </VisuallyHidden>
           </DialogHeader>
           <div className="flex-1 flex flex-col items-center p-4">
-            <Calendar {...props} mode="single" selected={selectedDate} onSelect={setSelectedDate} className={cn("p-0", calendarClassName)} />
+            <Calendar
+              defaultMonth={selected}
+              startMonth={new Date(2000, 0, 1)}
+              endMonth={new Date(new Date().getFullYear() + 2, 11, 31)}
+              {...props}
+              mode="single"
+              selected={selectedDate}
+              onSelect={setSelectedDate}
+              className={cn("p-0", calendarClassName)}
+            />
             <div className="flex justify-center items-center gap-4 mt-auto w-full">
               <Button variant="text" className="flex-1 h-10" onClick={handleCancel}>
                 {cancelText ?? "Cancel"}
