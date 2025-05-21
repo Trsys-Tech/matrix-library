@@ -1,8 +1,8 @@
 "use client";
 
-import React, { HTMLAttributes } from "react";
+import React, { HTMLAttributes, useMemo } from "react";
 import { AgGridReact, AgGridReactProps } from "ag-grid-react";
-import { GridApi, GridReadyEvent, themeQuartz } from "ag-grid-community";
+import { GridApi, GridReadyEvent, themeQuartz, AllCommunityModule, ModuleRegistry, Theme } from "ag-grid-community";
 import { CircleXmark, ElipsisVertical, Magnifier, Print, Refresh, Snowflake, Trashcan } from "@trsys-tech/matrix-icons";
 
 import { cn } from "../../lib/utils";
@@ -12,11 +12,20 @@ import { Button, ButtonProps } from "../button/Button";
 import { IconButton, IconButtonProps } from "../icon-botton/IconButton";
 import { Popover, PopoverContent, PopoverContentProps, PopoverProps, PopoverTrigger, PopoverTriggerProps } from "../popover/Popover";
 
-const appTheme = themeQuartz.withParams({
+// Register all Community features
+// Todo: Register only the required features
+ModuleRegistry.registerModules([AllCommunityModule]);
+
+const defaultTheme = themeQuartz.withParams({
   fontFamily: "DMSans",
   fontSize: "12px",
   headerFontSize: "12px",
   headerFontWeight: 700,
+  headerBackgroundColor: "hsl(var(--primary-50))",
+  backgroundColor: "hsl(var(--gray-0))",
+  accentColor: "hsl(var(--primary-300))",
+  foregroundColor: "hsl(var(--text-500))",
+  cellTextColor: "hsl(var(--text-500))",
 });
 
 type DataGridContext = {
@@ -78,7 +87,9 @@ const DataGrid: React.FC<DataGridProps> = ({ children }) => {
   );
 };
 
-type DataGridContentProps = AgGridReactProps & {};
+type DataGridContentProps = Omit<AgGridReactProps, "theme"> & {
+  theme?: Theme;
+};
 
 const DataGridContent: React.FC<DataGridContentProps> = ({
   theme: propTheme,
@@ -95,10 +106,12 @@ const DataGridContent: React.FC<DataGridContentProps> = ({
   }
   const { rowData, setRowData, actionbarExists, setApi, setQuickFilterText, quickFilterText, gridId, actionbarHeight } = context;
 
-  const theme = appTheme.withParams({
-    headerHeight: 40,
-    wrapperBorderRadius: actionbarExists ? "0px 0px 8px 8px" : "8px",
-  });
+  const theme = useMemo(() => {
+    return defaultTheme.withParams({
+      headerHeight: 40,
+      wrapperBorderRadius: actionbarExists ? "0px 0px 8px 8px" : "8px",
+    });
+  }, [actionbarExists]);
 
   const handleGridReady = (e: GridReadyEvent) => {
     setApi(e.api);
@@ -449,4 +462,5 @@ export {
   type ExtraActionsProps,
   type DeleteActionProps,
   useDataGrid,
+  defaultTheme,
 };

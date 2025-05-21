@@ -153,12 +153,6 @@
     /* --shadow-card: 0px 2px 1px -1px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0, 0, 0, 0.12); */
 
     --drawer-width: 16rem;
-
-    --ag-background-color: hsl(var(--gray-0));
-    --ag-accent-color: hsl(var(--primary-300));
-    --ag-header-background-color: hsl(var(--primary-25));
-    --ag-foreground-color: hsl(var(--text-500));
-    --ag-cell-text-color: hsl(var(--text-500));
   }
 
   /* Make scrollbar thinner */
