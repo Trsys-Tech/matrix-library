@@ -13,6 +13,8 @@ const chipVariants = tv({
     variant: {
       primary: "bg-primary-100 text-primary-700 border border-primary",
       neutral: "bg-gray-50 text-text-400 border border-gray-400",
+      "table-primary": "bg-primary-25 text-primary font-bold",
+      "table-neutral": "bg-gray-50 text-text-400 font-medium",
     },
     size: {
       sm: "px-2 h-6",

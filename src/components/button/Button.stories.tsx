@@ -98,9 +98,9 @@ export const OnDark: Story = {
   },
   render: props => (
     <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 w-full lg:min-w-[650px] bg-gray-400 p-4">
-      <Button {...props} variant="primaryOnDark" startIcon={<Plus />} endIcon={<ChevronDown className="w-4.5 h-4.5" />} />
-      <Button {...props} variant="outlineOnDark" startIcon={<Plus />} endIcon={<ChevronDown />} />
-      <Button {...props} variant="textOnDark" startIcon={<Plus />} endIcon={<ChevronDown />} />
+      <Button {...props} variant="primary-on-dark" startIcon={<Plus />} endIcon={<ChevronDown className="w-4.5 h-4.5" />} />
+      <Button {...props} variant="outline-on-dark" startIcon={<Plus />} endIcon={<ChevronDown />} />
+      <Button {...props} variant="text-on-dark" startIcon={<Plus />} endIcon={<ChevronDown />} />
       <Button {...props} variant="danger" startIcon={<Plus />} endIcon={<ChevronDown />} />
       <Button {...props} variant="warning" startIcon={<Plus />} endIcon={<ChevronDown />} />
       <Button {...props} variant="success" startIcon={<Plus />} endIcon={<ChevronDown />} />

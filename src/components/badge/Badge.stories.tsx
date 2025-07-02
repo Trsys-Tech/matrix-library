@@ -37,16 +37,16 @@ export const Variants: Story = {
         <Badge {...args} variant="success" />
         <Badge {...args} variant="warning" />
         <Badge {...args} variant="info" />
-        <Badge {...args} variant="primaryInverse" />
-        <Badge {...args} variant="dangerInverse" />
-        <Badge {...args} variant="successInverse" />
-        <Badge {...args} variant="warningInverse" />
-        <Badge {...args} variant="infoInverse" />
-        <Badge {...args} variant="purpleInverce" />
-        <Badge {...args} variant="coralInverce" />
-        <Badge {...args} variant="turquoiseInverce" />
-        <Badge {...args} variant="limeInverce" />
-        <Badge {...args} variant="grayInverce" />
+        <Badge {...args} variant="primary-inverse" />
+        <Badge {...args} variant="danger-inverse" />
+        <Badge {...args} variant="success-inverse" />
+        <Badge {...args} variant="warning-inverse" />
+        <Badge {...args} variant="info-inverse" />
+        <Badge {...args} variant="purple-inverse" />
+        <Badge {...args} variant="coral-inverse" />
+        <Badge {...args} variant="turquoise-inverse" />
+        <Badge {...args} variant="lime-inverse" />
+        <Badge {...args} variant="gray-inverse" />
       </div>
     );
   },

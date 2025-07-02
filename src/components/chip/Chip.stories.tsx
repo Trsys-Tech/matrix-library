@@ -32,6 +32,8 @@ export const Variants: Story = {
     <div className="space-x-2">
       <Chip {...props} />
       <Chip {...props} variant="neutral" />
+      <Chip {...props} variant="table-primary" />
+      <Chip {...props} variant="table-neutral" />
     </div>
   ),
 };
@@ -47,6 +49,8 @@ export const WithButton: Story = {
     <div className="space-x-2">
       <Chip {...props} />
       <Chip {...props} variant="neutral" />
+      <Chip {...props} variant="table-primary" />
+      <Chip {...props} variant="table-neutral" />
     </div>
   ),
 };
@@ -63,6 +67,8 @@ export const Large: Story = {
     <div className="space-x-2">
       <Chip {...props} />
       <Chip {...props} variant="neutral" />
+      <Chip {...props} variant="table-primary" />
+      <Chip {...props} variant="table-neutral" />
     </div>
   ),
 };
@@ -79,6 +85,8 @@ export const Small: Story = {
     <div className="space-x-2">
       <Chip {...props} />
       <Chip {...props} variant="neutral" />
+      <Chip {...props} variant="table-primary" />
+      <Chip {...props} variant="table-neutral" />
     </div>
   ),
 };

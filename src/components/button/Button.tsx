@@ -23,11 +23,11 @@ const buttonVariants = tv({
       success:
         "bg-success text-success-foreground hover:bg-success-600 focus:ring focus:ring-success-400 active:bg-success active:ring-1 active:ring-success active:ring-offset-2",
       info: "bg-info text-info-foreground hover:bg-info-600 focus:ring focus:ring-info-400 active:bg-info active:ring-1 active:ring-info active:ring-offset-2",
-      primaryOnDark:
+      "primary-on-dark":
         "bg-gray-0 text-primary hover:bg-primary-50 focus:bg-gray-0 focus:border-none focus:ring focus:ring-primary-100 active:ring-0 active:bg-gray-0 active:outline active:outline-2 active:outline-gray-0 active:outline-offset-1",
-      outlineOnDark:
+      "outline-on-dark":
         "border border-gray-0 text-gray-0 hover:bg-primary-100 hover:text-primary focus:text-primary focus:bg-primary-50 focus:border-primary-50 focus:ring focus:ring-primary-100 active:text-gray-0 active:bg-transparent active:border-gray-0 active:ring-0 active:outline active:outline-1 active:outline-gray-0 active:outline-offset-2",
-      textOnDark:
+      "text-on-dark":
         "text-gray-0 hover:bg-primary-50 hover:text-text [&>svg]:hover:text-primary focus:text-text focus:bg-transparent focus:border-none [&>svg]:focus:text-primary-100 focus:ring focus:ring-primary-100 active:ring-0 active:bg-primary-50 active:text-text [&>svg]:active:text-primary active:outline active:outline-1 active:outline-gray-0 active:outline-offset-1",
     },
     size: {
