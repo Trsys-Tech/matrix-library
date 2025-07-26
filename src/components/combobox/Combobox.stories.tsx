@@ -50,8 +50,8 @@ const meta: Meta<typeof Combobox> = {
 
 export const Default: StoryObj<typeof meta> = {
   args: {},
-  render: ({ ...props }) => {
-    return <Combobox {...props} />;
+  render: props => {
+    return <Combobox options={cars} {...props} />;
   },
 };
 
@@ -60,7 +60,7 @@ export const WithoutSearchInput: StoryObj<typeof meta> = {
     showSearchInput: false,
   },
   render: ({ ...props }) => {
-    return <Combobox {...props} />;
+    return <Combobox options={cars} {...props} />;
   },
 };
 
@@ -75,7 +75,7 @@ export const WithNumbers: StoryObj<typeof meta> = {
     options,
   },
   render: ({ ...props }) => {
-    return <Combobox {...props} />;
+    return <Combobox options={options} {...props} />;
   },
 };
 
@@ -84,7 +84,7 @@ export const Clearable: StoryObj<typeof meta> = {
     clearable: true,
   },
   render: ({ ...props }) => {
-    return <Combobox {...props} />;
+    return <Combobox options={cars} {...props} />;
   },
 };
 
