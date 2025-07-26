@@ -30,6 +30,7 @@ export default defineConfig({
         const componentName = getComponentName(entry);
         return `${componentName}.${ext}.js`;
       },
+      cssFileName: "styles",
     },
     rollupOptions: {
       external: [...Object.keys(peerDependencies), ...Object.keys(dependencies), "react/jsx-runtime"],
