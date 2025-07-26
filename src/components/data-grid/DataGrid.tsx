@@ -1,6 +1,6 @@
 "use client";
 
-import React, { HTMLAttributes, useMemo } from "react";
+import React, { forwardRef, HTMLAttributes, useMemo } from "react";
 import { AgGridReact, AgGridReactProps } from "ag-grid-react";
 import { GridApi, GridReadyEvent, themeQuartz, AllCommunityModule, ModuleRegistry, Theme } from "ag-grid-community";
 import { CircleXmark, ElipsisVertical, Magnifier, Print, Refresh, Snowflake, Trashcan } from "@trsys-tech/matrix-icons";
@@ -91,55 +91,53 @@ type DataGridContentProps = Omit<AgGridReactProps, "theme"> & {
   theme?: Theme;
 };
 
-const DataGridContent: React.FC<DataGridContentProps> = ({
-  theme: propTheme,
-  onGridReady,
-  quickFilterText: quickFilterTextProps,
-  rowData: rowDataProps,
-  containerStyle,
-  ...props
-}) => {
-  const context = React.useContext(DataGridContext);
+const DataGridContent = forwardRef<AgGridReact, DataGridContentProps>(
+  ({ theme: propTheme, onGridReady, quickFilterText: quickFilterTextProps, rowData: rowDataProps, containerStyle, ...props }, ref) => {
+    const context = React.useContext(DataGridContext);
 
-  if (!context) {
-    throw new Error("DataGridContent should be used within <DataGrid>");
-  }
-  const { rowData, setRowData, actionbarExists, setApi, setQuickFilterText, quickFilterText, gridId, actionbarHeight } = context;
-
-  const theme = useMemo(() => {
-    return dataGridDefaultTheme.withParams({
-      headerHeight: 40,
-      wrapperBorderRadius: actionbarExists ? "0px 0px 8px 8px" : "8px",
-    });
-  }, [actionbarExists]);
-
-  const handleGridReady = (e: GridReadyEvent) => {
-    setApi(e.api);
-    onGridReady?.(e);
-  };
-
-  React.useEffect(() => {
-    setRowData(rowDataProps);
-  }, [rowDataProps, setRowData]);
-
-  React.useEffect(() => {
-    if (quickFilterTextProps !== undefined) {
-      setQuickFilterText(quickFilterTextProps ?? "");
+    if (!context) {
+      throw new Error("DataGridContent should be used within <DataGrid>");
     }
-  }, [quickFilterTextProps, setQuickFilterText]);
+    const { rowData, setRowData, actionbarExists, setApi, setQuickFilterText, quickFilterText, gridId, actionbarHeight } = context;
 
-  return (
-    <AgGridReact
-      gridId={gridId}
-      theme={propTheme ?? theme}
-      rowData={rowData}
-      quickFilterText={quickFilterText}
-      onGridReady={handleGridReady}
-      containerStyle={{ height: `calc(100% - ${actionbarHeight}px)`, ...containerStyle }}
-      {...props}
-    />
-  );
-};
+    const theme = useMemo(() => {
+      return dataGridDefaultTheme.withParams({
+        headerHeight: 40,
+        wrapperBorderRadius: actionbarExists ? "0px 0px 8px 8px" : "8px",
+      });
+    }, [actionbarExists]);
+
+    const handleGridReady = (e: GridReadyEvent) => {
+      setApi(e.api);
+      onGridReady?.(e);
+    };
+
+    React.useEffect(() => {
+      setRowData(rowDataProps);
+    }, [rowDataProps, setRowData]);
+
+    React.useEffect(() => {
+      if (quickFilterTextProps !== undefined) {
+        setQuickFilterText(quickFilterTextProps ?? "");
+      }
+    }, [quickFilterTextProps, setQuickFilterText]);
+
+    return (
+      <AgGridReact
+        gridId={gridId}
+        theme={propTheme ?? theme}
+        rowData={rowData}
+        quickFilterText={quickFilterText}
+        onGridReady={handleGridReady}
+        containerStyle={{ height: `calc(100% - ${actionbarHeight}px)`, ...containerStyle }}
+        {...props}
+        ref={ref}
+      />
+    );
+  },
+);
+
+DataGridContent.displayName = "DataGridContent";
 
 type DatagridActionBarProps = HTMLAttributes<HTMLDivElement> & {};
 
