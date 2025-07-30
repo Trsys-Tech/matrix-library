@@ -2,7 +2,7 @@
   "name": "@trsys-tech/matrix-library",
   "description": "MatrixUI Library",
   "private": false,
-  "version": "0.5.1-alpha.0",
+  "version": "0.5.1-alpha.1",
   "type": "module",
   "main": "dist/index.js",
   "module": "dist/index.es.js",
@@ -16,7 +16,7 @@
     },
     "./package.json": "./package.json",
     "./dist/*": "./dist/*",
-    "./style.css": "./dist/style.css"
+    "./styles.css": "./dist/styles.css"
   },
   "files": [
     "dist"

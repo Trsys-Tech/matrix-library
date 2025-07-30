@@ -136,6 +136,7 @@ export {
   type DialogTriggerProps,
 } from "./components/dialog/Dialog";
 export { Drawer, DrawerContent, DrawerMain, type DrawerContentProps, type DrawerMainProps, type DrawerProps } from "./components/drawer/Drawer";
+export { Duration, type DurationProps } from "./components/duration/Duration";
 export {
   SwipableDrawer,
   SwipableDrawerTrigger,
@@ -159,6 +160,7 @@ export { FormCheckbox, type FormCheckboxProps } from "./components/form-checkbox
 export { FormCombobox, type FormComboboxProps } from "./components/form-combobox/FormCombobox";
 export { FormDatePicker, type FormDatePickerProps } from "./components/form-date-picker/FormDatePicker";
 export { FormDateRangePicker, type FormDateRangePickerProps } from "./components/form-date-range-picker/FormDateRangePicker";
+export { FormDuration, type FormDurationProps } from "./components/form-duration/FormDuration";
 export { FormInput, type FormInputProps } from "./components/form-input/FormInput";
 export { FormMultiSelect, type FormMultiSelectProps } from "./components/form-multi-select/FormMultiSelect";
 export { FormRating, type FormRatingProps } from "./components/form-rating/FormRating";
