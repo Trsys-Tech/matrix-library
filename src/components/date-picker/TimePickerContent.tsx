@@ -85,7 +85,7 @@ const TimePickerContent: React.FC<TimePickerContentProps> = ({ isOpen, time, onT
           <button
             style={{ height: itemHeight, marginBottom: marginBetweenItems }}
             className={cn(
-              "w-full flex justify-center items-center rounded-full text-sm font-bold text-text-400",
+              "w-full flex justify-center items-center rounded-full text-xs font-bold text-text-400",
               hour + 1 === selectedtime.hour && "bg-secondary",
             )}
             key={hour + 1}
@@ -102,7 +102,7 @@ const TimePickerContent: React.FC<TimePickerContentProps> = ({ isOpen, time, onT
           <button
             style={{ height: itemHeight, marginBottom: marginBetweenItems }}
             className={cn(
-              "w-full flex justify-center items-center rounded-full text-sm font-bold text-text-400",
+              "w-full flex justify-center items-center rounded-full text-xs font-bold text-text-400",
               minute === selectedtime.minute && "bg-secondary",
             )}
             key={minute}
@@ -119,7 +119,7 @@ const TimePickerContent: React.FC<TimePickerContentProps> = ({ isOpen, time, onT
           <button
             style={{ height: itemHeight, marginBottom: marginBetweenItems }}
             className={cn(
-              "w-full flex justify-center items-center rounded-full text-sm font-bold text-text-400",
+              "w-full flex justify-center items-center rounded-full text-xs font-bold text-text-400",
               ampm === selectedtime.ampm && "bg-secondary",
             )}
             key={ampm}

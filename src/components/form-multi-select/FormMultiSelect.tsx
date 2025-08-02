@@ -1,6 +1,6 @@
 "use client";
 
-import { ControllerProps, FieldPath, FieldValues, useController } from "react-hook-form";
+import { ControllerProps, FieldPath, FieldValues } from "react-hook-form";
 
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "../form/Form";
 import { MultiSelect, MultiSelectProps } from "../multi-select/MultiSelect";
@@ -13,12 +13,15 @@ type FormMultiSelectProps<TFieldValues extends FieldValues, TName extends FieldP
     label: string;
     loading?: boolean;
     loadingText?: string;
-    options: MultiSelectProps["options"];
+    options: MultiSelectProps<string>["options"];
     placeholder?: string;
     required?: boolean;
     readOnly?: boolean;
     slotProps?: {
-      multiSelectProps?: Partial<MultiSelectProps>;
+      multiSelectProps?: Omit<
+        React.ComponentProps<typeof MultiSelect>,
+        "onValueChange" | "value" | "options" | "loading" | "loadingText" | "placeholder" | "disabled"
+      >;
       formLabelProps?: React.HTMLAttributes<HTMLLabelElement> & React.RefAttributes<HTMLLabelElement>;
       formMessageProps?: React.HTMLAttributes<HTMLParagraphElement> & React.RefAttributes<HTMLParagraphElement>;
     };
@@ -45,12 +48,6 @@ const FormMultiSelect = <TFieldValues extends FieldValues, TName extends FieldPa
     ...formItemProps
   } = props;
 
-  const { field } = useController({ name, control, rules, defaultValue, disabled, shouldUnregister });
-
-  const handleChange = (value: string[]) => {
-    field.onChange(value);
-  };
-
   return (
     <FormField
       control={control}
@@ -70,7 +67,8 @@ const FormMultiSelect = <TFieldValues extends FieldValues, TName extends FieldPa
               <MultiSelect
                 aria-required={required}
                 options={options}
-                onValueChange={handleChange}
+                onValueChange={field.onChange}
+                onBlur={field.onBlur}
                 placeholder={placeholder}
                 value={field.value}
                 loading={loading}
