@@ -120,4 +120,33 @@ export const InForm: Story = {
   ),
 };
 
+export const WithNumbers = () => {
+  const formSchema = z.object({
+    name: z.array(z.number()).min(1, "Select at least one car"),
+  });
+  const form = useForm<z.infer<typeof formSchema>>({ defaultValues: { name: [1, 2] }, resolver: zodResolver(formSchema) });
+
+  const handleSubmit = form.handleSubmit(data => console.log(data));
+
+  return (
+    <Form {...form}>
+      <form onSubmit={handleSubmit} className="w-96 flex flex-col gap-2 items-end">
+        <FormMultiSelect
+          label="Label"
+          name="name"
+          className="w-full"
+          options={[
+            { value: 1, label: "one" },
+            { value: 2, label: "two" },
+            { value: 3, label: "three" },
+          ]}
+        />
+        <Button type="submit" className="w-24">
+          Submit
+        </Button>
+      </form>
+    </Form>
+  );
+};
+
 export default meta;

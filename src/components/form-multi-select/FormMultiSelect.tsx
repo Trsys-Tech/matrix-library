@@ -13,7 +13,7 @@ type FormMultiSelectProps<TFieldValues extends FieldValues, TName extends FieldP
     label: string;
     loading?: boolean;
     loadingText?: string;
-    options: MultiSelectProps<string>["options"];
+    options: MultiSelectProps<string | number>["options"];
     placeholder?: string;
     required?: boolean;
     readOnly?: boolean;
