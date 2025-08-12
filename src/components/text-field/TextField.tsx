@@ -7,7 +7,7 @@ import { cn } from "../../lib/utils";
 
 const textFieldVariants = tv({
   base: [
-    "flex items-center w-full rounded-sm border border-input text-text bg-transparent p-0 text-xs [&_input]:text-xs font-medium shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground",
+    "flex items-center w-full rounded-sm border border-input text-text bg-transparent p-0 text-xs [&_input]:text-xs font-medium transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground",
     "placeholder:text-text-300 hover:border-primary-400 focus-within:border-primary-400 focus-within:outline-none focus-within:ring focus-within:ring-primary-100",
     "aria-disabled:text-text-300 aria-disabled:bg-gray-100 aria-disabled:border-gray-100",
   ],
