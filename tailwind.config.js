@@ -2,6 +2,7 @@
 export default {
   darkMode: ["class"],
   content: ["./src/**/*.{js,ts,jsx,tsx,mdx}"],
+  safelist: ["dark"],
   theme: {
     extend: {
       spacing: {
