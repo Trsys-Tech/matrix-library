@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useMemo, useRef } from "react";
 import { Check, ChevronDown, XMark } from "@trsys-tech/matrix-icons";
 
 import { cn } from "../../lib/utils";
@@ -15,7 +15,7 @@ type ComboboxProps<T extends string | number> = React.HTMLAttributes<HTMLButtonE
    * The label is what is displayed in the combobox.
    * The value is what is returned when the option is selected.
    */
-  options: { label: string; value: T }[];
+  options: ({ label: string; value: T } | { label: React.ReactElement; value: T; keyword: string })[];
 
   /**
    * The value of the combobox.
@@ -171,6 +171,12 @@ const Combobox = <T extends string | number>({
 
   const showPlaceholder = currentSelectedValue === undefined || currentSelectedValue === "";
 
+  const label = useMemo(() => {
+    if (showPlaceholder && loading) return loadingText;
+    if (showPlaceholder) return placeholder;
+    return options.find(option => option.value === currentSelectedValue)?.label || placeholder;
+  }, [showPlaceholder, currentSelectedValue, options, placeholder, loading, loadingText]);
+
   return (
     <Popover open={isPopoverOpen} onOpenChange={setIsPopoverOpen} modal={modalPopover}>
       <PopoverTrigger asChild>
@@ -196,9 +202,7 @@ const Combobox = <T extends string | number>({
           }
           {...props}
         >
-          <span className="text-start text-ellipsis whitespace-nowrap overflow-hidden flex-1 max-w-[calc(100%-24px)]">
-            {!showPlaceholder ? options.find(option => option.value === currentSelectedValue)?.label : loading ? loadingText : placeholder}
-          </span>
+          <span className="text-start text-ellipsis whitespace-nowrap overflow-hidden flex-1 max-w-[calc(100%-24px)]">{label}</span>
           {clearable && currentSelectedValue !== undefined && currentSelectedValue !== null ? (
             <span
               onClick={handleClear}
@@ -231,7 +235,7 @@ const Combobox = <T extends string | number>({
                 <CommandItem
                   key={String(option.value)}
                   value={option.value}
-                  keywords={[option.label]}
+                  keywords={"keyword" in option ? [option.keyword] : [option.label]}
                   onSelect={handleSelect as React.ComponentProps<typeof CommandItem>["onSelect"]}
                 >
                   {option.label}

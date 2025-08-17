@@ -11,7 +11,7 @@ type FormComboboxProps<TFieldValues extends FieldValues, TName extends FieldPath
 > &
   React.ComponentProps<typeof FormItem> & {
     label: string;
-    options: { value: string | number; label: string }[];
+    options: React.ComponentProps<typeof Combobox>["options"];
     loading?: boolean;
     loadingText?: string;
     emptyOptionsText?: string;

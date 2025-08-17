@@ -4,6 +4,7 @@ import { Combobox } from "./Combobox";
 import { useState } from "react";
 import { Modal } from "../modal/Modal";
 import { Button } from "../button/Button";
+import { Cat, Dog, Rabbit } from "lucide-react";
 
 const cars: { label: string; value: string }[] = [
   { label: "Tesla", value: "tesla" },
@@ -124,6 +125,43 @@ export const InModal = () => {
       <Modal open={open} onOpenChange={handleOpenChange} title="Modal Title">
         <Combobox options={cars} modalPopover />
       </Modal>
+    </div>
+  );
+};
+
+export const WithReactElement = () => {
+  const options = [
+    {
+      label: (
+        <span className="flex items-center gap-2">
+          <Rabbit className="w-4 h-4" /> Rabbit
+        </span>
+      ),
+      value: "rabbit",
+      keyword: "rabbit",
+    },
+    {
+      label: (
+        <span className="flex items-center gap-2">
+          <Cat className="w-4 h-4" /> Cat
+        </span>
+      ),
+      value: "cat",
+      keyword: "cat",
+    },
+    {
+      label: (
+        <span className="flex items-center gap-2">
+          <Dog className="w-4 h-4" /> Dog
+        </span>
+      ),
+      value: "dog",
+      keyword: "dog",
+    },
+  ];
+  return (
+    <div>
+      <Combobox options={options} modalPopover />
     </div>
   );
 };
