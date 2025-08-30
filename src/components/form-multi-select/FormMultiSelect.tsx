@@ -3,7 +3,7 @@
 import { ControllerProps, FieldPath, FieldValues } from "react-hook-form";
 
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "../form/Form";
-import { MultiSelect, MultiSelectProps } from "../multi-select/MultiSelect";
+import { MultiSelect } from "../multi-select/MultiSelect";
 
 type FormMultiSelectProps<TFieldValues extends FieldValues, TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>> = Omit<
   ControllerProps<TFieldValues, TName>,
@@ -13,7 +13,7 @@ type FormMultiSelectProps<TFieldValues extends FieldValues, TName extends FieldP
     label: string;
     loading?: boolean;
     loadingText?: string;
-    options: MultiSelectProps<string | number>["options"];
+    options: React.ComponentPropsWithoutRef<typeof MultiSelect>["options"];
     placeholder?: string;
     required?: boolean;
     readOnly?: boolean;

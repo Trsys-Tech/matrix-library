@@ -91,7 +91,7 @@ export const Default: Story = {
     className: "w-full",
     slotProps: {
       multiSelectProps: {
-        className: "w-96 justify-start",
+        className: "w-96",
         maxCount: 3,
       },
     },
@@ -140,6 +140,38 @@ export const WithNumbers = () => {
             { value: 2, label: "two" },
             { value: 3, label: "three" },
           ]}
+        />
+        <Button type="submit" className="w-24">
+          Submit
+        </Button>
+      </form>
+    </Form>
+  );
+};
+
+const numericOptions = [
+  { value: 1, label: "one" },
+  { value: 2, label: "two" },
+  { value: 3, label: "three" },
+];
+
+export const AddOptionOnSearchNotFound = () => {
+  const formSchema = z.object({
+    name: z.array(z.number()).min(1, "Select at least one car"),
+  });
+  const form = useForm<z.infer<typeof formSchema>>({ defaultValues: { name: [] }, resolver: zodResolver(formSchema) });
+
+  const handleSubmit = form.handleSubmit(data => console.log(data));
+
+  return (
+    <Form {...form}>
+      <form onSubmit={handleSubmit} className="w-96 flex flex-col gap-2 items-end">
+        <FormMultiSelect
+          label="Label"
+          name="name"
+          className="w-full"
+          options={numericOptions}
+          slotProps={{ multiSelectProps: { addOptionOnSearchNotFound: true, showSelectAll: false } }}
         />
         <Button type="submit" className="w-24">
           Submit

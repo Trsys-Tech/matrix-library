@@ -51,7 +51,7 @@ export const AddOptionOnSearchNotFound: StoryObj<typeof meta> = {
 };
 
 export const Controlled = () => {
-  const [value, setValue] = React.useState<string[]>(["react"]);
+  const [value, setValue] = React.useState<string[]>([]);
   return <MultiSelect options={frameworksList} value={value} onValueChange={setValue} placeholder="Select your favorite frameworks" maxCount={3} />;
 };
 
