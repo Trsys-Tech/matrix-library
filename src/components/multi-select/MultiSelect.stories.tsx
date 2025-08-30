@@ -38,6 +38,18 @@ export const UnControlled: StoryObj<typeof meta> = {
   },
 };
 
+export const AddOptionOnSearchNotFound: StoryObj<typeof meta> = {
+  args: {
+    disabled: false,
+    options: frameworksList,
+    placeholder: "Select your favorite frameworks",
+    addOptionOnSearchNotFound: true,
+    onValueChange: () => {},
+    maxCount: 3,
+    className: "w-96",
+  },
+};
+
 export const Controlled = () => {
   const [value, setValue] = React.useState<string[]>(["react"]);
   return <MultiSelect options={frameworksList} value={value} onValueChange={setValue} placeholder="Select your favorite frameworks" maxCount={3} />;

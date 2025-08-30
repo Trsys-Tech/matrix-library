@@ -105,6 +105,17 @@ interface MultiSelectProps<T extends string | number>
   selectAllText?: string;
 
   /**
+   * Text to display in the search input.
+   */
+  searchText?: string;
+
+  /**
+   * If true, a new option will be added when the user submits a search query if it doesn't already exist.
+   * Optional, defaults to false.
+   */
+  addOptionOnSearchNotFound?: boolean;
+
+  /**
    * Text to display on the clear button when the multi-select component is open.
    */
   clearText?: string;
@@ -132,7 +143,7 @@ interface MultiSelectProps<T extends string | number>
 
 const MultiSelect = <T extends string | number>(
   {
-    options,
+    options: _options,
     onValueChange,
     value,
     variant,
@@ -148,6 +159,8 @@ const MultiSelect = <T extends string | number>(
     closeText = "Close",
     selectAllText = "Select All",
     noResultsText = "No results found.",
+    searchText = "Search...",
+    addOptionOnSearchNotFound = false,
     loading,
     loadingText = "Loading...",
     ...props
@@ -157,14 +170,35 @@ const MultiSelect = <T extends string | number>(
   const [selectedValues, setSelectedValues] = React.useState<T[]>(defaultValue ?? value);
   const [isPopoverOpen, setIsPopoverOpen] = React.useState(false);
   const containerRef = React.useRef<HTMLDivElement>(null);
+  const [searchValue, setSearchValue] = React.useState("");
   const [isWrapped, setIsWrapped] = React.useState(false);
+  const [options, setOptions] = React.useState<Map<T, MultiSelectProps<T>["options"][number]>>(
+    new Map(_options.map(option => [option.value, option])),
+  );
+
+  React.useEffect(() => {
+    setOptions(new Map(_options.map(option => [option.value, option])));
+  }, [_options]);
 
   React.useEffect(() => {
     setSelectedValues(value ?? []);
   }, [value]);
 
   const handleInputKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === "Enter") {
+    if (event.key === "Enter" && addOptionOnSearchNotFound) {
+      setIsPopoverOpen(true);
+      event.preventDefault();
+      event.stopPropagation();
+      if (!event.currentTarget.value) return;
+      const newOption = { value: event.currentTarget.value as T, label: event.currentTarget.value };
+      setOptions(prev => new Map(prev).set(newOption.value, newOption));
+      if (options.get(newOption.value) === undefined) {
+        const newSelectedValues = [...selectedValues, newOption.value];
+        setSelectedValues(newSelectedValues);
+        onValueChange(newSelectedValues);
+        setSearchValue("");
+      }
+    } else if (event.key === "Enter") {
       setIsPopoverOpen(true);
     } else if (event.key === "Backspace" && !event.currentTarget.value) {
       const newSelectedValues = [...selectedValues];
@@ -196,10 +230,10 @@ const MultiSelect = <T extends string | number>(
   };
 
   const toggleAll = () => {
-    if (selectedValues.length === options.length) {
+    if (selectedValues.length === options.size) {
       handleClear();
     } else {
-      const allValues = options.map(option => option.value);
+      const allValues = Array.from(options.keys());
       setSelectedValues(allValues);
       onValueChange(allValues);
     }
@@ -244,7 +278,7 @@ const MultiSelect = <T extends string | number>(
               <div className="flex justify-between items-center w-full">
                 <div className="flex flex-wrap items-center gap-2" ref={containerRef}>
                   {selectedValues.slice(0, maxCount).map(value => {
-                    const option = options.find(o => o.value === value);
+                    const option = options.get(value);
                     const IconComponent = option?.icon;
                     return (
                       <Badge key={value} className={cn(multiSelectVariants({ variant }), { "text-gray-400 bg-gray-200": disabled || loading })}>
@@ -296,7 +330,7 @@ const MultiSelect = <T extends string | number>(
       </PopoverTrigger>
       <PopoverContent className="w-auto p-0" align="start" onEscapeKeyDown={() => setIsPopoverOpen(false)}>
         <Command className="w-[--radix-popper-anchor-width]">
-          <CommandInput placeholder="Search..." onKeyDown={handleInputKeyDown} />
+          <CommandInput placeholder={searchText} onKeyDown={handleInputKeyDown} value={searchValue} onValueChange={setSearchValue} />
           <CommandList className="max-h-[--radix-popper-available-height]">
             <CommandEmpty>{noResultsText}</CommandEmpty>
             <CommandGroup>
@@ -304,14 +338,14 @@ const MultiSelect = <T extends string | number>(
                 <div
                   className={cn(
                     "mr-2 flex h-4.5 w-4.5 items-center justify-center rounded-sm border border-primary",
-                    selectedValues.length === options.length ? "bg-primary text-primary-foreground" : "opacity-50 [&_svg]:invisible",
+                    selectedValues.length === options.size ? "bg-primary text-primary-foreground" : "opacity-50 [&_svg]:invisible",
                   )}
                 >
                   <Check className="h-4.5 w-4.5" />
                 </div>
                 <span>({selectAllText})</span>
               </CommandItem>
-              {options.map(option => {
+              {Array.from(options.values()).map(option => {
                 const isSelected = selectedValues.includes(option.value);
                 return (
                   <CommandItem key={option.value} onSelect={() => toggleOption(option.value)} className="cursor-pointer">

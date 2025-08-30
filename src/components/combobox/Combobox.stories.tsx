@@ -4,7 +4,8 @@ import { Combobox } from "./Combobox";
 import { useState } from "react";
 import { Modal } from "../modal/Modal";
 import { Button } from "../button/Button";
-import { Cat, Dog, Rabbit } from "lucide-react";
+import { Cat, Dog, Moon, Rabbit, Sun } from "lucide-react";
+import { Gear } from "@trsys-tech/matrix-icons";
 
 const cars: { label: string; value: string }[] = [
   { label: "Tesla", value: "tesla" },
@@ -165,5 +166,42 @@ export const WithReactElement = () => {
     </div>
   );
 };
+
+export function ThemeToggle() {
+  const [theme, setTheme] = useState("light");
+
+  const comboboxOptions = [
+    {
+      label: (
+        <span className="flex items-center gap-2">
+          <Sun className="w-4 h-4" /> Light
+        </span>
+      ),
+      value: "light",
+      keyword: "light",
+    },
+    {
+      label: (
+        <span className="flex items-center gap-2">
+          <Moon className="w-4 h-4" /> Dark
+        </span>
+      ),
+      value: "dark",
+      keyword: "dark",
+    },
+    {
+      label: (
+        <span className="flex items-center gap-2">
+          <Gear className="w-4 h-4" /> System
+        </span>
+      ),
+      value: "system",
+      keyword: "system",
+    },
+  ];
+  console.log(theme);
+
+  return <Combobox options={comboboxOptions} showSearchInput={false} value={theme} onValueChange={value => setTheme(value)} />;
+}
 
 export default meta;
