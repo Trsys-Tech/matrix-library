@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useMemo, useRef } from "react";
+import React, { useMemo, useRef } from "react";
 import { Check, ChevronDown, XMark } from "@trsys-tech/matrix-icons";
 
 import { cn } from "../../lib/utils";
@@ -117,24 +117,20 @@ const Combobox = <T extends string | number>({
   const [isPopoverOpen, setIsPopoverOpen] = React.useState(false);
   const commandRef = useRef<HTMLDivElement>(null);
 
-  const [currentSelectedValue, setCurrentSelectedValue] = React.useState<T | undefined>(value);
-
   const handleInputKeyDown = React.useCallback(
     (event: React.KeyboardEvent<HTMLInputElement>) => {
       if (event.key === "Enter") {
         setIsPopoverOpen(true);
       } else if (event.key === "Backspace" && !event.currentTarget.value) {
-        setCurrentSelectedValue(currentSelectedValue);
-        onValueChange?.(currentSelectedValue!);
+        onValueChange?.(value!);
         if (closeOnSelect) setIsPopoverOpen(false);
       }
     },
-    [currentSelectedValue, onValueChange, closeOnSelect],
+    [onValueChange, closeOnSelect, value],
   );
 
   const handleSelect = React.useCallback(
     (currentValue: T) => {
-      setCurrentSelectedValue(currentValue);
       onValueChange?.(currentValue);
       if (closeOnSelect) setIsPopoverOpen(false);
     },
@@ -145,7 +141,6 @@ const Combobox = <T extends string | number>({
     (e: React.MouseEvent) => {
       e.stopPropagation();
       onValueChange?.(undefined as unknown as T);
-      setCurrentSelectedValue(undefined);
     },
     [onValueChange],
   );
@@ -165,17 +160,13 @@ const Combobox = <T extends string | number>({
     [showSearchInput],
   );
 
-  useEffect(() => {
-    setCurrentSelectedValue(value);
-  }, [value]);
-
-  const showPlaceholder = currentSelectedValue === undefined || currentSelectedValue === "";
+  const showPlaceholder = value === undefined || value === "";
 
   const label = useMemo(() => {
     if (showPlaceholder && loading) return loadingText;
     if (showPlaceholder) return placeholder;
-    return options.find(option => option.value === currentSelectedValue)?.label || placeholder;
-  }, [showPlaceholder, currentSelectedValue, options, placeholder, loading, loadingText]);
+    return options.find(option => option.value === value)?.label || placeholder;
+  }, [showPlaceholder, value, options, placeholder, loading, loadingText]);
 
   return (
     <Popover open={isPopoverOpen} onOpenChange={setIsPopoverOpen} modal={modalPopover}>
@@ -189,7 +180,7 @@ const Combobox = <T extends string | number>({
             "group flex h-8 w-full items-center justify-between whitespace-nowrap overflow-hidden rounded-sm border border-input bg-transparent px-3 py-1.5 text-xs ring-offset-background data-[placeholder]:text-muted-foreground hover:border hover:border-primary hover:bg-transparent focus:border focus:border-primary focus:outline-none focus:ring focus:ring-primary-100 disabled:cursor-not-allowed disabled:bg-gray-100 disabled:text-text-300 disabled:border-gray-100 [&_svg]:disabled:text-text-300",
             className,
           )}
-          data-value={currentSelectedValue}
+          data-value={value}
           data-placeholder={showPlaceholder ? "" : undefined}
           loading={loading}
           disabled={disabled}
@@ -203,7 +194,7 @@ const Combobox = <T extends string | number>({
           {...props}
         >
           <span className="text-start text-ellipsis whitespace-nowrap overflow-hidden flex-1 max-w-[calc(100%-24px)]">{label}</span>
-          {clearable && currentSelectedValue !== undefined && currentSelectedValue !== null ? (
+          {clearable && value !== undefined && value !== null ? (
             <span
               onClick={handleClear}
               className="p-0 rounded-sm text-xs font-normal transition-colors focus-visible:outline-none disabled:pointer-events-none disabled:bg-muted disabled:text-gray-500 text-primary hover:bg-primary-50 focus:bg-transparent focus:ring active:bg-primary-50 active:text-primary-700 [&>svg]:h-4.5 [&>svg]:w-4.5"
@@ -219,7 +210,7 @@ const Combobox = <T extends string | number>({
         <Command
           className="w-[--radix-popper-anchor-width] focus-visible:outline-none"
           filter={handleFilter}
-          defaultValue={currentSelectedValue !== undefined && currentSelectedValue !== null ? String(currentSelectedValue) : undefined} // highlight selected value on open
+          defaultValue={value !== undefined && value !== null ? String(value) : undefined} // highlight selected value on open
           ref={commandRef}
         >
           {showSearchInput && <CommandInput placeholder={searchText} onKeyDown={handleInputKeyDown} />}
@@ -239,7 +230,7 @@ const Combobox = <T extends string | number>({
                   onSelect={handleSelect as React.ComponentProps<typeof CommandItem>["onSelect"]}
                 >
                   {option.label}
-                  <Check className={cn("ml-auto", currentSelectedValue === option.value ? "opacity-100" : "opacity-0")} />
+                  <Check className={cn("ml-auto", value === option.value ? "opacity-100" : "opacity-0")} />
                 </CommandItem>
               ))}
             </CommandGroup>

@@ -1,4 +1,4 @@
-import { Meta, StoryObj } from "@storybook/react/*";
+import { Meta } from "@storybook/react/*";
 
 import { Combobox } from "./Combobox";
 import { useState } from "react";
@@ -50,20 +50,14 @@ const meta: Meta<typeof Combobox> = {
   tags: ["autodocs"],
 };
 
-export const Default: StoryObj<typeof meta> = {
-  args: {},
-  render: props => {
-    return <Combobox options={cars} {...props} />;
-  },
+export const Default = () => {
+  const [value, setValue] = useState<string | undefined>(undefined);
+  return <Combobox options={cars} value={value} onValueChange={setValue} />;
 };
 
-export const WithoutSearchInput: StoryObj<typeof meta> = {
-  args: {
-    showSearchInput: false,
-  },
-  render: ({ ...props }) => {
-    return <Combobox options={cars} {...props} />;
-  },
+export const WithoutSearchInput = () => {
+  const [value, setValue] = useState<string | undefined>(undefined);
+  return <Combobox options={cars} value={value} onValueChange={setValue} showSearchInput={false} />;
 };
 
 const options = [
@@ -72,22 +66,14 @@ const options = [
   { value: 3, label: "three" },
 ];
 
-export const WithNumbers: StoryObj<typeof meta> = {
-  args: {
-    options,
-  },
-  render: ({ ...props }) => {
-    return <Combobox options={options} {...props} />;
-  },
+export const WithNumbers = () => {
+  const [value, setValue] = useState<number | undefined>(undefined);
+  return <Combobox options={options} value={value} onValueChange={setValue} />;
 };
 
-export const Clearable: StoryObj<typeof meta> = {
-  args: {
-    clearable: true,
-  },
-  render: ({ ...props }) => {
-    return <Combobox options={cars} {...props} />;
-  },
+export const Clearable = () => {
+  const [value, setValue] = useState<string | undefined>(undefined);
+  return <Combobox options={cars} value={value} onValueChange={setValue} clearable />;
 };
 
 export const ProgrammaticChanges = () => {
@@ -117,6 +103,7 @@ export const ProgrammaticChanges = () => {
 
 export const InModal = () => {
   const [open, setOpen] = useState(false);
+  const [value, setValue] = useState<string | undefined>(undefined);
   const handleOpenChange = (open: boolean) => {
     setOpen(open);
   };
@@ -124,13 +111,14 @@ export const InModal = () => {
     <div>
       <Button onClick={() => setOpen(true)}>Open Modal</Button>
       <Modal open={open} onOpenChange={handleOpenChange} title="Modal Title">
-        <Combobox options={cars} modalPopover />
+        <Combobox options={cars} value={value} onValueChange={setValue} modalPopover />
       </Modal>
     </div>
   );
 };
 
 export const WithReactElement = () => {
+  const [value, setValue] = useState<string | undefined>(undefined);
   const options = [
     {
       label: (
@@ -162,7 +150,7 @@ export const WithReactElement = () => {
   ];
   return (
     <div>
-      <Combobox options={options} modalPopover />
+      <Combobox options={options} value={value} onValueChange={setValue} modalPopover />
     </div>
   );
 };

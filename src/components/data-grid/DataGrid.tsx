@@ -319,6 +319,7 @@ const FreezeAction: React.FC<FreezeActionProps> = ({ freezeText, unFreezeText, o
     });
 
     return () => {
+      if (api?.isDestroyed()) return;
       api?.removeEventListener("pinnedRowDataChanged", () => {
         setPinnedRowCount(api.getPinnedTopRowCount());
       });
