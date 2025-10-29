@@ -175,7 +175,9 @@ const MultiSelect = <T extends string | number>(
   }: MultiSelectProps<T>,
   ref: React.ForwardedRef<HTMLButtonElement>,
 ) => {
-  const [selectedValues, setSelectedValues] = React.useState<T[]>(defaultValue ?? value);
+  const isControlled = value !== undefined;
+  const [internalSelectedValues, setInternalSelectedValues] = React.useState<T[]>(defaultValue);
+  const selectedValues = isControlled ? value : internalSelectedValues;
   const [isPopoverOpen, setIsPopoverOpen] = React.useState(false);
   const containerRef = React.useRef<HTMLDivElement>(null);
   const [searchValue, setSearchValue] = React.useState("");
@@ -197,7 +199,9 @@ const MultiSelect = <T extends string | number>(
             return new Map(prev).set(newOption.value, newOption);
           });
           const newSelectedValues = [...selectedValues, newOption.value];
-          setSelectedValues(newSelectedValues);
+          if (!isControlled) {
+            setInternalSelectedValues(newSelectedValues);
+          }
           onValueChange(newSelectedValues);
           setSearchValue("");
         }
@@ -206,29 +210,35 @@ const MultiSelect = <T extends string | number>(
       } else if (event.key === "Backspace" && !event.currentTarget.value) {
         const newSelectedValues = [...selectedValues];
         newSelectedValues.pop();
-        setSelectedValues(newSelectedValues);
+        if (!isControlled) {
+          setInternalSelectedValues(newSelectedValues);
+        }
         onValueChange(newSelectedValues);
       }
     },
-    [addOptionOnSearchNotFound, onValueChange, options, selectedValues],
+    [addOptionOnSearchNotFound, onValueChange, options, selectedValues, isControlled],
   );
 
   const toggleOption = React.useCallback(
     (option: T) => {
       const newSelectedValues = selectedValues.includes(option) ? selectedValues.filter(value => value !== option) : [...selectedValues, option];
-      setSelectedValues(newSelectedValues);
+      if (!isControlled) {
+        setInternalSelectedValues(newSelectedValues);
+      }
       onValueChange(newSelectedValues);
     },
-    [onValueChange, selectedValues],
+    [onValueChange, selectedValues, isControlled],
   );
 
   const handleClear = React.useCallback(() => {
-    setSelectedValues([]);
+    if (!isControlled) {
+      setInternalSelectedValues([]);
+    }
     onValueChange([]);
     if (addOptionOnSearchNotFound) {
       setOptions(new Map(_options.map(option => [option.value, option])));
     }
-  }, [onValueChange, addOptionOnSearchNotFound, _options]);
+  }, [onValueChange, addOptionOnSearchNotFound, _options, isControlled]);
 
   const handleTogglePopover = React.useCallback(() => {
     setIsPopoverOpen(prev => !prev);
@@ -236,27 +246,27 @@ const MultiSelect = <T extends string | number>(
 
   const clearExtraOptions = React.useCallback(() => {
     const newSelectedValues = selectedValues.slice(0, maxCount);
-    setSelectedValues(newSelectedValues);
+    if (!isControlled) {
+      setInternalSelectedValues(newSelectedValues);
+    }
     onValueChange(newSelectedValues);
-  }, [maxCount, selectedValues, onValueChange]);
+  }, [maxCount, selectedValues, onValueChange, isControlled]);
 
   const toggleAll = React.useCallback(() => {
     if (selectedValues.length === options.size) {
       handleClear();
     } else {
       const allValues = Array.from(options.keys());
-      setSelectedValues(allValues);
+      if (!isControlled) {
+        setInternalSelectedValues(allValues);
+      }
       onValueChange(allValues);
     }
-  }, [handleClear, onValueChange, options, selectedValues.length]);
+  }, [handleClear, onValueChange, options, selectedValues.length, isControlled]);
 
   React.useEffect(() => {
     setOptions(new Map(_options.map(option => [option.value, option])));
   }, [_options]);
-
-  React.useEffect(() => {
-    setSelectedValues(value ?? []);
-  }, [value]);
 
   React.useLayoutEffect(() => {
     if (containerRef.current) {

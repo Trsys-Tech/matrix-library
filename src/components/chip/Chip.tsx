@@ -40,6 +40,7 @@ const Chip = React.forwardRef<HTMLSpanElement, ChipProps>(({ className, variant,
       {children}
       {onClose ? (
         <button
+          onClick={onClose}
           className={cn(
             { "-me-3 [&>svg]:w-5 [&>svg]:h-5": size === "lg" },
             { "-me-2 [&>svg]:w-4.5 [&>svg]:h-4.5": size === "md" || size === undefined },
