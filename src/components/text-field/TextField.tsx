@@ -38,12 +38,23 @@ interface TextFieldProps extends React.HTMLAttributes<HTMLDivElement>, VariantPr
 }
 
 const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
-  ({ className, slotProps, suffix, endAdornment, startAdornment, size, value, onChange, defaultValue, type, disabled, ...props }, ref) => {
+  ({ className, slotProps, suffix, endAdornment, startAdornment, size, value, onChange, defaultValue, type, disabled, onWheel, ...props }, ref) => {
+    const handleWheel = (event: React.WheelEvent<HTMLInputElement>) => {
+      if (type === "number") {
+        // Prevents the number input from changing value when scrolling
+        (event.target as HTMLInputElement).blur();
+      }
+      if (onWheel) {
+        onWheel(event);
+      }
+    };
+
     return (
       <div {...props} className={cn(textFieldVariants({ size, className }))} aria-disabled={disabled}>
         {startAdornment}
         <input
           type={type}
+          onWheel={handleWheel}
           ref={ref}
           onChange={onChange}
           value={value}
