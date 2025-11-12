@@ -76,6 +76,22 @@ export const Clearable = () => {
   return <Combobox options={cars} value={value} onValueChange={setValue} clearable />;
 };
 
+export const WithExtraActions = () => {
+  const [value, setValue] = useState<number | undefined>(undefined);
+  return (
+    <Combobox
+      options={options}
+      value={value}
+      onValueChange={setValue}
+      extraContent={
+        <Button className="m-2" onClick={() => alert("Extra Action clicked")}>
+          Extra Action
+        </Button>
+      }
+    />
+  );
+};
+
 export const ProgrammaticChanges = () => {
   const [value, setValue] = useState<string | undefined>(undefined);
   const [options, setOptions] = useState<{ label: string; value: string }[]>(cars);

@@ -94,6 +94,11 @@ type ComboboxProps<T extends string | number> = React.HTMLAttributes<HTMLButtonE
    * @default false
    */
   clearable?: boolean;
+
+  /**
+   * Extra content to be displayed in the combobox dropdown.
+   */
+  extraContent?: React.ReactNode;
 };
 
 const Combobox = <T extends string | number>({
@@ -112,6 +117,7 @@ const Combobox = <T extends string | number>({
   emptyOptionsText = "No Items",
   showSearchInput = true,
   modalPopover,
+  extraContent,
   ...props
 }: ComboboxProps<T>) => {
   const [isPopoverOpen, setIsPopoverOpen] = React.useState(false);
@@ -214,6 +220,7 @@ const Combobox = <T extends string | number>({
           ref={commandRef}
         >
           {showSearchInput && <CommandInput placeholder={searchText} onKeyDown={handleInputKeyDown} />}
+          {extraContent}
           <CommandList>
             {!loading && <CommandEmpty>{noResultsText}</CommandEmpty>}
             {!loading && !options.length ? (
