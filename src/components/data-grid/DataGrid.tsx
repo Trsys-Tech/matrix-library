@@ -40,6 +40,8 @@ type DataGridContext = {
   setActionbarExists: (value: boolean) => void;
   actionbarHeight: number;
   setActionbarHeight: (value: number) => void;
+  pinnedRowIds: Set<string>;
+  setPinnedRowIds: (value: Set<string>) => void;
 };
 
 const DataGridContext = React.createContext<DataGridContext | null>(null);
@@ -63,6 +65,7 @@ const DataGrid: React.FC<DataGridProps> = ({ children }) => {
   const [api, setApi] = React.useState<GridApi | null>(null);
   const [rowData, setRowData] = React.useState<any[] | null | undefined>([]);
   const [actionbarHeight, setActionbarHeight] = React.useState(0);
+  const [pinnedRowIds, setPinnedRowIds] = React.useState<Set<string>>(new Set());
 
   const [quickFilterText, setQuickFilterText] = React.useState("");
   const [actionbarExists, setActionbarExists] = React.useState(false);
@@ -80,6 +83,8 @@ const DataGrid: React.FC<DataGridProps> = ({ children }) => {
         setActionbarExists,
         actionbarHeight,
         setActionbarHeight,
+        pinnedRowIds,
+        setPinnedRowIds,
       }}
     >
       {children}
@@ -98,7 +103,7 @@ const DataGridContent = forwardRef<AgGridReact, DataGridContentProps>(
     if (!context) {
       throw new Error("DataGridContent should be used within <DataGrid>");
     }
-    const { rowData, setRowData, actionbarExists, setApi, setQuickFilterText, quickFilterText, gridId, actionbarHeight } = context;
+    const { rowData, setRowData, actionbarExists, setApi, setQuickFilterText, quickFilterText, gridId, actionbarHeight, pinnedRowIds } = context;
 
     const theme = useMemo(() => {
       return dataGridDefaultTheme.withParams({
@@ -122,15 +127,43 @@ const DataGridContent = forwardRef<AgGridReact, DataGridContentProps>(
       }
     }, [quickFilterTextProps, setQuickFilterText]);
 
+    const getRowId = useMemo(() => {
+      return props.getRowId ?? ((params: any) => params.data.id);
+    }, [props.getRowId]);
+
+    const { finalRowData, finalPinnedTopRowData } = useMemo(() => {
+      if (!rowData || pinnedRowIds.size === 0) {
+        return { finalRowData: rowData, finalPinnedTopRowData: [] };
+      }
+
+      const pinned: any[] = [];
+      const unpinned: any[] = [];
+
+      rowData.forEach(data => {
+        const id = getRowId({ data, level: 0 } as any);
+        const stringId = id !== undefined ? String(id) : undefined;
+
+        if (stringId !== undefined && pinnedRowIds.has(stringId)) {
+          pinned.push(data);
+        } else {
+          unpinned.push(data);
+        }
+      });
+
+      return { finalRowData: unpinned, finalPinnedTopRowData: pinned };
+    }, [rowData, pinnedRowIds, getRowId]);
+
     return (
       <AgGridReact
         gridId={gridId}
         theme={propTheme ?? theme}
-        rowData={rowData}
+        rowData={finalRowData}
+        pinnedTopRowData={finalPinnedTopRowData}
         quickFilterText={quickFilterText}
         onGridReady={handleGridReady}
         containerStyle={{ height: `calc(100% - ${actionbarHeight}px)`, ...containerStyle }}
         {...props}
+        getRowId={getRowId}
         ref={ref}
       />
     );
@@ -263,7 +296,7 @@ const FreezeAction: React.FC<FreezeActionProps> = ({ freezeText, unFreezeText, o
   const [pinnedRowCount, setPinnedRowCount] = React.useState(0);
   const [selectedRowsCount, setSelectedRowsCount] = React.useState(0);
 
-  const { api, rowData } = context;
+  const { api, pinnedRowIds, setPinnedRowIds } = context;
 
   const freezeRows = () => {
     if (!api) return;
@@ -272,29 +305,19 @@ const FreezeAction: React.FC<FreezeActionProps> = ({ freezeText, unFreezeText, o
     const selectedRows = api.getSelectedNodes();
 
     if (selectedRows.length > 0) {
-      // Pin the selected rows
-      api.setGridOption(
-        "pinnedTopRowData",
-        selectedRows.map(row => row.data),
-      );
-
-      // Get current row data
-      const allData = api.getRenderedNodes();
-      // Filter out pinned rows from the main data
-      const updatedNodes = allData.filter(row => !selectedRows.some(pinnedRow => pinnedRow.id === row.id));
-
-      // Update the grid with the filtered data
-      api.setGridOption(
-        "rowData",
-        updatedNodes.map(node => node.data),
-      );
+      const newPinnedIds = new Set(pinnedRowIds);
+      selectedRows.forEach(row => {
+        if (row.id !== undefined) {
+          newPinnedIds.add(row.id);
+        }
+      });
+      setPinnedRowIds(newPinnedIds);
+      api.deselectAll();
     }
   };
 
   const unfreezeRows = () => {
-    if (!api) return;
-    api.setGridOption("pinnedTopRowData", []);
-    api.setGridOption("rowData", rowData);
+    setPinnedRowIds(new Set());
   };
 
   const handleFreezing = (e: React.MouseEvent<HTMLButtonElement>) => {
