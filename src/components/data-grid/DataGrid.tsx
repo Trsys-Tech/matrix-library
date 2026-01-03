@@ -97,7 +97,7 @@ type DataGridContentProps = Omit<AgGridReactProps, "theme"> & {
 };
 
 const DataGridContent = forwardRef<AgGridReact, DataGridContentProps>(
-  ({ theme: propTheme, onGridReady, quickFilterText: quickFilterTextProps, rowData: rowDataProps, containerStyle, ...props }, ref) => {
+  ({ theme: propTheme, onGridReady, quickFilterText: quickFilterTextProps, rowData: rowDataProps, containerStyle, getRowId, ...props }, ref) => {
     const context = React.useContext(DataGridContext);
 
     if (!context) {
@@ -127,10 +127,6 @@ const DataGridContent = forwardRef<AgGridReact, DataGridContentProps>(
       }
     }, [quickFilterTextProps, setQuickFilterText]);
 
-    const getRowId = useMemo(() => {
-      return props.getRowId ?? ((params: any) => String(params.data.id));
-    }, [props.getRowId]);
-
     const { finalRowData, finalPinnedTopRowData } = useMemo(() => {
       if (!rowData || pinnedRowIds.size === 0) {
         return { finalRowData: rowData, finalPinnedTopRowData: [] };
@@ -140,8 +136,8 @@ const DataGridContent = forwardRef<AgGridReact, DataGridContentProps>(
       const unpinned: any[] = [];
 
       rowData.forEach(data => {
-        const id = getRowId({ data, level: 0 } as any);
-        const stringId = id !== undefined ? String(id) : undefined;
+        const id = getRowId ? getRowId({ data, level: 0 } as any) : (data as any).id;
+        const stringId = id !== undefined && id !== null ? String(id) : undefined;
 
         if (stringId !== undefined && pinnedRowIds.has(stringId)) {
           pinned.push(data);
@@ -162,8 +158,8 @@ const DataGridContent = forwardRef<AgGridReact, DataGridContentProps>(
         quickFilterText={quickFilterText}
         onGridReady={handleGridReady}
         containerStyle={{ height: `calc(100% - ${actionbarHeight}px)`, ...containerStyle }}
-        {...props}
         getRowId={getRowId}
+        {...props}
         ref={ref}
       />
     );
