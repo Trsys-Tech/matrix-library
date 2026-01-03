@@ -128,7 +128,7 @@ const DataGridContent = forwardRef<AgGridReact, DataGridContentProps>(
     }, [quickFilterTextProps, setQuickFilterText]);
 
     const getRowId = useMemo(() => {
-      return props.getRowId ?? ((params: any) => params.data.id);
+      return props.getRowId ?? ((params: any) => String(params.data.id));
     }, [props.getRowId]);
 
     const { finalRowData, finalPinnedTopRowData } = useMemo(() => {
