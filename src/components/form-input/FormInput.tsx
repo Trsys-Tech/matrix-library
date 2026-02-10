@@ -41,7 +41,14 @@ const FormInput = <TFieldValues extends FieldValues, TName extends FieldPath<TFi
               <TextField
                 {...(slotProps?.textFieldProps ?? {})}
                 disabled={disabled || readOnly}
-                slotProps={{ inputProps: { ...slotProps?.textFieldProps?.slotProps?.inputProps, ...field, "aria-required": required } }}
+                slotProps={{
+                  inputProps: {
+                    ...slotProps?.textFieldProps?.slotProps?.inputProps,
+                    ...field,
+                    "aria-required": required,
+                    disabled: disabled || readOnly,
+                  },
+                }}
               />
             </FormControl>
             <FormMessage {...(slotProps?.formMessageProps ?? {})} />

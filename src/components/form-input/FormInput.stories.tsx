@@ -83,4 +83,23 @@ export const InForm: Story = {
   ),
 };
 
+export const Numeric: Story = {
+  args: {
+    label: "Label",
+    name: "name",
+    disabled: false,
+    readOnly: true,
+    className: "w-full",
+  },
+  tags: ["autodocs"],
+  render: ({ ...args }) => (
+    <FormWrapper>
+      <FormInput {...args} slotProps={{ textFieldProps: { slotProps: { inputProps: { type: "number" } } } }} />
+      <Button type="submit" className="w-24">
+        Submit
+      </Button>
+    </FormWrapper>
+  ),
+};
+
 export default meta;
