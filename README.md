@@ -15,6 +15,8 @@ MatrixUI Library is a comprehensive UI component library built with React and Ty
 
 To install the MatrixUI Library, use npm or yarn:
 
+This package supports React 18 and React 19. Your application must provide matching `react` and `react-dom` peer dependencies.
+
 ```sh
 npm install @trsys-tech/matrix-library
 ```

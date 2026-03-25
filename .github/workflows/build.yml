@@ -8,6 +8,13 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - react-version: 18.3.1
+            react-types-major: 18
+          - react-version: 19.0.0
+            react-types-major: 19
 
     steps:
       - name: Checkout repository
@@ -20,6 +27,9 @@ jobs:
 
       - name: Install dependencies
         run: npm install
+
+      - name: Install React ${{ matrix.react-version }}
+        run: npm install --no-save react@${{ matrix.react-version }} react-dom@${{ matrix.react-version }} @types/react@^${{ matrix.react-types-major }} @types/react-dom@^${{ matrix.react-types-major }}
 
       - name: Build library
         run: npm run build
