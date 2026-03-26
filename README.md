@@ -50,6 +50,21 @@ MatrixUI Library includes a variety of components, such as:
 
 For a full list of components and their usage, please refer to the [Storybook](https://trsys-tech.github.io/matrix-library/) documentation.
 
+### React Version Support
+
+This library supports both React 18 (`^18.3.1`) and React 19 (`^19.2.4`) as peer dependencies. The library is built as ESM with React externalized, meaning it does not bundle React and relies on the consumer's installed React version.
+
+**Known Limitation:** During development and testing, we use React 18 type definitions even when testing against React 19 runtime. This is due to a transitive dependency type incompatibility in the Storybook ecosystem:
+
+```
+@storybook/addon-essentials
+  → @storybook/addon-docs
+    → @mdx-js/mdx
+      → @types/mdx (does not support React 19 types)
+```
+
+Since Storybook is dev-only, this limitation does not affect the shipped library. Runtime compatibility with React 19 is fully validated during the build process.
+
 ## Development
 
 To set up the development environment, clone the repository and install the dependencies:

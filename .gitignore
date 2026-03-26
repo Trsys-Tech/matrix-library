@@ -24,3 +24,5 @@ storybook-static
 *.sln
 *.sw?
 
+.npmrc
+.gitproxy
