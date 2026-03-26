@@ -1,4 +1,3 @@
-/* eslint-disable camelcase */
 import { Meta, StoryObj } from "@storybook/react/*";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
@@ -40,8 +39,8 @@ export type Story = StoryObj<typeof meta>;
 const formSchema = z.object({
   dateRange: z.object(
     {
-      from: z.date({ required_error: "From date is required" }),
-      to: z.date({ required_error: "To date is required" }),
+      from: z.date({ error: "From date is required" }),
+      to: z.date({ error: "To date is required" }),
     },
     { message: "Date range is required" },
   ),

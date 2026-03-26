@@ -1,4 +1,3 @@
-/* eslint-disable camelcase */
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { Meta, StoryObj } from "@storybook/react/*";
@@ -40,13 +39,13 @@ export type Story = StoryObj<typeof meta>;
 const formSchema = z.object({
   time: z.object(
     {
-      hour: z.number({ required_error: "Hours is required" }).nonnegative({ message: "Hour is required" }),
-      minute: z.number({ required_error: "Minutes is required" }).nonnegative({ message: "Minute is required" }),
+      hour: z.number({ error: "Hours is required" }).nonnegative({ message: "Hour is required" }),
+      minute: z.number({ error: "Minutes is required" }).nonnegative({ message: "Minute is required" }),
       ampm: z
-        .union([z.literal("AM"), z.literal("PM")], { required_error: "AM/PM is required" })
+        .union([z.literal("AM"), z.literal("PM")], { error: "AM/PM is required" })
         .refine(value => value !== null, { message: "AM/PM is required" }),
     },
-    { required_error: "Time is required" },
+    { error: "Time is required" },
   ),
 });
 

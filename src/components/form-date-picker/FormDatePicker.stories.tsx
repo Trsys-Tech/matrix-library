@@ -37,8 +37,7 @@ const meta = {
 export type Story = StoryObj<typeof meta>;
 
 const formSchema = z.object({
-  // eslint-disable-next-line camelcase
-  date: z.date({ required_error: "Date is required" }),
+  date: z.date({ error: "Date is required" }),
 });
 
 const FormWrapper = ({ children }: { children: React.ReactNode }) => {
