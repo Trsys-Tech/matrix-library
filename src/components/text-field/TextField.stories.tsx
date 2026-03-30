@@ -40,7 +40,7 @@ export const NumberType: Story = {
 
 export const WithEndButton: Story = {
   args: {
-    endAdornment: <IconButton className="m-[1px] focus:ring-0 px-1 w-auto">Button</IconButton>,
+    endAdornment: <IconButton className="mtx-m-[1px] focus:mtx-ring-0 mtx-px-1 mtx-w-auto">Button</IconButton>,
   },
 };
 

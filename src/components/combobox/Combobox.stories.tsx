@@ -84,7 +84,7 @@ export const WithExtraActions = () => {
       value={value}
       onValueChange={setValue}
       extraContent={
-        <Button className="m-2" onClick={() => alert("Extra Action clicked")}>
+        <Button className="mtx-m-2" onClick={() => alert("Extra Action clicked")}>
           Extra Action
         </Button>
       }
@@ -106,10 +106,10 @@ export const ProgrammaticChanges = () => {
 
   return (
     <div>
-      <button onClick={handleAddOption} className="m-4 bg-gray-200 p-2 rounded-md">
+      <button onClick={handleAddOption} className="mtx-m-4 mtx-bg-gray-200 mtx-p-2 mtx-rounded-md">
         Add Option
       </button>
-      <button onClick={() => setValue(undefined)} className="m-4 bg-red-200 p-2 rounded-md">
+      <button onClick={() => setValue(undefined)} className="mtx-m-4 mtx-bg-red-200 mtx-p-2 mtx-rounded-md">
         Clear Selection
       </button>
       <Combobox options={options} value={value} onValueChange={handleChange} />
@@ -138,8 +138,8 @@ export const WithReactElement = () => {
   const options = [
     {
       label: (
-        <span className="flex items-center gap-2">
-          <Rabbit className="w-4 h-4" /> Rabbit
+        <span className="mtx-flex mtx-items-center mtx-gap-2">
+          <Rabbit className="mtx-w-4 mtx-h-4" /> Rabbit
         </span>
       ),
       value: "rabbit",
@@ -147,8 +147,8 @@ export const WithReactElement = () => {
     },
     {
       label: (
-        <span className="flex items-center gap-2">
-          <Cat className="w-4 h-4" /> Cat
+        <span className="mtx-flex mtx-items-center mtx-gap-2">
+          <Cat className="mtx-w-4 mtx-h-4" /> Cat
         </span>
       ),
       value: "cat",
@@ -156,8 +156,8 @@ export const WithReactElement = () => {
     },
     {
       label: (
-        <span className="flex items-center gap-2">
-          <Dog className="w-4 h-4" /> Dog
+        <span className="mtx-flex mtx-items-center mtx-gap-2">
+          <Dog className="mtx-w-4 mtx-h-4" /> Dog
         </span>
       ),
       value: "dog",
@@ -177,8 +177,8 @@ export function ThemeToggle() {
   const comboboxOptions = [
     {
       label: (
-        <span className="flex items-center gap-2">
-          <Sun className="w-4 h-4" /> Light
+        <span className="mtx-flex mtx-items-center mtx-gap-2">
+          <Sun className="mtx-w-4 mtx-h-4" /> Light
         </span>
       ),
       value: "light",
@@ -186,8 +186,8 @@ export function ThemeToggle() {
     },
     {
       label: (
-        <span className="flex items-center gap-2">
-          <Moon className="w-4 h-4" /> Dark
+        <span className="mtx-flex mtx-items-center mtx-gap-2">
+          <Moon className="mtx-w-4 mtx-h-4" /> Dark
         </span>
       ),
       value: "dark",
@@ -195,8 +195,8 @@ export function ThemeToggle() {
     },
     {
       label: (
-        <span className="flex items-center gap-2">
-          <Gear className="w-4 h-4" /> System
+        <span className="mtx-flex mtx-items-center mtx-gap-2">
+          <Gear className="mtx-w-4 mtx-h-4" /> System
         </span>
       ),
       value: "system",

@@ -20,7 +20,7 @@ export const Primary: Story = {
   },
   render: props => {
     const value = 33;
-    return <Progress {...props} value={value} className="w-96" />;
+    return <Progress {...props} value={value} className="mtx-w-96" />;
   },
 };
 
@@ -31,7 +31,7 @@ export const Variants: Story = {
   render: props => {
     const value = 63;
     return (
-      <div className="space-y-3 w-96">
+      <div className="mtx-space-y-3 mtx-w-96">
         <Progress {...props} value={value} variant="primary" />
         <Progress {...props} value={value} variant="info" />
         <Progress {...props} value={value} variant="success" />
@@ -47,7 +47,7 @@ export const Sizes: Story = {
     variant: "primary",
   },
   render: props => (
-    <div className="space-y-3 w-96">
+    <div className="mtx-space-y-3 mtx-w-96">
       <Progress {...props} value={33} size="sm" />
       <Progress {...props} value={33} size="md" />
       <Progress {...props} value={33} size="lg" />

@@ -52,7 +52,7 @@ const rowData: Row[] = [
   { id: 13, make: "Peugeot", model: "e-208", price: 29900, electric: true },
   { id: 14, make: "Opel", model: "Corsa-e", price: 29900, electric: true },
   { id: 15, make: "Citroen", model: "C4", price: 29900, electric: true },
-  { id: 16, make: "Mazda", model: "MX-30", price: 33990, electric: true },
+  { id: 16, make: "Mazda", model: "mtx-30", price: 33990, electric: true },
   { id: 17, make: "Mini", model: "Cooper SE", price: 32000, electric: true },
   { id: 18, make: "Seat", model: "Mii Electric", price: 20990, electric: true },
   { id: 19, make: "Skoda", model: "Citigo-e", price: 20990, electric: true },
@@ -100,22 +100,26 @@ export const WithActionbar = () => {
   };
 
   return (
-    <div className="h-96 p-4">
+    <div className="mtx-h-96 mtx-p-4">
       <DataGrid>
         <DataGridActionBar>
-          <div className="flex gap-2 items-center me-2">
-            <Chip className="h-6 cursor-pointer" variant={priceType === "all" ? "primary" : "neutral"} onClick={() => externalFilterChanged("all")}>
+          <div className="mtx-flex mtx-gap-2 mtx-items-center mtx-me-2">
+            <Chip
+              className="mtx-h-6 mtx-cursor-pointer"
+              variant={priceType === "all" ? "primary" : "neutral"}
+              onClick={() => externalFilterChanged("all")}
+            >
               All
             </Chip>
             <Chip
-              className="h-6 cursor-pointer"
+              className="mtx-h-6 mtx-cursor-pointer"
               variant={priceType === "expensive" ? "primary" : "neutral"}
               onClick={() => externalFilterChanged("expensive")}
             >
               Expensive Cars
             </Chip>
             <Chip
-              className="h-6 cursor-pointer"
+              className="mtx-h-6 mtx-cursor-pointer"
               variant={priceType === "cheap" ? "primary" : "neutral"}
               onClick={() => externalFilterChanged("cheap")}
             >
@@ -123,7 +127,7 @@ export const WithActionbar = () => {
             </Chip>
           </div>
           <SearchAction />
-          <FreezeAction className="ms-auto" />
+          <FreezeAction className="mtx-ms-auto" />
           <PrintAction />
           <RefreshAction
             onRefresh={() => {
@@ -131,7 +135,7 @@ export const WithActionbar = () => {
             }}
           />
           <ExtraActions>
-            <Button variant="text" className="w-full">
+            <Button variant="text" className="mtx-w-full">
               Edit
             </Button>
           </ExtraActions>
@@ -153,11 +157,11 @@ export const WithPagination = () => {
   // Column Definitions: Defines the columns to be displayed.
 
   return (
-    <div className="h-96 p-4">
+    <div className="mtx-h-96 mtx-p-4">
       <DataGrid>
         <DataGridActionBar>
           <SearchAction />
-          <FreezeAction className="ms-auto" />
+          <FreezeAction className="mtx-ms-auto" />
           <PrintAction />
           <RefreshAction
             onRefresh={() => {
@@ -165,7 +169,7 @@ export const WithPagination = () => {
             }}
           />
           <ExtraActions>
-            <Button variant="text" className="w-full">
+            <Button variant="text" className="mtx-w-full">
               Edit
             </Button>
           </ExtraActions>
@@ -195,7 +199,7 @@ export const RowTotalTrick = () => {
   }, []);
 
   return (
-    <div className="h-96 p-4">
+    <div className="mtx-h-96 mtx-p-4">
       <DataGrid>
         <DataGridContent rowData={rowData} columnDefs={colDefs} pinnedBottomRowData={[totalRow]} />
       </DataGrid>

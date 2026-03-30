@@ -8,18 +8,18 @@ import { cn } from "../../lib/utils";
 import { XMark } from "@trsys-tech/matrix-icons";
 
 const chipVariants = tv({
-  base: "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full text-xs font-medium",
+  base: "mtx-inline-flex mtx-items-center mtx-justify-center mtx-gap-2 mtx-whitespace-nowrap mtx-rounded-full mtx-text-xs mtx-font-medium",
   variants: {
     variant: {
-      primary: "bg-primary-100 text-primary-700 border border-primary",
-      neutral: "bg-gray-50 text-text-400 border border-gray-400",
-      "table-primary": "bg-primary-25 text-primary font-bold",
-      "table-neutral": "bg-gray-50 text-text-400 font-medium",
+      primary: "mtx-bg-primary-100 mtx-text-primary-700 mtx-border mtx-border-primary",
+      neutral: "mtx-bg-gray-50 mtx-text-text-400 mtx-border mtx-border-gray-400",
+      "table-primary": "mtx-bg-primary-25 mtx-text-primary mtx-font-bold",
+      "table-neutral": "mtx-bg-gray-50 mtx-text-text-400 mtx-font-medium",
     },
     size: {
-      sm: "px-2 h-6",
-      md: "px-4 h-8",
-      lg: "px-6 h-10 text-sm",
+      sm: "mtx-px-2 mtx-h-6",
+      md: "mtx-px-4 mtx-h-8",
+      lg: "mtx-px-6 mtx-h-10 mtx-text-sm",
     },
   },
   defaultVariants: {
@@ -42,9 +42,9 @@ const Chip = React.forwardRef<HTMLSpanElement, ChipProps>(({ className, variant,
         <button
           onClick={onClose}
           className={cn(
-            { "-me-3 [&>svg]:w-5 [&>svg]:h-5": size === "lg" },
-            { "-me-2 [&>svg]:w-4.5 [&>svg]:h-4.5": size === "md" || size === undefined },
-            { "-me-1 [&>svg]:w-4 [&>svg]:h-4": size === "sm" },
+            { "-mtx-me-3 [&>svg]:mtx-w-5 [&>svg]:mtx-h-5": size === "lg" },
+            { "-mtx-me-2 [&>svg]:mtx-w-4.5 [&>svg]:mtx-h-4.5": size === "md" || size === undefined },
+            { "-mtx-me-1 [&>svg]:mtx-w-4 [&>svg]:mtx-h-4": size === "sm" },
           )}
         >
           <XMark />

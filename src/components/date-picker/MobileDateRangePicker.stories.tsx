@@ -9,7 +9,7 @@ const meta: Meta<typeof MobileDateRangePicker> = {
   component: MobileDateRangePicker,
   tags: ["autodocs"],
   args: {
-    className: "w-72",
+    className: "mtx-w-72",
   },
   argTypes: {
     selected: {

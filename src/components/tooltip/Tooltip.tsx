@@ -28,13 +28,13 @@ const TooltipContent = React.forwardRef<React.ElementRef<typeof Content>, Conten
       ref={ref}
       sideOffset={sideOffset}
       className={cn(
-        "z-50 rounded-sm bg-primary-900 px-3 py-1.5 text-xs text-primary-foreground animate-in fade-in-0 zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2",
+        "mtx-z-50 mtx-rounded-sm mtx-bg-primary-900 mtx-px-3 mtx-py-1.5 mtx-text-xs mtx-text-primary-foreground mtx-animate-in mtx-fade-in-0 mtx-zoom-in-95 data-[state=closed]:mtx-animate-out data-[state=closed]:mtx-fade-out-0 data-[state=closed]:mtx-zoom-out-95 data-[side=bottom]:mtx-slide-in-from-top-2 data-[side=left]:mtx-slide-in-from-right-2 data-[side=right]:mtx-slide-in-from-left-2 data-[side=top]:mtx-slide-in-from-bottom-2",
         className,
       )}
       {...props}
     >
       {children}
-      <Arrow data-role="arrow" className="w-2 h-1.5" />
+      <Arrow data-role="arrow" className="mtx-w-2 mtx-h-1.5" />
     </Content>
   </Portal>
 ));

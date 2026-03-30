@@ -12,7 +12,9 @@ export const Default = () => {
   return (
     <ContextMenu>
       <ContextMenuTrigger asChild>
-        <div className="flex items-center justify-center p-2 w-52 h-40 border border-gray-200 rounded-sm">Right click me</div>
+        <div className="mtx-flex mtx-items-center mtx-justify-center mtx-p-2 mtx-w-52 mtx-h-40 mtx-border mtx-border-gray-200 mtx-rounded-sm">
+          Right click me
+        </div>
       </ContextMenuTrigger>
       <ContextMenuContent>
         <ContextMenuItem>Profile</ContextMenuItem>

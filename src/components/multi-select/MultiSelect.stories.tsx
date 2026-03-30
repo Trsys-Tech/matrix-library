@@ -34,7 +34,7 @@ export const UnControlled: StoryObj<typeof meta> = {
     placeholder: "Select your favorite frameworks",
     onValueChange: () => {},
     maxCount: 3,
-    className: "w-96",
+    className: "mtx-w-96",
   },
 };
 
@@ -46,7 +46,7 @@ export const AddOptionOnSearchNotFound: StoryObj<typeof meta> = {
     addOptionOnSearchNotFound: true,
     onValueChange: () => {},
     maxCount: 3,
-    className: "w-96",
+    className: "mtx-w-96",
   },
 };
 

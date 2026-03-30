@@ -21,11 +21,11 @@ const dataGridDefaultTheme = themeQuartz.withParams({
   fontSize: "12px",
   headerFontSize: "12px",
   headerFontWeight: 700,
-  headerBackgroundColor: "hsl(var(--primary-50))",
-  backgroundColor: "hsl(var(--gray-0))",
-  accentColor: "hsl(var(--primary-300))",
-  foregroundColor: "hsl(var(--text-500))",
-  cellTextColor: "hsl(var(--text-500))",
+  headerBackgroundColor: "hsl(var(--mtx-primary-50))",
+  backgroundColor: "hsl(var(--mtx-gray-0))",
+  accentColor: "hsl(var(--mtx-primary-300))",
+  foregroundColor: "hsl(var(--mtx-text-500))",
+  cellTextColor: "hsl(var(--mtx-text-500))",
 });
 
 type DataGridContext = {
@@ -194,7 +194,7 @@ const DataGridActionBar: React.FC<DatagridActionBarProps> = ({ className, ...pro
   return (
     <div
       className={cn(
-        "relative flex items-center p-2 h-12 w-full bg-gray-0 border border-gray-200 border-b-0 -mb-[1px] z-10 rounded-t-[8px]",
+        "mtx-relative mtx-flex mtx-items-center mtx-p-2 mtx-h-12 mtx-w-full mtx-bg-gray-0 mtx-border mtx-border-gray-200 mtx-border-b-0 -mtx-mb-[1px] mtx-z-10 mtx-rounded-t-[8px]",
         className,
       )}
       ref={ref}
@@ -248,29 +248,33 @@ const SearchAction: React.FC<SearchActionProps> = ({ defaultOpen = false, classN
   };
 
   return (
-    <div className={cn("max-w-60", className)} {...props}>
+    <div className={cn("mtx-max-w-60", className)} {...props}>
       {isSearchInputOpen || isClosing ? (
         <TextField
           ref={inputRef}
-          className={cn("relative h-7.5", isSearchInputOpen && !isClosing ? "animate-input-open" : "", isClosing && "animate-input-close")}
+          className={cn(
+            "mtx-relative mtx-h-7.5",
+            isSearchInputOpen && !isClosing ? "mtx-animate-input-open" : "",
+            isClosing && "mtx-animate-input-close",
+          )}
           onChange={e => setQuickFilterText(e.target.value)}
           value={quickFilterText}
           startAdornment={
-            <IconButton variant="toolbar" className="p-0.5 h-6 w-6 border-none mx-1" onClick={handleClose}>
-              <Magnifier className="w-5 h-5" />
+            <IconButton variant="toolbar" className="mtx-p-0.5 mtx-h-6 mtx-w-6 mtx-border-none mtx-mx-1" onClick={handleClose}>
+              <Magnifier className="mtx-w-5 mtx-h-5" />
             </IconButton>
           }
           endAdornment={
             quickFilterText && (
-              <IconButton variant="toolbar" className="p-0.5 w-6 h-6 border-none mx-1" onClick={handleClear}>
-                <CircleXmark className="w-5 h-5" />
+              <IconButton variant="toolbar" className="mtx-p-0.5 mtx-w-6 mtx-h-6 mtx-border-none mtx-mx-1" onClick={handleClear}>
+                <CircleXmark className="mtx-w-5 mtx-h-5" />
               </IconButton>
             )
           }
         />
       ) : (
-        <IconButton variant="toolbar" className="p-0.5 w-6 h-6 m-1" onClick={handleOpen}>
-          <Magnifier className="w-5 h-5" />
+        <IconButton variant="toolbar" className="mtx-p-0.5 mtx-w-6 mtx-h-6 mtx-m-1" onClick={handleOpen}>
+          <Magnifier className="mtx-w-5 mtx-h-5" />
         </IconButton>
       )}
     </div>
@@ -353,7 +357,7 @@ const FreezeAction: React.FC<FreezeActionProps> = ({ freezeText, unFreezeText, o
     <Button
       variant="text"
       onClick={handleFreezing}
-      startIcon={<Snowflake className="w-4.5 h-4.5" />}
+      startIcon={<Snowflake className="mtx-w-4.5 mtx-h-4.5" />}
       disabled={(!pinnedRowCount && !selectedRowsCount) || disabled}
       {...props}
     >
@@ -390,8 +394,8 @@ const PrintAction: React.FC<PrintActionProps> = ({ children, className, onClick,
   };
 
   return (
-    <IconButton variant="toolbar" className={cn("p-0.5 w-6 h-6", className)} onClick={handlePrint} {...props}>
-      {children ?? <Print className="w-5 h-5" />}
+    <IconButton variant="toolbar" className={cn("mtx-p-0.5 mtx-w-6 mtx-h-6", className)} onClick={handlePrint} {...props}>
+      {children ?? <Print className="mtx-w-5 mtx-h-5" />}
     </IconButton>
   );
 };
@@ -413,13 +417,13 @@ const RefreshAction: React.FC<RefreshActionProps> = ({ className, onRefresh, chi
 
   return (
     <IconButton
-      className={cn("p-0.5 w-6 h-6", loading && "disabled:bg-transparent", className)}
+      className={cn("mtx-p-0.5 mtx-w-6 mtx-h-6", loading && "disabled:mtx-bg-transparent", className)}
       variant="toolbar"
       onClick={handleRefresh}
       disabled={loading}
       {...props}
     >
-      {children ?? <Refresh className={cn("w-4.5 h-4.5", loading && "animate-spin")} />}
+      {children ?? <Refresh className={cn("mtx-w-4.5 mtx-h-4.5", loading && "mtx-animate-spin")} />}
     </IconButton>
   );
 };
@@ -434,7 +438,7 @@ const DeleteAction: React.FC<DeleteActionProps> = ({ onDelete, children, ...prop
   };
 
   return (
-    <Button variant="danger" onClick={handleDelete} startIcon={<Trashcan className="w-4.5 h-4.5" />} {...props}>
+    <Button variant="danger" onClick={handleDelete} startIcon={<Trashcan className="mtx-w-4.5 mtx-h-4.5" />} {...props}>
       {children}
     </Button>
   );
@@ -452,9 +456,9 @@ const ExtraActions: React.FC<ExtraActionsProps> = ({ children, slotProps, classN
   return (
     <Popover {...(slotProps?.popoverProps ?? {})}>
       <PopoverTrigger {...(slotProps?.triggerProps ?? {})}>
-        <ElipsisVertical className="w-4.5 h-4.5 text-primary" />
+        <ElipsisVertical className="mtx-w-4.5 mtx-h-4.5 mtx-text-primary" />
       </PopoverTrigger>
-      <PopoverContent align="end" className={cn("w-40", className)} {...props}>
+      <PopoverContent align="end" className={cn("mtx-w-40", className)} {...props}>
         {children}
       </PopoverContent>
     </Popover>

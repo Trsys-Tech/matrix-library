@@ -18,7 +18,7 @@ export const Default: Story = {
   },
   render: ({ ...args }) => (
     <Select {...args}>
-      <SelectTrigger className="w-96">
+      <SelectTrigger className="mtx-w-96">
         <SelectValue placeholder="Select an item" />
       </SelectTrigger>
       <SelectContent>

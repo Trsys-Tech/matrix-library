@@ -8,7 +8,7 @@ const meta: Meta<typeof DesktopDatePicker> = {
   component: DesktopDatePicker,
   tags: ["autodocs"],
   args: {
-    className: "w-72",
+    className: "mtx-w-72",
     closeOnSelect: true,
   },
   argTypes: {

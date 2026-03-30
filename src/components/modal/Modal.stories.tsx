@@ -28,16 +28,16 @@ export const Default: StoryFn = () => {
       <Button onClick={() => setOpen(true)}>Open Modal</Button>
       <Modal title="Modal Title" open={open} onOpenChange={setOpen}>
         <div>
-          <p className="text-sm">
+          <p className="mtx-text-sm">
             Lorem, ipsum dolor sit amet consectetur adipisicing elit. Minus, maiores! Voluptas, impedit asperiores necessitatibus dolor inventore odio
             exercitationem est id quia delectus expedita quis, fuga quod magnam neque laudantium. Enim!
           </p>
         </div>
         <ModalFooter>
-          <Button className="w-28" variant="outline" onClick={() => setOpen(false)}>
+          <Button className="mtx-w-28" variant="outline" onClick={() => setOpen(false)}>
             Close
           </Button>
-          <Button className="w-28" variant="success" onClick={() => setOpen(false)}>
+          <Button className="mtx-w-28" variant="success" onClick={() => setOpen(false)}>
             Ok
           </Button>
         </ModalFooter>

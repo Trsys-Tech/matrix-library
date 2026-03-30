@@ -8,7 +8,7 @@ const meta: Meta<typeof MobileTimePicker> = {
   component: MobileTimePicker,
   tags: ["autodocs"],
   args: {
-    className: "w-72",
+    className: "mtx-w-72",
   },
   argTypes: {},
 };

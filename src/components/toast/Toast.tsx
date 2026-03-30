@@ -45,12 +45,12 @@ function Toast({ limit = 3, duration = 5000, slotProps }: ToastProps) {
             }}
             {...(slotProps?.itemProps ?? {})}
           >
-            <div className="flex gap-2 items-center">
+            <div className="mtx-flex mtx-gap-2 mtx-items-center">
               <div>
-                {variant === "danger" && <DangerCircleIcon className="w-5 h-5" />}
-                {variant === "success" && <SuccessCircleIcon className="w-5 h-5" />}
-                {variant === "info" && <InfoCircleIcon className="w-5 h-5" />}
-                {variant === "warning" && <WarningCircleIcon className="w-5 h-5" />}
+                {variant === "danger" && <DangerCircleIcon className="mtx-w-5 mtx-h-5" />}
+                {variant === "success" && <SuccessCircleIcon className="mtx-w-5 mtx-h-5" />}
+                {variant === "info" && <InfoCircleIcon className="mtx-w-5 mtx-h-5" />}
+                {variant === "warning" && <WarningCircleIcon className="mtx-w-5 mtx-h-5" />}
               </div>
               {message && <ToastTitle {...(slotProps?.titleProps ?? {})}>{message}</ToastTitle>}
             </div>

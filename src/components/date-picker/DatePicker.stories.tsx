@@ -8,7 +8,7 @@ const meta: Meta<typeof DatePicker> = {
   component: DatePicker,
   tags: ["autodocs"],
   args: {
-    className: "w-72",
+    className: "mtx-w-72",
     closeOnSelect: true,
   },
   argTypes: {

@@ -9,7 +9,7 @@ const meta: Meta<typeof DesktopDateRangePicker> = {
   component: DesktopDateRangePicker,
   tags: ["autodocs"],
   args: {
-    className: "w-72",
+    className: "mtx-w-72",
   },
   argTypes: {
     selected: {

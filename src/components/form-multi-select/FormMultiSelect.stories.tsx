@@ -75,7 +75,7 @@ const FormWrapper = ({ children }: { children: React.ReactNode }) => {
   const handleSubmit = form.handleSubmit(data => console.log(data));
   return (
     <Form {...form}>
-      <form onSubmit={handleSubmit} className="w-96 flex flex-col gap-2 items-end">
+      <form onSubmit={handleSubmit} className="mtx-w-96 mtx-flex mtx-flex-col mtx-gap-2 mtx-items-end">
         {children}
       </form>
     </Form>
@@ -88,10 +88,10 @@ export const Default: Story = {
     name: "name",
     disabled: false,
     placeholder: "Select a car...",
-    className: "w-full",
+    className: "mtx-w-full",
     slotProps: {
       multiSelectProps: {
-        className: "w-96",
+        className: "mtx-w-96",
         maxCount: 3,
       },
     },
@@ -108,12 +108,12 @@ export const InForm: Story = {
     label: "Label",
     name: "name",
     disabled: false,
-    className: "w-full",
+    className: "mtx-w-full",
   },
   render: ({ ...args }) => (
     <FormWrapper>
       <FormMultiSelect {...args} />
-      <Button type="submit" className="w-24">
+      <Button type="submit" className="mtx-w-24">
         Submit
       </Button>
     </FormWrapper>
@@ -130,18 +130,18 @@ export const WithNumbers = () => {
 
   return (
     <Form {...form}>
-      <form onSubmit={handleSubmit} className="w-96 flex flex-col gap-2 items-end">
+      <form onSubmit={handleSubmit} className="mtx-w-96 mtx-flex mtx-flex-col mtx-gap-2 mtx-items-end">
         <FormMultiSelect
           label="Label"
           name="name"
-          className="w-full"
+          className="mtx-w-full"
           options={[
             { value: 1, label: "one" },
             { value: 2, label: "two" },
             { value: 3, label: "three" },
           ]}
         />
-        <Button type="submit" className="w-24">
+        <Button type="submit" className="mtx-w-24">
           Submit
         </Button>
       </form>
@@ -165,15 +165,15 @@ export const AddOptionOnSearchNotFound = () => {
 
   return (
     <Form {...form}>
-      <form onSubmit={handleSubmit} className="w-96 flex flex-col gap-2 items-end">
+      <form onSubmit={handleSubmit} className="mtx-w-96 mtx-flex mtx-flex-col mtx-gap-2 mtx-items-end">
         <FormMultiSelect
           label="Label"
           name="name"
-          className="w-full"
+          className="mtx-w-full"
           options={numericOptions}
           slotProps={{ multiSelectProps: { addOptionOnSearchNotFound: true, showSelectAll: false } }}
         />
-        <Button type="submit" className="w-24">
+        <Button type="submit" className="mtx-w-24">
           Submit
         </Button>
       </form>

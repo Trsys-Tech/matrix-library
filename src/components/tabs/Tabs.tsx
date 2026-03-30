@@ -10,7 +10,7 @@ const TabsList = React.forwardRef<React.ElementRef<typeof List>, React.Component
   <List
     ref={ref}
     className={cn(
-      "inline-flex h-12 w-full overflow-auto thin-scrollbar items-center justify-start bg-background p-0 text-muted-foreground md:[box-shadow:inset_0_-1px_0_hsl(var(--gray-300))]",
+      "mtx-inline-flex mtx-h-12 mtx-w-full mtx-overflow-auto mtx-thin-scrollbar mtx-items-center mtx-justify-start mtx-bg-background mtx-p-0 mtx-text-muted-foreground md:mtx-[box-shadow:inset_0_-1px_0_hsl(var(--gray-300))]",
       className,
     )}
     {...props}
@@ -23,7 +23,7 @@ const TabsTrigger = React.forwardRef<React.ElementRef<typeof Trigger>, React.Com
     <Trigger
       ref={ref}
       className={cn(
-        "inline-flex items-center justify-center whitespace-nowrap h-full px-3 py-1 text-sm font-medium disabled:pointer-events-none disabled:opacity-50 data-[state=active]:text-foreground data-[state=active]:font-bold data-[state=active]:border-b-2 data-[state=active]:border-primary",
+        "mtx-inline-flex mtx-items-center mtx-justify-center mtx-whitespace-nowrap mtx-h-full mtx-px-3 mtx-py-1 mtx-text-sm mtx-font-medium disabled:mtx-pointer-events-none disabled:mtx-opacity-50 data-[state=active]:mtx-text-foreground data-[state=active]:mtx-font-bold data-[state=active]:mtx-border-b-2 data-[state=active]:mtx-border-primary",
         className,
       )}
       {...props}
@@ -33,7 +33,7 @@ const TabsTrigger = React.forwardRef<React.ElementRef<typeof Trigger>, React.Com
 TabsTrigger.displayName = Trigger.displayName;
 
 const TabsContent = React.forwardRef<React.ElementRef<typeof Content>, React.ComponentPropsWithoutRef<typeof Content>>(
-  ({ className, ...props }, ref) => <Content ref={ref} className={cn("mt-2", className)} {...props} />,
+  ({ className, ...props }, ref) => <Content ref={ref} className={cn("mtx-mt-2", className)} {...props} />,
 );
 TabsContent.displayName = Content.displayName;
 

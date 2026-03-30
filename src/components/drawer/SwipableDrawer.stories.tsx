@@ -18,12 +18,12 @@ export const Default = () => {
   return (
     <SwipableDrawer>
       <SwipableDrawerTrigger>Toggle</SwipableDrawerTrigger>
-      <SwipableDrawerContent className="h-72">
+      <SwipableDrawerContent className="mtx-h-72">
         <SwipableDrawerHeader>
           <SwipableDrawerTitle>Edit profile</SwipableDrawerTitle>
           <SwipableDrawerDescription>Edit profile</SwipableDrawerDescription>
         </SwipableDrawerHeader>
-        <div className="p-4">This is the content</div>
+        <div className="mtx-p-4">This is the content</div>
       </SwipableDrawerContent>
     </SwipableDrawer>
   );

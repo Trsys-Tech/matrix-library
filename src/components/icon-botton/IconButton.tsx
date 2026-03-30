@@ -8,21 +8,24 @@ import { cn } from "../../lib/utils";
 import { Spinner } from "@trsys-tech/matrix-icons";
 
 const iconButtonVariants = tv({
-  base: "inline-flex items-center justify-center gap-1 p-2 rounded-sm text-xs font-normal transition-colors focus-visible:outline-none disabled:pointer-events-none disabled:bg-muted disabled:text-gray-500",
+  base: "mtx-inline-flex mtx-items-center mtx-justify-center mtx-gap-1 mtx-p-2 mtx-rounded-sm mtx-text-xs mtx-font-normal mtx-transition-colors focus-visible:mtx-outline-none disabled:mtx-pointer-events-none disabled:mtx-bg-muted disabled:mtx-text-gray-500",
   variants: {
     variant: {
-      table: "text-text hover:bg-primary-50 focus:bg-transparent focus:ring active:bg-primary-50 active:text-primary-700",
-      toolbar: "text-primary hover:bg-primary-50 focus:bg-transparent focus:ring active:bg-primary-50 active:text-primary-700",
-      form: "border border-gray-300 text-primary hover:border-none hover:bg-primary-50 focus:border-none focus:bg-transparent focus:ring active:border-none active:bg-primary-50 active:text-primary-700 disabled:border-none",
-      danger: "text-danger hover:bg-danger-200 focus:bg-transparent focus:ring focus:ring-danger-400 active:bg-danger-300",
-      warning: "text-warning hover:bg-warning-200 focus:bg-transparent focus:ring focus:ring-warning-400 active:bg-warning-300",
-      success: "text-success hover:bg-success-200 focus:bg-transparent focus:ring focus:ring-success-400 active:bg-success-300",
-      info: "text-info hover:bg-info-200 focus:bg-transparent focus:ring focus:ring-info-400 active:bg-info-300",
+      table: "mtx-text-text hover:mtx-bg-primary-50 focus:mtx-bg-transparent focus:mtx-ring active:mtx-bg-primary-50 active:mtx-text-primary-700",
+      toolbar:
+        "mtx-text-primary hover:mtx-bg-primary-50 focus:mtx-bg-transparent focus:mtx-ring active:mtx-bg-primary-50 active:mtx-text-primary-700",
+      form: "mtx-border mtx-border-gray-300 mtx-text-primary hover:mtx-border-none hover:mtx-bg-primary-50 focus:mtx-border-none focus:mtx-bg-transparent focus:mtx-ring active:mtx-border-none active:mtx-bg-primary-50 active:mtx-text-primary-700 disabled:mtx-border-none",
+      danger: "mtx-text-danger hover:mtx-bg-danger-200 focus:mtx-bg-transparent focus:mtx-ring focus:mtx-ring-danger-400 active:mtx-bg-danger-300",
+      warning:
+        "mtx-text-warning hover:mtx-bg-warning-200 focus:mtx-bg-transparent focus:mtx-ring focus:mtx-ring-warning-400 active:mtx-bg-warning-300",
+      success:
+        "mtx-text-success hover:mtx-bg-success-200 focus:mtx-bg-transparent focus:mtx-ring focus:mtx-ring-success-400 active:mtx-bg-success-300",
+      info: "mtx-text-info hover:mtx-bg-info-200 focus:mtx-bg-transparent focus:mtx-ring focus:mtx-ring-info-400 active:mtx-bg-info-300",
     },
     size: {
-      md: "h-8 w-8.5",
-      sm: "h-6 w-6 p-1 [&>svg]:h-4 [&>svg]:w-4",
-      lg: "h-10 w-10 [&>svg]:h-6 [&>svg]:w-6",
+      md: "mtx-h-8 mtx-w-8.5",
+      sm: "mtx-h-6 mtx-w-6 mtx-p-1 [&>svg]:mtx-h-4 [&>svg]:mtx-w-4",
+      lg: "mtx-h-10 mtx-w-10 [&>svg]:mtx-h-6 [&>svg]:mtx-w-6",
     },
   },
   defaultVariants: {

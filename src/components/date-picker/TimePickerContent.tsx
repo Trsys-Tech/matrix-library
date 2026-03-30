@@ -78,15 +78,18 @@ const TimePickerContent: React.FC<TimePickerContentProps> = ({ isOpen, time, onT
   }, [isOpen]);
 
   return (
-    <div {...(slotsProps?.content ?? {})} className={cn("py-2 px-0 h-52 w-full flex justify-center gap-1", slotsProps?.content?.className)}>
+    <div
+      {...(slotsProps?.content ?? {})}
+      className={cn("mtx-py-2 mtx-px-0 mtx-h-52 mtx-w-full mtx-flex mtx-justify-center mtx-gap-1", slotsProps?.content?.className)}
+    >
       {/* Hour Selector */}
-      <div className="w-24 px-2 h-full relative overflow-auto thin-scrollbar" ref={hourRef}>
+      <div className="mtx-w-24 mtx-px-2 mtx-h-full mtx-relative mtx-overflow-auto mtx-thin-scrollbar" ref={hourRef}>
         {Array.from({ length: 12 }, (_, i) => i).map(hour => (
           <button
             style={{ height: itemHeight, marginBottom: marginBetweenItems }}
             className={cn(
-              "w-full flex justify-center items-center rounded-full text-xs font-bold text-text-400",
-              hour + 1 === selectedtime.hour && "bg-secondary",
+              "mtx-w-full mtx-flex mtx-justify-center mtx-items-center mtx-rounded-full mtx-text-xs mtx-font-bold mtx-text-text-400",
+              hour + 1 === selectedtime.hour && "mtx-bg-secondary",
             )}
             key={hour + 1}
             onClick={() => handleSethour(hour + 1)}
@@ -97,13 +100,13 @@ const TimePickerContent: React.FC<TimePickerContentProps> = ({ isOpen, time, onT
       </div>
 
       {/* Minute Selector */}
-      <div className="h-full w-24 px-2 relative overflow-auto thin-scrollbar" ref={minuteRef}>
+      <div className="mtx-h-full mtx-w-24 mtx-px-2 mtx-relative mtx-overflow-auto mtx-thin-scrollbar" ref={minuteRef}>
         {Array.from({ length: 60 }, (_, i) => i).map(minute => (
           <button
             style={{ height: itemHeight, marginBottom: marginBetweenItems }}
             className={cn(
-              "w-full flex justify-center items-center rounded-full text-xs font-bold text-text-400",
-              minute === selectedtime.minute && "bg-secondary",
+              "mtx-w-full mtx-flex mtx-justify-center mtx-items-center mtx-rounded-full mtx-text-xs mtx-font-bold mtx-text-text-400",
+              minute === selectedtime.minute && "mtx-bg-secondary",
             )}
             key={minute}
             onClick={() => handleSetMinute(minute)}
@@ -114,13 +117,13 @@ const TimePickerContent: React.FC<TimePickerContentProps> = ({ isOpen, time, onT
       </div>
 
       {/* AM/PM Selector */}
-      <div className="h-full w-24 px-2 relative overflow-auto thin-scrollbar">
+      <div className="mtx-h-full mtx-w-24 mtx-px-2 mtx-relative mtx-overflow-auto mtx-thin-scrollbar">
         {["AM", "PM"].map(ampm => (
           <button
             style={{ height: itemHeight, marginBottom: marginBetweenItems }}
             className={cn(
-              "w-full flex justify-center items-center rounded-full text-xs font-bold text-text-400",
-              ampm === selectedtime.ampm && "bg-secondary",
+              "mtx-w-full mtx-flex mtx-justify-center mtx-items-center mtx-rounded-full mtx-text-xs mtx-font-bold mtx-text-text-400",
+              ampm === selectedtime.ampm && "mtx-bg-secondary",
             )}
             key={ampm}
             onClick={() => handleSetAMPM(ampm as "AM" | "PM")}

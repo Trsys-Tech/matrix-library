@@ -17,7 +17,7 @@ const ModalOverlay = React.forwardRef<
   <DialogPrimitive.Overlay
     ref={ref}
     className={cn(
-      "fixed inset-0 z-50 bg-black/80  data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
+      "mtx-fixed mtx-inset-0 mtx-z-50 mtx-bg-black/80  data-[state=open]:mtx-animate-in data-[state=closed]:mtx-animate-out data-[state=closed]:mtx-fade-out-0 data-[state=open]:mtx-fade-in-0",
       className,
     )}
     {...props}
@@ -26,19 +26,19 @@ const ModalOverlay = React.forwardRef<
 ModalOverlay.displayName = DialogPrimitive.Overlay.displayName;
 
 const ModalHeader = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
-  <div className={cn("flex flex-row justify-between", className)} {...props} />
+  <div className={cn("mtx-flex mtx-flex-row mtx-justify-between", className)} {...props} />
 );
 ModalHeader.displayName = "DialogHeader";
 
 const ModalFooter = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
-  <div className={cn("flex flex-row justify-end gap-2", className)} {...props} />
+  <div className={cn("mtx-flex mtx-flex-row mtx-justify-end mtx-gap-2", className)} {...props} />
 );
 ModalFooter.displayName = "DialogFooter";
 type ModalFooterProps = React.ComponentProps<typeof ModalFooter>;
 
 const ModalTitle = React.forwardRef<React.ElementRef<typeof DialogPrimitive.Title>, React.ComponentPropsWithoutRef<typeof DialogPrimitive.Title>>(
   ({ className, ...props }, ref) => (
-    <DialogPrimitive.Title ref={ref} className={cn("text-lg font-semibold leading-none tracking-tight", className)} {...props} />
+    <DialogPrimitive.Title ref={ref} className={cn("mtx-text-lg mtx-font-semibold mtx-leading-none mtx-tracking-tight", className)} {...props} />
   ),
 );
 ModalTitle.displayName = DialogPrimitive.Title.displayName;
@@ -46,7 +46,9 @@ ModalTitle.displayName = DialogPrimitive.Title.displayName;
 const ModalDescription = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Description>,
   React.ComponentPropsWithoutRef<typeof DialogPrimitive.Description>
->(({ className, ...props }, ref) => <DialogPrimitive.Description ref={ref} className={cn("text-sm text-muted-foreground", className)} {...props} />);
+>(({ className, ...props }, ref) => (
+  <DialogPrimitive.Description ref={ref} className={cn("mtx-text-sm mtx-text-muted-foreground", className)} {...props} />
+));
 ModalDescription.displayName = DialogPrimitive.Description.displayName;
 
 interface ModalProps extends DialogPrimitive.DialogProps, Omit<DialogPrimitive.DialogContentProps, "title"> {
@@ -71,8 +73,8 @@ const Modal = React.forwardRef<React.ElementRef<typeof DialogPrimitive.Content>,
         <DialogPrimitive.Content
           ref={ref}
           className={cn(
-            "fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-50 flex flex-col gap-2 w-full max-w-lg p-4 border bg-background shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] sm:rounded-lg",
-            fullScreen ? "w-screen h-screen" : "max-w-lg",
+            "mtx-fixed mtx-left-1/2 mtx-top-1/2 -mtx-translate-x-1/2 -mtx-translate-y-1/2 mtx-z-50 mtx-flex mtx-flex-col mtx-gap-2 mtx-w-full mtx-max-w-lg mtx-p-4 mtx-border mtx-bg-background mtx-shadow-lg mtx-duration-200 data-[state=open]:mtx-animate-in data-[state=closed]:mtx-animate-out data-[state=closed]:mtx-fade-out-0 data-[state=open]:mtx-fade-in-0 data-[state=closed]:mtx-zoom-out-95 data-[state=open]:mtx-zoom-in-95 data-[state=closed]:mtx-slide-out-to-left-1/2 data-[state=closed]:mtx-slide-out-to-top-[48%] data-[state=open]:mtx-slide-in-from-left-1/2 data-[state=open]:mtx-slide-in-from-top-[48%] sm:mtx-rounded-lg",
+            fullScreen ? "mtx-w-screen mtx-h-screen" : "mtx-max-w-lg",
             className,
           )}
           {...restProps}
@@ -83,18 +85,22 @@ const Modal = React.forwardRef<React.ElementRef<typeof DialogPrimitive.Content>,
             <ModalClose
               {...(slotProps?.close ?? {})}
               className={cn(
-                "rounded-sm hover:bg-primary-50 hover:ring-2 hover:ring-primary-50 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground mt-0",
+                "mtx-rounded-sm hover:mtx-bg-primary-50 hover:mtx-ring-2 hover:mtx-ring-primary-50 disabled:mtx-pointer-events-none data-[state=open]:mtx-bg-accent data-[state=open]:mtx-text-muted-foreground mtx-mt-0",
                 slotProps?.close?.className,
               )}
             >
-              <XMark className="h-5 w-5" />
-              <span className="sr-only">Close</span>
+              <XMark className="mtx-h-5 mtx-w-5" />
+              <span className="mtx-sr-only">Close</span>
             </ModalClose>
           </ModalHeader>
           {/* Divider: the padding and margin is because of a bug in chrome causes the border to be shown with more height than expected */}
           <hr
             {...(slotProps?.divider ?? {})}
-            className={cn("w-full border-muted -mt-[1px] pb-2", fullScreen && "w-screen -mx-4", slotProps?.divider?.className)}
+            className={cn(
+              "mtx-w-full mtx-border-muted -mtx-mt-[1px] mtx-pb-2",
+              fullScreen && "mtx-w-screen -mtx-mx-4",
+              slotProps?.divider?.className,
+            )}
           />
           {children}
         </DialogPrimitive.Content>

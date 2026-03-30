@@ -55,7 +55,7 @@ const Drawer = React.forwardRef<React.ElementRef<"div">, ScopedProps<DrawerProps
   const isMobile = useIsMobile();
 
   return (
-    <Comp ref={ref} className={cn("flex", className)} {...restProps}>
+    <Comp ref={ref} className={cn("mtx-flex", className)} {...restProps}>
       <DrawerProvider anchor={anchor} onClose={onClose} open={open} width={width} isMobile={isMobile} scope={__scopeDrawer}>
         {children}
       </DrawerProvider>
@@ -101,7 +101,7 @@ const DrawerMain = React.forwardRef<HTMLDivElement, ScopedProps<DrawerMainProps>
     }, [anchor, open, width, isMobile]);
 
     return (
-      <Comp ref={ref} className={cn("flex-grow overflow-hidden", className)} style={{ ...style, ...marginStyle }} {...props}>
+      <Comp ref={ref} className={cn("mtx-flex-grow mtx-overflow-hidden", className)} style={{ ...style, ...marginStyle }} {...props}>
         {children}
       </Comp>
     );
@@ -138,24 +138,28 @@ const DrawerContent = React.forwardRef<HTMLDivElement, ScopedProps<DrawerContent
           {children}
         </Modal>
       ) : (
-        <div className={cn("hidden md:block overflow-hidden")} style={{ width }} ref={ref}>
+        <div className={cn("mtx-hidden md:mtx-block mtx-overflow-hidden")} style={{ width }} ref={ref}>
           <div
             className={cn(
-              "overflow-y-auto flex flex-col h-full top-0 z-[120] bg-background transition-all border-gray-200",
-              open ? "" : anchor === "left" ? "-translate-x-full rtl:translate-x-full invisible" : "translate-x-full rtl:-translate-x-full invisible",
-              anchor === "left" ? "border-r" : "border-l",
+              "mtx-overflow-y-auto mtx-flex mtx-flex-col mtx-h-full mtx-top-0 mtx-z-[120] mtx-bg-background mtx-transition-all mtx-border-gray-200",
+              open
+                ? ""
+                : anchor === "left"
+                  ? "-mtx-translate-x-full rtl:mtx-translate-x-full mtx-invisible"
+                  : "mtx-translate-x-full rtl:-mtx-translate-x-full mtx-invisible",
+              anchor === "left" ? "mtx-border-r" : "mtx-border-l",
             )}
           >
             <div
               className={cn(
-                "h-9 flex items-center gap-2 p-2 bg-background w-full sticky top-0 border-b border-gray-200",
-                anchor === "right" ? "justify-start rtl:justify-end" : "justify-end rtl:justify-start",
+                "mtx-h-9 mtx-flex mtx-items-center mtx-gap-2 mtx-p-2 mtx-bg-background mtx-w-full mtx-sticky mtx-top-0 mtx-border-b mtx-border-gray-200",
+                anchor === "right" ? "mtx-justify-start rtl:mtx-justify-end" : "mtx-justify-end rtl:mtx-justify-start",
               )}
             >
-              <IconButton onClick={onClose} className="w-5 h-5 p-0">
-                <ChevronsRight className={cn("w-5 h-5", anchor === "right" ? "rtl:-scale-100" : "-scale-100 rtl:scale-100")} />
+              <IconButton onClick={onClose} className="mtx-w-5 mtx-h-5 mtx-p-0">
+                <ChevronsRight className={cn("mtx-w-5 mtx-h-5", anchor === "right" ? "rtl:-mtx-scale-100" : "-mtx-scale-100 rtl:mtx-scale-100")} />
               </IconButton>
-              {typeof title === "string" || typeof title === "number" ? <h2 className="text-lg font-bold text-text">{title}</h2> : title}
+              {typeof title === "string" || typeof title === "number" ? <h2 className="mtx-text-lg mtx-font-bold mtx-text-text">{title}</h2> : title}
             </div>
             {children}
           </div>

@@ -59,7 +59,7 @@ const FormItem = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivEl
 
   return (
     <FormItemContext.Provider value={{ id }}>
-      <div ref={ref} className={cn("space-y-1", className)} {...props} />
+      <div ref={ref} className={cn("mtx-space-y-1", className)} {...props} />
     </FormItemContext.Provider>
   );
 });
@@ -68,7 +68,7 @@ FormItem.displayName = "FormItem";
 const FormLabel = React.forwardRef<HTMLLabelElement, React.ComponentPropsWithoutRef<"label">>(({ className, ...props }, ref) => {
   const { error, formItemId } = useFormField();
 
-  return <Label ref={ref} className={cn(error && "text-danger", "block text-text-300", className)} htmlFor={formItemId} {...props} />;
+  return <Label ref={ref} className={cn(error && "mtx-text-danger", "mtx-block mtx-text-text-300", className)} htmlFor={formItemId} {...props} />;
 });
 FormLabel.displayName = "FormLabel";
 
@@ -81,7 +81,7 @@ const FormControl = React.forwardRef<React.ElementRef<typeof Slot>, React.Compon
       id={formItemId}
       aria-describedby={!error ? `${formDescriptionId}` : `${formDescriptionId} ${formMessageId}`}
       aria-invalid={!!error}
-      className={cn(className, error && "border-danger hover:border-danger focus-visible:border-danger")}
+      className={cn(className, error && "mtx-border-danger hover:mtx-border-danger focus-visible:mtx-border-danger")}
       {...props}
     />
   );
@@ -91,7 +91,7 @@ FormControl.displayName = "FormControl";
 const FormDescription = React.forwardRef<HTMLParagraphElement, React.HTMLAttributes<HTMLParagraphElement>>(({ className, ...props }, ref) => {
   const { formDescriptionId } = useFormField();
 
-  return <p ref={ref} id={formDescriptionId} className={cn("text-[0.8rem] text-muted-foreground", className)} {...props} />;
+  return <p ref={ref} id={formDescriptionId} className={cn("mtx-text-[0.8rem] mtx-text-muted-foreground", className)} {...props} />;
 });
 FormDescription.displayName = "FormDescription";
 
@@ -104,7 +104,7 @@ const FormMessage = React.forwardRef<HTMLParagraphElement, React.HTMLAttributes<
   // }
 
   return (
-    <p ref={ref} id={formMessageId} className={cn("text-[0.625rem] font-medium text-danger h-4", className)} {...props}>
+    <p ref={ref} id={formMessageId} className={cn("mtx-text-[0.625rem] mtx-font-medium mtx-text-danger mtx-h-4", className)} {...props}>
       {body ?? " "}
     </p>
   );

@@ -22,18 +22,18 @@ export const Default: StoryObj<typeof meta> = {
             <SheetTitle>Edit profile</SheetTitle>
             <SheetDescription>Make changes to your profile here. Click save when you're done.</SheetDescription>
           </SheetHeader>
-          <div className="grid gap-4 py-4">
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="name" className="text-right">
+          <div className="mtx-grid mtx-gap-4 mtx-py-4">
+            <div className="mtx-grid mtx-grid-cols-4 mtx-items-center mtx-gap-4">
+              <Label htmlFor="name" className="mtx-text-right">
                 Name
               </Label>
-              <TextField id="name" slotProps={{ inputProps: { value: "Pedro Duarte" } }} className="col-span-3" />
+              <TextField id="name" slotProps={{ inputProps: { value: "Pedro Duarte" } }} className="mtx-col-span-3" />
             </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="username" className="text-right">
+            <div className="mtx-grid mtx-grid-cols-4 mtx-items-center mtx-gap-4">
+              <Label htmlFor="username" className="mtx-text-right">
                 Username
               </Label>
-              <TextField id="username" slotProps={{ inputProps: { value: "@peduarte" } }} className="col-span-3" />
+              <TextField id="username" slotProps={{ inputProps: { value: "@peduarte" } }} className="mtx-col-span-3" />
             </div>
           </div>
           <SheetFooter>

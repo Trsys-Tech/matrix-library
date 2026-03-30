@@ -183,7 +183,7 @@ const Combobox = <T extends string | number>({
           type="button"
           aria-expanded={isPopoverOpen}
           className={cn(
-            "group flex h-8 w-full items-center justify-between whitespace-nowrap overflow-hidden rounded-sm border border-input bg-transparent px-3 py-1.5 text-xs ring-offset-background data-[placeholder]:text-muted-foreground hover:border hover:border-primary hover:bg-transparent focus:border focus:border-primary focus:outline-none focus:ring focus:ring-primary-100 disabled:cursor-not-allowed disabled:bg-gray-100 disabled:text-text-300 disabled:border-gray-100 [&_svg]:disabled:text-text-300",
+            "mtx-group mtx-flex mtx-h-8 mtx-w-full mtx-items-center mtx-justify-between mtx-whitespace-nowrap mtx-overflow-hidden mtx-rounded-sm mtx-border mtx-border-input mtx-bg-transparent mtx-px-3 mtx-py-1.5 mtx-text-xs mtx-ring-offset-background data-[placeholder]:mtx-text-muted-foreground hover:mtx-border hover:mtx-border-primary hover:mtx-bg-transparent focus:mtx-border focus:mtx-border-primary focus:mtx-outline-none focus:mtx-ring focus:mtx-ring-primary-100 disabled:mtx-cursor-not-allowed disabled:mtx-bg-gray-100 disabled:mtx-text-text-300 disabled:mtx-border-gray-100 [&_svg]:disabled:mtx-text-text-300",
             className,
           )}
           data-value={value}
@@ -194,16 +194,18 @@ const Combobox = <T extends string | number>({
             <ChevronDown
               role="button"
               aria-label="Expand dropdown"
-              className="!h-4.5 !w-4.5 cursor-pointer group-data-[state=open]:rotate-180 transition-transform ms-auto"
+              className="!mtx-h-4.5 !mtx-w-4.5 mtx-cursor-pointer group-data-[state=open]:mtx-rotate-180 mtx-transition-transform mtx-ms-auto"
             />
           }
           {...props}
         >
-          <span className="text-start text-ellipsis whitespace-nowrap overflow-hidden flex-1 max-w-[calc(100%-24px)]">{label}</span>
+          <span className="mtx-text-start mtx-text-ellipsis mtx-whitespace-nowrap mtx-overflow-hidden mtx-flex-1 mtx-max-w-[calc(100%-24px)]">
+            {label}
+          </span>
           {clearable && value !== undefined && value !== null ? (
             <span
               onClick={handleClear}
-              className="p-0 rounded-sm text-xs font-normal transition-colors focus-visible:outline-none disabled:pointer-events-none disabled:bg-muted disabled:text-gray-500 text-primary hover:bg-primary-50 focus:bg-transparent focus:ring active:bg-primary-50 active:text-primary-700 [&>svg]:h-4.5 [&>svg]:w-4.5"
+              className="mtx-p-0 mtx-rounded-sm mtx-text-xs mtx-font-normal mtx-transition-colors focus-visible:mtx-outline-none disabled:mtx-pointer-events-none disabled:mtx-bg-muted disabled:mtx-text-gray-500 mtx-text-primary hover:mtx-bg-primary-50 focus:mtx-bg-transparent focus:mtx-ring active:mtx-bg-primary-50 active:mtx-text-primary-700 [&>svg]:mtx-h-4.5 [&>svg]:mtx-w-4.5"
               role="button"
               aria-label="Clear selection"
             >
@@ -212,9 +214,14 @@ const Combobox = <T extends string | number>({
           ) : null}
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-auto p-0" align="start" onEscapeKeyDown={() => setIsPopoverOpen(false)} onOpenAutoFocus={handleOpenAutoFocus}>
+      <PopoverContent
+        className="mtx-w-auto mtx-p-0"
+        align="start"
+        onEscapeKeyDown={() => setIsPopoverOpen(false)}
+        onOpenAutoFocus={handleOpenAutoFocus}
+      >
         <Command
-          className="w-[--radix-popper-anchor-width] focus-visible:outline-none"
+          className="mtx-w-[--radix-popper-anchor-width] focus-visible:mtx-outline-none"
           filter={handleFilter}
           defaultValue={value !== undefined && value !== null ? String(value) : undefined} // highlight selected value on open
           ref={commandRef}
@@ -237,7 +244,7 @@ const Combobox = <T extends string | number>({
                   onSelect={handleSelect as React.ComponentProps<typeof CommandItem>["onSelect"]}
                 >
                   {option.label}
-                  <Check className={cn("ml-auto", value === option.value ? "opacity-100" : "opacity-0")} />
+                  <Check className={cn("mtx-ml-auto", value === option.value ? "mtx-opacity-100" : "mtx-opacity-0")} />
                 </CommandItem>
               ))}
             </CommandGroup>

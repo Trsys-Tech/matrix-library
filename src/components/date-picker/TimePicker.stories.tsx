@@ -8,7 +8,7 @@ const meta: Meta<typeof TimePicker> = {
   component: TimePicker,
   tags: ["autodocs"],
   args: {
-    className: "w-72",
+    className: "mtx-w-72",
   },
   argTypes: {
     disabled: { control: "boolean" },

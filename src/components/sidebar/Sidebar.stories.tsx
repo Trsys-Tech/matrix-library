@@ -34,12 +34,12 @@ export const WithRightAndLeft = () => {
   const [leftOpen, setLeftOpen] = React.useState(false);
   const [rightOpen, setRightOpen] = React.useState(false);
   return (
-    <div className="h-svh flex flex-col overflow-hidden">
-      <div className="w-screen h-8.5 bg-gray-50">Header</div>
+    <div className="mtx-h-svh mtx-flex mtx-flex-col mtx-overflow-hidden">
+      <div className="mtx-w-screen mtx-h-8.5 mtx-bg-gray-50">Header</div>
       <SidebarProvider open={rightOpen} onOpenChange={setRightOpen}>
         <SidebarProvider open={leftOpen} onOpenChange={setLeftOpen}>
           <Sidebar collapsible="icon" variant="sidebar" side="left" width="12rem">
-            <SidebarContent className="bg-white">
+            <SidebarContent className="mtx-bg-white">
               <SidebarGroup>
                 <SidebarGroupLabel>Platform</SidebarGroupLabel>
                 <SidebarMenu>
@@ -54,16 +54,16 @@ export const WithRightAndLeft = () => {
               <SidebarGroup />
             </SidebarContent>
           </Sidebar>
-          <SidebarInset className="p-4">
+          <SidebarInset className="mtx-p-4">
             <div>This is the main content</div>
-            <div className="flex justify-between">
+            <div className="mtx-flex mtx-justify-between">
               <Button onClick={() => setLeftOpen(prev => !prev)}>Toggle Sidebar Left</Button>
               <Button onClick={() => setRightOpen(prev => !prev)}>Toggle Sidebar Right</Button>
             </div>
           </SidebarInset>
         </SidebarProvider>
         <Sidebar collapsible="offcanvas" variant="sidebar" side="right" widthMobile="12rem">
-          <SidebarContent className="bg-gray-0">
+          <SidebarContent className="mtx-bg-gray-0">
             <SidebarGroup>
               <SidebarGroupLabel>Platform</SidebarGroupLabel>
               <SidebarMenu>
@@ -83,12 +83,12 @@ export const WithRightAndLeft = () => {
 
 export const WithLeft = () => {
   return (
-    <div className="h-screen">
+    <div className="mtx-h-screen">
       <SidebarProvider>
         <Sidebar collapsible="icon" variant="sidebar" side="left" width="12rem" widthIcon="4rem">
-          <SidebarContent className="relative bg-gray-0 pt-8">
-            <SidebarTrigger className="absolute end-0 top-0 flex items-center justify-center bg-gray-100 rounded-sm z-10 transition-transform rotate-180 group-data-[state=collapsed]:rotate-0">
-              <ChevronRight className="w-4 h-4" />
+          <SidebarContent className="mtx-relative mtx-bg-gray-0 mtx-pt-8">
+            <SidebarTrigger className="mtx-absolute mtx-end-0 mtx-top-0 mtx-flex mtx-items-center mtx-justify-center mtx-bg-gray-100 mtx-rounded-sm mtx-z-10 mtx-transition-transform mtx-rotate-180 group-data-[state=collapsed]:mtx-rotate-0">
+              <ChevronRight className="mtx-w-4 mtx-h-4" />
             </SidebarTrigger>
             <SidebarGroup>
               <SidebarGroupLabel>Platform</SidebarGroupLabel>
@@ -110,15 +110,15 @@ export const WithLeft = () => {
             <SidebarGroup>
               <SidebarGroupLabel>Platform</SidebarGroupLabel>
               <SidebarMenu>
-                <Collapsible asChild className="group/collapsible rounded-e-none border-0 shadow-none">
+                <Collapsible asChild className="mtx-group/collapsible mtx-rounded-e-none mtx-border-0 mtx-shadow-none">
                   <SidebarMenuItem>
-                    <CollapsibleTrigger asChild className="p-2">
+                    <CollapsibleTrigger asChild className="mtx-p-2">
                       <SidebarMenuButton tooltip="Users & Access">
                         <House /> Users & Access
-                        <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
+                        <ChevronRight className="mtx-ml-auto mtx-transition-transform mtx-duration-200 group-data-[state=open]/collapsible:mtx-rotate-90" />
                       </SidebarMenuButton>
                     </CollapsibleTrigger>
-                    <CollapsibleContent className="p-0">
+                    <CollapsibleContent className="mtx-p-0">
                       <SidebarMenuSub>
                         <SidebarMenuSubItem>
                           <SidebarMenuSubButton isActive>Users</SidebarMenuSubButton>
@@ -134,7 +134,7 @@ export const WithLeft = () => {
             </SidebarGroup>
           </SidebarContent>
         </Sidebar>
-        <SidebarInset className="p-4">
+        <SidebarInset className="mtx-p-4">
           <div>This is the main content</div>
         </SidebarInset>
       </SidebarProvider>

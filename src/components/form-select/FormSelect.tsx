@@ -80,7 +80,7 @@ const FormSelect = <TFieldValues extends FieldValues, TName extends FieldPath<TF
           <FormItem {...formItemProps}>
             <FormLabel {...(slotProps?.formLabelProps ?? {})}>
               {label}
-              {required && <span className="text-danger text-sm leading-4">*</span>}
+              {required && <span className="mtx-text-danger mtx-text-sm mtx-leading-4">*</span>}
             </FormLabel>
             <Select
               {...(slotProps?.selectProps ?? {})}
@@ -93,7 +93,7 @@ const FormSelect = <TFieldValues extends FieldValues, TName extends FieldPath<TF
                   aria-required={required}
                   disabled={disabled}
                   {...(slotProps?.selectTriggerProps ?? {})}
-                  className={cn("*:truncate [&>span]:inline-block", slotProps?.selectTriggerProps?.className)}
+                  className={cn("*:mtx-truncate [&>span]:mtx-inline-block", slotProps?.selectTriggerProps?.className)}
                 >
                   <SelectValue {...(slotProps?.selectValueProps ?? {})} placeholder={placeholder ?? label} />
                 </SelectTrigger>
@@ -101,7 +101,7 @@ const FormSelect = <TFieldValues extends FieldValues, TName extends FieldPath<TF
               <SelectContent {...(slotProps?.selectContentProps ?? {})}>
                 {loading && (
                   <SelectItem {...(slotProps?.selectItemProps ?? {})} value="-1" disabled>
-                    <Spinner className="inline-block mb-0.5" /> {loadingText || "Loading..."}
+                    <Spinner className="mtx-inline-block mtx-mb-0.5" /> {loadingText || "Loading..."}
                   </SelectItem>
                 )}
                 {!loading && !options.length ? (

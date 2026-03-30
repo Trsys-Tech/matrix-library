@@ -45,7 +45,7 @@ const FormCheckbox = <TFieldValues extends FieldValues, TName extends FieldPath<
       shouldUnregister={shouldUnregister}
       render={({ field }) => {
         return (
-          <FormItem {...formItemProps} className="flex items-center gap-2 justify-start space-y-0">
+          <FormItem {...formItemProps} className="mtx-flex mtx-items-center mtx-gap-2 mtx-justify-start mtx-space-y-0">
             <FormControl {...(slotProps?.formControlProps ?? {})}>
               <Checkbox
                 {...(slotProps?.checkboxProps ?? {})}
@@ -56,9 +56,9 @@ const FormCheckbox = <TFieldValues extends FieldValues, TName extends FieldPath<
                 disabled={disabled || readOnly}
               />
             </FormControl>
-            <FormLabel {...(slotProps?.formLabelProps ?? {})} className={cn("text-text", slotProps?.formLabelProps?.className)}>
+            <FormLabel {...(slotProps?.formLabelProps ?? {})} className={cn("mtx-text-text", slotProps?.formLabelProps?.className)}>
               {label}
-              {required && <span className="text-danger text-sm leading-4">*</span>}
+              {required && <span className="mtx-text-danger mtx-text-sm mtx-leading-4">*</span>}
             </FormLabel>
             <FormMessage {...(slotProps?.formMessageProps ?? {})} />
           </FormItem>

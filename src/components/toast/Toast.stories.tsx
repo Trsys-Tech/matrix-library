@@ -18,37 +18,37 @@ export const Variants = {
     docs: {
       source: {
         code: `
-<div className="h-96 flex flex-col justify-center items-start p-6 gap-2">
+<div className="mtx-h-96 mtx-flex mtx-flex-col mtx-justify-center mtx-items-start mtx-p-6 mtx-gap-2">
   <Button 
-  className="w-36"
+  className="mtx-w-36"
   onClick={() => {
     toast("This is a default toast.");
   }} variant="outline">
     Fire a default Toast
   </Button>
   <Button 
-  className="w-36"
+  className="mtx-w-36"
   onClick={() => {
     toast.success("This is a success toast.");
   }} variant="success">
     Fire a Success Toast
   </Button>
   <Button 
-  className="w-36"
+  className="mtx-w-36"
   onClick={() => {
     toast.danger("This is a danger toast.");
   }} variant="danger">
     Fire a Danger Toast
   </Button>
   <Button 
-  className="w-36"
+  className="mtx-w-36"
   onClick={() => {
     toast.warning("This is a warning toast.");
   }} variant="warning">
     Fire a Warning Toast
   </Button>
   <Button 
-  className="w-36"
+  className="mtx-w-36"
   onClick={() => {
     toast.info("This is an info toast.");
   }} variant="info">
@@ -62,9 +62,9 @@ export const Variants = {
   },
   render: ({ ...args }) => {
     return (
-      <div className="h-96 flex flex-col justify-center items-start p-6 gap-2">
+      <div className="mtx-h-96 mtx-flex mtx-flex-col mtx-justify-center mtx-items-start mtx-p-6 mtx-gap-2">
         <Button
-          className="w-36"
+          className="mtx-w-36"
           onClick={() => {
             toast("This is a default toast.");
           }}
@@ -73,7 +73,7 @@ export const Variants = {
           Fire a default Toast
         </Button>
         <Button
-          className="w-36"
+          className="mtx-w-36"
           onClick={() => {
             toast.success("This is a success toast.");
           }}
@@ -82,7 +82,7 @@ export const Variants = {
           Fire a Success Toast
         </Button>
         <Button
-          className="w-36"
+          className="mtx-w-36"
           onClick={() => {
             toast.danger("This is a danger toast.");
           }}
@@ -91,7 +91,7 @@ export const Variants = {
           Fire a Danger Toast
         </Button>
         <Button
-          className="w-36"
+          className="mtx-w-36"
           onClick={() => {
             toast.warning("This is a warning toast.");
           }}
@@ -100,7 +100,7 @@ export const Variants = {
           Fire a Warning Toast
         </Button>
         <Button
-          className="w-36"
+          className="mtx-w-36"
           onClick={() => {
             toast.info("This is an info toast.");
           }}

@@ -10,7 +10,7 @@ const Collapsible = React.forwardRef<
   React.ElementRef<typeof CollapsiblePrimitive.Root>,
   React.ComponentPropsWithoutRef<typeof CollapsiblePrimitive.Root>
 >(({ className, ...props }, ref) => (
-  <CollapsiblePrimitive.Root ref={ref} className={cn("rounded-lg bg-card text-card-foreground shadow-card", className)} {...props} />
+  <CollapsiblePrimitive.Root ref={ref} className={cn("mtx-rounded-lg mtx-bg-card mtx-text-card-foreground mtx-shadow-card", className)} {...props} />
 ));
 Collapsible.displayName = "Collapsible";
 
@@ -20,10 +20,10 @@ const CollapsibleContent = React.forwardRef<
 >(({ className, children, ...props }, ref) => (
   <CollapsiblePrimitive.CollapsibleContent
     ref={ref}
-    className="overflow-hidden data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down rounded-b-lg"
+    className="mtx-overflow-hidden data-[state=closed]:mtx-animate-collapsible-up data-[state=open]:mtx-animate-collapsible-down mtx-rounded-b-lg"
     {...props}
   >
-    <div className={cn("p-4 pt-0", className)}>{children}</div>
+    <div className={cn("mtx-p-4 mtx-pt-0", className)}>{children}</div>
   </CollapsiblePrimitive.CollapsibleContent>
 ));
 CollapsibleContent.displayName = CollapsiblePrimitive.Content.displayName;
@@ -32,7 +32,7 @@ const CollapsibleTrigger = React.forwardRef<
   React.ElementRef<typeof CollapsiblePrimitive.CollapsibleTrigger>,
   React.ComponentPropsWithoutRef<typeof CollapsiblePrimitive.CollapsibleTrigger>
 >(({ className, children, ...props }, ref) => (
-  <CollapsiblePrimitive.CollapsibleTrigger ref={ref} className={cn("p-4", className)} {...props}>
+  <CollapsiblePrimitive.CollapsibleTrigger ref={ref} className={cn("mtx-p-4", className)} {...props}>
     {children}
   </CollapsiblePrimitive.CollapsibleTrigger>
 ));

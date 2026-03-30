@@ -76,7 +76,7 @@ const FormWrapper = ({ children }: { children: React.ReactNode }) => {
   const handleSubmit = form.handleSubmit(data => console.log(data));
   return (
     <Form {...form}>
-      <form onSubmit={handleSubmit} className="w-96 flex flex-col gap-2 items-end">
+      <form onSubmit={handleSubmit} className="mtx-w-96 mtx-flex mtx-flex-col mtx-gap-2 mtx-items-end">
         {children}
       </form>
     </Form>
@@ -89,7 +89,7 @@ export const Default: Story = {
     name: "name",
     disabled: false,
     placeholder: "Select a car...",
-    className: "w-full",
+    className: "mtx-w-full",
     slotProps: {},
   },
   render: ({ ...args }) => (
@@ -104,12 +104,12 @@ export const InForm: Story = {
     label: "Label",
     name: "name",
     disabled: false,
-    className: "w-full",
+    className: "mtx-w-full",
   },
   render: ({ ...args }) => (
     <FormWrapper>
       <FormCombobox {...args} />
-      <Button type="submit" className="w-24">
+      <Button type="submit" className="mtx-w-24">
         Submit
       </Button>
     </FormWrapper>
@@ -137,14 +137,14 @@ export const ProgrammaticChanges = () => {
 
   return (
     <Form {...form}>
-      <form onSubmit={handleSubmit} className="w-96 flex flex-col gap-2 items-end">
-        <FormCombobox label="Label" name="name" disabled={false} options={options} className="w-full" clearable={true} />
-        <Button type="submit" className="w-24">
+      <form onSubmit={handleSubmit} className="mtx-w-96 mtx-flex mtx-flex-col mtx-gap-2 mtx-items-end">
+        <FormCombobox label="Label" name="name" disabled={false} options={options} className="mtx-w-full" clearable={true} />
+        <Button type="submit" className="mtx-w-24">
           Submit
         </Button>
         <Button
           type="button"
-          className="w-24"
+          className="mtx-w-24"
           onClick={() => {
             form.setValue("name", 1);
           }}
@@ -153,7 +153,7 @@ export const ProgrammaticChanges = () => {
         </Button>
         <Button
           type="button"
-          className="w-24"
+          className="mtx-w-24"
           onClick={() => {
             form.setValue("name", undefined as unknown as number);
           }}

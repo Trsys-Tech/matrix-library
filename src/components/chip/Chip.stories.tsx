@@ -29,7 +29,7 @@ export const Variants: Story = {
     asChild: false,
   },
   render: props => (
-    <div className="space-x-2">
+    <div className="mtx-space-x-2">
       <Chip {...props} />
       <Chip {...props} variant="neutral" />
       <Chip {...props} variant="table-primary" />
@@ -46,7 +46,7 @@ export const WithButton: Story = {
     asChild: false,
   },
   render: props => (
-    <div className="space-x-2">
+    <div className="mtx-space-x-2">
       <Chip {...props} />
       <Chip {...props} variant="neutral" />
       <Chip {...props} variant="table-primary" />
@@ -64,7 +64,7 @@ export const Large: Story = {
     asChild: false,
   },
   render: props => (
-    <div className="space-x-2">
+    <div className="mtx-space-x-2">
       <Chip {...props} />
       <Chip {...props} variant="neutral" />
       <Chip {...props} variant="table-primary" />
@@ -82,7 +82,7 @@ export const Small: Story = {
     asChild: false,
   },
   render: props => (
-    <div className="space-x-2">
+    <div className="mtx-space-x-2">
       <Chip {...props} />
       <Chip {...props} variant="neutral" />
       <Chip {...props} variant="table-primary" />

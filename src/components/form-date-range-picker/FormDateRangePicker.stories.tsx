@@ -51,7 +51,7 @@ const FormWrapper = ({ children }: { children: React.ReactNode }) => {
   const handleSubmit = form.handleSubmit(data => console.log(data));
   return (
     <Form {...form}>
-      <form onSubmit={handleSubmit} className="w-56 flex flex-col gap-2 items-end">
+      <form onSubmit={handleSubmit} className="mtx-w-56 mtx-flex mtx-flex-col mtx-gap-2 mtx-items-end">
         {children}
       </form>
     </Form>
@@ -63,7 +63,7 @@ export const Default: Story = {
     label: "Label",
     name: "dateRange",
     disabled: false,
-    className: "w-full",
+    className: "mtx-w-full",
   },
   render: ({ ...args }) => (
     <FormWrapper>
@@ -77,12 +77,12 @@ export const InForm: Story = {
     label: "Label",
     name: "dateRange",
     disabled: false,
-    className: "w-96",
+    className: "mtx-w-96",
   },
   render: ({ ...args }) => (
     <FormWrapper>
       <FormDateRangePicker {...args} />
-      <Button type="submit" className="w-24">
+      <Button type="submit" className="mtx-w-24">
         Submit
       </Button>
     </FormWrapper>

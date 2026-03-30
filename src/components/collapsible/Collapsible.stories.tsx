@@ -4,7 +4,7 @@ import { Meta, StoryObj, Decorator } from "@storybook/react/*";
 import { Collapsible, CollapsibleTrigger, CollapsibleContent } from "./Collapsible";
 
 const withCustomClass: Decorator = Story => (
-  <div className="flex justify-center items-start">
+  <div className="mtx-flex mtx-justify-center mtx-items-start">
     <Story />
   </div>
 );
@@ -21,13 +21,13 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {
-    className: "w-96",
+    className: "mtx-w-96",
   },
   render: ({ ...props }) => (
     <Collapsible {...props}>
-      <CollapsibleTrigger className="group flex justify-between w-full">
+      <CollapsibleTrigger className="mtx-group mtx-flex mtx-justify-between mtx-w-full">
         Collapsibe title
-        <ChevronDown className="text-primary w-6 h-6 group-data-[state='open']:rotate-180 transition-transform ms-auto" />
+        <ChevronDown className="mtx-text-primary mtx-w-6 mtx-h-6 group-data-[state='open']:mtx-rotate-180 mtx-transition-transform mtx-ms-auto" />
       </CollapsibleTrigger>
       <CollapsibleContent>
         <div>

@@ -10,11 +10,11 @@ const meta: Meta<typeof Skeleton> = {
 export const Default: StoryObj<typeof meta> = {
   render: () => {
     return (
-      <div className="flex items-center space-x-4">
-        <Skeleton className="h-12 w-12 rounded-full" />
-        <div className="space-y-2">
-          <Skeleton className="h-4 w-[250px]" />
-          <Skeleton className="h-4 w-[200px]" />
+      <div className="mtx-flex mtx-items-center mtx-space-x-4">
+        <Skeleton className="mtx-h-12 mtx-w-12 mtx-rounded-full" />
+        <div className="mtx-space-y-2">
+          <Skeleton className="mtx-h-4 mtx-w-[250px]" />
+          <Skeleton className="mtx-h-4 mtx-w-[200px]" />
         </div>
       </div>
     );

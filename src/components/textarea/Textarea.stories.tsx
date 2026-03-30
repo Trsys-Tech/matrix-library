@@ -18,7 +18,7 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
   args: {
     rows: 4,
-    className: "w-full",
+    className: "mtx-w-full",
     value: "This is a text area",
   },
 };

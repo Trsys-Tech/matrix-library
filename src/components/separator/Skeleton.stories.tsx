@@ -11,12 +11,12 @@ export const Default: StoryObj<typeof meta> = {
   render: () => {
     return (
       <div>
-        <div className="space-y-1">
-          <h4 className="text-sm font-medium leading-none">UI Components</h4>
-          <p className="text-sm text-muted-foreground">A UI component library.</p>
+        <div className="mtx-space-y-1">
+          <h4 className="mtx-text-sm mtx-font-medium mtx-leading-none">UI Components</h4>
+          <p className="mtx-text-sm mtx-text-muted-foreground">A UI component library.</p>
         </div>
-        <Separator className="my-4" />
-        <div className="flex h-5 items-center space-x-4 text-sm">
+        <Separator className="mtx-my-4" />
+        <div className="mtx-flex mtx-h-5 mtx-items-center mtx-space-x-4 mtx-text-sm">
           <div>Blog</div>
           <Separator orientation="vertical" />
           <div>Docs</div>

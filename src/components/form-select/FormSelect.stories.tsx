@@ -46,7 +46,7 @@ const FormSelectWrapper = ({ children }: { children: React.ReactNode }) => {
   const handleSubmit = form.handleSubmit(data => console.log(data));
   return (
     <Form {...form}>
-      <form onSubmit={handleSubmit} className="w-96 flex flex-col gap-2 items-end">
+      <form onSubmit={handleSubmit} className="mtx-w-96 mtx-flex mtx-flex-col mtx-gap-2 mtx-items-end">
         {children}
       </form>
     </Form>
@@ -63,7 +63,7 @@ export const Default: Story = {
       { label: "Option 2", value: "2" },
       { label: "Option 3", value: "3" },
     ],
-    className: "w-96",
+    className: "mtx-w-96",
   },
   render: ({ ...args }) => (
     <FormSelectWrapper>

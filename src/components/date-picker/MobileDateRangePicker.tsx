@@ -81,7 +81,7 @@ const MobileDateRangePicker: React.FC<MobileDateRangePickerProps> = ({
       <Button
         variant="text"
         className={cn(
-          "flex h-8 w-full items-center justify-between whitespace-nowrap rounded-sm border border-input bg-transparent ps-3 pe-1 py-1.5 text-xs ring-offset-background data-[placeholder]:text-muted-foreground hover:border hover:border-primary hover:bg-transparent focus:border focus:border-primary focus:outline-none focus:ring focus:ring-primary-100 disabled:cursor-not-allowed disabled:bg-gray-100 disabled:text-text-300 disabled:border-gray-100 [&>span]:line-clamp-1 [&_svg]:disabled:text-text-300",
+          "mtx-flex mtx-h-8 mtx-w-full mtx-items-center mtx-justify-between mtx-whitespace-nowrap mtx-rounded-sm mtx-border mtx-border-input mtx-bg-transparent mtx-ps-3 mtx-pe-1 mtx-py-1.5 mtx-text-xs mtx-ring-offset-background data-[placeholder]:mtx-text-muted-foreground hover:mtx-border hover:mtx-border-primary hover:mtx-bg-transparent focus:mtx-border focus:mtx-border-primary focus:mtx-outline-none focus:mtx-ring focus:mtx-ring-primary-100 disabled:mtx-cursor-not-allowed disabled:mtx-bg-gray-100 disabled:mtx-text-text-300 disabled:mtx-border-gray-100 [&>span]:mtx-line-clamp-1 [&_svg]:disabled:mtx-text-text-300",
           className,
         )}
         data-placeholder={!selected ? "" : undefined}
@@ -94,7 +94,7 @@ const MobileDateRangePicker: React.FC<MobileDateRangePickerProps> = ({
         disabled={disabled}
       >
         {selected ? (
-          <div className="grid grid-cols-2 flex-1 justify-items-start">
+          <div className="mtx-grid mtx-grid-cols-2 mtx-flex-1 mtx-justify-items-start">
             <span>
               {fromText ?? "From"}: {selected?.from ? format(selected.from, formatStr ?? "yyyy/MM/dd") : "-"}
             </span>{" "}
@@ -105,19 +105,19 @@ const MobileDateRangePicker: React.FC<MobileDateRangePickerProps> = ({
         ) : (
           <span>{placeholder ?? "Pick a Range"}</span>
         )}
-        <CalendarIcon className="mr-2 h-5 w-4 ms-auto" />
+        <CalendarIcon className="mtx-mr-2 mtx-h-5 mtx-w-4 mtx-ms-auto" />
       </Button>
       <Dialog open={isOpen} onOpenChange={handleCancel}>
-        <DialogContent className="h-dscreen w-screen p-0 flex flex-col gap-0 data-[state=open]:animate-slide-from-bottom data-[state=closed]:animate-slide-to-bottom overflow-auto max-w-screen-2xl sm:rounded-none">
+        <DialogContent className="mtx-h-dscreen mtx-w-screen mtx-p-0 mtx-flex mtx-flex-col mtx-gap-0 data-[state=open]:mtx-animate-slide-from-bottom data-[state=closed]:mtx-animate-slide-to-bottom mtx-overflow-auto mtx-max-w-screen-2xl sm:mtx-rounded-none">
           <DialogHeader>
             <DialogTitle asChild>
-              <div className="grid grid-cols-2 border-b border-b-gray-200 mt-3">
-                <div className="text-sm font-bold space-y-1 border-e border-e-gray-200 p-4">
-                  <h5 className="text-text-300 font-medium text-xs">From</h5>
+              <div className="mtx-grid mtx-grid-cols-2 mtx-border-b mtx-border-b-gray-200 mtx-mt-3">
+                <div className="mtx-text-sm mtx-font-bold mtx-space-y-1 mtx-border-e mtx-border-e-gray-200 mtx-p-4">
+                  <h5 className="mtx-text-text-300 mtx-font-medium mtx-text-xs">From</h5>
                   <h6 className="">{range?.from ? format(range.from, formatStr ?? "eee, MMM dd") : <pre> </pre>}</h6>
                 </div>
-                <div className="text-sm font-bold space-y-1 p-4 flex flex-col justify-center">
-                  <h5 className="text-text-300 font-medium text-xs">To</h5>
+                <div className="mtx-text-sm mtx-font-bold mtx-space-y-1 mtx-p-4 mtx-flex mtx-flex-col mtx-justify-center">
+                  <h5 className="mtx-text-text-300 mtx-font-medium mtx-text-xs">To</h5>
                   <h6 className="">{range?.to ? format(range.to, formatStr ?? "eee, MMM dd") : <pre> </pre>}</h6>
                 </div>
               </div>
@@ -126,7 +126,7 @@ const MobileDateRangePicker: React.FC<MobileDateRangePickerProps> = ({
               <DialogDescription>{"Date Picker"}</DialogDescription>
             </VisuallyHidden>
           </DialogHeader>
-          <div className="flex-1 flex flex-col items-center p-4">
+          <div className="mtx-flex-1 mtx-flex mtx-flex-col mtx-items-center mtx-p-4">
             <Calendar
               defaultMonth={selected?.from}
               startMonth={new Date(2000, 0, 1)}
@@ -135,14 +135,14 @@ const MobileDateRangePicker: React.FC<MobileDateRangePickerProps> = ({
               mode="range"
               selected={selected}
               onDayClick={handleDayClick}
-              className={cn("p-0", calendarClassName)}
+              className={cn("mtx-p-0", calendarClassName)}
             />
 
-            <div className="flex justify-center items-center gap-4 mt-auto w-full">
-              <Button variant="text" className="flex-1 h-10" onClick={handleCancel}>
+            <div className="mtx-flex mtx-justify-center mtx-items-center mtx-gap-4 mtx-mt-auto mtx-w-full">
+              <Button variant="text" className="mtx-flex-1 mtx-h-10" onClick={handleCancel}>
                 {cancelText ?? "Cancel"}
               </Button>
-              <Button variant="primary" className="flex-1 h-10" onClick={handleApply}>
+              <Button variant="primary" className="mtx-flex-1 mtx-h-10" onClick={handleApply}>
                 {applyText ?? "Apply"}
               </Button>
             </div>

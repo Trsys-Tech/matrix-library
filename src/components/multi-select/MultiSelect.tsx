@@ -16,13 +16,13 @@ import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, Command
  * Uses tailwind-variants (cva) to define different styles based on "variant" prop.
  */
 const multiSelectVariants = tv({
-  base: "flex gap-1 items-center py-0.5 px-2 rounded-xl",
+  base: "mtx-flex mtx-gap-1 mtx-items-center mtx-py-0.5 mtx-px-2 mtx-rounded-xl",
   variants: {
     variant: {
-      default: "border-none shadow-none bg-primary-50 text-primary hover:bg-primary-50",
-      secondary: "border-foreground/10 bg-secondary text-secondary-foreground hover:bg-secondary/80",
-      destructive: "border-transparent bg-destructive text-destructive-foreground hover:bg-destructive/80",
-      inverted: "inverted",
+      default: "mtx-border-none mtx-shadow-none mtx-bg-primary-50 mtx-text-primary hover:mtx-bg-primary-50",
+      secondary: "mtx-border-foreground/10 mtx-bg-secondary mtx-text-secondary-foreground hover:mtx-bg-secondary/80",
+      destructive: "mtx-border-transparent mtx-bg-destructive mtx-text-destructive-foreground hover:mtx-bg-destructive/80",
+      inverted: "mtx-inverted",
     },
   },
   defaultVariants: {
@@ -289,8 +289,8 @@ const MultiSelect = <T extends string | number>(
           {...props}
           onClick={handleTogglePopover}
           className={cn(
-            "group flex max-h-14 h-8 w-full items-center justify-between whitespace-nowrap rounded-sm border border-input bg-transparent px-3 py-1.5 text-sm ring-offset-background data-[placeholder]:text-muted-foreground hover:border hover:border-primary hover:bg-transparent focus:border focus:border-primary focus:outline-none focus:ring focus:ring-primary-100 disabled:cursor-not-allowed disabled:bg-gray-100 disabled:text-text-300 disabled:border-gray-100 [&>span]:line-clamp-1 [&_svg]:disabled:text-text-300",
-            isWrapped && "h-auto",
+            "mtx-group mtx-flex mtx-max-h-14 mtx-h-8 mtx-w-full mtx-items-center mtx-justify-between mtx-whitespace-nowrap mtx-rounded-sm mtx-border mtx-border-input mtx-bg-transparent mtx-px-3 mtx-py-1.5 mtx-text-sm mtx-ring-offset-background data-[placeholder]:mtx-text-muted-foreground hover:mtx-border hover:mtx-border-primary hover:mtx-bg-transparent focus:mtx-border focus:mtx-border-primary focus:mtx-outline-none focus:mtx-ring focus:mtx-ring-primary-100 disabled:mtx-cursor-not-allowed disabled:mtx-bg-gray-100 disabled:mtx-text-text-300 disabled:mtx-border-gray-100 [&>span]:mtx-line-clamp-1 [&_svg]:disabled:mtx-text-text-300",
+            isWrapped && "mtx-h-auto",
             className,
           )}
           data-placeholder={!selectedValues.length ? "" : undefined}
@@ -298,27 +298,27 @@ const MultiSelect = <T extends string | number>(
             <ChevronDown
               role="button"
               aria-label="Expand dropdown"
-              className="!h-4.5 !w-4.5 cursor-pointer group-data-[state=open]:rotate-180 transition-transform"
+              className="!mtx-h-4.5 !mtx-w-4.5 mtx-cursor-pointer group-data-[state=open]:mtx-rotate-180 mtx-transition-transform"
             />
           }
         >
           <>
             {selectedValues.length > 0 ? (
-              <div className="flex justify-between items-center w-full">
-                <div className="flex flex-wrap items-center gap-2" ref={containerRef}>
+              <div className="mtx-flex mtx-justify-between mtx-items-center mtx-w-full">
+                <div className="mtx-flex mtx-flex-wrap mtx-items-center mtx-gap-2" ref={containerRef}>
                   {selectedValues.slice(0, maxCount).map(value => {
                     const option = options.get(value);
                     const IconComponent = option?.icon;
                     return (
                       <Badge key={value} className={cn(multiSelectVariants({ variant }), { "text-gray-400 bg-gray-200": disabled || loading })}>
                         <XMark
-                          className="h-4 w-4 cursor-pointer"
+                          className="mtx-h-4 mtx-w-4 mtx-cursor-pointer"
                           onClick={event => {
                             event.stopPropagation();
                             toggleOption(value);
                           }}
                         />
-                        {IconComponent && <IconComponent className="h-4 w-4 mr-2" />}
+                        {IconComponent && <IconComponent className="mtx-h-4 mtx-w-4 mtx-mr-2" />}
                         {option?.label}
                       </Badge>
                     );
@@ -328,7 +328,7 @@ const MultiSelect = <T extends string | number>(
                       {`+ ${selectedValues.length - maxCount} ${moreText}`}
                       <CircleXmark
                         role="button"
-                        className="ml-2 h-4.5 w-4.5 cursor-pointer"
+                        className="mtx-ml-2 mtx-h-4.5 mtx-w-4.5 mtx-cursor-pointer"
                         onClick={event => {
                           event.stopPropagation();
                           clearExtraOptions();
@@ -338,17 +338,17 @@ const MultiSelect = <T extends string | number>(
                   )}
                   {loading && loadingText ? loadingText : null}
                 </div>
-                <div className="flex items-center justify-between gap-1">
+                <div className="mtx-flex mtx-items-center mtx-justify-between mtx-gap-1">
                   <XMark
                     role="button"
-                    className="h-5 w-5 text-muted-foreground cursor-pointer"
+                    className="mtx-h-5 mtx-w-5 mtx-text-muted-foreground mtx-cursor-pointer"
                     onClick={event => {
                       event.stopPropagation();
                       handleClear();
                     }}
                     aria-label="Clear"
                   />
-                  <Separator orientation="vertical" className="flex min-h-5 h-full" />
+                  <Separator orientation="vertical" className="mtx-flex mtx-min-h-5 mtx-h-full" />
                 </div>
               </div>
             ) : (
@@ -357,21 +357,21 @@ const MultiSelect = <T extends string | number>(
           </>
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-auto p-0" align="start" onEscapeKeyDown={() => setIsPopoverOpen(false)}>
-        <Command className="w-[--radix-popper-anchor-width] max-h-[--radix-popper-available-height]">
+      <PopoverContent className="mtx-w-auto mtx-p-0" align="start" onEscapeKeyDown={() => setIsPopoverOpen(false)}>
+        <Command className="mtx-w-[--radix-popper-anchor-width] mtx-max-h-[--radix-popper-available-height]">
           <CommandInput placeholder={searchText} onKeyDown={handleInputKeyDown} value={searchValue} onValueChange={setSearchValue} />
           <CommandList className="">
             <CommandEmpty>{noResultsText}</CommandEmpty>
             <CommandGroup>
               {showSelectAll && (
-                <CommandItem key="all" onSelect={toggleAll} className="cursor-pointer">
+                <CommandItem key="all" onSelect={toggleAll} className="mtx-cursor-pointer">
                   <div
                     className={cn(
-                      "mr-2 flex h-4.5 w-4.5 items-center justify-center rounded-sm border border-primary",
-                      selectedValues.length === options.size ? "bg-primary text-primary-foreground" : "opacity-50 [&_svg]:invisible",
+                      "mtx-mr-2 mtx-flex mtx-h-4.5 mtx-w-4.5 mtx-items-center mtx-justify-center mtx-rounded-sm mtx-border mtx-border-primary",
+                      selectedValues.length === options.size ? "mtx-bg-primary mtx-text-primary-foreground" : "mtx-opacity-50 [&_svg]:mtx-invisible",
                     )}
                   >
-                    <Check className="h-4.5 w-4.5" />
+                    <Check className="mtx-h-4.5 mtx-w-4.5" />
                   </div>
                   <span>({selectAllText})</span>
                 </CommandItem>
@@ -379,16 +379,16 @@ const MultiSelect = <T extends string | number>(
               {Array.from(options.values()).map(option => {
                 const isSelected = selectedValues.includes(option.value);
                 return (
-                  <CommandItem key={option.value} onSelect={() => toggleOption(option.value)} className="cursor-pointer">
+                  <CommandItem key={option.value} onSelect={() => toggleOption(option.value)} className="mtx-cursor-pointer">
                     <div
                       className={cn(
-                        "mr-2 flex h-4.5 w-4.5 items-center justify-center rounded-sm border border-primary",
-                        isSelected ? "bg-primary text-primary-foreground" : "opacity-50 [&_svg]:invisible",
+                        "mtx-mr-2 mtx-flex mtx-h-4.5 mtx-w-4.5 mtx-items-center mtx-justify-center mtx-rounded-sm mtx-border mtx-border-primary",
+                        isSelected ? "mtx-bg-primary mtx-text-primary-foreground" : "mtx-opacity-50 [&_svg]:mtx-invisible",
                       )}
                     >
-                      <Check className="h-4.5 w-4.5" />
+                      <Check className="mtx-h-4.5 mtx-w-4.5" />
                     </div>
-                    {option.icon && <option.icon className="mr-2 h-4.5 w-4.5 text-muted-foreground" />}
+                    {option.icon && <option.icon className="mtx-mr-2 mtx-h-4.5 mtx-w-4.5 mtx-text-muted-foreground" />}
                     <span>{option.label}</span>
                   </CommandItem>
                 );
@@ -396,16 +396,16 @@ const MultiSelect = <T extends string | number>(
             </CommandGroup>
             <CommandSeparator />
             <CommandGroup>
-              <div className="flex items-center justify-between">
+              <div className="mtx-flex mtx-items-center mtx-justify-between">
                 {selectedValues.length > 0 && (
                   <>
-                    <CommandItem onSelect={handleClear} className="flex-1 justify-center cursor-pointer">
+                    <CommandItem onSelect={handleClear} className="mtx-flex-1 mtx-justify-center mtx-cursor-pointer">
                       {clearText}
                     </CommandItem>
-                    <Separator orientation="vertical" className="flex min-h-6 h-full" />
+                    <Separator orientation="vertical" className="mtx-flex mtx-min-h-6 mtx-h-full" />
                   </>
                 )}
-                <CommandItem onSelect={() => setIsPopoverOpen(false)} className="flex-1 justify-center cursor-pointer max-w-full">
+                <CommandItem onSelect={() => setIsPopoverOpen(false)} className="mtx-flex-1 mtx-justify-center mtx-cursor-pointer mtx-max-w-full">
                   {closeText}
                 </CommandItem>
               </div>

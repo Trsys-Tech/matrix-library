@@ -48,21 +48,21 @@ const SelectTrigger = React.forwardRef<React.ElementRef<typeof SelectPrimitive.T
       <SelectPrimitive.Trigger
         ref={ref}
         className={cn(
-          "group flex h-8 w-full items-center justify-between whitespace-nowrap rounded-sm border border-input bg-transparent px-3 py-2 text-xs ring-offset-background data-[placeholder]:text-muted-foreground hover:border hover:border-primary focus:border focus:border-primary focus:outline-none focus:ring focus:ring-primary-100 disabled:cursor-not-allowed disabled:bg-gray-100 disabled:text-text-300 disabled:border-none [&>span]:line-clamp-1 [&_svg]:disabled:text-text-300",
+          "mtx-group mtx-flex mtx-h-8 mtx-w-full mtx-items-center mtx-justify-between mtx-whitespace-nowrap mtx-rounded-sm mtx-border mtx-border-input mtx-bg-transparent mtx-px-3 mtx-py-2 mtx-text-xs mtx-ring-offset-background data-[placeholder]:mtx-text-muted-foreground hover:mtx-border hover:mtx-border-primary focus:mtx-border focus:mtx-border-primary focus:mtx-outline-none focus:mtx-ring focus:mtx-ring-primary-100 disabled:mtx-cursor-not-allowed disabled:mtx-bg-gray-100 disabled:mtx-text-text-300 disabled:mtx-border-none [&>span]:mtx-line-clamp-1 [&_svg]:disabled:mtx-text-text-300",
           className,
         )}
         data-value={value}
         {...props}
       >
         {children}
-        <div className="flex items-center gap-2">
+        <div className="mtx-flex mtx-items-center mtx-gap-2">
           {clearable && value ? (
             <SelectPrimitive.Icon asChild onPointerDown={handlePointerDown} onClickCapture={onClear}>
-              <XMark className="h-4.5 w-4.5" />
+              <XMark className="mtx-h-4.5 mtx-w-4.5" />
             </SelectPrimitive.Icon>
           ) : null}
           <SelectPrimitive.Icon asChild>
-            <ChevronDown className="h-4.5 w-4.5 text-primary group-data-[state=open]:rotate-180 transition-transform" />
+            <ChevronDown className="mtx-h-4.5 mtx-w-4.5 mtx-text-primary group-data-[state=open]:mtx-rotate-180 mtx-transition-transform" />
           </SelectPrimitive.Icon>
         </div>
       </SelectPrimitive.Trigger>
@@ -76,7 +76,11 @@ const SelectScrollUpButton = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.ScrollUpButton>,
   React.ComponentPropsWithoutRef<typeof SelectPrimitive.ScrollUpButton>
 >(({ className, ...props }, ref) => (
-  <SelectPrimitive.ScrollUpButton ref={ref} className={cn("flex cursor-default items-center justify-center py-1", className)} {...props}>
+  <SelectPrimitive.ScrollUpButton
+    ref={ref}
+    className={cn("mtx-flex mtx-cursor-default mtx-items-center mtx-justify-center mtx-py-1", className)}
+    {...props}
+  >
     <ChevronUp />
   </SelectPrimitive.ScrollUpButton>
 ));
@@ -87,7 +91,11 @@ const SelectScrollDownButton = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.ScrollDownButton>,
   React.ComponentPropsWithoutRef<typeof SelectPrimitive.ScrollDownButton>
 >(({ className, ...props }, ref) => (
-  <SelectPrimitive.ScrollDownButton ref={ref} className={cn("flex cursor-default items-center justify-center py-1", className)} {...props}>
+  <SelectPrimitive.ScrollDownButton
+    ref={ref}
+    className={cn("mtx-flex mtx-cursor-default mtx-items-center mtx-justify-center mtx-py-1", className)}
+    {...props}
+  >
     <ChevronDown />
   </SelectPrimitive.ScrollDownButton>
 ));
@@ -102,9 +110,9 @@ const SelectContent = React.forwardRef<
     <SelectPrimitive.Content
       ref={ref}
       className={cn(
-        "relative z-50 max-h-96 min-w-[8rem] overflow-hidden rounded-md border bg-popover text-popover-foreground shadow-md data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2",
+        "mtx-relative mtx-z-50 mtx-max-h-96 mtx-min-w-[8rem] mtx-overflow-hidden mtx-rounded-md mtx-border mtx-bg-popover mtx-text-popover-foreground mtx-shadow-md data-[state=open]:mtx-animate-in data-[state=closed]:mtx-animate-out data-[state=closed]:mtx-fade-out-0 data-[state=open]:mtx-fade-in-0 data-[state=closed]:mtx-zoom-out-95 data-[state=open]:mtx-zoom-in-95 data-[side=bottom]:mtx-slide-in-from-top-2 data-[side=left]:mtx-slide-in-from-right-2 data-[side=right]:mtx-slide-in-from-left-2 data-[side=top]:mtx-slide-in-from-bottom-2",
         position === "popper" &&
-          "data-[side=bottom]:translate-y-1 data-[side=left]:-translate-x-1 data-[side=right]:translate-x-1 data-[side=top]:-translate-y-1 max-h-[--radix-select-content-available-height]",
+          "data-[side=bottom]:mtx-translate-y-1 data-[side=left]:-mtx-translate-x-1 data-[side=right]:mtx-translate-x-1 data-[side=top]:-mtx-translate-y-1 mtx-max-h-[--radix-select-content-available-height]",
         className,
       )}
       position={position}
@@ -112,7 +120,10 @@ const SelectContent = React.forwardRef<
     >
       <SelectScrollUpButton />
       <SelectPrimitive.Viewport
-        className={cn("p-1", position === "popper" && "h-[var(--radix-select-trigger-height)] w-full min-w-[var(--radix-select-trigger-width)]")}
+        className={cn(
+          "mtx-p-1",
+          position === "popper" && "mtx-h-[var(--radix-select-trigger-height)] mtx-w-full mtx-min-w-[var(--radix-select-trigger-width)]",
+        )}
       >
         {children}
       </SelectPrimitive.Viewport>
@@ -124,7 +135,9 @@ SelectContent.displayName = SelectPrimitive.Content.displayName;
 type SelectContentProps = React.ComponentProps<typeof SelectContent>;
 
 const SelectLabel = React.forwardRef<React.ElementRef<typeof SelectPrimitive.Label>, React.ComponentPropsWithoutRef<typeof SelectPrimitive.Label>>(
-  ({ className, ...props }, ref) => <SelectPrimitive.Label ref={ref} className={cn("px-2 py-1.5 text-xs font-semibold", className)} {...props} />,
+  ({ className, ...props }, ref) => (
+    <SelectPrimitive.Label ref={ref} className={cn("mtx-px-2 mtx-py-1.5 mtx-text-xs mtx-font-semibold", className)} {...props} />
+  ),
 );
 SelectLabel.displayName = SelectPrimitive.Label.displayName;
 type SelectLabelProps = React.ComponentProps<typeof SelectLabel>;
@@ -134,14 +147,14 @@ const SelectItem = React.forwardRef<React.ElementRef<typeof SelectPrimitive.Item
     <SelectPrimitive.Item
       ref={ref}
       className={cn(
-        "relative flex w-full cursor-default select-none items-center rounded-sm py-1.5 pl-2 pr-8 text-xs outline-none focus:bg-gray-200 data-[active=true]:bg-gray-300 data-[active=true]:font-bold data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
+        "mtx-relative mtx-flex mtx-w-full mtx-cursor-default mtx-select-none mtx-items-center mtx-rounded-sm mtx-py-1.5 mtx-pl-2 mtx-pr-8 mtx-text-xs mtx-outline-none focus:mtx-bg-gray-200 data-[active=true]:mtx-bg-gray-300 data-[active=true]:mtx-font-bold data-[disabled]:mtx-pointer-events-none data-[disabled]:mtx-opacity-50",
         className,
       )}
       {...props}
     >
-      <span className="absolute right-2 flex h-3.5 w-3.5 items-center justify-center">
+      <span className="mtx-absolute mtx-right-2 mtx-flex mtx-h-3.5 mtx-w-3.5 mtx-items-center mtx-justify-center">
         <SelectPrimitive.ItemIndicator>
-          <Check className="h-4 w-4" />
+          <Check className="mtx-h-4 mtx-w-4" />
         </SelectPrimitive.ItemIndicator>
       </span>
       <SelectPrimitive.ItemText>{children}</SelectPrimitive.ItemText>
@@ -154,7 +167,9 @@ type SelectItemProps = React.ComponentProps<typeof SelectItem>;
 const SelectSeparator = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Separator>,
   React.ComponentPropsWithoutRef<typeof SelectPrimitive.Separator>
->(({ className, ...props }, ref) => <SelectPrimitive.Separator ref={ref} className={cn("-mx-1 my-1 h-px bg-muted", className)} {...props} />);
+>(({ className, ...props }, ref) => (
+  <SelectPrimitive.Separator ref={ref} className={cn("-mtx-mx-1 mtx-my-1 mtx-h-px mtx-bg-muted", className)} {...props} />
+));
 SelectSeparator.displayName = SelectPrimitive.Separator.displayName;
 type SelectSeparatorProps = React.ComponentProps<typeof SelectSeparator>;
 

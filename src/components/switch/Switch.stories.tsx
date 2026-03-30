@@ -11,7 +11,7 @@ const meta: Meta<typeof Switch> = {
 export const Default: StoryObj<typeof meta> = {
   render: () => {
     return (
-      <div className="flex items-center gap-2">
+      <div className="mtx-flex mtx-items-center mtx-gap-2">
         <Switch id="airplane-mode" size="sm" />
         <Label htmlFor="airplane-mode">Airplane Mode</Label>
       </div>
@@ -22,16 +22,16 @@ export const Default: StoryObj<typeof meta> = {
 export const Sizes: StoryObj<typeof meta> = {
   render: () => {
     return (
-      <div className="grid gap-2">
-        <div className="flex items-center gap-2">
+      <div className="mtx-grid mtx-gap-2">
+        <div className="mtx-flex mtx-items-center mtx-gap-2">
           <Switch id="small" size="sm" />
           <Label htmlFor="small">Small</Label>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="mtx-flex mtx-items-center mtx-gap-2">
           <Switch id="medium" size="md" />
           <Label htmlFor="medium">Medium</Label>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="mtx-flex mtx-items-center mtx-gap-2">
           <Switch id="large" size="lg" />
           <Label htmlFor="large">Large</Label>
         </div>

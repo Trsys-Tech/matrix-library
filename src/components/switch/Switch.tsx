@@ -7,12 +7,12 @@ import { cn } from "../../lib/utils";
 import { tv, VariantProps } from "tailwind-variants";
 
 const switchVariants = tv({
-  base: "peer inline-flex h-4 w-7 shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-primary data-[state=unchecked]:bg-input",
+  base: "mtx-peer mtx-inline-flex mtx-h-4 mtx-w-7 mtx-shrink-0 mtx-cursor-pointer mtx-items-center mtx-rounded-full mtx-border-2 mtx-border-transparent mtx-shadow-sm mtx-transition-colors focus-visible:mtx-outline-none focus-visible:mtx-ring-2 focus-visible:mtx-ring-ring focus-visible:mtx-ring-offset-2 focus-visible:mtx-ring-offset-background disabled:mtx-cursor-not-allowed disabled:mtx-opacity-50 data-[state=checked]:mtx-bg-primary data-[state=unchecked]:mtx-bg-input",
   variants: {
     size: {
-      sm: "h-4 w-7 [&>span]:h-3 [&>span]:w-3 [&>span]:data-[state=checked]:translate-x-3",
-      md: "h-5 w-9 [&>span]:h-4 [&>span]:w-4 [&>span]:data-[state=checked]:translate-x-4",
-      lg: "h-6 w-11 [&>span]:h-5 [&>span]:w-5 [&>span]:data-[state=checked]:translate-x-5",
+      sm: "mtx-h-4 mtx-w-7 [&>span]:mtx-h-3 [&>span]:mtx-w-3 [&>span]:data-[state=checked]:mtx-translate-x-3",
+      md: "mtx-h-5 mtx-w-9 [&>span]:mtx-h-4 [&>span]:mtx-w-4 [&>span]:data-[state=checked]:mtx-translate-x-4",
+      lg: "mtx-h-6 mtx-w-11 [&>span]:mtx-h-5 [&>span]:mtx-w-5 [&>span]:data-[state=checked]:mtx-translate-x-5",
     },
   },
   defaultVariants: {
@@ -26,7 +26,7 @@ const Switch = React.forwardRef<React.ElementRef<typeof SwitchPrimitives.Root>, 
   <SwitchPrimitives.Root className={cn(switchVariants({ size, className }))} {...props} ref={ref}>
     <SwitchPrimitives.Thumb
       className={cn(
-        "pointer-events-none block rounded-full bg-background shadow-lg ring-0 transition-transform data-[state=unchecked]:translate-x-0",
+        "mtx-pointer-events-none mtx-block mtx-rounded-full mtx-bg-background mtx-shadow-lg mtx-ring-0 mtx-transition-transform data-[state=unchecked]:mtx-translate-x-0",
       )}
     />
   </SwitchPrimitives.Root>

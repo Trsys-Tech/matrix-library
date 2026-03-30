@@ -27,11 +27,11 @@ export const Default: Story = {
         Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet, et. Rerum consequuntur odio velit voluptatibus dolorem amet deserunt. Optio,
         voluptates.
       </CardContent>
-      <CardFooter className="justify-end gap-2">
-        <Button variant="danger" className="w-24">
+      <CardFooter className="mtx-justify-end mtx-gap-2">
+        <Button variant="danger" className="mtx-w-24">
           Cancel
         </Button>
-        <Button className="w-24">Ok</Button>
+        <Button className="mtx-w-24">Ok</Button>
       </CardFooter>
     </Card>
   ),

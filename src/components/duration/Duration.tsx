@@ -7,15 +7,15 @@ import { cn } from "../../lib/utils";
 
 const textFieldVariants = tv({
   base: [
-    "flex items-center w-full rounded-sm border border-input text-text bg-transparent p-0 text-xs [&_input]:text-xs font-medium transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground",
-    "placeholder:text-text-300 hover:border-primary-400 focus-within:border-primary-400 focus-within:outline-none focus-within:ring focus-within:ring-primary-100",
-    "aria-disabled:text-text-300 aria-disabled:bg-gray-100 aria-disabled:border-gray-100",
+    "mtx-flex mtx-items-center mtx-w-full mtx-rounded-sm mtx-border mtx-border-input mtx-text-text mtx-bg-transparent mtx-p-0 mtx-text-xs [&_input]:mtx-text-xs mtx-font-medium mtx-transition-colors file:mtx-border-0 file:mtx-bg-transparent file:mtx-text-sm file:mtx-font-medium file:mtx-text-foreground",
+    "placeholder:mtx-text-text-300 hover:mtx-border-primary-400 focus-within:mtx-border-primary-400 focus-within:mtx-outline-none focus-within:mtx-ring focus-within:mtx-ring-primary-100",
+    "aria-disabled:mtx-text-text-300 aria-disabled:mtx-bg-gray-100 aria-disabled:mtx-border-gray-100",
   ],
   variants: {
     size: {
-      sm: "h-7",
-      md: "h-8",
-      lg: "h-11",
+      sm: "mtx-h-7",
+      md: "mtx-h-8",
+      lg: "mtx-h-11",
     },
   },
   defaultVariants: {
@@ -216,8 +216,8 @@ const Duration = React.forwardRef<HTMLInputElement, DurationProps>(
           disabled={disabled}
           {...(slotProps?.inputProps ?? {})}
           className={cn(
-            "focus:outline-none w-full h-full py-1 rounded-sm file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-text-300",
-            !startAdornment ? "px-3" : "ps-1 pe-3",
+            "focus:mtx-outline-none mtx-w-full mtx-h-full mtx-py-1 mtx-rounded-sm file:mtx-border-0 file:mtx-bg-transparent file:mtx-text-sm file:mtx-font-medium file:mtx-text-foreground placeholder:mtx-text-text-300",
+            !startAdornment ? "mtx-px-3" : "mtx-ps-1 mtx-pe-3",
             slotProps?.inputProps?.className,
           )}
         />

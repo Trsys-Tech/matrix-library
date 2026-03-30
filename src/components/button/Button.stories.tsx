@@ -24,7 +24,7 @@ export const Primary: Story = {
     asChild: false,
     loading: false,
   },
-  render: props => <Button {...props} startIcon={<Plus />} endIcon={<ChevronDown className="w-4.5 h-4.5" />} />,
+  render: props => <Button {...props} startIcon={<Plus />} endIcon={<ChevronDown className="mtx-w-4.5 mtx-h-4.5" />} />,
 };
 
 export const Variants: Story = {
@@ -35,8 +35,8 @@ export const Variants: Story = {
     loading: false,
   },
   render: props => (
-    <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 w-full lg:min-w-[600px]">
-      <Button {...props} startIcon={<Plus />} endIcon={<ChevronDown className="w-4.5 h-4.5" />} />
+    <div className="mtx-grid mtx-grid-cols-2 lg:mtx-grid-cols-4 mtx-gap-4 mtx-w-full lg:mtx-min-w-[600px]">
+      <Button {...props} startIcon={<Plus />} endIcon={<ChevronDown className="mtx-w-4.5 mtx-h-4.5" />} />
       <Button {...props} variant="outline" startIcon={<Plus />} endIcon={<ChevronDown />} />
       <Button {...props} variant="text" startIcon={<Plus />} endIcon={<ChevronDown />} />
       <Button {...props} variant="danger" startIcon={<Plus />} endIcon={<ChevronDown />} />
@@ -56,8 +56,8 @@ export const Large: Story = {
     loading: false,
   },
   render: props => (
-    <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 w-full lg:min-w-[650px]">
-      <Button {...props} startIcon={<Plus />} endIcon={<ChevronDown className="w-4.5 h-4.5" />} />
+    <div className="mtx-grid mtx-grid-cols-2 lg:mtx-grid-cols-4 mtx-gap-4 mtx-w-full lg:mtx-min-w-[650px]">
+      <Button {...props} startIcon={<Plus />} endIcon={<ChevronDown className="mtx-w-4.5 mtx-h-4.5" />} />
       <Button {...props} variant="outline" startIcon={<Plus />} endIcon={<ChevronDown />} />
       <Button {...props} variant="text" startIcon={<Plus />} endIcon={<ChevronDown />} />
       <Button {...props} variant="danger" startIcon={<Plus />} endIcon={<ChevronDown />} />
@@ -77,8 +77,8 @@ export const Small: Story = {
     loading: false,
   },
   render: props => (
-    <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 w-full lg:min-w-[650px]">
-      <Button {...props} startIcon={<Plus />} endIcon={<ChevronDown className="w-4.5 h-4.5" />} />
+    <div className="mtx-grid mtx-grid-cols-2 lg:mtx-grid-cols-4 mtx-gap-4 mtx-w-full lg:mtx-min-w-[650px]">
+      <Button {...props} startIcon={<Plus />} endIcon={<ChevronDown className="mtx-w-4.5 mtx-h-4.5" />} />
       <Button {...props} variant="outline" startIcon={<Plus />} endIcon={<ChevronDown />} />
       <Button {...props} variant="text" startIcon={<Plus />} endIcon={<ChevronDown />} />
       <Button {...props} variant="danger" startIcon={<Plus />} endIcon={<ChevronDown />} />
@@ -97,8 +97,8 @@ export const OnDark: Story = {
     loading: false,
   },
   render: props => (
-    <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 w-full lg:min-w-[650px] bg-gray-400 p-4">
-      <Button {...props} variant="primary-on-dark" startIcon={<Plus />} endIcon={<ChevronDown className="w-4.5 h-4.5" />} />
+    <div className="mtx-grid mtx-grid-cols-2 lg:mtx-grid-cols-4 mtx-gap-4 mtx-w-full lg:mtx-min-w-[650px] mtx-bg-gray-400 mtx-p-4">
+      <Button {...props} variant="primary-on-dark" startIcon={<Plus />} endIcon={<ChevronDown className="mtx-w-4.5 mtx-h-4.5" />} />
       <Button {...props} variant="outline-on-dark" startIcon={<Plus />} endIcon={<ChevronDown />} />
       <Button {...props} variant="text-on-dark" startIcon={<Plus />} endIcon={<ChevronDown />} />
       <Button {...props} variant="danger" startIcon={<Plus />} endIcon={<ChevronDown />} />

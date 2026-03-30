@@ -7,21 +7,21 @@ import { tv, VariantProps } from "tailwind-variants";
 import { Star } from "@trsys-tech/matrix-icons";
 
 const ratingVariants = tv({
-  base: "flex items-center gap-0",
+  base: "mtx-flex mtx-items-center mtx-gap-0",
   variants: {
     variant: {
-      default: "text-yellow-400",
-      primary: "text-primary",
-      secondary: "text-secondary",
-      success: "text-success",
-      danger: "text-danger",
-      warning: "text-warning",
-      info: "text-info",
+      default: "mtx-text-yellow-400",
+      primary: "mtx-text-primary",
+      secondary: "mtx-text-secondary",
+      success: "mtx-text-success",
+      danger: "mtx-text-danger",
+      warning: "mtx-text-warning",
+      info: "mtx-text-info",
     },
     size: {
-      sm: "[&_*_svg]:h-5 [&_*_svg]:w-5",
-      md: "[&_*_svg]:h-6 [&_*_svg]:w-6",
-      lg: "[&_*_svg]:h-8 [&_*_svg]:w-8",
+      sm: "[&_*_svg]:mtx-h-5 [&_*_svg]:mtx-w-5",
+      md: "[&_*_svg]:mtx-h-6 [&_*_svg]:mtx-w-6",
+      lg: "[&_*_svg]:mtx-h-8 [&_*_svg]:mtx-w-8",
     },
   },
   defaultVariants: {
@@ -125,18 +125,18 @@ const RatingItem = ({ Icon, index, displayedValue, onHover, onValueChange, preci
     return (
       <div
         className={cn(
-          "relative hover:scale-125 transition-transform px-0.5",
-          readOnly && "hover:scale-100",
-          disabled && "hover:scale-100 opacity-70",
+          "mtx-relative hover:mtx-scale-125 mtx-transition-transform mtx-px-0.5",
+          readOnly && "hover:mtx-scale-100",
+          disabled && "hover:mtx-scale-100 mtx-opacity-70",
         )}
       >
-        <Icon className={cn("stroke-gray-500")} />
+        <Icon className={cn("mtx-stroke-gray-500")} />
         <button
           type="button"
           className={cn(
-            "absolute top-0 w-[calc(50%+2px)] left-0 overflow-hidden h-full",
-            readOnly && "cursor-default",
-            disabled && "cursor-default hover:scale-100 opacity-70",
+            "mtx-absolute mtx-top-0 mtx-w-[calc(50%+2px)] mtx-left-0 mtx-overflow-hidden mtx-h-full",
+            readOnly && "mtx-cursor-default",
+            disabled && "mtx-cursor-default hover:mtx-scale-100 mtx-opacity-70",
           )}
           onClick={() => onValueChange(index + 0.5)}
           onMouseEnter={() => onHover(index + 0.5)}
@@ -146,17 +146,17 @@ const RatingItem = ({ Icon, index, displayedValue, onHover, onValueChange, preci
         >
           <Icon
             className={cn(
-              "stroke-none absolute left-0.5 top-0 [mask-image:linear-gradient(to_right,_black_50%,_transparent_50%)]",
-              displayedValue >= index + 0.5 && "stroke-current fill-current",
+              "mtx-stroke-none mtx-absolute mtx-left-0.5 mtx-top-0 mtx-[mask-image:linear-gradient(to_right,_black_50%,_transparent_50%)]",
+              displayedValue >= index + 0.5 && "mtx-stroke-current mtx-fill-current",
             )}
           />
         </button>
         <button
           type="button"
           className={cn(
-            "absolute top-0 w-[calc(50%+2px)] right-0 overflow-hidden h-full",
-            readOnly && "cursor-default",
-            disabled && "cursor-default hover:scale-100 opacity-70",
+            "mtx-absolute mtx-top-0 mtx-w-[calc(50%+2px)] mtx-right-0 mtx-overflow-hidden mtx-h-full",
+            readOnly && "mtx-cursor-default",
+            disabled && "mtx-cursor-default hover:mtx-scale-100 mtx-opacity-70",
           )}
           onClick={() => onValueChange(index + 1)}
           onMouseEnter={() => onHover(index + 1)}
@@ -166,8 +166,8 @@ const RatingItem = ({ Icon, index, displayedValue, onHover, onValueChange, preci
         >
           <Icon
             className={cn(
-              "stroke-none absolute right-0.5 top-0 [mask-image:linear-gradient(to_left,_black_50%,_transparent_50%)]",
-              displayedValue >= index + 1 && "stroke-current fill-current",
+              "mtx-stroke-none mtx-absolute mtx-right-0.5 mtx-top-0 mtx-[mask-image:linear-gradient(to_left,_black_50%,_transparent_50%)]",
+              displayedValue >= index + 1 && "mtx-stroke-current mtx-fill-current",
             )}
           />
         </button>
@@ -182,14 +182,14 @@ const RatingItem = ({ Icon, index, displayedValue, onHover, onValueChange, preci
       onMouseEnter={() => onHover(index + 1)}
       onMouseLeave={() => onHover(null)}
       className={cn(
-        "hover:scale-125 px-0.5 transition-transform",
-        readOnly && "cursor-default hover:scale-100",
-        disabled && "cursor-default hover:scale-100 opacity-70",
+        "hover:mtx-scale-125 mtx-px-0.5 mtx-transition-transform",
+        readOnly && "mtx-cursor-default hover:mtx-scale-100",
+        disabled && "mtx-cursor-default hover:mtx-scale-100 mtx-opacity-70",
       )}
       disabled={disabled}
       aria-label={`Set rating to ${index + 1}`}
     >
-      <Icon className={cn("stroke-gray-500", displayedValue >= index + 1 && "stroke-current fill-current")} />
+      <Icon className={cn("mtx-stroke-gray-500", displayedValue >= index + 1 && "mtx-stroke-current mtx-fill-current")} />
     </button>
   );
 };

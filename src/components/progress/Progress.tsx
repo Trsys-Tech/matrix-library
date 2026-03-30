@@ -9,16 +9,16 @@ const progressVariants = tv({
   base: "",
   variants: {
     variant: {
-      primary: "bg-primary",
-      info: "bg-info",
-      success: "bg-success",
-      warning: "bg-warning",
-      danger: "bg-danger",
+      primary: "mtx-bg-primary",
+      info: "mtx-bg-info",
+      success: "mtx-bg-success",
+      warning: "mtx-bg-warning",
+      danger: "mtx-bg-danger",
     },
     size: {
-      sm: "h-[3px]",
-      md: "h-[4px]",
-      lg: "h-[5px]",
+      sm: "mtx-h-[3px]",
+      md: "mtx-h-[4px]",
+      lg: "mtx-h-[5px]",
     },
   },
   defaultVariants: {
@@ -34,9 +34,13 @@ type ProgressProps = React.ComponentPropsWithoutRef<typeof ProgressPrimitive.Roo
 
 const Progress = React.forwardRef<React.ElementRef<typeof ProgressPrimitive.Root>, ProgressProps>(
   ({ className, value, variant, size, ...props }, ref) => (
-    <ProgressPrimitive.Root ref={ref} className={cn(progressVariants({ size }), "relative w-full overflow-hidden bg-gray-300", className)} {...props}>
+    <ProgressPrimitive.Root
+      ref={ref}
+      className={cn(progressVariants({ size }), "mtx-relative mtx-w-full mtx-overflow-hidden mtx-bg-gray-300", className)}
+      {...props}
+    >
       <ProgressPrimitive.Indicator
-        className={cn("h-full w-full flex-1 transition-all", progressVariants({ variant }))}
+        className={cn("mtx-h-full mtx-w-full mtx-flex-1 mtx-transition-all", progressVariants({ variant }))}
         style={{ transform: `translateX(-${100 - (value || 0)}%)` }}
       />
     </ProgressPrimitive.Root>

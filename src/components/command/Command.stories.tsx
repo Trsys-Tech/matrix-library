@@ -23,7 +23,7 @@ const meta: Meta<typeof Command> = {
 
 export const Default = () => {
   return (
-    <Command className="rounded-lg border shadow-md md:min-w-[450px]">
+    <Command className="mtx-rounded-lg mtx-border mtx-shadow-md md:mtx-min-w-[450px]">
       <CommandInput placeholder="Type a command or search..." />
       <CommandList>
         <CommandEmpty>No results found.</CommandEmpty>
@@ -81,10 +81,10 @@ export function WithCommandDialog() {
 
   return (
     <>
-      <p className="text-sm text-muted-foreground">
+      <p className="mtx-text-sm mtx-text-muted-foreground">
         Press{" "}
-        <kbd className="pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground opacity-100">
-          <span className="text-xs">⌘</span>J
+        <kbd className="mtx-pointer-events-none mtx-inline-flex mtx-h-5 mtx-select-none mtx-items-center mtx-gap-1 mtx-rounded mtx-border mtx-bg-muted mtx-px-1.5 mtx-font-mono mtx-text-[10px] mtx-font-medium mtx-text-muted-foreground mtx-opacity-100">
+          <span className="mtx-text-xs">⌘</span>J
         </kbd>
       </p>
       <CommandDialog open={open} onOpenChange={setOpen}>

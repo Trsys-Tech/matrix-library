@@ -25,14 +25,14 @@ export const Default: StoryFn<typeof Drawer> = () => {
   const width = 240;
 
   return (
-    <Drawer open={open} onClose={() => setOpen(false)} width={width} anchor="right" className="bg-gray-50">
+    <Drawer open={open} onClose={() => setOpen(false)} width={width} anchor="right" className="mtx-bg-gray-50">
       <DrawerMain asChild>
-        <div className={cn("flex items-center justify-center h-96")}>
+        <div className={cn("mtx-flex mtx-items-center mtx-justify-center mtx-h-96")}>
           <Button onClick={() => setOpen(prev => !prev)}>Toggle Drawer</Button>
         </div>
       </DrawerMain>
       <DrawerContent title="Add Details">
-        <div className={cn("flex flex-col items-center justify-center h-full w-full")}>This is the content</div>
+        <div className={cn("mtx-flex mtx-flex-col mtx-items-center mtx-justify-center mtx-h-full mtx-w-full")}>This is the content</div>
       </DrawerContent>
     </Drawer>
   );

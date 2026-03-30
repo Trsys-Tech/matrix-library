@@ -42,7 +42,7 @@ const FormDuration = <TFieldValues extends FieldValues, TName extends FieldPath<
           <FormItem {...formItemProps}>
             <FormLabel {...(slotProps?.formLabelProps ?? {})}>
               {label}
-              {required && <span className="text-danger text-sm leading-4">*</span>}
+              {required && <span className="mtx-text-danger mtx-text-sm mtx-leading-4">*</span>}
             </FormLabel>
             <FormControl {...(slotProps?.formControlProps ?? {})}>
               <Duration
