@@ -25,6 +25,6 @@ jobs:
         run: npm run build
 
       - name: Push to npm
-        run: npm publish --access public
+        run: npm publish --access public --tag legacy
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
