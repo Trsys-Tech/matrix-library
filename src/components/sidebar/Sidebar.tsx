@@ -437,8 +437,7 @@ const sidebarMenuButtonVariants = tv({
   variants: {
     variant: {
       default: "hover:mtx-bg-gray-50",
-      outline:
-        "mtx-bg-background mtx-shadow-[0_0_0_1px_hsl(var(--gray--300))] hover:mtx-bg-gray-50 hover:mtx-shadow-[0_0_0_1px_hsl(var(--gray-400))]",
+      outline: "mtx-bg-background mtx-shadow-[oklch(var(--gray--300))] hover:mtx-bg-gray-50 hover:mtx-shadow-[oklch(var(--gray-400))]",
     },
     size: {
       default: "mtx-h-10 mtx-text-sm",

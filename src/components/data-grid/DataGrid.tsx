@@ -21,11 +21,11 @@ const dataGridDefaultTheme = themeQuartz.withParams({
   fontSize: "12px",
   headerFontSize: "12px",
   headerFontWeight: 700,
-  headerBackgroundColor: "hsl(var(--mtx-primary-50))",
-  backgroundColor: "hsl(var(--mtx-gray-0))",
-  accentColor: "hsl(var(--mtx-primary-300))",
-  foregroundColor: "hsl(var(--mtx-text-500))",
-  cellTextColor: "hsl(var(--mtx-text-500))",
+  headerBackgroundColor: "oklch(var(--mtx-primary-50))",
+  backgroundColor: "oklch(var(--mtx-gray-0))",
+  accentColor: "oklch(var(--mtx-primary-300))",
+  foregroundColor: "oklch(var(--mtx-text-500))",
+  cellTextColor: "oklch(var(--mtx-text-500))",
 });
 
 type DataGridContext = {

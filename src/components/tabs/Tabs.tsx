@@ -10,7 +10,7 @@ const TabsList = React.forwardRef<React.ElementRef<typeof List>, React.Component
   <List
     ref={ref}
     className={cn(
-      "mtx-inline-flex mtx-h-12 mtx-w-full mtx-overflow-auto mtx-thin-scrollbar mtx-items-center mtx-justify-start mtx-bg-background mtx-p-0 mtx-text-muted-foreground md:mtx-[box-shadow:inset_0_-1px_0_hsl(var(--gray-300))]",
+      "mtx-inline-flex mtx-h-12 mtx-w-full mtx-overflow-auto mtx-thin-scrollbar mtx-items-center mtx-justify-start mtx-bg-background mtx-p-0 mtx-text-muted-foreground md:mtx-[box-shadow:inset_0_-oklch(var(--gray-300))]",
       className,
     )}
     {...props}
