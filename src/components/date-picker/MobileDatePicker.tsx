@@ -70,7 +70,7 @@ const MobileDatePicker: React.FC<MobileDatePickerProps> = ({
           <DialogHeader className="mtx-p-4 mtx-border-b mtx-border-b-gray-200">
             <DialogTitle asChild>
               <div className="mtx-text-sm mtx-font-bold mtx-space-y-1 mtx-mt-3">
-                <h5 className="mtx-text-text-300">{selectedDate?.getFullYear() ?? <pre> </pre>}</h5>
+                <h5 className="mtx-text-text-300">{selectedDate ? selectedDate.getFullYear() : <pre> </pre>}</h5>
                 <h6 className="">{selectedDate ? format(selectedDate, formatStr ?? "eee, MMM dd") : <pre> </pre>}</h6>
               </div>
             </DialogTitle>
