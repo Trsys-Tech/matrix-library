@@ -37,11 +37,12 @@ const MobileDatePicker: React.FC<MobileDatePickerProps> = ({
   ...props
 }) => {
   const [isOpen, setIsOpen] = React.useState(false);
-  const [selectedDate, setSelectedDate] = React.useState<Date | undefined>(selected);
+  const validatedSelectedDate = selected ? new Date(selected) : undefined;
+  const [selectedDate, setSelectedDate] = React.useState<Date | undefined>(validatedSelectedDate);
 
   const handleCancel = () => {
     setIsOpen(false);
-    setSelectedDate(selected);
+    setSelectedDate(validatedSelectedDate);
   };
 
   const handleApply = () => {
@@ -57,12 +58,12 @@ const MobileDatePicker: React.FC<MobileDatePickerProps> = ({
           "mtx-flex mtx-h-8 mtx-w-full mtx-items-center mtx-justify-between mtx-whitespace-nowrap mtx-rounded-sm mtx-border mtx-border-input mtx-bg-transparent mtx-ps-3 mtx-pe-1 mtx-py-1.5 mtx-text-xs mtx-ring-offset-background data-[placeholder]:mtx-text-muted-foreground hover:mtx-border hover:mtx-border-primary hover:mtx-bg-transparent focus:mtx-border focus:mtx-border-primary focus:mtx-outline-none focus:mtx-ring focus:mtx-ring-primary-100 disabled:mtx-cursor-not-allowed disabled:mtx-bg-gray-100 disabled:mtx-text-text-300 disabled:mtx-border-gray-100 [&>span]:mtx-line-clamp-1 [&_svg]:disabled:mtx-text-text-300",
           className,
         )}
-        data-placeholder={!selected ? "" : undefined}
+        data-placeholder={!validatedSelectedDate ? "" : undefined}
         onClick={() => setIsOpen(true)}
-        aria-label={selected ? `Selected date: ${format(selected, formatStr ?? "yyyy/MM/dd")}` : "Pick a date"}
+        aria-label={validatedSelectedDate ? `Selected date: ${format(validatedSelectedDate, formatStr ?? "yyyy/MM/dd")}` : "Pick a date"}
         disabled={disabled}
       >
-        {selected ? format(selected, formatStr ?? "eee, MMM dd") : <span>{placeholder ?? "Pick a date"}</span>}
+        {validatedSelectedDate ? format(validatedSelectedDate, formatStr ?? "eee, MMM dd") : <span>{placeholder ?? "Pick a date"}</span>}
         <CalendarIcon className="mtx-mr-2 mtx-h-5 mtx-w-5 mtx-ms-auto" />
       </Button>
       <Dialog open={isOpen} onOpenChange={handleCancel}>
@@ -80,7 +81,7 @@ const MobileDatePicker: React.FC<MobileDatePickerProps> = ({
           </DialogHeader>
           <div className="mtx-flex-1 mtx-flex mtx-flex-col mtx-items-center mtx-p-4">
             <Calendar
-              defaultMonth={selected}
+              defaultMonth={validatedSelectedDate}
               startMonth={new Date(2000, 0, 1)}
               endMonth={new Date(new Date().getFullYear() + 2, 11, 31)}
               {...props}
