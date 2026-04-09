@@ -62,6 +62,7 @@ const MobileDatePicker: React.FC<MobileDatePickerProps> = ({
         onClick={() => setIsOpen(true)}
         aria-label={validatedSelectedDate ? `Selected date: ${format(validatedSelectedDate, formatStr ?? "yyyy/MM/dd")}` : "Pick a date"}
         disabled={disabled}
+        type="button"
       >
         {validatedSelectedDate ? format(validatedSelectedDate, formatStr ?? "eee, MMM dd") : <span>{placeholder ?? "Pick a date"}</span>}
         <CalendarIcon className="mtx-mr-2 mtx-h-5 mtx-w-5 mtx-ms-auto" />
@@ -91,10 +92,10 @@ const MobileDatePicker: React.FC<MobileDatePickerProps> = ({
               className={cn("mtx-p-0", calendarClassName)}
             />
             <div className="mtx-flex mtx-justify-center mtx-items-center mtx-gap-4 mtx-mt-auto mtx-w-full">
-              <Button variant="text" className="mtx-flex-1 mtx-h-10" onClick={handleCancel}>
+              <Button variant="text" className="mtx-flex-1 mtx-h-10" onClick={handleCancel} type="button">
                 {cancelText ?? "Cancel"}
               </Button>
-              <Button variant="primary" className="mtx-flex-1 mtx-h-10" onClick={handleApply}>
+              <Button variant="primary" className="mtx-flex-1 mtx-h-10" onClick={handleApply} type="button">
                 {applyText ?? "Apply"}
               </Button>
             </div>

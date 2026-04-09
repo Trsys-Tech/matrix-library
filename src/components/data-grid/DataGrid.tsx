@@ -359,6 +359,7 @@ const FreezeAction: React.FC<FreezeActionProps> = ({ freezeText, unFreezeText, o
       onClick={handleFreezing}
       startIcon={<Snowflake className="mtx-w-4.5 mtx-h-4.5" />}
       disabled={(!pinnedRowCount && !selectedRowsCount) || disabled}
+      type="button"
       {...props}
     >
       {pinnedRowCount ? (unFreezeText ?? "Unfreeze") : (freezeText ?? "Freeze")}

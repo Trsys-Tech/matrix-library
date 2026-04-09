@@ -102,6 +102,7 @@ function Calendar({ className, classNames, showOutsideDays = true, ...props }: C
                                 params.value === option.value && "mtx-bg-secondary",
                               )}
                               onClick={() => handleChange(option.value.toString())}
+                              type="button"
                             >
                               {option.label}
                             </Button>

@@ -286,6 +286,7 @@ const MultiSelect = <T extends string | number>(
           variant="text"
           loading={loading}
           disabled={disabled}
+          type="button"
           {...props}
           onClick={handleTogglePopover}
           className={cn(

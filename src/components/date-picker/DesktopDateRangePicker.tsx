@@ -56,6 +56,7 @@ const DesktopDateRangePicker: React.FC<DesktopDateRangePickerProps> = ({
               : placeholder
           }
           disabled={disabled}
+          type="button"
         >
           {selected ? (
             <div className="mtx-grid mtx-grid-cols-2 mtx-flex-1 mtx-justify-items-start">
@@ -71,30 +72,6 @@ const DesktopDateRangePicker: React.FC<DesktopDateRangePickerProps> = ({
           )}
           <CalendarIcon className="mtx-mr-2 mtx-h-5 mtx-w-4 mtx-ms-auto" />
         </Button>
-        {/* <div className="flex gap-2">
-          <Button
-            variant={"outline"}
-            className={cn(
-              "border-gray-300 text-text focus:ring-0 active:ring-transparent justify-start",
-              !selected && "text-muted-foreground",
-              className,
-            )}
-          >
-            {selected?.from ? format(selected.from, formatStr ?? "yyyy/MM/dd") : <span>{placeholder ?? "From"}</span>}
-            <CalendarIcon className="mr-2 h-5 w-5 ms-auto" />
-          </Button>
-          <Button
-            variant={"outline"}
-            className={cn(
-              "border-gray-300 text-text focus:ring-0 active:ring-transparent justify-start",
-              !selected && "text-muted-foreground",
-              className,
-            )}
-          >
-            {selected?.to ? format(selected.to, formatStr ?? "yyyy/MM/dd") : <span>{placeholder ?? "To"}</span>}
-            <CalendarIcon className="mr-2 h-5 w-5 ms-auto" />
-          </Button>
-        </div> */}
       </PopoverTrigger>
       <PopoverContent className="mtx-w-auto mtx-p-0" align="start">
         <Calendar

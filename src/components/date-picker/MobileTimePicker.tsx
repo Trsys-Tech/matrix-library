@@ -46,6 +46,7 @@ const MobileTimePicker: React.FC<MobileTimePickerProps> = ({
         onClick={() => setIsOpen(true)}
         aria-label={time?.hour ? `Selected time: ${time.hour}:${time.minute} ${time.ampm}` : placeholder}
         {...restProps}
+        type="button"
       >
         {`${time?.hour?.toString()?.padStart(2, "0") ?? "--"} : ${time?.minute?.toString()?.padStart(2, "0") ?? "--"} ${time?.ampm ?? "--"}`}
       </Button>

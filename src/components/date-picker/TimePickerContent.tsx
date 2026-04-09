@@ -127,6 +127,7 @@ const TimePickerContent: React.FC<TimePickerContentProps> = ({ isOpen, time, onT
             )}
             key={ampm}
             onClick={() => handleSetAMPM(ampm as "AM" | "PM")}
+            type="button"
           >
             {ampm}
           </button>

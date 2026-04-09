@@ -92,6 +92,7 @@ const MobileDateRangePicker: React.FC<MobileDateRangePickerProps> = ({
             : placeholder
         }
         disabled={disabled}
+        type="button"
       >
         {selected ? (
           <div className="mtx-grid mtx-grid-cols-2 mtx-flex-1 mtx-justify-items-start">
@@ -139,10 +140,10 @@ const MobileDateRangePicker: React.FC<MobileDateRangePickerProps> = ({
             />
 
             <div className="mtx-flex mtx-justify-center mtx-items-center mtx-gap-4 mtx-mt-auto mtx-w-full">
-              <Button variant="text" className="mtx-flex-1 mtx-h-10" onClick={handleCancel}>
+              <Button variant="text" className="mtx-flex-1 mtx-h-10" onClick={handleCancel} type="button">
                 {cancelText ?? "Cancel"}
               </Button>
-              <Button variant="primary" className="mtx-flex-1 mtx-h-10" onClick={handleApply}>
+              <Button variant="primary" className="mtx-flex-1 mtx-h-10" onClick={handleApply} type="button">
                 {applyText ?? "Apply"}
               </Button>
             </div>

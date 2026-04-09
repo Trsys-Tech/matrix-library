@@ -146,6 +146,7 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({ onConfirm, open, options, o
           return (
             <Button
               key="confirm-button"
+              type="button"
               onClick={onConfirm}
               variant="primary"
               className={cn("mtx-w-28", confirmClassName)}
@@ -157,7 +158,14 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({ onConfirm, open, options, o
         }
         if (action === "cancel" && !hideCancelButton) {
           return (
-            <Button key="cancel-button" onClick={onCancel} variant="text" className={cn("mtx-w-28", cancelClassName)} {...restCancelButtonProps}>
+            <Button
+              key="cancel-button"
+              onClick={onCancel}
+              variant="text"
+              className={cn("mtx-w-28", cancelClassName)}
+              {...restCancelButtonProps}
+              type="button"
+            >
               {cancelationText || "Cancel"}
             </Button>
           );
