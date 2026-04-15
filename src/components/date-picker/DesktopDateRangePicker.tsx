@@ -44,6 +44,7 @@ const DesktopDateRangePicker: React.FC<DesktopDateRangePickerProps> = ({
     >
       <PopoverTrigger asChild>
         <Button
+          type="button"
           variant="text"
           className={cn(
             "flex h-8 w-full items-center justify-between whitespace-nowrap rounded-sm border border-input bg-transparent ps-3 pe-1 py-1.5 text-xs ring-offset-background data-[placeholder]:text-muted-foreground hover:border hover:border-primary hover:bg-transparent focus:border focus:border-primary focus:outline-none focus:ring focus:ring-primary-100 disabled:cursor-not-allowed disabled:bg-gray-100 disabled:text-text-300 disabled:border-gray-100 [&>span]:line-clamp-1 [&_svg]:disabled:text-text-300",
@@ -71,30 +72,6 @@ const DesktopDateRangePicker: React.FC<DesktopDateRangePickerProps> = ({
           )}
           <CalendarIcon className="mr-2 h-5 w-4 ms-auto" />
         </Button>
-        {/* <div className="flex gap-2">
-          <Button
-            variant={"outline"}
-            className={cn(
-              "border-gray-300 text-text focus:ring-0 active:ring-transparent justify-start",
-              !selected && "text-muted-foreground",
-              className,
-            )}
-          >
-            {selected?.from ? format(selected.from, formatStr ?? "yyyy/MM/dd") : <span>{placeholder ?? "From"}</span>}
-            <CalendarIcon className="mr-2 h-5 w-5 ms-auto" />
-          </Button>
-          <Button
-            variant={"outline"}
-            className={cn(
-              "border-gray-300 text-text focus:ring-0 active:ring-transparent justify-start",
-              !selected && "text-muted-foreground",
-              className,
-            )}
-          >
-            {selected?.to ? format(selected.to, formatStr ?? "yyyy/MM/dd") : <span>{placeholder ?? "To"}</span>}
-            <CalendarIcon className="mr-2 h-5 w-5 ms-auto" />
-          </Button>
-        </div> */}
       </PopoverTrigger>
       <PopoverContent className="w-auto p-0" align="start">
         <Calendar

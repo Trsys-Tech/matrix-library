@@ -79,6 +79,7 @@ const MobileDateRangePicker: React.FC<MobileDateRangePickerProps> = ({
   return (
     <>
       <Button
+        type="button"
         variant="text"
         className={cn(
           "flex h-8 w-full items-center justify-between whitespace-nowrap rounded-sm border border-input bg-transparent ps-3 pe-1 py-1.5 text-xs ring-offset-background data-[placeholder]:text-muted-foreground hover:border hover:border-primary hover:bg-transparent focus:border focus:border-primary focus:outline-none focus:ring focus:ring-primary-100 disabled:cursor-not-allowed disabled:bg-gray-100 disabled:text-text-300 disabled:border-gray-100 [&>span]:line-clamp-1 [&_svg]:disabled:text-text-300",
@@ -139,10 +140,10 @@ const MobileDateRangePicker: React.FC<MobileDateRangePickerProps> = ({
             />
 
             <div className="flex justify-center items-center gap-4 mt-auto w-full">
-              <Button variant="text" className="flex-1 h-10" onClick={handleCancel}>
+              <Button type="button" variant="text" className="flex-1 h-10" onClick={handleCancel}>
                 {cancelText ?? "Cancel"}
               </Button>
-              <Button variant="primary" className="flex-1 h-10" onClick={handleApply}>
+              <Button type="button" variant="primary" className="flex-1 h-10" onClick={handleApply}>
                 {applyText ?? "Apply"}
               </Button>
             </div>

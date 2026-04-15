@@ -95,6 +95,7 @@ function Calendar({ className, classNames, showOutsideDays = true, ...props }: C
                             <Button
                               data-value={option.value}
                               variant="text"
+                              type="button"
                               className={cn("h-6 w-14 py-1 px-3 rounded-full font-bold", params.value === option.value && "bg-secondary")}
                               onClick={() => handleChange(option.value.toString())}
                             >

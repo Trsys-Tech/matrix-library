@@ -256,20 +256,20 @@ const SearchAction: React.FC<SearchActionProps> = ({ defaultOpen = false, classN
           onChange={e => setQuickFilterText(e.target.value)}
           value={quickFilterText}
           startAdornment={
-            <IconButton variant="toolbar" className="p-0.5 h-6 w-6 border-none mx-1" onClick={handleClose}>
+            <IconButton type="button" variant="toolbar" className="p-0.5 h-6 w-6 border-none mx-1" onClick={handleClose}>
               <Magnifier className="w-5 h-5" />
             </IconButton>
           }
           endAdornment={
             quickFilterText && (
-              <IconButton variant="toolbar" className="p-0.5 w-6 h-6 border-none mx-1" onClick={handleClear}>
+              <IconButton type="button" variant="toolbar" className="p-0.5 w-6 h-6 border-none mx-1" onClick={handleClear}>
                 <CircleXmark className="w-5 h-5" />
               </IconButton>
             )
           }
         />
       ) : (
-        <IconButton variant="toolbar" className="p-0.5 w-6 h-6 m-1" onClick={handleOpen}>
+        <IconButton type="button" variant="toolbar" className="p-0.5 w-6 h-6 m-1" onClick={handleOpen}>
           <Magnifier className="w-5 h-5" />
         </IconButton>
       )}
@@ -352,6 +352,7 @@ const FreezeAction: React.FC<FreezeActionProps> = ({ freezeText, unFreezeText, o
   return (
     <Button
       variant="text"
+      type="button"
       onClick={handleFreezing}
       startIcon={<Snowflake className="w-4.5 h-4.5" />}
       disabled={(!pinnedRowCount && !selectedRowsCount) || disabled}
@@ -390,7 +391,7 @@ const PrintAction: React.FC<PrintActionProps> = ({ children, className, onClick,
   };
 
   return (
-    <IconButton variant="toolbar" className={cn("p-0.5 w-6 h-6", className)} onClick={handlePrint} {...props}>
+    <IconButton type="button" variant="toolbar" className={cn("p-0.5 w-6 h-6", className)} onClick={handlePrint} {...props}>
       {children ?? <Print className="w-5 h-5" />}
     </IconButton>
   );
@@ -413,6 +414,7 @@ const RefreshAction: React.FC<RefreshActionProps> = ({ className, onRefresh, chi
 
   return (
     <IconButton
+      type="button"
       className={cn("p-0.5 w-6 h-6", loading && "disabled:bg-transparent", className)}
       variant="toolbar"
       onClick={handleRefresh}
@@ -434,7 +436,7 @@ const DeleteAction: React.FC<DeleteActionProps> = ({ onDelete, children, ...prop
   };
 
   return (
-    <Button variant="danger" onClick={handleDelete} startIcon={<Trashcan className="w-4.5 h-4.5" />} {...props}>
+    <Button variant="danger" type="button" onClick={handleDelete} startIcon={<Trashcan className="w-4.5 h-4.5" />} {...props}>
       {children}
     </Button>
   );

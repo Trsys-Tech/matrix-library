@@ -152,7 +152,7 @@ const DrawerContent = React.forwardRef<HTMLDivElement, ScopedProps<DrawerContent
                 anchor === "right" ? "justify-start rtl:justify-end" : "justify-end rtl:justify-start",
               )}
             >
-              <IconButton onClick={onClose} className="w-5 h-5 p-0">
+              <IconButton type="button" onClick={onClose} className="w-5 h-5 p-0">
                 <ChevronsRight className={cn("w-5 h-5", anchor === "right" ? "rtl:-scale-100" : "-scale-100 rtl:scale-100")} />
               </IconButton>
               {typeof title === "string" || typeof title === "number" ? <h2 className="text-lg font-bold text-text">{title}</h2> : title}

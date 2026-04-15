@@ -282,6 +282,7 @@ const MultiSelect = <T extends string | number>(
     <Popover open={isPopoverOpen} onOpenChange={setIsPopoverOpen} modal={modalPopover}>
       <PopoverTrigger asChild>
         <Button
+          type="button"
           ref={ref}
           variant="text"
           loading={loading}
