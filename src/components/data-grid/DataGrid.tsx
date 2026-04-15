@@ -260,20 +260,20 @@ const SearchAction: React.FC<SearchActionProps> = ({ defaultOpen = false, classN
           onChange={e => setQuickFilterText(e.target.value)}
           value={quickFilterText}
           startAdornment={
-            <IconButton variant="toolbar" className="mtx-p-0.5 mtx-h-6 mtx-w-6 mtx-border-none mtx-mx-1" onClick={handleClose}>
+            <IconButton variant="toolbar" type="button" className="mtx-p-0.5 mtx-h-6 mtx-w-6 mtx-border-none mtx-mx-1" onClick={handleClose}>
               <Magnifier className="mtx-w-5 mtx-h-5" />
             </IconButton>
           }
           endAdornment={
             quickFilterText && (
-              <IconButton variant="toolbar" className="mtx-p-0.5 mtx-w-6 mtx-h-6 mtx-border-none mtx-mx-1" onClick={handleClear}>
+              <IconButton variant="toolbar" type="button" className="mtx-p-0.5 mtx-w-6 mtx-h-6 mtx-border-none mtx-mx-1" onClick={handleClear}>
                 <CircleXmark className="mtx-w-5 mtx-h-5" />
               </IconButton>
             )
           }
         />
       ) : (
-        <IconButton variant="toolbar" className="mtx-p-0.5 mtx-w-6 mtx-h-6 mtx-m-1" onClick={handleOpen}>
+        <IconButton variant="toolbar" type="button" className="mtx-p-0.5 mtx-w-6 mtx-h-6 mtx-m-1" onClick={handleOpen}>
           <Magnifier className="mtx-w-5 mtx-h-5" />
         </IconButton>
       )}
@@ -395,7 +395,7 @@ const PrintAction: React.FC<PrintActionProps> = ({ children, className, onClick,
   };
 
   return (
-    <IconButton variant="toolbar" className={cn("mtx-p-0.5 mtx-w-6 mtx-h-6", className)} onClick={handlePrint} {...props}>
+    <IconButton variant="toolbar" type="button" className={cn("mtx-p-0.5 mtx-w-6 mtx-h-6", className)} onClick={handlePrint} {...props}>
       {children ?? <Print className="mtx-w-5 mtx-h-5" />}
     </IconButton>
   );
@@ -420,6 +420,7 @@ const RefreshAction: React.FC<RefreshActionProps> = ({ className, onRefresh, chi
     <IconButton
       className={cn("mtx-p-0.5 mtx-w-6 mtx-h-6", loading && "disabled:mtx-bg-transparent", className)}
       variant="toolbar"
+      type="button"
       onClick={handleRefresh}
       disabled={loading}
       {...props}
@@ -439,7 +440,7 @@ const DeleteAction: React.FC<DeleteActionProps> = ({ onDelete, children, ...prop
   };
 
   return (
-    <Button variant="danger" onClick={handleDelete} startIcon={<Trashcan className="mtx-w-4.5 mtx-h-4.5" />} {...props}>
+    <Button variant="danger" type="button" onClick={handleDelete} startIcon={<Trashcan className="mtx-w-4.5 mtx-h-4.5" />} {...props}>
       {children}
     </Button>
   );
