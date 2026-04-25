@@ -1,4 +1,4 @@
-import { Meta, StoryObj } from "@storybook/react/*";
+import { Meta, StoryObj } from "@storybook/react";
 import { Rating } from "./Rating";
 import { Star } from "@trsys-tech/matrix-icons";
 

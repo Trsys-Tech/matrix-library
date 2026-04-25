@@ -1,4 +1,4 @@
-import { Meta, StoryObj } from "@storybook/react/*";
+import { Meta, StoryObj } from "@storybook/react";
 import { FormSelect } from "./FormSelect";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";

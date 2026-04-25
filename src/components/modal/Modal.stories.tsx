@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Meta, StoryFn } from "@storybook/react/*";
+import { Meta, StoryFn } from "@storybook/react";
 import { Modal, ModalFooter } from "./Modal";
 import { Button } from "../button/Button";
 

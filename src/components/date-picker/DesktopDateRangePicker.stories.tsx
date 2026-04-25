@@ -1,6 +1,6 @@
 import React from "react";
 import { DateRange } from "react-day-picker";
-import { Meta, StoryObj } from "@storybook/react/*";
+import { Meta, StoryObj } from "@storybook/react";
 
 import { DesktopDateRangePicker } from "./DesktopDateRangePicker";
 

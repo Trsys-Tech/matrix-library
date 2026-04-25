@@ -1,4 +1,4 @@
-import { Meta, StoryObj } from "@storybook/react/*";
+import { Meta, StoryObj } from "@storybook/react";
 import { Sheet, SheetClose, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle, SheetTrigger } from "./Sheet";
 import { Button } from "../button/Button";
 import { Label } from "../label/Label";

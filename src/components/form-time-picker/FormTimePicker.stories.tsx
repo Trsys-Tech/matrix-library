@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { useForm } from "react-hook-form";
-import { Meta, StoryObj } from "@storybook/react/*";
+import { Meta, StoryObj } from "@storybook/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { Form } from "../form/Form";

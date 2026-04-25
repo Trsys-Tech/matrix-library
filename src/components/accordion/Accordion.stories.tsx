@@ -1,4 +1,4 @@
-import { Meta } from "@storybook/react/*";
+import { Meta } from "@storybook/react";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "./Accordion";
 
 const meta: Meta<typeof Accordion> = {
