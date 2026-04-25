@@ -1,5 +1,5 @@
 import React from "react";
-import { Meta } from "@storybook/react/*";
+import { Meta } from "@storybook/react";
 import { Calendar, ChevronRight, House } from "@trsys-tech/matrix-icons";
 
 import { Button } from "../button/Button";

@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Meta, StoryFn } from "@storybook/react/*";
+import { Meta, StoryFn } from "@storybook/react";
 import { DrawerContent, DrawerMain, Drawer } from "./Drawer";
 import { cn } from "../../lib/utils";
 import { Button } from "../button/Button";

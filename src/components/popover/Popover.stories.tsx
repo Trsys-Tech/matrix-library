@@ -1,4 +1,4 @@
-import { Meta } from "@storybook/react/*";
+import { Meta } from "@storybook/react";
 import { Popover, PopoverContent, PopoverTrigger } from "./Popover";
 import { Button } from "../button/Button";
 import { TextField } from "../text-field/TextField";

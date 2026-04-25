@@ -1,4 +1,4 @@
-import { Meta } from "@storybook/react/*";
+import { Meta } from "@storybook/react";
 
 import { Toast } from "./Toast";
 import { toast } from "./use-toast";

@@ -1,4 +1,4 @@
-import { Meta, StoryObj } from "@storybook/react/*";
+import { Meta, StoryObj } from "@storybook/react";
 import { ConfirmProvider, useConfirm } from "./Confirm";
 import { Button } from "../button/Button";
 

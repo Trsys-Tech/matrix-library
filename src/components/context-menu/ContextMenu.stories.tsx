@@ -1,4 +1,4 @@
-import { Meta } from "@storybook/react/*";
+import { Meta } from "@storybook/react";
 import { ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuTrigger } from "./ContextMenu";
 
 const meta: Meta<typeof ContextMenu> = {

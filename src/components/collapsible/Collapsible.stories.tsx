@@ -1,5 +1,5 @@
 import { ChevronDown } from "@trsys-tech/matrix-icons";
-import { Meta, StoryObj, Decorator } from "@storybook/react/*";
+import { Meta, StoryObj, Decorator } from "@storybook/react";
 
 import { Collapsible, CollapsibleTrigger, CollapsibleContent } from "./Collapsible";
 

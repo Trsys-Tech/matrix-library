@@ -1,4 +1,4 @@
-import { Meta, StoryObj } from "@storybook/react/*";
+import { Meta, StoryObj } from "@storybook/react";
 
 import { IconButton } from "../icon-botton/IconButton";
 import { Duration } from "./Duration";

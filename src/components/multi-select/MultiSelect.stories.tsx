@@ -1,4 +1,4 @@
-import { Meta, StoryObj } from "@storybook/react/*";
+import { Meta, StoryObj } from "@storybook/react";
 import { MultiSelect } from "./MultiSelect";
 import { Cat, Dog, Fish, Rabbit, Turtle } from "lucide-react";
 import React from "react";
