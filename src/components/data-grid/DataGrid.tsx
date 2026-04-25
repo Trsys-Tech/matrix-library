@@ -16,6 +16,9 @@ import { Popover, PopoverContent, PopoverContentProps, PopoverProps, PopoverTrig
 // Todo: Register only the required features
 ModuleRegistry.registerModules([AllCommunityModule]);
 
+/**
+ * Default ag-Grid theme used by DataGrid.
+ */
 const dataGridDefaultTheme = themeQuartz.withParams({
   fontFamily: "DMSans",
   fontSize: "12px",
@@ -28,6 +31,9 @@ const dataGridDefaultTheme = themeQuartz.withParams({
   cellTextColor: "oklch(var(--mtx-text-500))",
 });
 
+/**
+ * Shared DataGrid state exposed through context.
+ */
 type DataGridContext = {
   api: GridApi | null;
   setApi: (value: GridApi) => void;
@@ -46,6 +52,9 @@ type DataGridContext = {
 
 const DataGridContext = React.createContext<DataGridContext | null>(null);
 
+/**
+ * Returns the current DataGrid context.
+ */
 const useDataGrid = () => {
   const context = React.useContext(DataGridContext);
 
@@ -56,10 +65,21 @@ const useDataGrid = () => {
   return context;
 };
 
+/**
+ * Props for the root DataGrid provider.
+ */
 type DataGridProps = {
+  /** Content rendered inside the provider. */
   children: React.ReactNode;
 };
 
+/**
+ * DataGrid provider.
+ * Provides shared state for the grid shell, content, and toolbar actions.
+ * @param {DataGridProps} props - DataGrid props.
+ * @param {React.ReactNode} children - Content rendered inside the provider.
+ * @returns {React.ReactElement}
+ */
 const DataGrid: React.FC<DataGridProps> = ({ children }) => {
   const gridId = React.useId();
   const [api, setApi] = React.useState<GridApi | null>(null);
@@ -92,10 +112,27 @@ const DataGrid: React.FC<DataGridProps> = ({ children }) => {
   );
 };
 
+/**
+ * Props for the Ag Grid content wrapper.
+ */
 type DataGridContentProps = Omit<AgGridReactProps, "theme"> & {
+  /** Optional theme override forwarded to ag-Grid. */
   theme?: Theme;
 };
 
+/**
+ * DataGridContent component.
+ * Connects ag-Grid to the shared DataGrid context and keeps pinned rows separate from the main row set.
+ * @param {DataGridContentProps} props - Ag Grid props.
+ * @param {Theme} [theme] - Optional ag-Grid theme override.
+ * @param {GridReadyEvent} [onGridReady] - Called when the grid becomes ready.
+ * @param {any[] | null | undefined} [rowData] - Row data rendered by the grid.
+ * @param {string} [quickFilterText] - Quick filter text synced from the search action.
+ * @param {React.CSSProperties} [containerStyle] - Inline styles applied to the grid container.
+ * @param {Function} [getRowId] - Resolves the row id used to keep pinned rows stable.
+ * @param {React.ForwardedRef<AgGridReact>} ref - Grid ref.
+ * @returns {React.ReactElement}
+ */
 const DataGridContent = forwardRef<AgGridReact, DataGridContentProps>(
   ({ theme: propTheme, onGridReady, quickFilterText: quickFilterTextProps, rowData: rowDataProps, containerStyle, getRowId, ...props }, ref) => {
     const context = React.useContext(DataGridContext);
@@ -168,8 +205,19 @@ const DataGridContent = forwardRef<AgGridReact, DataGridContentProps>(
 
 DataGridContent.displayName = "DataGridContent";
 
+/**
+ * Props for the DataGrid action bar container.
+ */
 type DatagridActionBarProps = HTMLAttributes<HTMLDivElement> & {};
 
+/**
+ * DataGrid action bar.
+ * Marks the grid as having a toolbar so the grid can adjust border radius and height.
+ * @param {DatagridActionBarProps} props - Action bar props.
+ * @param {React.ReactNode} children - Action bar content.
+ * @param {string} className - Additional classes applied to the action bar.
+ * @returns {React.ReactElement}
+ */
 const DataGridActionBar: React.FC<DatagridActionBarProps> = ({ className, ...props }) => {
   const context = React.useContext(DataGridContext);
 
@@ -204,11 +252,32 @@ const DataGridActionBar: React.FC<DatagridActionBarProps> = ({ className, ...pro
   );
 };
 
+/**
+ * Props for SearchAction.
+ */
 type SearchActionProps = HTMLAttributes<HTMLDivElement> & {
+  /** Opens the search input immediately on mount. */
   defaultOpen?: boolean;
+  /** Focuses the input the first time it opens. */
+  defaultOpenAutoFocus?: boolean;
 };
 
-const SearchAction: React.FC<SearchActionProps> = ({ defaultOpen = false, className, ...props }) => {
+/**
+ * Search action.
+ * Toggles the quick filter input and manages its open/close focus behavior.
+ * @param {SearchActionProps} props - Search action props.
+ * @param {boolean} [defaultOpen] - Opens the search input immediately on mount.
+ * @param {boolean} [defaultOpenAutoFocus] - Focuses the input the first time it opens.
+ * @param {React.ReactNode} children - Optional wrapper content.
+ * @param {string} className - Additional wrapper classes.
+ * @returns {React.ReactElement}
+ */
+const SearchAction: React.FC<SearchActionProps> = ({
+  defaultOpen = false,
+  defaultOpenAutoFocus = true,
+  className,
+  ...props
+}: SearchActionProps): React.ReactElement => {
   const context = React.useContext(DataGridContext);
 
   if (!context) {
@@ -220,6 +289,7 @@ const SearchAction: React.FC<SearchActionProps> = ({ defaultOpen = false, classN
   const [isSearchInputOpen, setIsSearchInputOpen] = React.useState(defaultOpen);
   const [isClosing, setIsClosing] = React.useState(false);
   const inputRef = React.useRef<HTMLInputElement | null>(null);
+  const isFirstRender = React.useRef(true);
 
   const handleClear = () => {
     context.setQuickFilterText("");
@@ -233,10 +303,11 @@ const SearchAction: React.FC<SearchActionProps> = ({ defaultOpen = false, classN
   };
 
   React.useEffect(() => {
-    if (isSearchInputOpen && inputRef?.current) {
+    if (isSearchInputOpen && inputRef?.current && (defaultOpenAutoFocus || !isFirstRender.current)) {
       inputRef.current.focus();
     }
-  }, [isSearchInputOpen]);
+    isFirstRender.current = false;
+  }, [isSearchInputOpen, defaultOpenAutoFocus]);
 
   const handleClose = () => {
     setIsClosing(true);
@@ -281,12 +352,31 @@ const SearchAction: React.FC<SearchActionProps> = ({ defaultOpen = false, classN
   );
 };
 
+/**
+ * Props for FreezeAction.
+ */
 type FreezeActionProps = ButtonProps & {
+  /** Label shown when rows can be frozen. */
   freezeText?: string;
+  /** Label shown when rows are already frozen. */
   unFreezeText?: string;
 };
 
-const FreezeAction: React.FC<FreezeActionProps> = ({ freezeText, unFreezeText, onClick, disabled, ...props }) => {
+/**
+ * Freeze action.
+ * Pins the current selection when rows are selected, or clears pinned rows when the grid is already frozen.
+ * @param {FreezeActionProps} props - Freeze action props.
+ * @param {boolean} [disabled] - Disables the action button.
+ * @param {React.MouseEventHandler<HTMLButtonElement>} [onClick] - Called after the freeze toggle runs.
+ * @returns {React.ReactElement}
+ */
+const FreezeAction: React.FC<FreezeActionProps> = ({
+  freezeText,
+  unFreezeText,
+  onClick,
+  disabled,
+  ...props
+}: FreezeActionProps): React.ReactElement => {
   const context = React.useContext(DataGridContext);
 
   if (!context) {
@@ -367,8 +457,20 @@ const FreezeAction: React.FC<FreezeActionProps> = ({ freezeText, unFreezeText, o
   );
 };
 
+/**
+ * Props for PrintAction.
+ */
 type PrintActionProps = IconButtonProps & {};
 
+/**
+ * Print action.
+ * Switches the grid to print layout, captures the rendered markup, and opens the browser print flow.
+ * @param {PrintActionProps} props - Print action props.
+ * @param {React.ReactNode} [children] - Custom icon content rendered in the button.
+ * @param {string} [className] - Additional button classes.
+ * @param {React.MouseEventHandler<HTMLButtonElement>} [onClick] - Called after printing is triggered.
+ * @returns {React.ReactElement}
+ */
 const PrintAction: React.FC<PrintActionProps> = ({ children, className, onClick, ...props }) => {
   const context = React.useContext(DataGridContext);
 
@@ -401,10 +503,24 @@ const PrintAction: React.FC<PrintActionProps> = ({ children, className, onClick,
   );
 };
 
+/**
+ * Props for RefreshAction.
+ */
 type RefreshActionProps = Omit<IconButtonProps, "onClick"> & {
+  /** Callback invoked when the refresh action is clicked. */
   onRefresh: () => void;
 };
 
+/**
+ * Refresh action.
+ * Calls the provided refresh callback and reflects the loading state in the toolbar button.
+ * @param {RefreshActionProps} props - Refresh action props.
+ * @param {() => void} onRefresh - Called when the button is clicked.
+ * @param {boolean} [loading] - Shows the loading spinner and disables the button.
+ * @param {React.ReactNode} [children] - Custom icon content rendered in the button.
+ * @param {string} [className] - Additional button classes.
+ * @returns {React.ReactElement}
+ */
 const RefreshAction: React.FC<RefreshActionProps> = ({ className, onRefresh, children, loading, ...props }) => {
   const context = React.useContext(DataGridContext);
 
@@ -430,10 +546,22 @@ const RefreshAction: React.FC<RefreshActionProps> = ({ className, onRefresh, chi
   );
 };
 
+/**
+ * Props for DeleteAction.
+ */
 type DeleteActionProps = Omit<ButtonProps, "onClick"> & {
+  /** Callback invoked when the delete action is clicked. */
   onDelete: () => void;
 };
 
+/**
+ * Delete action.
+ * Renders a danger button with the delete icon and delegates the click to the provided handler.
+ * @param {DeleteActionProps} props - Delete action props.
+ * @param {() => void} onDelete - Called when the button is clicked.
+ * @param {React.ReactNode} [children] - Button label or custom content.
+ * @returns {React.ReactElement}
+ */
 const DeleteAction: React.FC<DeleteActionProps> = ({ onDelete, children, ...props }) => {
   const handleDelete = () => {
     onDelete();
@@ -446,14 +574,28 @@ const DeleteAction: React.FC<DeleteActionProps> = ({ onDelete, children, ...prop
   );
 };
 
+/**
+ * Props for ExtraActions.
+ */
 type ExtraActionsProps = PopoverContentProps & {
+  /** Menu items rendered inside the popover. */
   children: React.ReactNode;
+  /** Props forwarded to the popover trigger and popover root. */
   slotProps?: {
     triggerProps?: PopoverTriggerProps;
     popoverProps?: PopoverProps;
   };
 };
 
+/**
+ * Extra actions menu.
+ * Wraps overflow actions in a popover anchored to the vertical ellipsis trigger.
+ * @param {ExtraActionsProps} props - Extra actions props.
+ * @param {React.ReactNode} children - Menu items rendered inside the popover.
+ * @param {{ triggerProps?: PopoverTriggerProps; popoverProps?: PopoverProps; }} [slotProps] - Props forwarded to the trigger and popover root.
+ * @param {string} [className] - Additional popover content classes.
+ * @returns {React.ReactElement}
+ */
 const ExtraActions: React.FC<ExtraActionsProps> = ({ children, slotProps, className, ...props }) => {
   return (
     <Popover {...(slotProps?.popoverProps ?? {})}>
