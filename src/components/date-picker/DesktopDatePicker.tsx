@@ -51,6 +51,7 @@ const DesktopDatePicker: React.FC<DesktopDatePickerProps> = ({
           data-placeholder={!selected ? "" : undefined}
           aria-label={selected ? `Selected date: ${format(selected, formatStr ?? "yyyy/MM/dd")}` : "Pick a date"}
           disabled={disabled}
+          aria-haspopup="dialog"
           type="button"
         >
           {selected ? format(selected, formatStr ?? "yyyy/MM/dd") : <span>{placeholder ?? "Pick a date"}</span>}
