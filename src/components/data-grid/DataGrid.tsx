@@ -16,6 +16,12 @@ import { Popover, PopoverContent, PopoverContentProps, PopoverProps, PopoverTrig
 // Todo: Register only the required features
 ModuleRegistry.registerModules([AllCommunityModule]);
 
+type DataGridRowWithId = {
+  id?: string | number | null;
+};
+
+type ResolveRowId = (data: unknown) => string | undefined;
+
 /**
  * Default ag-Grid theme used by DataGrid.
  */
@@ -30,6 +36,24 @@ const dataGridDefaultTheme = themeQuartz.withParams({
   foregroundColor: "hsl(var(--text-500))",
   cellTextColor: "hsl(var(--text-500))",
 });
+
+const fallbackResolveRowId: ResolveRowId = data => {
+  const id = (data as DataGridRowWithId | null | undefined)?.id;
+
+  return id !== undefined && id !== null ? String(id) : undefined;
+};
+
+const createResolveRowId = (getRowId?: AgGridReactProps["getRowId"]): ResolveRowId => {
+  if (!getRowId) {
+    return fallbackResolveRowId;
+  }
+
+  return data => {
+    const id = getRowId({ data, level: 0 } as any);
+
+    return id !== undefined && id !== null ? String(id) : fallbackResolveRowId(data);
+  };
+};
 
 /**
  * Shared DataGrid state exposed through context.
@@ -48,6 +72,7 @@ type DataGridContext = {
   setActionbarHeight: (value: number) => void;
   pinnedRowIds: Set<string>;
   setPinnedRowIds: (value: Set<string>) => void;
+  resolveRowIdRef: React.MutableRefObject<ResolveRowId>;
 };
 
 const DataGridContext = React.createContext<DataGridContext | null>(null);
@@ -84,6 +109,7 @@ const DataGrid: React.FC<DataGridProps> = ({ children }) => {
   const [rowData, setRowData] = React.useState<any[] | null | undefined>([]);
   const [actionbarHeight, setActionbarHeight] = React.useState(0);
   const [pinnedRowIds, setPinnedRowIds] = React.useState<Set<string>>(new Set());
+  const resolveRowIdRef = React.useRef<ResolveRowId>(fallbackResolveRowId);
 
   const [quickFilterText, setQuickFilterText] = React.useState("");
   const [actionbarExists, setActionbarExists] = React.useState(false);
@@ -103,6 +129,7 @@ const DataGrid: React.FC<DataGridProps> = ({ children }) => {
         setActionbarHeight,
         pinnedRowIds,
         setPinnedRowIds,
+        resolveRowIdRef,
       }}
     >
       {children}
@@ -138,7 +165,20 @@ const DataGridContent = forwardRef<AgGridReact, DataGridContentProps>(
     if (!context) {
       throw new Error("DataGridContent should be used within <DataGrid>");
     }
-    const { rowData, setRowData, actionbarExists, setApi, setQuickFilterText, quickFilterText, gridId, actionbarHeight, pinnedRowIds } = context;
+    const {
+      rowData,
+      setRowData,
+      actionbarExists,
+      setApi,
+      setQuickFilterText,
+      quickFilterText,
+      gridId,
+      actionbarHeight,
+      pinnedRowIds,
+      resolveRowIdRef,
+    } = context;
+
+    const resolveRowId = React.useMemo(() => createResolveRowId(getRowId), [getRowId]);
 
     const theme = useMemo(() => {
       return dataGridDefaultTheme.withParams({
@@ -146,6 +186,14 @@ const DataGridContent = forwardRef<AgGridReact, DataGridContentProps>(
         wrapperBorderRadius: actionbarExists ? "0px 0px 8px 8px" : "8px",
       });
     }, [actionbarExists]);
+
+    React.useEffect(() => {
+      resolveRowIdRef.current = resolveRowId;
+
+      return () => {
+        resolveRowIdRef.current = fallbackResolveRowId;
+      };
+    }, [resolveRowId, resolveRowIdRef]);
 
     const handleGridReady = (e: GridReadyEvent) => {
       setApi(e.api);
@@ -171,10 +219,9 @@ const DataGridContent = forwardRef<AgGridReact, DataGridContentProps>(
       const unpinned: any[] = [];
 
       rowData.forEach(data => {
-        const id = getRowId ? getRowId({ data, level: 0 } as any) : (data as any).id;
-        const stringId = id !== undefined && id !== null ? String(id) : undefined;
+        const id = resolveRowId(data);
 
-        if (stringId !== undefined && pinnedRowIds.has(stringId)) {
+        if (id !== undefined && pinnedRowIds.has(id)) {
           pinned.push(data);
         } else {
           unpinned.push(data);
@@ -182,7 +229,7 @@ const DataGridContent = forwardRef<AgGridReact, DataGridContentProps>(
       });
 
       return { finalRowData: unpinned, finalPinnedTopRowData: pinned };
-    }, [rowData, pinnedRowIds, getRowId]);
+    }, [rowData, pinnedRowIds, resolveRowId]);
 
     return (
       <AgGridReact
@@ -369,19 +416,21 @@ const FreezeAction: React.FC<FreezeActionProps> = ({ freezeText, unFreezeText, o
   const [pinnedRowCount, setPinnedRowCount] = React.useState(0);
   const [selectedRowsCount, setSelectedRowsCount] = React.useState(0);
 
-  const { api, pinnedRowIds, setPinnedRowIds } = context;
+  const { api, pinnedRowIds, setPinnedRowIds, resolveRowIdRef } = context;
 
   const freezeRows = () => {
     if (!api) return;
 
     // Get currently selected rows
-    const selectedRows = api.getSelectedNodes();
+    const selectedRows = api.getSelectedRows();
 
     if (selectedRows.length > 0) {
       const newPinnedIds = new Set(pinnedRowIds);
       selectedRows.forEach(row => {
-        if (row.id !== undefined) {
-          newPinnedIds.add(row.id);
+        const rowId = resolveRowIdRef.current(row);
+
+        if (rowId !== undefined) {
+          newPinnedIds.add(rowId);
         }
       });
       setPinnedRowIds(newPinnedIds);
