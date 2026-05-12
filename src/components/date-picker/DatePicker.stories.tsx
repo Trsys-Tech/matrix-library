@@ -23,17 +23,19 @@ const meta: Meta<typeof DatePicker> = {
       },
     },
     disabled: { control: "boolean" },
+    disabledDates: { control: "object" },
   },
 };
 
 export const Default: StoryObj<typeof meta> = {
   args: {
     selected: new Date(),
+    disabledDates: { after: new Date() },
   },
   render: args => {
     const Component = () => {
       const [selected, setSelected] = React.useState<Date | undefined>(args.selected);
-      return <DatePicker {...args} selected={selected} onSelect={day => setSelected(day)} />;
+      return <DatePicker {...args} selected={selected} onSelect={day => setSelected(day)} disabledDates={args.disabledDates} />;
     };
     return <Component />;
   },
