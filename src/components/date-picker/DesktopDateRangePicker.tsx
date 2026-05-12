@@ -2,16 +2,16 @@
 
 import * as React from "react";
 import { format } from "date-fns";
-import { PropsBase, PropsRange, DateRange } from "react-day-picker";
 import { Calendar as CalendarIcon } from "@trsys-tech/matrix-icons";
+import { PropsBase, PropsRange, DateRange, Matcher } from "react-day-picker";
 
 import { cn } from "../../lib/utils";
 import { Calendar } from "./calendar";
 import { Button } from "../button/Button";
 import { Popover, PopoverContent, PopoverTrigger } from "../popover/Popover";
 
-type DesktopDateRangePickerProps = PropsBase &
-  Omit<PropsRange, "mode"> & {
+type DesktopDateRangePickerProps = Omit<PropsBase, "disabled"> &
+  Omit<PropsRange, "mode" | "disabled"> & {
     formatStr?: string;
     placeholder?: string;
     calendarClassName?: string;
@@ -20,6 +20,7 @@ type DesktopDateRangePickerProps = PropsBase &
     fromText?: string;
     toText?: string;
     disabled?: boolean;
+    disabledDates?: Matcher | Matcher[];
   };
 
 const DesktopDateRangePicker: React.FC<DesktopDateRangePickerProps> = ({
@@ -31,6 +32,7 @@ const DesktopDateRangePicker: React.FC<DesktopDateRangePickerProps> = ({
   fromText,
   toText,
   disabled,
+  disabledDates,
   ...props
 }) => {
   const [isOpen, setIsOpen] = React.useState(false);
@@ -83,6 +85,7 @@ const DesktopDateRangePicker: React.FC<DesktopDateRangePickerProps> = ({
           selected={selected}
           className={cn(calendarClassName, "md:max-w-full md:w-[36rem]")}
           numberOfMonths={2}
+          disabled={disabledDates}
         />
       </PopoverContent>
     </Popover>

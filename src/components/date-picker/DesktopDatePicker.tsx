@@ -3,15 +3,15 @@
 import * as React from "react";
 import { format } from "date-fns";
 import { Calendar as CalendarIcon } from "@trsys-tech/matrix-icons";
-import { PropsBase, PropsSingle, DayEventHandler } from "react-day-picker";
+import { PropsBase, PropsSingle, DayEventHandler, Matcher } from "react-day-picker";
 
 import { cn } from "../../lib/utils";
 import { Calendar } from "./calendar";
 import { Button } from "../button/Button";
 import { Popover, PopoverContent, PopoverTrigger } from "../popover/Popover";
 
-type DesktopDatePickerProps = PropsBase &
-  Omit<PropsSingle, "mode"> & {
+type DesktopDatePickerProps = Omit<PropsBase, "disabled"> &
+  Omit<PropsSingle, "mode" | "disabled"> & {
     formatStr?: string;
     placeholder?: string;
     calendarClassName?: string;
@@ -19,6 +19,7 @@ type DesktopDatePickerProps = PropsBase &
     required?: boolean;
     closeOnSelect?: boolean;
     disabled?: boolean;
+    disabledDates?: Matcher | Matcher[];
   };
 
 const DesktopDatePicker: React.FC<DesktopDatePickerProps> = ({
@@ -30,6 +31,7 @@ const DesktopDatePicker: React.FC<DesktopDatePickerProps> = ({
   closeOnSelect = true,
   onDayClick,
   disabled,
+  disabledDates,
   ...props
 }) => {
   const [isOpen, setIsOpen] = React.useState(false);
@@ -69,6 +71,7 @@ const DesktopDatePicker: React.FC<DesktopDatePickerProps> = ({
           captionLayout="dropdown-years"
           className={calendarClassName}
           onDayClick={handleDayClick}
+          disabled={disabledDates}
         />
       </PopoverContent>
     </Popover>

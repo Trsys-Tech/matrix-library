@@ -4,15 +4,15 @@ import * as React from "react";
 import { format } from "date-fns";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import { Calendar as CalendarIcon } from "@trsys-tech/matrix-icons";
-import { PropsBase, PropsRange, DateRange, DayEventHandler } from "react-day-picker";
+import { PropsBase, PropsRange, DateRange, DayEventHandler, Matcher } from "react-day-picker";
 
 import { cn } from "../../lib/utils";
 import { Calendar } from "./calendar";
 import { Button } from "../button/Button";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "../dialog/Dialog";
 
-type MobileDateRangePickerProps = PropsBase &
-  Omit<PropsRange, "mode"> & {
+type MobileDateRangePickerProps = Omit<PropsBase, "disabled"> &
+  Omit<PropsRange, "mode" | "disabled"> & {
     formatStr?: string;
     placeholder?: string;
     calendarClassName?: string;
@@ -24,6 +24,7 @@ type MobileDateRangePickerProps = PropsBase &
     fromText?: string;
     toText?: string;
     disabled?: boolean;
+    disabledDates?: Matcher | Matcher[];
   };
 
 const MobileDateRangePicker: React.FC<MobileDateRangePickerProps> = ({
@@ -39,6 +40,7 @@ const MobileDateRangePicker: React.FC<MobileDateRangePickerProps> = ({
   fromText,
   toText,
   disabled,
+  disabledDates,
   ...props
 }) => {
   const [isOpen, setIsOpen] = React.useState(false);
@@ -137,6 +139,7 @@ const MobileDateRangePicker: React.FC<MobileDateRangePickerProps> = ({
               selected={selected}
               onDayClick={handleDayClick}
               className={cn("p-0", calendarClassName)}
+              disabled={disabledDates}
             />
 
             <div className="flex justify-center items-center gap-4 mt-auto w-full">
