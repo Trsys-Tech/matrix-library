@@ -1,9 +1,10 @@
 "use client";
 
-import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "../form/Form";
 import { SlotProps } from "@radix-ui/react-slot";
 import { Control, ControllerProps, FieldPath, FieldValues } from "react-hook-form";
+
 import { TimePicker, TimePickerProps } from "../date-picker/TimePicker";
+import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "../form/Form";
 
 type FormTimePickerProps<TFieldValues extends FieldValues, TName extends FieldPath<TFieldValues>> = Omit<
   ControllerProps<TFieldValues, TName>,
@@ -14,16 +15,18 @@ type FormTimePickerProps<TFieldValues extends FieldValues, TName extends FieldPa
     control: Control<TFieldValues>;
     required?: boolean;
     readOnly?: boolean;
+    is24HourMode?: boolean;
     slotProps?: {
       formLabelProps?: React.HTMLAttributes<HTMLLabelElement> & React.RefAttributes<HTMLLabelElement>;
       formMessageProps?: React.HTMLAttributes<HTMLParagraphElement> & React.RefAttributes<HTMLParagraphElement>;
       formControlProps?: Omit<SlotProps & React.RefAttributes<HTMLElement>, "ref"> & React.RefAttributes<HTMLElement>;
-      datepickerProps?: TimePickerProps;
+      timepickerProps?: Partial<TimePickerProps>;
     };
   };
 
 const FormTimePicker = <TFieldValues extends FieldValues, TName extends FieldPath<TFieldValues>>(props: FormTimePickerProps<TFieldValues, TName>) => {
-  const { name, control, defaultValue, disabled, readOnly, rules, shouldUnregister, label, slotProps, required, ...formItemProps } = props;
+  const { name, control, defaultValue, disabled, readOnly, rules, shouldUnregister, label, slotProps, required, is24HourMode, ...formItemProps } =
+    props;
 
   return (
     <FormField
@@ -41,7 +44,13 @@ const FormTimePicker = <TFieldValues extends FieldValues, TName extends FieldPat
               {required && <span className="text-danger text-sm leading-4">*</span>}
             </FormLabel>
             <FormControl {...(slotProps?.formControlProps ?? {})}>
-              <TimePicker {...(slotProps?.datepickerProps ?? {})} time={field.value} onTimeChange={field.onChange} disabled={disabled || readOnly} />
+              <TimePicker
+                {...(slotProps?.timepickerProps ?? {})}
+                time={field.value}
+                onTimeChange={field.onChange}
+                disabled={disabled || readOnly}
+                is24HourMode={is24HourMode}
+              />
             </FormControl>
             <FormMessage {...(slotProps?.formMessageProps ?? {})} />
           </FormItem>
