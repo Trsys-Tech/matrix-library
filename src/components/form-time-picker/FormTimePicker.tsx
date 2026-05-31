@@ -19,12 +19,13 @@ type FormTimePickerProps<TFieldValues extends FieldValues, TName extends FieldPa
       formLabelProps?: React.HTMLAttributes<HTMLLabelElement> & React.RefAttributes<HTMLLabelElement>;
       formMessageProps?: React.HTMLAttributes<HTMLParagraphElement> & React.RefAttributes<HTMLParagraphElement>;
       formControlProps?: Omit<SlotProps & React.RefAttributes<HTMLElement>, "ref"> & React.RefAttributes<HTMLElement>;
-      timePickerProps?: Partial<TimePickerProps>;
+      timepickerProps?: Partial<TimePickerProps>;
     };
   };
 
 const FormTimePicker = <TFieldValues extends FieldValues, TName extends FieldPath<TFieldValues>>(props: FormTimePickerProps<TFieldValues, TName>) => {
-  const { name, control, defaultValue, disabled, readOnly, rules, shouldUnregister, label, slotProps, required, ...formItemProps } = props;
+  const { name, control, defaultValue, disabled, readOnly, rules, shouldUnregister, label, slotProps, required, is24HourMode, ...formItemProps } =
+    props;
 
   return (
     <FormField
@@ -43,11 +44,11 @@ const FormTimePicker = <TFieldValues extends FieldValues, TName extends FieldPat
             </FormLabel>
             <FormControl {...(slotProps?.formControlProps ?? {})}>
               <TimePicker
-                {...(slotProps?.timePickerProps ?? {})}
+                {...(slotProps?.timepickerProps ?? {})}
                 time={field.value}
                 onTimeChange={field.onChange}
                 disabled={disabled || readOnly}
-                is24HourMode={props.is24HourMode}
+                is24HourMode={is24HourMode}
               />
             </FormControl>
             <FormMessage {...(slotProps?.formMessageProps ?? {})} />
