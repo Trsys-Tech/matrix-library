@@ -10,7 +10,9 @@ const meta: Meta<typeof DesktopTimePicker> = {
   args: {
     className: "mtx-w-72",
   },
-  argTypes: {},
+  argTypes: {
+    is24HourMode: { control: "boolean" },
+  },
 };
 
 export const Default: StoryObj<typeof meta> = {

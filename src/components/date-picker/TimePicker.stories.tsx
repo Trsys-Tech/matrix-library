@@ -12,6 +12,7 @@ const meta: Meta<typeof TimePicker> = {
   },
   argTypes: {
     disabled: { control: "boolean" },
+    is24HourMode: { control: "boolean" },
   },
 };
 

@@ -14,9 +14,25 @@ import {
   SwipableDrawerTitle,
 } from "../drawer/SwipableDrawer";
 
+const formatTimeLabel = (time: Time, is24HourMode: boolean) => {
+  const minute = time.minute.toString().padStart(2, "0");
+
+  if (is24HourMode) {
+    const hour = time.ampm ? (time.hour % 12) + (time.ampm === "PM" ? 12 : 0) : time.hour;
+    return `${hour.toString().padStart(2, "0")} : ${minute}`;
+  }
+
+  const hourFromAmpm = time.ampm ? (time.hour % 12) + (time.ampm === "PM" ? 12 : 0) : time.hour;
+  const hour = hourFromAmpm % 12 || 12;
+  const ampm = time.ampm ?? (hourFromAmpm >= 12 ? "PM" : "AM");
+
+  return `${hour.toString().padStart(2, "0")} : ${minute} ${ampm}`;
+};
+
 type MobileTimePickerProps = HTMLAttributes<HTMLButtonElement> & {
   time: Time | undefined;
   onTimeChange: (time: Time | undefined) => void;
+  is24HourMode?: boolean;
   placeholder?: string;
   disabled?: boolean;
   slotsProps?: {
@@ -29,6 +45,7 @@ const MobileTimePicker: React.FC<MobileTimePickerProps> = ({
   onTimeChange,
   className,
   slotsProps,
+  is24HourMode = false,
   placeholder = "Pick a time",
   ...restProps
 }) => {
@@ -44,11 +61,11 @@ const MobileTimePicker: React.FC<MobileTimePickerProps> = ({
         )}
         data-placeholder={!time ? "" : undefined}
         onClick={() => setIsOpen(true)}
-        aria-label={time?.hour ? `Selected time: ${time.hour}:${time.minute} ${time.ampm}` : placeholder}
+        aria-label={time ? `Selected time: ${formatTimeLabel(time, is24HourMode)}` : placeholder}
         {...restProps}
         type="button"
       >
-        {`${time?.hour?.toString()?.padStart(2, "0") ?? "--"} : ${time?.minute?.toString()?.padStart(2, "0") ?? "--"} ${time?.ampm ?? "--"}`}
+        {time ? formatTimeLabel(time, is24HourMode) : "-- : --"}
       </Button>
       <SwipableDrawerContent>
         <SwipableDrawerHeader className="mtx-p-0">
@@ -57,7 +74,7 @@ const MobileTimePicker: React.FC<MobileTimePickerProps> = ({
             <SwipableDrawerDescription> </SwipableDrawerDescription>
           </VisuallyHidden>
         </SwipableDrawerHeader>
-        <TimePickerContent isOpen={isOpen} onTimeChange={onTimeChange} time={time} slotsProps={slotsProps} />
+        <TimePickerContent isOpen={isOpen} is24HourMode={is24HourMode} onTimeChange={onTimeChange} time={time} slotsProps={slotsProps} />
       </SwipableDrawerContent>
     </SwipableDrawer>
   );
