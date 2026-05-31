@@ -78,7 +78,6 @@ const TimePickerContent: React.FC<TimePickerContentProps> = ({ isOpen, time, is2
     const normalizedTime = normalizeTime(nextTime, is24HourMode);
     selectedTimeRef.current = normalizedTime;
     setSelectedTime(normalizedTime);
-    console.log(normalizedTime);
     onTimeChange(normalizedTime);
   };
 
