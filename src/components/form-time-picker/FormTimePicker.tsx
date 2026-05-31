@@ -14,11 +14,12 @@ type FormTimePickerProps<TFieldValues extends FieldValues, TName extends FieldPa
     control: Control<TFieldValues>;
     required?: boolean;
     readOnly?: boolean;
+    is24HourMode?: boolean;
     slotProps?: {
       formLabelProps?: React.HTMLAttributes<HTMLLabelElement> & React.RefAttributes<HTMLLabelElement>;
       formMessageProps?: React.HTMLAttributes<HTMLParagraphElement> & React.RefAttributes<HTMLParagraphElement>;
       formControlProps?: Omit<SlotProps & React.RefAttributes<HTMLElement>, "ref"> & React.RefAttributes<HTMLElement>;
-      datepickerProps?: TimePickerProps;
+      timePickerProps?: Partial<TimePickerProps>;
     };
   };
 
@@ -41,7 +42,13 @@ const FormTimePicker = <TFieldValues extends FieldValues, TName extends FieldPat
               {required && <span className="mtx-text-danger mtx-text-sm mtx-leading-4">*</span>}
             </FormLabel>
             <FormControl {...(slotProps?.formControlProps ?? {})}>
-              <TimePicker {...(slotProps?.datepickerProps ?? {})} time={field.value} onTimeChange={field.onChange} disabled={disabled || readOnly} />
+              <TimePicker
+                {...(slotProps?.timePickerProps ?? {})}
+                time={field.value}
+                onTimeChange={field.onChange}
+                disabled={disabled || readOnly}
+                is24HourMode={props.is24HourMode}
+              />
             </FormControl>
             <FormMessage {...(slotProps?.formMessageProps ?? {})} />
           </FormItem>
