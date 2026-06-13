@@ -11,8 +11,9 @@ const iconButtonVariants = tv({
   base: "inline-flex items-center justify-center gap-1 p-2 rounded-sm text-xs font-normal transition-colors focus-visible:outline-none disabled:pointer-events-none disabled:bg-muted disabled:text-gray-500",
   variants: {
     variant: {
-      table: "text-text hover:bg-primary-50 focus:bg-transparent focus:ring active:bg-primary-50 active:text-primary-700",
-      toolbar: "text-primary hover:bg-primary-50 focus:bg-transparent focus:ring active:bg-primary-50 active:text-primary-700",
+      table: "text-text hover:bg-primary-50 focus:bg-transparent focus:ring focus:mtx-ring-primary-400 active:bg-primary-50 active:text-primary-700",
+      toolbar:
+        "text-primary hover:bg-primary-50 focus:bg-transparent focus:ring focus:mtx-ring-primary-400 active:bg-primary-50 active:text-primary-700",
       form: "border border-gray-300 text-primary hover:border-none hover:bg-primary-50 focus:border-none focus:bg-transparent focus:ring active:border-none active:bg-primary-50 active:text-primary-700 disabled:border-none",
       danger: "text-danger hover:bg-danger-200 focus:bg-transparent focus:ring focus:ring-danger-400 active:bg-danger-300",
       warning: "text-warning hover:bg-warning-200 focus:bg-transparent focus:ring focus:ring-warning-400 active:bg-warning-300",

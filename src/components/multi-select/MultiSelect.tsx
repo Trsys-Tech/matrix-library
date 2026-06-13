@@ -5,7 +5,7 @@ import { tv, type VariantProps } from "tailwind-variants";
 import { Check, ChevronDown, CircleXmark, XMark } from "@trsys-tech/matrix-icons";
 
 import { cn } from "../../lib/utils";
-import { Badge } from "../badge/Badge";
+import { Status } from "../status/Status";
 import { Button } from "../button/Button";
 import { Separator } from "../separator/Separator";
 import { Popover, PopoverContent, PopoverTrigger } from "../popover/Popover";
@@ -311,7 +311,7 @@ const MultiSelect = <T extends string | number>(
                     const option = options.get(value);
                     const IconComponent = option?.icon;
                     return (
-                      <Badge key={value} className={cn(multiSelectVariants({ variant }), { "text-gray-400 bg-gray-200": disabled || loading })}>
+                      <Status key={value} className={cn(multiSelectVariants({ variant }), { "text-gray-400 bg-gray-200": disabled || loading })}>
                         <XMark
                           className="h-4 w-4 cursor-pointer"
                           onClick={event => {
@@ -321,11 +321,11 @@ const MultiSelect = <T extends string | number>(
                         />
                         {IconComponent && <IconComponent className="h-4 w-4 mr-2" />}
                         {option?.label}
-                      </Badge>
+                      </Status>
                     );
                   })}
                   {selectedValues.length > maxCount && (
-                    <Badge className={cn(multiSelectVariants({ variant }))}>
+                    <Status className={cn(multiSelectVariants({ variant }))}>
                       {`+ ${selectedValues.length - maxCount} ${moreText}`}
                       <CircleXmark
                         role="button"
@@ -335,7 +335,7 @@ const MultiSelect = <T extends string | number>(
                           clearExtraOptions();
                         }}
                       />
-                    </Badge>
+                    </Status>
                   )}
                   {loading && loadingText ? loadingText : null}
                 </div>

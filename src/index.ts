@@ -1,5 +1,3 @@
-import "./index.css";
-
 export { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "./components/accordion/Accordion";
 export { Avatar, AvatarFallback, AvatarImage } from "./components/avatar/Avatar";
 export { Badge, type BadgeProps } from "./components/badge/Badge";
@@ -278,6 +276,7 @@ export {
   type SidebarTriggerProps,
 } from "./components/sidebar/Sidebar";
 export { Skeleton, type SkeletonProps } from "./components/skeleton/Skeleton";
+export { Status, type StatusProps } from "./components/status/Status";
 export { Switch, type SwitchProps } from "./components/switch/Switch";
 export {
   Tabs,

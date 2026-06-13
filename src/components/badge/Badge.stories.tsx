@@ -1,55 +1,69 @@
-import { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react";
 import { Badge } from "./Badge";
 
-const meta: Meta<typeof Badge> = {
+const meta = {
   title: "Components/Badge",
   component: Badge,
-  tags: ["autodocs"],
-  argTypes: {
-    children: {
-      control: {
-        type: "text",
-      },
-    },
+  parameters: {
+    layout: "centered",
   },
-};
+  tags: ["autodocs"],
+  argTypes: {},
+} satisfies Meta<typeof Badge>;
 
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {
+export const Primary: Story = {
   args: {
+    variant: "primary",
     children: "Badge",
+    disabled: false,
+    asChild: false,
   },
 };
 
 export const Variants: Story = {
   args: {
-    children: "Badge",
     variant: "primary",
+    children: "Badges component",
+    asChild: false,
   },
-  render: args => {
-    return (
-      <div className="flex flex-wrap gap-2">
-        <Badge {...args} />
-        <Badge {...args} variant="secondary" />
-        <Badge {...args} variant="outline" />
-        <Badge {...args} variant="danger" />
-        <Badge {...args} variant="success" />
-        <Badge {...args} variant="warning" />
-        <Badge {...args} variant="info" />
-        <Badge {...args} variant="primary-inverse" />
-        <Badge {...args} variant="danger-inverse" />
-        <Badge {...args} variant="success-inverse" />
-        <Badge {...args} variant="warning-inverse" />
-        <Badge {...args} variant="info-inverse" />
-        <Badge {...args} variant="purple-inverse" />
-        <Badge {...args} variant="coral-inverse" />
-        <Badge {...args} variant="turquoise-inverse" />
-        <Badge {...args} variant="lime-inverse" />
-        <Badge {...args} variant="gray-inverse" />
-      </div>
-    );
+  render: props => (
+    <div className="space-x-2">
+      <Badge {...props} />
+      <Badge {...props} variant="outline" />
+    </div>
+  ),
+};
+
+export const Large: Story = {
+  args: {
+    variant: "primary",
+    children: "Badges component",
+    size: "lg",
+    asChild: false,
   },
+  render: props => (
+    <div className="space-x-2">
+      <Badge {...props} />
+      <Badge {...props} variant="outline" />
+    </div>
+  ),
+};
+
+export const Small: Story = {
+  args: {
+    variant: "primary",
+    children: "Badges component",
+    size: "sm",
+    asChild: false,
+  },
+  render: props => (
+    <div className="space-x-2">
+      <Badge {...props} />
+      <Badge {...props} variant="outline" />
+    </div>
+  ),
 };
 
 export default meta;
