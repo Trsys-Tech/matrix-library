@@ -1,3 +1,5 @@
+import "./index.css";
+
 export { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "./components/accordion/Accordion";
 export { Avatar, AvatarFallback, AvatarImage } from "./components/avatar/Avatar";
 export { Badge, type BadgeProps } from "./components/badge/Badge";
