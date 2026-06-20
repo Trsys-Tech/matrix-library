@@ -33,6 +33,8 @@ const DesktopDateRangePicker: React.FC<DesktopDateRangePickerProps> = ({
   toText,
   disabled,
   disabledDates,
+  startMonth,
+  endMonth,
   ...props
 }) => {
   const [isOpen, setIsOpen] = React.useState(false);
@@ -78,8 +80,8 @@ const DesktopDateRangePicker: React.FC<DesktopDateRangePickerProps> = ({
       <PopoverContent className="mtx-w-auto mtx-p-0" align="start">
         <Calendar
           defaultMonth={selected?.from}
-          startMonth={new Date(2000, 0, 1)}
-          endMonth={new Date(new Date().getFullYear() + 2, 11, 31)}
+          startMonth={startMonth ?? new Date(2000, 0, 1)}
+          endMonth={endMonth ?? new Date(new Date().getFullYear() + 2, 11, 31)}
           {...props}
           mode="range"
           selected={selected}

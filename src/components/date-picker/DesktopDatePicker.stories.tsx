@@ -23,7 +23,7 @@ const meta: Meta<typeof DesktopDatePicker> = {
       },
     },
   },
-};
+} satisfies Meta<typeof DesktopDatePicker>;
 
 export const Default: StoryObj<typeof meta> = {
   args: {
@@ -32,9 +32,18 @@ export const Default: StoryObj<typeof meta> = {
   render: args => {
     const Component = () => {
       const [selected, setSelected] = React.useState<Date | undefined>(args.selected);
-      return <DesktopDatePicker {...args} selected={selected} onSelect={day => setSelected(day)} />;
+      return <DesktopDatePicker {...args} selected={selected} onSelect={day => setSelected(day)} startMonth={new Date(1970, 0, 1)} />;
     };
     return <Component />;
+  },
+  parameters: {
+    docs: {
+      source: {
+        code: `const [selected, setSelected] = React.useState<Date | undefined>(new Date());
+        
+return <DesktopDatePicker selected={selected} onSelect={day => setSelected(day)} startMonth={new Date(1970, 0, 1)} />;`,
+      },
+    },
   },
 };
 
