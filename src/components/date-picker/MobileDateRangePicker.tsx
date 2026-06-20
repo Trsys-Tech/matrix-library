@@ -41,8 +41,6 @@ const MobileDateRangePicker: React.FC<MobileDateRangePickerProps> = ({
   toText,
   disabled,
   disabledDates,
-  startMonth,
-  endMonth,
   ...props
 }) => {
   const [isOpen, setIsOpen] = React.useState(false);
@@ -134,8 +132,8 @@ const MobileDateRangePicker: React.FC<MobileDateRangePickerProps> = ({
           <div className="mtx-flex-1 mtx-flex mtx-flex-col mtx-items-center mtx-p-4">
             <Calendar
               defaultMonth={selected?.from}
-              startMonth={startMonth ?? new Date(2000, 0, 1)}
-              endMonth={endMonth ?? new Date(new Date().getFullYear() + 2, 11, 31)}
+              startMonth={new Date(2000, 0, 1)}
+              endMonth={new Date(new Date().getFullYear() + 2, 11, 31)}
               {...props}
               mode="range"
               selected={selected}

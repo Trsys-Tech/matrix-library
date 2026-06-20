@@ -4,8 +4,8 @@ import { HTMLAttributes, useState } from "react";
 
 import { cn } from "../../lib/utils";
 import { Button } from "../button/Button";
-import { Time, TimePickerContent } from "./TimePickerContent";
 import { Popover, PopoverContent, PopoverTrigger } from "../popover/Popover";
+import { Time, TimePickerContent } from "./TimePickerContent";
 
 const formatTimeLabel = (time: Time, is24HourMode: boolean) => {
   const minute = time.minute.toString().padStart(2, "0");

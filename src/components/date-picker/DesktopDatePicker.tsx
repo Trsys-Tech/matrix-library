@@ -32,8 +32,6 @@ const DesktopDatePicker: React.FC<DesktopDatePickerProps> = ({
   onDayClick,
   disabled,
   disabledDates,
-  startMonth,
-  endMonth,
   ...props
 }) => {
   const [isOpen, setIsOpen] = React.useState(false);
@@ -65,8 +63,8 @@ const DesktopDatePicker: React.FC<DesktopDatePickerProps> = ({
       <PopoverContent className="mtx-w-auto mtx-p-0">
         <Calendar
           defaultMonth={selected}
-          startMonth={startMonth ?? new Date(2000, 0, 1)}
-          endMonth={endMonth ?? new Date(new Date().getFullYear() + 2, 11, 31)}
+          startMonth={new Date(2000, 0, 1)}
+          endMonth={new Date(new Date().getFullYear() + 2, 11, 31)}
           {...props}
           mode="single"
           selected={selected}
