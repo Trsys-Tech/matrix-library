@@ -8,23 +8,44 @@ import { Calendar as CalendarIcon } from "@trsys-tech/matrix-icons";
 
 import { cn } from "../../lib/utils";
 import { Calendar } from "./calendar";
+import { DateOnlyString, DateValue, toCalendarDateFromKey, toDateOnlyString } from "./dateValue";
 import { Button } from "../button/Button";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "../dialog/Dialog";
 
+/**
+ * Props for the mobile-only single-date picker.
+ *
+ * Inherits the single-date calendar props from react-day-picker, but accepts
+ * Date | YYYY-MM-DD on input and emits YYYY-MM-DD on apply.
+ */
 type MobileDatePickerProps = Omit<PropsBase, "disabled"> &
-  Omit<PropsSingle, "mode" | "disabled"> & {
+  Omit<PropsSingle, "mode" | "disabled" | "selected" | "onSelect"> & {
+    /** Display format used in the trigger and dialog header. */
     formatStr?: string;
+    /** Placeholder shown when no date is selected. */
     placeholder?: string;
+    /** Class name forwarded to the calendar content. */
     calendarClassName?: string;
-    selected?: Date;
+    /** Current value as a native Date or a YYYY-MM-DD string. */
+    selected?: DateValue;
+    /** Prevents clearing the selection when true. */
     required?: boolean;
+    /** Label for the cancel button. */
     cancelText?: string;
+    /** Label for the apply button. */
     applyText?: string;
-    onSelect?: (date: Date | undefined) => void;
+    /** Called with a YYYY-MM-DD string when the user confirms the selection. */
+    onSelect?: (date: DateOnlyString | undefined) => void;
+    /** Disables the trigger button. */
     disabled?: boolean;
-    disabledDates?: Matcher | Matcher[]; // Renamed to avoid conflict with the 'disabled' prop
+    /** Dates disabled in the calendar. */
+    disabledDates?: Matcher | Matcher[];
   };
 
+/**
+ * Mobile-only single-date picker rendered in a full-screen dialog.
+ * Use this component when you want mobile interaction regardless of screen size.
+ */
 const MobileDatePicker: React.FC<MobileDatePickerProps> = ({
   formatStr,
   selected,
@@ -39,8 +60,13 @@ const MobileDatePicker: React.FC<MobileDatePickerProps> = ({
   ...props
 }) => {
   const [isOpen, setIsOpen] = React.useState(false);
-  const validatedSelectedDate = selected ? new Date(selected) : undefined;
+  const selectedValueKey = selected instanceof Date ? selected.getTime() : selected;
+  const validatedSelectedDate = React.useMemo(() => toCalendarDateFromKey(selectedValueKey), [selectedValueKey]);
   const [selectedDate, setSelectedDate] = React.useState<Date | undefined>(validatedSelectedDate);
+
+  React.useEffect(() => {
+    setSelectedDate(validatedSelectedDate);
+  }, [validatedSelectedDate]);
 
   const handleCancel = () => {
     setIsOpen(false);
@@ -48,7 +74,7 @@ const MobileDatePicker: React.FC<MobileDatePickerProps> = ({
   };
 
   const handleApply = () => {
-    onSelect?.(selectedDate);
+    onSelect?.(toDateOnlyString(selectedDate));
     setIsOpen(false);
   };
 

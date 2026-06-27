@@ -8,25 +8,48 @@ import { PropsBase, PropsRange, DateRange, DayEventHandler, Matcher } from "reac
 
 import { cn } from "../../lib/utils";
 import { Calendar } from "./calendar";
+import { DateOnlyRange, DateRangeValue, toCalendarDateRangeFromKeys, toDateOnlyRange } from "./dateValue";
 import { Button } from "../button/Button";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "../dialog/Dialog";
 
+/**
+ * Props for the mobile-only date-range picker.
+ *
+ * Inherits the range calendar props from react-day-picker, but accepts Date
+ * objects or YYYY-MM-DD strings and emits { from, to } values in YYYY-MM-DD format.
+ */
 type MobileDateRangePickerProps = Omit<PropsBase, "disabled"> &
-  Omit<PropsRange, "mode" | "disabled"> & {
+  Omit<PropsRange, "mode" | "disabled" | "selected" | "onSelect"> & {
+    /** Display format used in the trigger and dialog header. */
     formatStr?: string;
+    /** Placeholder shown when no range is selected. */
     placeholder?: string;
+    /** Class name forwarded to the calendar content. */
     calendarClassName?: string;
-    selected?: DateRange;
+    /** Current value as Date objects or YYYY-MM-DD strings. */
+    selected?: DateRangeValue;
+    /** Prevents clearing the selection when true. */
     required?: boolean;
+    /** Label for the cancel button. */
     cancelText?: string;
+    /** Label for the apply button. */
     applyText?: string;
-    onSelect?: (date: DateRange | undefined) => void;
+    /** Called with YYYY-MM-DD range values when the user confirms the selection. */
+    onSelect?: (date: DateOnlyRange | undefined) => void;
+    /** Label shown before the start date in the trigger. */
     fromText?: string;
+    /** Label shown before the end date in the trigger. */
     toText?: string;
+    /** Disables the trigger button. */
     disabled?: boolean;
+    /** Dates disabled in the calendar. */
     disabledDates?: Matcher | Matcher[];
   };
 
+/**
+ * Mobile-only date-range picker rendered in a full-screen dialog.
+ * Use this component when you want mobile interaction regardless of screen size.
+ */
 const MobileDateRangePicker: React.FC<MobileDateRangePickerProps> = ({
   formatStr,
   selected,
@@ -44,7 +67,15 @@ const MobileDateRangePicker: React.FC<MobileDateRangePickerProps> = ({
   ...props
 }) => {
   const [isOpen, setIsOpen] = React.useState(false);
-  const [range, setRange] = React.useState<DateRange | undefined>(selected);
+  const selectedFromKey = selected?.from instanceof Date ? selected.from.getTime() : selected?.from;
+  const selectedToKey = selected?.to instanceof Date ? selected.to.getTime() : selected?.to;
+  const selectedRange = React.useMemo(() => toCalendarDateRangeFromKeys(selectedFromKey, selectedToKey), [selectedFromKey, selectedToKey]);
+  const [range, setRange] = React.useState<DateRange | undefined>(selectedRange);
+  const hasSelectedRange = Boolean(selectedRange?.from || selectedRange?.to);
+
+  React.useEffect(() => {
+    setRange(selectedRange);
+  }, [selectedRange]);
 
   const handleDayClick: DayEventHandler<React.MouseEvent<Element, MouseEvent>> = (date, modifiers, e) => {
     onDayClick?.(date, modifiers, e);
@@ -70,11 +101,11 @@ const MobileDateRangePicker: React.FC<MobileDateRangePickerProps> = ({
 
   const handleCancel = () => {
     setIsOpen(false);
-    setRange(selected);
+    setRange(selectedRange);
   };
 
   const handleApply = () => {
-    onSelect?.(range);
+    onSelect?.(toDateOnlyRange(range));
     setIsOpen(false);
   };
 
@@ -87,22 +118,22 @@ const MobileDateRangePicker: React.FC<MobileDateRangePickerProps> = ({
           "flex h-8 w-full items-center justify-between whitespace-nowrap rounded-sm border border-input bg-transparent ps-3 pe-1 py-1.5 text-xs ring-offset-background data-[placeholder]:text-muted-foreground hover:border hover:border-primary hover:bg-transparent focus:border focus:border-primary focus:outline-none focus:ring focus:ring-primary-100 disabled:cursor-not-allowed disabled:bg-gray-100 disabled:text-text-300 disabled:border-gray-100 [&>span]:line-clamp-1 [&_svg]:disabled:text-text-300",
           className,
         )}
-        data-placeholder={!selected ? "" : undefined}
+        data-placeholder={!hasSelectedRange ? "" : undefined}
         onClick={() => setIsOpen(true)}
         aria-label={
-          selected
-            ? `Selected date: ${selected?.from ? format(selected.from, formatStr ?? "yyyy/MM/dd") : ""} - ${selected?.to ? format(selected.to, formatStr ?? "yyyy/MM/dd") : ""}`
+          hasSelectedRange
+            ? `Selected date: ${selectedRange?.from ? format(selectedRange.from, formatStr ?? "yyyy/MM/dd") : ""} - ${selectedRange?.to ? format(selectedRange.to, formatStr ?? "yyyy/MM/dd") : ""}`
             : placeholder
         }
         disabled={disabled}
       >
-        {selected ? (
+        {hasSelectedRange ? (
           <div className="grid grid-cols-2 flex-1 justify-items-start">
             <span>
-              {fromText ?? "From"}: {selected?.from ? format(selected.from, formatStr ?? "yyyy/MM/dd") : "-"}
+              {fromText ?? "From"}: {selectedRange?.from ? format(selectedRange.from, formatStr ?? "yyyy/MM/dd") : "-"}
             </span>{" "}
             <span>
-              {toText ?? "To"}: {selected?.to ? format(selected.to, formatStr ?? "yyyy/MM/dd") : "-"}
+              {toText ?? "To"}: {selectedRange?.to ? format(selectedRange.to, formatStr ?? "yyyy/MM/dd") : "-"}
             </span>
           </div>
         ) : (
@@ -131,12 +162,12 @@ const MobileDateRangePicker: React.FC<MobileDateRangePickerProps> = ({
           </DialogHeader>
           <div className="flex-1 flex flex-col items-center p-4">
             <Calendar
-              defaultMonth={selected?.from}
+              defaultMonth={range?.from}
               startMonth={new Date(2000, 0, 1)}
               endMonth={new Date(new Date().getFullYear() + 2, 11, 31)}
               {...props}
               mode="range"
-              selected={selected}
+              selected={range}
               onDayClick={handleDayClick}
               className={cn("p-0", calendarClassName)}
               disabled={disabledDates}

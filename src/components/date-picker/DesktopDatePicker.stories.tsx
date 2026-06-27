@@ -27,11 +27,11 @@ const meta: Meta<typeof DesktopDatePicker> = {
 
 export const Default: StoryObj<typeof meta> = {
   args: {
-    selected: new Date(),
+    selected: "2025-12-24",
   },
   render: args => {
     const Component = () => {
-      const [selected, setSelected] = React.useState<Date | undefined>(args.selected);
+      const [selected, setSelected] = React.useState<string | Date | undefined>(args.selected);
       return <DesktopDatePicker {...args} selected={selected} onSelect={day => setSelected(day)} />;
     };
     return <Component />;

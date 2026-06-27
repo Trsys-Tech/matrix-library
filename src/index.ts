@@ -93,16 +93,20 @@ export {
   DatePicker,
   DesktopDatePicker,
   MobileDatePicker,
+  type DateOnlyString,
   type DatePickerProps,
   type DesktopDatePickerProps,
+  type DateValue,
   type MobileDatePickerProps,
 } from "./components/date-picker/DatePicker";
 export {
   DateRangePicker,
   DesktopDateRangePicker,
   MobileDateRangePicker,
+  type DateOnlyRange,
   type DateRangePickerProps,
   type DesktopDateRangePickerProps,
+  type DateRangeValue,
   type MobileDateRangePickerProps,
 } from "./components/date-picker/DateRangePicker";
 export {
