@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { Form } from "../form/Form";
+import { DATE_ONLY_PATTERN, toCalendarDate } from "../date-picker/dateValue";
 import { FormDatePicker } from "./FormDatePicker";
 import { Button } from "../button/Button";
 
@@ -36,8 +37,13 @@ const meta = {
 
 export type Story = StoryObj<typeof meta>;
 
+const dateOnlyStringSchema = z
+  .string({ error: "Date is required" })
+  .regex(DATE_ONLY_PATTERN, "Date must be in YYYY-MM-DD format")
+  .refine(value => !DATE_ONLY_PATTERN.test(value) || toCalendarDate(value) !== undefined, "Date must be a real calendar date");
+
 const formSchema = z.object({
-  date: z.date({ error: "Date is required" }),
+  date: dateOnlyStringSchema,
 });
 
 const FormWrapper = ({ children }: { children: React.ReactNode }) => {

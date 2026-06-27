@@ -4,8 +4,14 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { Form } from "../form/Form";
+import { DATE_ONLY_PATTERN, toCalendarDate } from "../date-picker/dateValue";
 import { Button } from "../button/Button";
 import { FormDateRangePicker } from "./FormDateRangePicker";
+
+const dateOnlyStringSchema = z
+  .string({ error: "Date is required" })
+  .regex(DATE_ONLY_PATTERN, "Date must be in YYYY-MM-DD format")
+  .refine(value => !DATE_ONLY_PATTERN.test(value) || toCalendarDate(value) !== undefined, "Date must be a real calendar date");
 
 const meta = {
   title: "Form/FormDateRangePicker",
@@ -39,8 +45,8 @@ export type Story = StoryObj<typeof meta>;
 const formSchema = z.object({
   dateRange: z.object(
     {
-      from: z.date({ error: "From date is required" }),
-      to: z.date({ error: "To date is required" }),
+      from: dateOnlyStringSchema,
+      to: dateOnlyStringSchema,
     },
     { message: "Date range is required" },
   ),

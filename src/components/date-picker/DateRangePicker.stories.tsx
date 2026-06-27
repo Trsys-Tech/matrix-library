@@ -1,5 +1,4 @@
 import React from "react";
-import { DateRange } from "react-day-picker";
 import { Meta, StoryObj } from "@storybook/react";
 import { DateRangePicker } from "./DateRangePicker";
 
@@ -28,7 +27,7 @@ const meta: Meta<typeof DateRangePicker> = {
 export const Default: StoryObj<typeof meta> = {
   render: args => {
     const Component = () => {
-      const [selected, setSelected] = React.useState<DateRange | undefined>(undefined);
+      const [selected, setSelected] = React.useState<{ from?: string; to?: string } | undefined>({ from: "2025-12-24", to: "2025-12-31" });
       return <DateRangePicker {...args} selected={selected} onSelect={setSelected} />;
     };
     return <Component />;

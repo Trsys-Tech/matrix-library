@@ -29,12 +29,12 @@ const meta: Meta<typeof DatePicker> = {
 
 export const Default: StoryObj<typeof meta> = {
   args: {
-    selected: new Date(),
+    selected: "2025-12-24",
     disabledDates: { after: new Date() },
   },
   render: args => {
     const Component = () => {
-      const [selected, setSelected] = React.useState<Date | undefined>(args.selected);
+      const [selected, setSelected] = React.useState<string | Date | undefined>(args.selected);
       return <DatePicker {...args} selected={selected} onSelect={day => setSelected(day)} disabledDates={args.disabledDates} />;
     };
     return <Component />;

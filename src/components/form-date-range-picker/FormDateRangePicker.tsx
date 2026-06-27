@@ -2,19 +2,31 @@
 
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "../form/Form";
 import { SlotProps } from "@radix-ui/react-slot";
-import { Control, ControllerProps, FieldPath, FieldValues } from "react-hook-form";
+import { Control, ControllerProps, FieldPathByValue, FieldValues } from "react-hook-form";
 
-import { DateRangePicker, DateRangePickerProps } from "../date-picker/DateRangePicker";
+import { DateRangePicker, type DateOnlyRange, type DateRangePickerProps } from "../date-picker/DateRangePicker";
 
-type FormDateRangePickerProps<TFieldValues extends FieldValues, TName extends FieldPath<TFieldValues>> = Omit<
+/**
+ * Props for FormDateRangePicker.
+ *
+ * The bound field value should be an object shaped like
+ * { from?: "YYYY-MM-DD", to?: "YYYY-MM-DD" } or undefined.
+ * Use slotProps.datepickerProps to forward props to the underlying DateRangePicker.
+ */
+type FormDateRangePickerProps<TFieldValues extends FieldValues, TName extends FieldPathByValue<TFieldValues, DateOnlyRange | undefined>> = Omit<
   ControllerProps<TFieldValues, TName>,
   "render"
 > &
   React.ComponentProps<typeof FormItem> & {
+    /** Label rendered above the picker. */
     label: string;
+    /** React Hook Form control instance. */
     control: Control<TFieldValues>;
+    /** Shows the required asterisk next to the label. */
     required?: boolean;
+    /** Keeps the field readable while preventing edits. */
     readOnly?: boolean;
+    /** Props forwarded to the form shell and underlying DateRangePicker. */
     slotProps?: {
       formLabelProps?: React.HTMLAttributes<HTMLLabelElement> & React.RefAttributes<HTMLLabelElement>;
       formMessageProps?: React.HTMLAttributes<HTMLParagraphElement> & React.RefAttributes<HTMLParagraphElement>;
@@ -23,7 +35,25 @@ type FormDateRangePickerProps<TFieldValues extends FieldValues, TName extends Fi
     };
   };
 
-const FormDateRangePicker = <TFieldValues extends FieldValues, TName extends FieldPath<TFieldValues>>(
+/**
+ * React Hook Form wrapper around DateRangePicker.
+ *
+ * Binds a { from, to } date-only string object to the shared range picker and
+ * renders the label, validation message, and read-only handling.
+ *
+ * @example
+ * const form = useForm<{ vacation?: { from?: string; to?: string } }>({
+ *   defaultValues: { vacation: { from: "2025-12-24", to: "2025-12-31" } },
+ * });
+ *
+ * <FormDateRangePicker
+ *   control={form.control}
+ *   name="vacation"
+ *   label="Vacation"
+ *   slotProps={{ datepickerProps: { fromText: "Start", toText: "End" } }}
+ * />
+ */
+const FormDateRangePicker = <TFieldValues extends FieldValues, TName extends FieldPathByValue<TFieldValues, DateOnlyRange | undefined>>(
   props: FormDateRangePickerProps<TFieldValues, TName>,
 ) => {
   const { name, control, defaultValue, disabled, readOnly, rules, shouldUnregister, label, slotProps, required, ...formItemProps } = props;
