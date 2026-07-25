@@ -1,4 +1,4 @@
-import { Meta } from "@storybook/react";
+import { Meta } from "@storybook/react-vite";
 
 import { Combobox } from "./Combobox";
 import { useState } from "react";
