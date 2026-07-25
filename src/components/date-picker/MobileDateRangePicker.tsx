@@ -44,6 +44,10 @@ type MobileDateRangePickerProps = Omit<PropsBase, "disabled"> &
     disabled?: boolean;
     /** Dates disabled in the calendar. */
     disabledDates?: Matcher | Matcher[];
+    /** Separator between the start and end date in the trigger. default: ": " */
+    labelSeparator?: string;
+    /** Separator between the start and end date in the trigger. default: "" */
+    fromToSeparator?: string;
   };
 
 /**
@@ -64,6 +68,8 @@ const MobileDateRangePicker: React.FC<MobileDateRangePickerProps> = ({
   toText,
   disabled,
   disabledDates,
+  labelSeparator = ": ",
+  fromToSeparator = "",
   ...props
 }) => {
   const [isOpen, setIsOpen] = React.useState(false);
@@ -128,12 +134,17 @@ const MobileDateRangePicker: React.FC<MobileDateRangePickerProps> = ({
         disabled={disabled}
       >
         {hasSelectedRange ? (
-          <div className="grid grid-cols-2 flex-1 justify-items-start">
+          <div className="flex flex-row gap-1 flex-1 justify-items-start">
             <span>
-              {fromText ?? "From"}: {selectedRange?.from ? format(selectedRange.from, formatStr ?? "yyyy/MM/dd") : "-"}
+              {fromText ?? "From"}
+              {labelSeparator}
+              {selectedRange?.from ? format(selectedRange.from, formatStr ?? "yyyy/MM/dd") : "-"}
             </span>{" "}
+            {fromToSeparator}{" "}
             <span>
-              {toText ?? "To"}: {selectedRange?.to ? format(selectedRange.to, formatStr ?? "yyyy/MM/dd") : "-"}
+              {toText ?? "To"}
+              {labelSeparator}
+              {selectedRange?.to ? format(selectedRange.to, formatStr ?? "yyyy/MM/dd") : "-"}
             </span>
           </div>
         ) : (
