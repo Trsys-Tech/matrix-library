@@ -1,5 +1,4 @@
-import { fn } from "@storybook/test";
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { ChevronDown, Plus } from "@trsys-tech/matrix-icons";
 
 import { Button } from "./Button";
@@ -12,7 +11,7 @@ const meta = {
   },
   tags: ["autodocs"],
   argTypes: {},
-  args: { onClick: fn() },
+  args: { onClick: () => {} },
 } satisfies Meta<typeof Button>;
 
 type Story = StoryObj<typeof meta>;
