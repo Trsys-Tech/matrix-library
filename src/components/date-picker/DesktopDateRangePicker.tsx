@@ -39,6 +39,10 @@ type DesktopDateRangePickerProps = Omit<PropsBase, "disabled"> &
     disabled?: boolean;
     /** Dates disabled in the calendar. */
     disabledDates?: Matcher | Matcher[];
+    /** Separator between the start and end date in the trigger. default: ": " */
+    labelSeparator?: string;
+    /** Separator between the start and end date in the trigger. default: "" */
+    fromToSeparator?: string;
   };
 
 /**
@@ -50,6 +54,8 @@ const DesktopDateRangePicker: React.FC<DesktopDateRangePickerProps> = ({
   selected,
   placeholder,
   className,
+  labelSeparator = ": ",
+  fromToSeparator = "",
   calendarClassName,
   fromText,
   toText,
@@ -90,12 +96,17 @@ const DesktopDateRangePicker: React.FC<DesktopDateRangePickerProps> = ({
           type="button"
         >
           {hasSelectedRange ? (
-            <div className="mtx-grid mtx-grid-cols-2 mtx-flex-1 mtx-justify-items-start">
+            <div className="mtx-flex mtx-flex-row mtx-gap-1 mtx-flex-1 mtx-justify-items-start">
               <span>
-                {fromText ?? "From"}: {selectedRange?.from ? format(selectedRange.from, formatStr ?? "yyyy/MM/dd") : "-"}
-              </span>{" "}
+                {fromText ?? "From"}
+                {labelSeparator}
+                {selectedRange?.from ? format(selectedRange.from, formatStr ?? "yyyy/MM/dd") : "-"}
+              </span>
+              {fromToSeparator}
               <span>
-                {toText ?? "To"}: {selectedRange?.to ? format(selectedRange.to, formatStr ?? "yyyy/MM/dd") : "-"}
+                {toText ?? "To"}
+                {labelSeparator}
+                {selectedRange?.to ? format(selectedRange.to, formatStr ?? "yyyy/MM/dd") : "-"}
               </span>
             </div>
           ) : (

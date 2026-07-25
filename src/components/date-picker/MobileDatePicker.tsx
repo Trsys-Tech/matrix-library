@@ -64,10 +64,6 @@ const MobileDatePicker: React.FC<MobileDatePickerProps> = ({
   const validatedSelectedDate = React.useMemo(() => toCalendarDateFromKey(selectedValueKey), [selectedValueKey]);
   const [selectedDate, setSelectedDate] = React.useState<Date | undefined>(validatedSelectedDate);
 
-  React.useEffect(() => {
-    setSelectedDate(validatedSelectedDate);
-  }, [validatedSelectedDate]);
-
   const handleCancel = () => {
     setIsOpen(false);
     setSelectedDate(validatedSelectedDate);
@@ -87,7 +83,10 @@ const MobileDatePicker: React.FC<MobileDatePickerProps> = ({
           className,
         )}
         data-placeholder={!validatedSelectedDate ? "" : undefined}
-        onClick={() => setIsOpen(true)}
+        onClick={() => {
+          setSelectedDate(validatedSelectedDate);
+          setIsOpen(true);
+        }}
         aria-label={validatedSelectedDate ? `Selected date: ${format(validatedSelectedDate, formatStr ?? "yyyy/MM/dd")}` : "Pick a date"}
         disabled={disabled}
         type="button"

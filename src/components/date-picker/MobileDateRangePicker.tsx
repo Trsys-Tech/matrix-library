@@ -44,6 +44,10 @@ type MobileDateRangePickerProps = Omit<PropsBase, "disabled"> &
     disabled?: boolean;
     /** Dates disabled in the calendar. */
     disabledDates?: Matcher | Matcher[];
+    /** Separator between the start and end date in the trigger. default: ": " */
+    labelSeparator?: string;
+    /** Separator between the start and end date in the trigger. default: "" */
+    fromToSeparator?: string;
   };
 
 /**
@@ -64,6 +68,8 @@ const MobileDateRangePicker: React.FC<MobileDateRangePickerProps> = ({
   toText,
   disabled,
   disabledDates,
+  labelSeparator = ": ",
+  fromToSeparator = "",
   ...props
 }) => {
   const [isOpen, setIsOpen] = React.useState(false);
@@ -72,10 +78,6 @@ const MobileDateRangePicker: React.FC<MobileDateRangePickerProps> = ({
   const selectedRange = React.useMemo(() => toCalendarDateRangeFromKeys(selectedFromKey, selectedToKey), [selectedFromKey, selectedToKey]);
   const [range, setRange] = React.useState<DateRange | undefined>(selectedRange);
   const hasSelectedRange = Boolean(selectedRange?.from || selectedRange?.to);
-
-  React.useEffect(() => {
-    setRange(selectedRange);
-  }, [selectedRange]);
 
   const handleDayClick: DayEventHandler<React.MouseEvent<Element, MouseEvent>> = (date, modifiers, e) => {
     onDayClick?.(date, modifiers, e);
@@ -118,7 +120,10 @@ const MobileDateRangePicker: React.FC<MobileDateRangePickerProps> = ({
           className,
         )}
         data-placeholder={!hasSelectedRange ? "" : undefined}
-        onClick={() => setIsOpen(true)}
+        onClick={() => {
+          setRange(selectedRange);
+          setIsOpen(true);
+        }}
         aria-label={
           hasSelectedRange
             ? `Selected date: ${selectedRange?.from ? format(selectedRange.from, formatStr ?? "yyyy/MM/dd") : ""} - ${selectedRange?.to ? format(selectedRange.to, formatStr ?? "yyyy/MM/dd") : ""}`
@@ -128,12 +133,17 @@ const MobileDateRangePicker: React.FC<MobileDateRangePickerProps> = ({
         type="button"
       >
         {hasSelectedRange ? (
-          <div className="mtx-grid mtx-grid-cols-2 mtx-flex-1 mtx-justify-items-start">
+          <div className="mtx-flex mtx-flex-row mtx-gap-1 mtx-flex-1 mtx-justify-items-start">
             <span>
-              {fromText ?? "From"}: {selectedRange?.from ? format(selectedRange.from, formatStr ?? "yyyy/MM/dd") : "-"}
-            </span>{" "}
+              {fromText ?? "From"}
+              {labelSeparator}
+              {selectedRange?.from ? format(selectedRange.from, formatStr ?? "yyyy/MM/dd") : "-"}
+            </span>
+            {fromToSeparator}
             <span>
-              {toText ?? "To"}: {selectedRange?.to ? format(selectedRange.to, formatStr ?? "yyyy/MM/dd") : "-"}
+              {toText ?? "To"}
+              {labelSeparator}
+              {selectedRange?.to ? format(selectedRange.to, formatStr ?? "yyyy/MM/dd") : "-"}
             </span>
           </div>
         ) : (

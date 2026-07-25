@@ -1,6 +1,6 @@
-import type { Preview } from "@storybook/react";
+import type { Preview } from "@storybook/react-vite";
 import "../src/index.css";
-import { Title, Subtitle, Primary, Controls, Stories, useOf, Markdown, DocsContext } from "@storybook/blocks";
+import { Title, Subtitle, Primary, Controls, Stories, useOf, Markdown, DocsContext } from "@storybook/addon-docs/blocks";
 import { useContext } from "react";
 
 const getDescriptionFromResolvedOf = (resolvedOf: any) => {
