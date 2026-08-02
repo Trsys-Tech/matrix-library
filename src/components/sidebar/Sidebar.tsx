@@ -257,12 +257,13 @@ type SidebarProps = React.ComponentProps<typeof Sidebar>;
 
 const SidebarTrigger = React.forwardRef<React.ElementRef<"button">, React.ComponentProps<"button"> & { asChild?: boolean }>(
   ({ className, onClick, asChild, ...props }, ref) => {
-    const { toggleSidebar } = useSidebar();
+    const { toggleSidebar, state } = useSidebar();
     const Comp = asChild ? Slot : "button";
 
     return (
       <Comp
         ref={ref}
+        data-state={state}
         data-sidebar="trigger"
         className={cn("mtx-h-7 mtx-w-7", className)}
         onClick={event => {
@@ -549,11 +550,6 @@ const SidebarMenuSkeleton = React.forwardRef<
     showIcon?: boolean;
   }
 >(({ className, showIcon = false, ...props }, ref) => {
-  // Random width between 50 to 90%.
-  const width = React.useMemo(() => {
-    return `${Math.floor(Math.random() * 40) + 50}%`;
-  }, []);
-
   return (
     <div
       ref={ref}
@@ -567,7 +563,7 @@ const SidebarMenuSkeleton = React.forwardRef<
         data-sidebar="menu-skeleton-text"
         style={
           {
-            "--skeleton-width": width,
+            "--skeleton-width": "70%",
           } as React.CSSProperties
         }
       />
