@@ -129,5 +129,9 @@
     "extends": [
       "plugin:storybook/recommended"
     ]
+  },
+  "allowScripts": {
+    "esbuild@0.28.1": true,
+    "esbuild@0.25.12": true
   }
 }
