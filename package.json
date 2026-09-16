@@ -24,6 +24,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -p tsconfig.build.json && vite build",
+    "test": "npm run build && node --test tests/*.test.mjs",
     "build:styles": "npx tailwindcss -i ./src/index.css -o ./dist/style.css --watch",
     "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "sb": "storybook dev -p 6006",

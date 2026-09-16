@@ -91,6 +91,16 @@ export {
   dataGridDefaultTheme,
 } from "./components/data-grid/DataGrid";
 export {
+  GanttChart,
+  type GanttChartProps,
+  type GanttDate,
+  type GanttItem,
+  type GanttMarker,
+  type GanttRenderBarContext,
+  type GanttRenderItemContext,
+  type GanttView,
+} from "./components/gantt-chart/GanttChart";
+export {
   DatePicker,
   DesktopDatePicker,
   MobileDatePicker,
