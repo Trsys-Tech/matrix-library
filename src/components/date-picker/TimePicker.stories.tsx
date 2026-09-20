@@ -11,6 +11,10 @@ const meta: Meta<typeof TimePicker> = {
     className: "mtx-w-72",
   },
   argTypes: {
+    className: {
+      control: false,
+      description: "Additional classes to apply to the component.",
+    },
     disabled: { control: "boolean" },
     is24HourMode: { control: "boolean" },
   },

@@ -1,4 +1,6 @@
-import { Meta, StoryObj } from "@storybook/react-vite";
+import type { Meta, StoryObj } from "@storybook/react-vite";
+import { fn } from "storybook/test";
+import type { ReactNode } from "react";
 import { FormSelect } from "./FormSelect";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -18,7 +20,31 @@ const meta = {
     control: undefined,
   },
   argTypes: {
+    className: {
+      control: false,
+      description: "Additional classes to apply to the component.",
+    },
     control: {
+      table: {
+        disable: true,
+      },
+    },
+    defaultValue: {
+      table: {
+        disable: true,
+      },
+    },
+    name: {
+      table: {
+        disable: true,
+      },
+    },
+    rules: {
+      table: {
+        disable: true,
+      },
+    },
+    shouldUnregister: {
       table: {
         disable: true,
       },
@@ -35,15 +61,17 @@ const meta = {
   tags: ["autodocs"],
 } satisfies Meta<typeof FormSelect>;
 
-type Story = StoryObj<typeof meta>;
+export type Story = StoryObj<typeof meta>;
 
 const formSchema = z.object({
   item: z.string().min(1, "Please select an item"),
 });
 
-const FormSelectWrapper = ({ children }: { children: React.ReactNode }) => {
+const onSubmit = fn();
+
+const FormSelectWrapper = ({ children }: { children: ReactNode }) => {
   const form = useForm<z.infer<typeof formSchema>>({ defaultValues: { item: "" }, resolver: zodResolver(formSchema) });
-  const handleSubmit = form.handleSubmit(data => console.log(data));
+  const handleSubmit = form.handleSubmit(onSubmit);
   return (
     <Form {...form}>
       <form onSubmit={handleSubmit} className="mtx-w-96 mtx-flex mtx-flex-col mtx-gap-2 mtx-items-end">
@@ -56,6 +84,7 @@ const FormSelectWrapper = ({ children }: { children: React.ReactNode }) => {
 export const Default: Story = {
   args: {
     name: "item",
+    required: true,
     emptyOptionsText: "Empty",
     placeholder: "Select an item",
     options: [
@@ -65,7 +94,7 @@ export const Default: Story = {
     ],
     className: "mtx-w-96",
   },
-  render: ({ ...args }) => (
+  render: args => (
     <FormSelectWrapper>
       <FormSelect {...args} />
       <Button type="submit">Submit</Button>

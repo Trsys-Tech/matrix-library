@@ -1,7 +1,9 @@
-import { Meta, StoryObj } from "@storybook/react-vite";
+import type { Meta, StoryObj } from "@storybook/react-vite";
+import { fn } from "storybook/test";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import type { ReactNode } from "react";
 
 import { Form } from "../form/Form";
 import { FormMultiSelect } from "./FormMultiSelect";
@@ -40,14 +42,38 @@ const meta = {
   title: "Form/FormMultiSelect",
   component: FormMultiSelect,
   args: {
-    label: "label",
+    label: "Label",
     name: "name",
     disabled: false,
     control: undefined,
     options: cars,
   },
   argTypes: {
+    className: {
+      control: false,
+      description: "Additional classes to apply to the component.",
+    },
     control: {
+      table: {
+        disable: true,
+      },
+    },
+    defaultValue: {
+      table: {
+        disable: true,
+      },
+    },
+    name: {
+      table: {
+        disable: true,
+      },
+    },
+    rules: {
+      table: {
+        disable: true,
+      },
+    },
+    shouldUnregister: {
       table: {
         disable: true,
       },
@@ -70,9 +96,11 @@ const formSchema = z.object({
   name: z.array(z.string()).min(1, "Select at least one car"),
 });
 
-const FormWrapper = ({ children }: { children: React.ReactNode }) => {
+const onSubmit = fn();
+
+const FormWrapper = ({ children }: { children: ReactNode }) => {
   const form = useForm<z.infer<typeof formSchema>>({ defaultValues: { name: ["Tesla", "Ford"] }, resolver: zodResolver(formSchema) });
-  const handleSubmit = form.handleSubmit(data => console.log(data));
+  const handleSubmit = form.handleSubmit(onSubmit);
   return (
     <Form {...form}>
       <form onSubmit={handleSubmit} className="mtx-w-96 mtx-flex mtx-flex-col mtx-gap-2 mtx-items-end">
@@ -96,7 +124,7 @@ export const Default: Story = {
       },
     },
   },
-  render: ({ ...args }) => (
+  render: args => (
     <FormWrapper>
       <FormMultiSelect {...args} />
     </FormWrapper>
@@ -108,9 +136,10 @@ export const InForm: Story = {
     label: "Label",
     name: "name",
     disabled: false,
+    required: true,
     className: "mtx-w-full",
   },
-  render: ({ ...args }) => (
+  render: args => (
     <FormWrapper>
       <FormMultiSelect {...args} />
       <Button type="submit" className="mtx-w-24">
@@ -120,65 +149,67 @@ export const InForm: Story = {
   ),
 };
 
-export const WithNumbers = () => {
-  const formSchema = z.object({
-    name: z.array(z.number()).min(1, "Select at least one car"),
-  });
-  const form = useForm<z.infer<typeof formSchema>>({ defaultValues: { name: [1, 2] }, resolver: zodResolver(formSchema) });
+export const WithNumbers: Story = {
+  render: () => {
+    const numericSchema = z.object({
+      name: z.array(z.number()).min(1, "Select at least one car"),
+    });
+    const form = useForm<z.infer<typeof numericSchema>>({ defaultValues: { name: [1, 2] }, resolver: zodResolver(numericSchema) });
+    const handleSubmit = form.handleSubmit(onSubmit);
 
-  const handleSubmit = form.handleSubmit(data => console.log(data));
-
-  return (
-    <Form {...form}>
-      <form onSubmit={handleSubmit} className="mtx-w-96 mtx-flex mtx-flex-col mtx-gap-2 mtx-items-end">
-        <FormMultiSelect
-          label="Label"
-          name="name"
-          className="mtx-w-full"
-          options={[
-            { value: 1, label: "one" },
-            { value: 2, label: "two" },
-            { value: 3, label: "three" },
-          ]}
-        />
-        <Button type="submit" className="mtx-w-24">
-          Submit
-        </Button>
-      </form>
-    </Form>
-  );
+    return (
+      <Form {...form}>
+        <form onSubmit={handleSubmit} className="mtx-w-96 mtx-flex mtx-flex-col mtx-gap-2 mtx-items-end">
+          <FormMultiSelect
+            label="Label"
+            name="name"
+            className="mtx-w-full"
+            options={[
+              { value: 1, label: "one" },
+              { value: 2, label: "two" },
+              { value: 3, label: "three" },
+            ]}
+          />
+          <Button type="submit" className="mtx-w-24">
+            Submit
+          </Button>
+        </form>
+      </Form>
+    );
+  },
 };
 
-const numericOptions = [
-  { value: 1, label: "one" },
-  { value: 2, label: "two" },
-  { value: 3, label: "three" },
+const addOptionOptions = [
+  { value: "one", label: "one" },
+  { value: "two", label: "two" },
+  { value: "three", label: "three" },
 ];
 
-export const AddOptionOnSearchNotFound = () => {
-  const formSchema = z.object({
-    name: z.array(z.number()).min(1, "Select at least one car"),
-  });
-  const form = useForm<z.infer<typeof formSchema>>({ defaultValues: { name: [] }, resolver: zodResolver(formSchema) });
+export const AddOptionOnSearchNotFound: Story = {
+  render: () => {
+    const addOptionSchema = z.object({
+      name: z.array(z.string()).min(1, "Select at least one car"),
+    });
+    const form = useForm<z.infer<typeof addOptionSchema>>({ defaultValues: { name: [] }, resolver: zodResolver(addOptionSchema) });
+    const handleSubmit = form.handleSubmit(onSubmit);
 
-  const handleSubmit = form.handleSubmit(data => console.log(data));
-
-  return (
-    <Form {...form}>
-      <form onSubmit={handleSubmit} className="mtx-w-96 mtx-flex mtx-flex-col mtx-gap-2 mtx-items-end">
-        <FormMultiSelect
-          label="Label"
-          name="name"
-          className="mtx-w-full"
-          options={numericOptions}
-          slotProps={{ multiSelectProps: { addOptionOnSearchNotFound: true, showSelectAll: false } }}
-        />
-        <Button type="submit" className="mtx-w-24">
-          Submit
-        </Button>
-      </form>
-    </Form>
-  );
+    return (
+      <Form {...form}>
+        <form onSubmit={handleSubmit} className="mtx-w-96 mtx-flex mtx-flex-col mtx-gap-2 mtx-items-end">
+          <FormMultiSelect
+            label="Label"
+            name="name"
+            className="mtx-w-full"
+            options={addOptionOptions}
+            slotProps={{ multiSelectProps: { addOptionOnSearchNotFound: true, showSelectAll: false } }}
+          />
+          <Button type="submit" className="mtx-w-24">
+            Submit
+          </Button>
+        </form>
+      </Form>
+    );
+  },
 };
 
 export default meta;

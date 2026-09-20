@@ -1,44 +1,52 @@
-import { Meta, StoryObj } from "@storybook/react-vite";
+import type { Meta, StoryObj } from "@storybook/react-vite";
+import { fn } from "storybook/test";
+
 import { ConfirmProvider, useConfirm } from "./Confirm";
 import { Button } from "../button/Button";
 
-const meta: Meta = {
+const meta = {
   title: "Components/Confirm",
+  component: ConfirmProvider,
   tags: ["autodocs"],
-  argTypes: {},
-};
+  parameters: {
+    layout: "centered",
+  },
+  argTypes: {
+    children: {
+      table: {
+        disable: true,
+      },
+    },
+  },
+} satisfies Meta<typeof ConfirmProvider>;
 
 type Story = StoryObj<typeof meta>;
 
-const Wrapper = () => {
+const onConfirmed = fn();
+const onCanceled = fn();
+
+const ConfirmExample = () => {
+  const confirm = useConfirm();
+  const handleConfirm = () => {
+    void confirm({ title: "Title", description: "Are you sure you want to do this?" }).then(onConfirmed).catch(onCanceled);
+  };
+
   return (
-    <ConfirmProvider>
-      <Component />
-    </ConfirmProvider>
+    <Button type="button" onClick={handleConfirm}>
+      Open Confirm
+    </Button>
   );
 };
 
-const Component = () => {
-  const confirm = useConfirm();
-  const handleConfirm = () => {
-    confirm({ title: "Title", description: "Are you sure you want to do this?" })
-      .then(() => {
-        console.log("confirmed");
-      })
-      .catch(() => {
-        {
-          console.log("canceled");
-        }
-      });
-  };
-
-  return <Button onClick={handleConfirm}>Open Confirm</Button>;
-};
-
 export const Default: Story = {
-  render: () => {
-    return <Wrapper />;
+  args: {
+    children: null,
   },
+  render: () => (
+    <ConfirmProvider>
+      <ConfirmExample />
+    </ConfirmProvider>
+  ),
 };
 
 export default meta;

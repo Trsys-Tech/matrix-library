@@ -1,7 +1,9 @@
-import { Meta, StoryObj } from "@storybook/react-vite";
+import type { Meta, StoryObj } from "@storybook/react-vite";
+import { fn } from "storybook/test";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import type { ReactNode } from "react";
 
 import { Form } from "../form/Form";
 import { Button } from "../button/Button";
@@ -11,13 +13,37 @@ const meta = {
   title: "Form/FormRating",
   component: FormRating,
   args: {
-    label: "label",
+    label: "Label",
     name: "name",
     disabled: false,
     control: undefined,
   },
   argTypes: {
+    className: {
+      control: false,
+      description: "Additional classes to apply to the component.",
+    },
     control: {
+      table: {
+        disable: true,
+      },
+    },
+    defaultValue: {
+      table: {
+        disable: true,
+      },
+    },
+    name: {
+      table: {
+        disable: true,
+      },
+    },
+    rules: {
+      table: {
+        disable: true,
+      },
+    },
+    shouldUnregister: {
       table: {
         disable: true,
       },
@@ -40,10 +66,12 @@ const formSchema = z.object({
   rate: z.number().min(1, "rate must be greater than or equal to 1").max(5),
 });
 
-const FormWrapper = ({ children }: { children: React.ReactNode }) => {
+const onSubmit = fn();
+
+const FormWrapper = ({ children }: { children: ReactNode }) => {
   const form = useForm<z.infer<typeof formSchema>>({ defaultValues: { rate: 0 }, resolver: zodResolver(formSchema) });
 
-  const handleSubmit = form.handleSubmit(data => console.log(data));
+  const handleSubmit = form.handleSubmit(onSubmit);
   return (
     <Form {...form}>
       <form onSubmit={handleSubmit} className="mtx-w-96 mtx-flex mtx-flex-col mtx-gap-2 mtx-items-end">
@@ -56,11 +84,11 @@ const FormWrapper = ({ children }: { children: React.ReactNode }) => {
 export const Default: Story = {
   args: {
     label: "Label",
-    name: "name",
+    name: "rate",
     disabled: false,
     className: "mtx-w-full",
   },
-  render: ({ ...args }) => (
+  render: args => (
     <FormWrapper>
       <FormRating {...args} />
     </FormWrapper>
@@ -72,9 +100,10 @@ export const InForm: Story = {
     label: "Label",
     name: "rate",
     disabled: false,
+    required: true,
     className: "mtx-w-full",
   },
-  render: ({ ...args }) => (
+  render: args => (
     <FormWrapper>
       <FormRating {...args} />
       <Button type="submit" className="mtx-w-24">

@@ -1,40 +1,59 @@
-import React from "react";
-import { Meta, StoryObj } from "@storybook/react-vite";
+import type { Meta, StoryObj } from "@storybook/react-vite";
+import { fn } from "storybook/test";
+import { useArgs } from "storybook/preview-api";
 
 import { DesktopDatePicker } from "./DesktopDatePicker";
 
-const meta: Meta<typeof DesktopDatePicker> = {
+const meta = {
   title: "Components/DesktopDatePicker",
   component: DesktopDatePicker,
   tags: ["autodocs"],
+  parameters: {
+    layout: "centered",
+  },
   args: {
     className: "mtx-w-72",
     closeOnSelect: true,
+    selected: "2025-12-24",
   },
   argTypes: {
-    selected: {
-      table: {
-        disable: false,
-      },
+    className: {
+      control: false,
+      description: "Additional classes to apply to the component.",
     },
     calendarClassName: {
       table: {
         disable: true,
       },
     },
+    disabled: { control: "boolean" },
+    disabledDates: {
+      control: false,
+      description: "Dates after today are disabled in this example.",
+    },
   },
-};
+} satisfies Meta<typeof DesktopDatePicker>;
 
-export const Default: StoryObj<typeof meta> = {
+type Story = StoryObj<typeof meta>;
+
+const onSelect = fn();
+
+export const Default: Story = {
   args: {
-    selected: "2025-12-24",
+    disabledDates: { after: new Date() },
   },
-  render: args => {
-    const Component = () => {
-      const [selected, setSelected] = React.useState<string | Date | undefined>(args.selected);
-      return <DesktopDatePicker {...args} selected={selected} onSelect={day => setSelected(day)} />;
-    };
-    return <Component />;
+  render: function Render(args) {
+    const [, updateArgs] = useArgs<NonNullable<Story["args"]>>();
+
+    return (
+      <DesktopDatePicker
+        {...args}
+        onSelect={day => {
+          onSelect(day);
+          updateArgs({ selected: day });
+        }}
+      />
+    );
   },
 };
 

@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { fn } from "storybook/test";
 import { ChevronDown, Plus } from "@trsys-tech/matrix-icons";
 
 import { Button } from "./Button";
@@ -10,8 +11,42 @@ const meta = {
     layout: "centered",
   },
   tags: ["autodocs"],
-  argTypes: {},
-  args: { onClick: () => {} },
+  args: {
+    onClick: fn(),
+  },
+  argTypes: {
+    className: {
+      control: false,
+      description: "Additional classes to apply to the component.",
+    },
+    variant: {
+      control: { type: "inline-radio" },
+      options: ["primary", "outline", "text", "danger", "warning", "success", "info", "primary-on-dark", "outline-on-dark", "text-on-dark"],
+    },
+    size: {
+      control: { type: "inline-radio" },
+      options: ["sm", "md", "lg"],
+    },
+    children: {
+      control: "text",
+    },
+    loading: {
+      control: "boolean",
+    },
+    disabled: {
+      control: "boolean",
+    },
+    startIcon: {
+      control: false,
+    },
+    endIcon: {
+      control: false,
+    },
+    asChild: {
+      control: false,
+      description: "Use the AsChild story when the button should render as another element.",
+    },
+  },
 } satisfies Meta<typeof Button>;
 
 type Story = StoryObj<typeof meta>;
@@ -19,7 +54,7 @@ type Story = StoryObj<typeof meta>;
 export const Primary: Story = {
   args: {
     variant: "primary",
-    children: <span>Button</span>,
+    children: "Button",
     asChild: false,
     loading: false,
   },
@@ -105,6 +140,20 @@ export const OnDark: Story = {
       <Button {...props} variant="success" startIcon={<Plus />} endIcon={<ChevronDown />} />
       <Button {...props} variant="info" startIcon={<Plus />} endIcon={<ChevronDown />} />
     </div>
+  ),
+};
+
+export const AsChild: Story = {
+  args: {
+    variant: "outline",
+    children: "Go to dashboard",
+    asChild: true,
+    loading: false,
+  },
+  render: ({ children, asChild, ...props }) => (
+    <Button {...props} asChild={asChild}>
+      <a href="#dashboard">{children}</a>
+    </Button>
   ),
 };
 

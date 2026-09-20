@@ -1,19 +1,48 @@
-import React from "react";
-import { Meta } from "@storybook/react-vite";
-import { ColDef, GridApi, GridReadyEvent, IDetailCellRendererParams, ITextFilterParams } from "ag-grid-community";
+import { useEffect, useState } from "react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
+import { fn } from "storybook/test";
+import type {
+  ColDef,
+  DoesExternalFilterPass,
+  GetRowIdFunc,
+  GridApi,
+  GridReadyEvent,
+  ICellRendererParams,
+  ITextFilterParams,
+} from "ag-grid-community";
 
-import { Chip } from "../chip/Chip";
 import { Button } from "../button/Button";
+import { Chip } from "../chip/Chip";
 import { DataGrid, DataGridActionBar, DataGridContent, ExtraActions, FreezeAction, PrintAction, RefreshAction, SearchAction } from "./DataGrid";
 
-const meta: Meta<typeof DataGrid> = {
+const meta = {
   title: "Components/DataGrid",
   component: DataGrid,
   tags: ["autodocs"],
-};
+  parameters: {
+    layout: "fullscreen",
+  },
+  args: {
+    children: null,
+  },
+  argTypes: {
+    children: {
+      table: {
+        disable: true,
+      },
+    },
+  },
+} satisfies Meta<typeof DataGrid>;
+
+type Story = StoryObj<typeof meta>;
 
 type Row = { id: number; make: string; model: string; price: number; electric: boolean };
 type PriceType = "all" | "expensive" | "cheap";
+
+const onEdit = fn();
+const onRefresh = fn();
+
+const getRowId: GetRowIdFunc<Row> = ({ data }) => String(data.id);
 
 const colDefs: ColDef<Row>[] = [
   {
@@ -24,12 +53,10 @@ const colDefs: ColDef<Row>[] = [
     } as ITextFilterParams,
     flex: 1,
   },
-  { field: "model", editable: true, valueFormatter: params => `**${params.value}**`, flex: 1 },
+  { field: "model", editable: true, flex: 1 },
   {
     field: "price",
-    cellRenderer: (params: IDetailCellRendererParams<Row>) => {
-      return <strong>{params.value}</strong>;
-    },
+    cellRenderer: (params: ICellRendererParams<Row, number>) => <strong>{params.value}</strong>,
     filter: "agNumberColumnFilter",
     flex: 1,
   },
@@ -71,105 +98,105 @@ const rowData: Row[] = [
   { id: 32, make: "Porsche", model: "Taycan Cross Turismo", price: 93950, electric: true },
 ];
 
-export const WithActionbar = () => {
-  const [api, setApi] = React.useState<GridApi | null>(null);
-  const [priceType, setPriceType] = React.useState<PriceType>("all");
+const totalRow = {
+  make: "Total",
+  model: "",
+  price: rowData.reduce((total, row) => total + row.price, 0),
+} satisfies Partial<Row>;
 
-  const isExternalFilterPresent = () => {
-    return priceType !== "all";
-  };
+export const WithActionBar: Story = {
+  render: () => {
+    const [api, setApi] = useState<GridApi<Row> | null>(null);
+    const [priceType, setPriceType] = useState<PriceType>("all");
 
-  const doesExternalFilterPass = (node: { data: Row }) => {
-    switch (priceType) {
-      case "expensive":
-        return node.data.price > 30000;
-      case "cheap":
-        return node.data.price < 30000;
-      default:
-        return true;
-    }
-  };
+    const isExternalFilterPresent = () => priceType !== "all";
 
-  const externalFilterChanged = (newValue: PriceType) => {
-    setPriceType(newValue);
-    api?.onFilterChanged();
-  };
+    const doesExternalFilterPass: DoesExternalFilterPass<Row> = node => {
+      const price = node.data?.price;
 
-  const handleGridReady = (params: GridReadyEvent) => {
-    setApi(params.api);
-  };
+      if (price === undefined) {
+        return false;
+      }
 
-  return (
-    <div className="mtx-h-96 mtx-p-4">
-      <DataGrid>
-        <DataGridActionBar>
-          <div className="mtx-flex mtx-gap-2 mtx-items-center mtx-me-2">
-            <Chip
-              className="mtx-h-6 mtx-cursor-pointer"
-              variant={priceType === "all" ? "primary" : "neutral"}
-              onClick={() => externalFilterChanged("all")}
-            >
-              All
-            </Chip>
-            <Chip
-              className="mtx-h-6 mtx-cursor-pointer"
-              variant={priceType === "expensive" ? "primary" : "neutral"}
-              onClick={() => externalFilterChanged("expensive")}
-            >
-              Expensive Cars
-            </Chip>
-            <Chip
-              className="mtx-h-6 mtx-cursor-pointer"
-              variant={priceType === "cheap" ? "primary" : "neutral"}
-              onClick={() => externalFilterChanged("cheap")}
-            >
-              Cheap Cars
-            </Chip>
-          </div>
-          <SearchAction />
-          <FreezeAction className="mtx-ms-auto" />
-          <PrintAction />
-          <RefreshAction
-            onRefresh={() => {
-              alert("data refreshed");
-            }}
+      switch (priceType) {
+        case "expensive":
+          return price > 30000;
+        case "cheap":
+          return price < 30000;
+        default:
+          return true;
+      }
+    };
+
+    const externalFilterChanged = (newValue: PriceType) => {
+      setPriceType(newValue);
+    };
+
+    const handleGridReady = (params: GridReadyEvent<Row>) => {
+      setApi(params.api);
+    };
+
+    useEffect(() => {
+      api?.onFilterChanged();
+    }, [api, priceType]);
+
+    return (
+      <div className="mtx-h-96 mtx-p-4">
+        <DataGrid>
+          <DataGridActionBar>
+            <div className="mtx-flex mtx-items-center mtx-gap-2 mtx-me-2">
+              <Chip asChild className="mtx-h-6 mtx-cursor-pointer" variant={priceType === "all" ? "primary" : "neutral"}>
+                <button type="button" onClick={() => externalFilterChanged("all")}>
+                  All
+                </button>
+              </Chip>
+              <Chip asChild className="mtx-h-6 mtx-cursor-pointer" variant={priceType === "expensive" ? "primary" : "neutral"}>
+                <button type="button" onClick={() => externalFilterChanged("expensive")}>
+                  Expensive Cars
+                </button>
+              </Chip>
+              <Chip asChild className="mtx-h-6 mtx-cursor-pointer" variant={priceType === "cheap" ? "primary" : "neutral"}>
+                <button type="button" onClick={() => externalFilterChanged("cheap")}>
+                  Cheap Cars
+                </button>
+              </Chip>
+            </div>
+            <SearchAction />
+            <FreezeAction className="mtx-ms-auto" />
+            <PrintAction aria-label="Print data" />
+            <RefreshAction aria-label="Refresh data" onRefresh={onRefresh} />
+            <ExtraActions slotProps={{ triggerProps: { "aria-label": "More actions" } }}>
+              <Button variant="text" className="mtx-w-full" onClick={onEdit}>
+                Edit
+              </Button>
+            </ExtraActions>
+          </DataGridActionBar>
+          <DataGridContent
+            rowData={rowData}
+            columnDefs={colDefs}
+            rowSelection={{ mode: "multiRow" }}
+            getRowId={getRowId}
+            onGridReady={handleGridReady}
+            isExternalFilterPresent={isExternalFilterPresent}
+            doesExternalFilterPass={doesExternalFilterPass}
           />
-          <ExtraActions>
-            <Button variant="text" className="mtx-w-full">
-              Edit
-            </Button>
-          </ExtraActions>
-        </DataGridActionBar>
-        <DataGridContent
-          rowData={rowData}
-          columnDefs={colDefs}
-          rowSelection={{ mode: "multiRow" }}
-          onGridReady={handleGridReady}
-          isExternalFilterPresent={isExternalFilterPresent}
-          doesExternalFilterPass={doesExternalFilterPass}
-        />
-      </DataGrid>
-    </div>
-  );
+        </DataGrid>
+      </div>
+    );
+  },
 };
 
-export const WithPagination = () => {
-  // Column Definitions: Defines the columns to be displayed.
-
-  return (
+export const WithPagination: Story = {
+  render: () => (
     <div className="mtx-h-96 mtx-p-4">
       <DataGrid>
         <DataGridActionBar>
           <SearchAction />
           <FreezeAction className="mtx-ms-auto" />
-          <PrintAction />
-          <RefreshAction
-            onRefresh={() => {
-              alert("data refreshed");
-            }}
-          />
-          <ExtraActions>
-            <Button variant="text" className="mtx-w-full">
+          <PrintAction aria-label="Print data" />
+          <RefreshAction aria-label="Refresh data" onRefresh={onRefresh} />
+          <ExtraActions slotProps={{ triggerProps: { "aria-label": "More actions" } }}>
+            <Button variant="text" className="mtx-w-full" onClick={onEdit}>
               Edit
             </Button>
           </ExtraActions>
@@ -178,33 +205,26 @@ export const WithPagination = () => {
           rowData={rowData}
           columnDefs={colDefs}
           rowSelection={{ mode: "multiRow" }}
+          getRowId={getRowId}
           paginationPageSizeSelector={[5, 10, 25]}
           paginationPageSize={5}
           pagination
         />
       </DataGrid>
     </div>
-  );
+  ),
 };
 
-export const RowTotalTrick = () => {
-  const totalRow = React.useMemo(() => {
-    return rowData.reduce(
-      (acc, row) => {
-        acc.price += row.price;
-        return acc;
-      },
-      { make: "Total", model: "", price: 0, electric: "" },
+export const RowTotalTrick: Story = {
+  render: () => {
+    return (
+      <div className="mtx-h-96 mtx-p-4">
+        <DataGrid>
+          <DataGridContent rowData={rowData} columnDefs={colDefs} getRowId={getRowId} pinnedBottomRowData={[totalRow]} />
+        </DataGrid>
+      </div>
     );
-  }, []);
-
-  return (
-    <div className="mtx-h-96 mtx-p-4">
-      <DataGrid>
-        <DataGridContent rowData={rowData} columnDefs={colDefs} pinnedBottomRowData={[totalRow]} />
-      </DataGrid>
-    </div>
-  );
+  },
 };
 
 export default meta;

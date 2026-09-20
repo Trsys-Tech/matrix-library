@@ -1,33 +1,58 @@
-import React from "react";
-import { Meta, StoryObj } from "@storybook/react-vite";
+import type { Meta, StoryObj } from "@storybook/react-vite";
+import { fn } from "storybook/test";
+import { useArgs } from "storybook/preview-api";
 
 import { MobileDatePicker } from "./MobileDatePicker";
 
-const meta: Meta<typeof MobileDatePicker> = {
+const meta = {
   title: "Components/MobileDatePicker",
   component: MobileDatePicker,
   tags: ["autodocs"],
+  parameters: {
+    layout: "centered",
+  },
+  args: {
+    className: "mtx-w-72",
+    selected: "2025-12-24",
+  },
   argTypes: {
-    selected: {
-      table: {
-        disable: true,
-      },
+    className: {
+      control: false,
+      description: "Additional classes to apply to the component.",
     },
     calendarClassName: {
       table: {
         disable: true,
       },
     },
+    disabled: { control: "boolean" },
+    disabledDates: {
+      control: false,
+      description: "Dates after today are disabled in this example.",
+    },
   },
-};
+} satisfies Meta<typeof MobileDatePicker>;
 
-export const Default: StoryObj<typeof meta> = {
-  render: args => {
-    const Component = () => {
-      const [selected, setSelected] = React.useState<string | Date | undefined>(undefined);
-      return <MobileDatePicker {...args} selected={selected} onSelect={day => setSelected(day)} />;
-    };
-    return <Component />;
+type Story = StoryObj<typeof meta>;
+
+const onSelect = fn();
+
+export const Default: Story = {
+  args: {
+    disabledDates: { after: new Date() },
+  },
+  render: function Render(args) {
+    const [, updateArgs] = useArgs<NonNullable<Story["args"]>>();
+
+    return (
+      <MobileDatePicker
+        {...args}
+        onSelect={day => {
+          onSelect(day);
+          updateArgs({ selected: day });
+        }}
+      />
+    );
   },
 };
 

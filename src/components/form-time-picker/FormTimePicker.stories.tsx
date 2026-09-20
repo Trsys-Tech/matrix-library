@@ -1,6 +1,8 @@
 import { z } from "zod";
 import { useForm } from "react-hook-form";
-import { Meta, StoryObj } from "@storybook/react-vite";
+import type { Meta, StoryObj } from "@storybook/react-vite";
+import { fn } from "storybook/test";
+import type { ReactNode } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { Form } from "../form/Form";
@@ -11,13 +13,37 @@ const meta = {
   title: "Form/FormTimePicker",
   component: FormTimePicker,
   args: {
-    label: "label",
+    label: "Label",
     name: "name",
     disabled: false,
     control: undefined,
   },
   argTypes: {
+    className: {
+      control: false,
+      description: "Additional classes to apply to the component.",
+    },
     control: {
+      table: {
+        disable: true,
+      },
+    },
+    defaultValue: {
+      table: {
+        disable: true,
+      },
+    },
+    name: {
+      table: {
+        disable: true,
+      },
+    },
+    rules: {
+      table: {
+        disable: true,
+      },
+    },
+    shouldUnregister: {
       table: {
         disable: true,
       },
@@ -49,10 +75,12 @@ const formSchema = z.object({
   ),
 });
 
-const FormWrapper = ({ children }: { children: React.ReactNode }) => {
+const onSubmit = fn();
+
+const FormWrapper = ({ children }: { children: ReactNode }) => {
   const form = useForm<z.infer<typeof formSchema>>({ defaultValues: { time: undefined }, resolver: zodResolver(formSchema) });
 
-  const handleSubmit = form.handleSubmit(data => console.log(data));
+  const handleSubmit = form.handleSubmit(onSubmit);
   return (
     <Form {...form}>
       <form onSubmit={handleSubmit} className="mtx-w-56 mtx-flex mtx-flex-col mtx-gap-2 mtx-items-end">
@@ -69,7 +97,7 @@ export const Default: Story = {
     disabled: false,
     className: "mtx-w-full",
   },
-  render: ({ ...args }) => (
+  render: args => (
     <FormWrapper>
       <FormTimePicker {...args} />
     </FormWrapper>
@@ -81,9 +109,10 @@ export const InForm: Story = {
     label: "Label",
     name: "time",
     disabled: false,
+    required: true,
     className: "mtx-w-96",
   },
-  render: ({ ...args }) => (
+  render: args => (
     <FormWrapper>
       <FormTimePicker {...args} />
       <Button type="submit" className="mtx-w-24">

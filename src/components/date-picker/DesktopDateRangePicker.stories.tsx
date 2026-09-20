@@ -11,6 +11,10 @@ const meta: Meta<typeof DesktopDateRangePicker> = {
     className: "mtx-w-72",
   },
   argTypes: {
+    className: {
+      control: false,
+      description: "Additional classes to apply to the component.",
+    },
     selected: {
       table: {
         disable: true,

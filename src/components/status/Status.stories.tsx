@@ -1,18 +1,47 @@
-import { Meta, StoryObj } from "@storybook/react-vite";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Status } from "./Status";
 
-const meta: Meta<typeof Status> = {
+const meta = {
   title: "Components/Status",
   component: Status,
   tags: ["autodocs"],
+  parameters: {
+    layout: "centered",
+  },
   argTypes: {
+    className: {
+      control: false,
+      description: "Additional classes to apply to the component.",
+    },
     children: {
       control: {
         type: "text",
       },
     },
+    variant: {
+      control: { type: "inline-radio" },
+      options: [
+        "primary",
+        "secondary",
+        "outline",
+        "danger",
+        "success",
+        "warning",
+        "info",
+        "primary-inverse",
+        "danger-inverse",
+        "success-inverse",
+        "warning-inverse",
+        "info-inverse",
+        "purple-inverse",
+        "coral-inverse",
+        "turquoise-inverse",
+        "lime-inverse",
+        "gray-inverse",
+      ],
+    },
   },
-};
+} satisfies Meta<typeof Status>;
 
 type Story = StoryObj<typeof meta>;
 
@@ -23,6 +52,11 @@ export const Default: Story = {
 };
 
 export const Variants: Story = {
+  parameters: {
+    controls: {
+      disable: true,
+    },
+  },
   args: {
     children: "Status",
     variant: "primary",

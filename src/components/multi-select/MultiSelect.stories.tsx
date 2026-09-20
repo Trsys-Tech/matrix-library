@@ -1,23 +1,9 @@
-import { Meta, StoryObj } from "@storybook/react-vite";
+import type { Meta, StoryObj } from "@storybook/react-vite";
+import { useArgs } from "storybook/preview-api";
+import { fn } from "storybook/test";
+
 import { MultiSelect } from "./MultiSelect";
 import { Cat, Dog, Fish, Rabbit, Turtle } from "lucide-react";
-import React from "react";
-
-const meta: Meta<typeof MultiSelect> = {
-  title: "Components/MultiSelect",
-  component: MultiSelect,
-  args: {
-    disabled: false,
-  },
-  argTypes: {
-    disabled: {
-      control: {
-        type: "boolean",
-      },
-    },
-  },
-  tags: ["autodocs"],
-};
 
 const frameworksList = [
   { value: "react", label: "React", icon: Turtle },
@@ -27,32 +13,112 @@ const frameworksList = [
   { value: "ember", label: "Ember", icon: Fish },
 ];
 
-export const UnControlled: StoryObj<typeof meta> = {
+const onValueChange = fn();
+
+const meta = {
+  title: "Components/MultiSelect",
+  component: MultiSelect,
+  parameters: {
+    layout: "centered",
+  },
   args: {
     disabled: false,
+  },
+  argTypes: {
+    className: {
+      control: false,
+      description: "Additional classes to apply to the component.",
+    },
+    options: {
+      control: false,
+      table: {
+        disable: true,
+      },
+    },
+    value: {
+      control: "object",
+    },
+    defaultValue: {
+      control: "object",
+    },
+    disabled: {
+      control: "boolean",
+    },
+    loading: {
+      control: "boolean",
+    },
+    showSelectAll: {
+      control: "boolean",
+    },
+    addOptionOnSearchNotFound: {
+      control: "boolean",
+    },
+    modalPopover: {
+      control: "boolean",
+    },
+    maxCount: {
+      control: "number",
+    },
+    onValueChange: {
+      table: {
+        disable: true,
+      },
+    },
+    asChild: {
+      control: false,
+      table: {
+        disable: true,
+      },
+    },
+  },
+  tags: ["autodocs"],
+} satisfies Meta<typeof MultiSelect>;
+
+type Story = StoryObj<typeof meta>;
+
+export const UnControlled: Story = {
+  args: {
     options: frameworksList,
     placeholder: "Select your favorite frameworks",
-    onValueChange: () => {},
+    onValueChange,
     maxCount: 3,
     className: "mtx-w-96",
   },
 };
 
-export const AddOptionOnSearchNotFound: StoryObj<typeof meta> = {
+export const AddOptionOnSearchNotFound: Story = {
   args: {
-    disabled: false,
     options: frameworksList,
     placeholder: "Select your favorite frameworks",
     addOptionOnSearchNotFound: true,
-    onValueChange: () => {},
+    onValueChange,
     maxCount: 3,
     className: "mtx-w-96",
   },
 };
 
-export const Controlled = () => {
-  const [value, setValue] = React.useState<string[]>([]);
-  return <MultiSelect options={frameworksList} value={value} onValueChange={setValue} placeholder="Select your favorite frameworks" maxCount={3} />;
+export const Controlled: Story = {
+  args: {
+    options: frameworksList,
+    value: [],
+    onValueChange,
+    placeholder: "Select your favorite frameworks",
+    maxCount: 3,
+    className: "mtx-w-96",
+  },
+  render: function Render(args) {
+    const [, updateArgs] = useArgs<NonNullable<Story["args"]>>();
+
+    return (
+      <MultiSelect
+        {...args}
+        onValueChange={value => {
+          onValueChange(value);
+          updateArgs({ value });
+        }}
+      />
+    );
+  },
 };
 
 export default meta;

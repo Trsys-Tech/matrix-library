@@ -1,4 +1,4 @@
-import { Meta, StoryObj } from "@storybook/react-vite";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 
 import { Button } from "../button/Button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "./Card";
@@ -10,14 +10,23 @@ const meta = {
     layout: "centered",
   },
   tags: ["autodocs"],
-  argTypes: {},
+  argTypes: {
+    className: {
+      control: false,
+      description: "Additional classes to apply to the component.",
+    },
+    children: {
+      table: {
+        disable: true,
+      },
+    },
+  },
 } satisfies Meta<typeof Card>;
 
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
-  args: {},
-  render: ({ ...props }) => (
+  render: props => (
     <Card {...props}>
       <CardHeader>
         <CardTitle>Card Title</CardTitle>

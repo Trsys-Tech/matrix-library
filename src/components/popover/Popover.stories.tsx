@@ -1,22 +1,27 @@
-import { Meta } from "@storybook/react-vite";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Popover, PopoverContent, PopoverTrigger } from "./Popover";
 import { Button } from "../button/Button";
 import { TextField } from "../text-field/TextField";
 import { Label } from "../label/Label";
 
-const meta: Meta<typeof Popover> = {
+const meta = {
   title: "Components/Popover",
   component: Popover,
+  parameters: {
+    layout: "centered",
+  },
   tags: ["autodocs"],
-};
+} satisfies Meta<typeof Popover>;
 
-export const Default = () => {
-  return (
+type Story = StoryObj<typeof meta>;
+
+export const Default: Story = {
+  render: () => (
     <Popover>
       <PopoverTrigger asChild>
-        <Button>Toggle</Button>
+        <Button type="button">Toggle</Button>
       </PopoverTrigger>
-      <PopoverContent className="mtx-w-72" align="start">
+      <PopoverContent align="start">
         <div className="mtx-grid mtx-gap-4">
           <div className="mtx-space-y-2">
             <h4 className="mtx-font-medium mtx-leading-none">Dimensions</h4>
@@ -43,7 +48,7 @@ export const Default = () => {
         </div>
       </PopoverContent>
     </Popover>
-  );
+  ),
 };
 
 export default meta;

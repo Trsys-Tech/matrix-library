@@ -1,17 +1,32 @@
-import { Meta } from "@storybook/react-vite";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 
 import { Breadcrumb, BreadcrumbEllipsis, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "./Breadcrumb";
 
-const meta: Meta<typeof Breadcrumb> = {
+const meta = {
   title: "Components/Breadcrumb",
   component: Breadcrumb,
-  args: {},
+  parameters: {
+    layout: "centered",
+  },
   tags: ["autodocs"],
-};
+  argTypes: {
+    className: {
+      control: false,
+      description: "Additional classes to apply to the component.",
+    },
+    children: {
+      table: {
+        disable: true,
+      },
+    },
+  },
+} satisfies Meta<typeof Breadcrumb>;
 
-export const Default = () => {
-  return (
-    <Breadcrumb>
+type Story = StoryObj<typeof meta>;
+
+export const Default: Story = {
+  render: props => (
+    <Breadcrumb {...props}>
       <BreadcrumbList>
         <BreadcrumbItem>
           <BreadcrumbLink asChild>
@@ -34,7 +49,7 @@ export const Default = () => {
         </BreadcrumbItem>
       </BreadcrumbList>
     </Breadcrumb>
-  );
+  ),
 };
 
 export default meta;

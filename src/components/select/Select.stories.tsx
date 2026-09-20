@@ -1,4 +1,5 @@
-import { Meta, StoryObj } from "@storybook/react-vite";
+import type { Meta, StoryObj } from "@storybook/react-vite";
+import { fn } from "storybook/test";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./Select";
 
 const meta = {
@@ -15,10 +16,11 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
   args: {
     disabled: false,
+    onValueChange: fn(),
   },
-  render: ({ ...args }) => (
+  render: args => (
     <Select {...args}>
-      <SelectTrigger className="mtx-w-96">
+      <SelectTrigger aria-label="Item" className="mtx-w-96">
         <SelectValue placeholder="Select an item" />
       </SelectTrigger>
       <SelectContent>

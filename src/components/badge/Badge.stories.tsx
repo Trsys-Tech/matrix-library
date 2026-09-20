@@ -8,7 +8,32 @@ const meta = {
     layout: "centered",
   },
   tags: ["autodocs"],
-  argTypes: {},
+  args: {
+    variant: "primary",
+    size: "md",
+    children: "Badge",
+  },
+  argTypes: {
+    className: {
+      control: false,
+      description: "Additional classes to apply to the component.",
+    },
+    variant: {
+      control: { type: "inline-radio" },
+      options: ["primary", "outline"],
+    },
+    size: {
+      control: { type: "inline-radio" },
+      options: ["sm", "md", "lg"],
+    },
+    children: {
+      control: "text",
+    },
+    asChild: {
+      control: false,
+      description: "Use the AsChild story when the badge should render as another element.",
+    },
+  },
 } satisfies Meta<typeof Badge>;
 
 type Story = StoryObj<typeof meta>;
@@ -16,17 +41,13 @@ type Story = StoryObj<typeof meta>;
 export const Primary: Story = {
   args: {
     variant: "primary",
-    children: "Chips",
-    disabled: false,
-    asChild: false,
+    size: "md",
   },
 };
 
 export const Variants: Story = {
   args: {
     variant: "primary",
-    children: "Chips component",
-    asChild: false,
   },
   render: props => (
     <div className="mtx-space-x-2">
@@ -39,9 +60,7 @@ export const Variants: Story = {
 export const Large: Story = {
   args: {
     variant: "primary",
-    children: "Chips component",
     size: "lg",
-    asChild: false,
   },
   render: props => (
     <div className="mtx-space-x-2">
@@ -54,15 +73,24 @@ export const Large: Story = {
 export const Small: Story = {
   args: {
     variant: "primary",
-    children: "Chips component",
     size: "sm",
-    asChild: false,
   },
   render: props => (
     <div className="mtx-space-x-2">
       <Badge {...props} />
       <Badge {...props} variant="outline" />
     </div>
+  ),
+};
+
+export const AsChild: Story = {
+  args: {
+    asChild: true,
+  },
+  render: ({ children, asChild, ...props }) => (
+    <Badge {...props} asChild={asChild}>
+      <a href="#badge">{children}</a>
+    </Badge>
   ),
 };
 
