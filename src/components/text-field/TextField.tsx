@@ -91,7 +91,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
           )}
         />
         {typeof suffix === "string" || typeof suffix === "number" ? (
-          <span className="mtx-inline-flex mtx-items-center mtx-px-2 mtx-text-xs mtx-font-medium mtx-text-primary mtx-bg-primary-50 mtx-m-0.5 mtx-rounded-sm">
+          <span className="mtx-inline-flex mtx-items-center mtx-px-2 mtx-text-xs mtx-font-medium mtx-text-primary mtx-bg-primary-50 mtx-m-0.5 mtx-rounded-sm mtx-h-[calc(100%-4px)]">
             {suffix}
           </span>
         ) : (
