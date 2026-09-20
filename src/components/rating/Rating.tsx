@@ -36,6 +36,7 @@ interface RatingProps extends React.HTMLAttributes<HTMLDivElement> {
   size?: VariantProps<typeof ratingVariants>["size"];
   readOnly?: boolean;
   value?: number;
+  defaultValue?: number;
   onValueChange?: (value: number) => void;
   children?: React.ReactNode;
   disabled?: boolean;
@@ -50,7 +51,8 @@ const Rating = React.forwardRef<HTMLDivElement, RatingProps>((props, ref) => {
     size,
     readOnly = false,
     onValueChange,
-    value: _value = 0,
+    value: controlledValue,
+    defaultValue = 0,
     className,
     children,
     max = 5,
@@ -59,18 +61,18 @@ const Rating = React.forwardRef<HTMLDivElement, RatingProps>((props, ref) => {
     ...restProps
   } = props;
 
-  const [value, setValue] = React.useState(_value);
+  const isControlled = controlledValue !== undefined;
+  const [internalValue, setInternalValue] = React.useState(defaultValue);
+  const value = controlledValue !== undefined ? controlledValue : internalValue;
   const [hoveredValue, setHoveredValue] = React.useState<number | null>(null);
 
   const displayedValue = hoveredValue ?? value;
 
-  React.useEffect(() => {
-    setValue(_value);
-  }, [_value]);
-
   const handleValueChange = (newValue: number) => {
     if (readOnly) return;
-    setValue(newValue);
+    if (!isControlled) {
+      setInternalValue(newValue);
+    }
     onValueChange?.(newValue);
   };
 
