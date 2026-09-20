@@ -122,7 +122,7 @@ const Sidebar = React.forwardRef<
   HTMLDivElement,
   React.ComponentProps<"div"> & {
     side?: "left" | "right";
-    variant?: "sidebar" | "floating" | "inset";
+    variant?: "sidebar" | "floating" | "inset" | "sheet";
     collapsible?: "offcanvas" | "icon" | "none";
     width?: string;
     widthIcon?: string;
@@ -161,7 +161,7 @@ const Sidebar = React.forwardRef<
     );
   }
 
-  if (isMobile) {
+  if (isMobile || variant === "sheet") {
     return (
       <Sheet open={open} onOpenChange={setOpen} {...props}>
         <SheetContent
