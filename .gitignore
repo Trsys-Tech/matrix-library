@@ -26,3 +26,4 @@ storybook-static
 
 .npmrc
 .gitproxy
+.agents/
