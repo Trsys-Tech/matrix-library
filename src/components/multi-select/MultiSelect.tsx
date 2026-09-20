@@ -9,7 +9,7 @@ import { Status } from "../status/Status";
 import { Button } from "../button/Button";
 import { Separator } from "../separator/Separator";
 import { Popover, PopoverContent, PopoverTrigger } from "../popover/Popover";
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList, CommandSeparator } from "../command/Command";
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "../command/Command";
 
 /**
  * Variants for the multi-select component to handle different styles.
@@ -97,11 +97,6 @@ interface MultiSelectProps<T extends string | number>
   className?: string;
 
   /**
-   * Text to display on the close button when the multi-select component is open.
-   */
-  closeText?: string;
-
-  /**
    * Whether to show the select all option or not
    */
   showSelectAll?: boolean;
@@ -121,11 +116,6 @@ interface MultiSelectProps<T extends string | number>
    * Optional, defaults to false.
    */
   addOptionOnSearchNotFound?: boolean;
-
-  /**
-   * Text to display on the clear button when the multi-select component is open.
-   */
-  clearText?: string;
 
   /**
    * Text to display on the more button when the multi-select component is open.
@@ -162,8 +152,6 @@ const MultiSelect = <T extends string | number>(
     // asChild = false,
     className,
     moreText = "more",
-    clearText = "Clear",
-    closeText = "Close",
     selectAllText = "Select All",
     noResultsText = "No results found.",
     searchText = "Search...",
@@ -182,9 +170,20 @@ const MultiSelect = <T extends string | number>(
   const containerRef = React.useRef<HTMLDivElement>(null);
   const [searchValue, setSearchValue] = React.useState("");
   const [isWrapped, setIsWrapped] = React.useState(false);
-  const [options, setOptions] = React.useState<Map<T, MultiSelectProps<T>["options"][number]>>(
-    new Map(_options.map(option => [option.value, option])),
-  );
+  type MultiSelectOption = MultiSelectProps<T>["options"][number];
+  const [addedOptions, setAddedOptions] = React.useState<Map<T, MultiSelectOption>>(new Map());
+  const propOptions = React.useMemo(() => new Map<T, MultiSelectOption>(_options.map(option => [option.value, option] as const)), [_options]);
+  const options = React.useMemo(() => {
+    const mergedOptions = new Map(propOptions);
+
+    addedOptions.forEach((option, value) => {
+      if (!mergedOptions.has(value)) {
+        mergedOptions.set(value, option);
+      }
+    });
+
+    return mergedOptions;
+  }, [addedOptions, propOptions]);
 
   const handleInputKeyDown = React.useCallback(
     (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -195,7 +194,7 @@ const MultiSelect = <T extends string | number>(
         if (!event.currentTarget.value) return;
         const newOption = { value: event.currentTarget.value as T, label: event.currentTarget.value };
         if (options.get(newOption.value) === undefined) {
-          setOptions(prev => {
+          setAddedOptions(prev => {
             return new Map(prev).set(newOption.value, newOption);
           });
           const newSelectedValues = [...selectedValues, newOption.value];
@@ -236,9 +235,9 @@ const MultiSelect = <T extends string | number>(
     }
     onValueChange([]);
     if (addOptionOnSearchNotFound) {
-      setOptions(new Map(_options.map(option => [option.value, option])));
+      setAddedOptions(new Map());
     }
-  }, [onValueChange, addOptionOnSearchNotFound, _options, isControlled]);
+  }, [onValueChange, addOptionOnSearchNotFound, isControlled]);
 
   const handleTogglePopover = React.useCallback(() => {
     setIsPopoverOpen(prev => !prev);
@@ -263,10 +262,6 @@ const MultiSelect = <T extends string | number>(
       onValueChange(allValues);
     }
   }, [handleClear, onValueChange, options, selectedValues.length, isControlled]);
-
-  React.useEffect(() => {
-    setOptions(new Map(_options.map(option => [option.value, option])));
-  }, [_options]);
 
   React.useLayoutEffect(() => {
     if (containerRef.current) {
@@ -394,22 +389,6 @@ const MultiSelect = <T extends string | number>(
                   </CommandItem>
                 );
               })}
-            </CommandGroup>
-            <CommandSeparator />
-            <CommandGroup>
-              <div className="mtx-flex mtx-items-center mtx-justify-between">
-                {selectedValues.length > 0 && (
-                  <>
-                    <CommandItem onSelect={handleClear} className="mtx-flex-1 mtx-justify-center mtx-cursor-pointer">
-                      {clearText}
-                    </CommandItem>
-                    <Separator orientation="vertical" className="mtx-flex mtx-min-h-6 mtx-h-full" />
-                  </>
-                )}
-                <CommandItem onSelect={() => setIsPopoverOpen(false)} className="mtx-flex-1 mtx-justify-center mtx-cursor-pointer mtx-max-w-full">
-                  {closeText}
-                </CommandItem>
-              </div>
             </CommandGroup>
           </CommandList>
         </Command>
