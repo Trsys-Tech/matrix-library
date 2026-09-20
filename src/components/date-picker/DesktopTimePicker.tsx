@@ -1,11 +1,11 @@
 "use client";
 
-import { HTMLAttributes, useState } from "react";
+import { useState, type FC, type HTMLAttributes } from "react";
 
 import { cn } from "../../lib/utils";
 import { Button } from "../button/Button";
 import { Popover, PopoverContent, PopoverTrigger } from "../popover/Popover";
-import { Time, TimePickerContent } from "./TimePickerContent";
+import { TimePickerContent, type Time } from "./TimePickerContent";
 
 const formatTimeLabel = (time: Time, is24HourMode: boolean) => {
   const minute = time.minute.toString().padStart(2, "0");
@@ -50,7 +50,7 @@ type DesktopTimePickerProps = HTMLAttributes<HTMLButtonElement> & {
  * Desktop-only time picker rendered in a popover.
  * Use this component when you want the desktop interaction regardless of screen size.
  */
-const DesktopTimePicker: React.FC<DesktopTimePickerProps> = ({
+const DesktopTimePicker: FC<DesktopTimePickerProps> = ({
   time,
   onTimeChange,
   className,

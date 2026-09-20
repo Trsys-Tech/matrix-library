@@ -9,6 +9,7 @@ const meta: Meta<typeof TimePicker> = {
   tags: ["autodocs"],
   args: {
     className: "mtx-w-72",
+    time: { hour: 9, minute: 16, ampm: "AM" },
   },
   argTypes: {
     className: {
@@ -23,7 +24,7 @@ const meta: Meta<typeof TimePicker> = {
 export const Default: StoryObj<typeof meta> = {
   render: args => {
     const Component = () => {
-      const [time, setTime] = React.useState<Time | undefined>(undefined);
+      const [time, setTime] = React.useState<Time | undefined>(args.time);
       return <TimePicker {...args} time={time} onTimeChange={day => setTime(day)} />;
     };
     return <Component />;

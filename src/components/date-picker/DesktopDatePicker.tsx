@@ -3,11 +3,11 @@
 import * as React from "react";
 import { format } from "date-fns";
 import { Calendar as CalendarIcon } from "@trsys-tech/matrix-icons";
-import { PropsBase, PropsSingle, DayEventHandler, Matcher, OnSelectHandler } from "react-day-picker";
+import type { DayEventHandler, Matcher, OnSelectHandler, PropsBase, PropsSingle } from "react-day-picker";
 
 import { cn } from "../../lib/utils";
 import { Calendar } from "./calendar";
-import { DateOnlyString, DateValue, toCalendarDate, toDateOnlyString } from "./dateValue";
+import { toCalendarDate, toDateOnlyString, type DateOnlyString, type DateValue } from "./dateValue";
 import { Button } from "../button/Button";
 import { Popover, PopoverContent, PopoverTrigger } from "../popover/Popover";
 
@@ -61,11 +61,11 @@ const DesktopDatePicker: React.FC<DesktopDatePickerProps> = ({
 
   const handleDayClick: DayEventHandler<React.MouseEvent<Element, MouseEvent>> = (date, modifiers, e) => {
     onDayClick?.(date, modifiers, e);
-    if (closeOnSelect) setIsOpen(false);
   };
 
   const handleSelect: OnSelectHandler<Date | undefined> = date => {
     onSelect?.(toDateOnlyString(date));
+    if (closeOnSelect) setIsOpen(false);
   };
 
   return (

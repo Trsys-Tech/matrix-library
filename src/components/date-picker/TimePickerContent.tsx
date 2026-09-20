@@ -1,4 +1,4 @@
-import { HTMLAttributes, useEffect, useRef, useState } from "react";
+import { HTMLAttributes, useEffect, useMemo, useRef } from "react";
 
 import { cn } from "../../lib/utils";
 
@@ -77,7 +77,7 @@ const normalizeTime = (time: Time | undefined, is24HourMode: boolean): Time => {
  * It normalizes values based on 12-hour or 24-hour mode and emits updates as the user picks segments.
  */
 const TimePickerContent: React.FC<TimePickerContentProps> = ({ isOpen, time, is24HourMode = false, onTimeChange, slotsProps }) => {
-  const [selectedTime, setSelectedTime] = useState<Time>(() => normalizeTime(time, is24HourMode));
+  const selectedTime = useMemo(() => normalizeTime(time, is24HourMode), [time, is24HourMode]);
   const selectedTimeRef = useRef<Time>(selectedTime);
 
   const hourRef = useRef<HTMLDivElement>(null);
@@ -105,7 +105,6 @@ const TimePickerContent: React.FC<TimePickerContentProps> = ({ isOpen, time, is2
   const updateSelectedTime = (nextTime: Time) => {
     const normalizedTime = normalizeTime(nextTime, is24HourMode);
     selectedTimeRef.current = normalizedTime;
-    setSelectedTime(normalizedTime);
     onTimeChange(normalizedTime);
   };
 
@@ -122,12 +121,8 @@ const TimePickerContent: React.FC<TimePickerContentProps> = ({ isOpen, time, is2
   };
 
   useEffect(() => {
-    if (isOpen) {
-      const nextTime = normalizeTime(time, is24HourMode);
-      selectedTimeRef.current = nextTime;
-      setSelectedTime(nextTime);
-    }
-  }, [isOpen, time, is24HourMode]);
+    selectedTimeRef.current = selectedTime;
+  }, [selectedTime]);
 
   useEffect(() => {
     if (!isOpen) {

@@ -11,7 +11,10 @@ import { Button } from "../button/Button";
 
 export type CalendarProps = DayPickerProps & {};
 
-function Calendar({ className, classNames, showOutsideDays = true, ...props }: CalendarProps) {
+const selectedDayClassName =
+  "[&>button]:mtx-bg-secondary [&>button]:mtx-rounded-full mtx-text-text mtx-font-bold [&>button]:hover:mtx-bg-secondary [&>button]:hover:mtx-text-text [&>button]:focus:mtx-bg-secondary [&>button]:focus:mtx-text-text [&>button]:mtx-text-xs";
+
+function Calendar({ className, classNames, showOutsideDays = false, ...props }: CalendarProps) {
   const yearCollapseRef = React.useRef<HTMLDivElement>(null);
   const [size, setSize] = React.useState({ width: 0, height: 0 });
 
@@ -50,18 +53,20 @@ function Calendar({ className, classNames, showOutsideDays = true, ...props }: C
         week: "mtx-mt-2 mtx-h-11 mtx-grid mtx-grid-cols-7 mtx-items-center",
         day: "mtx-relative mtx-p-0 mtx-text-center mtx-text-sm mtx-h-11 mtx-min-w-11 md:mtx-min-w-9 md:mtx-h-9",
         day_button: "mtx-w-11 md:mtx-w-9 mtx-h-full mtx-p-0 mtx-text-sm",
-        range_start:
+        range_start: cn(
+          selectedDayClassName,
           "before:mtx-block before:mtx-absolute before:mtx--z-10 before:mtx-content-[''] before:mtx-w-1/2 before:mtx-end-0 before:mtx-h-full before:mtx-bg-secondary/50 after:!mtx-w-0",
-        range_end:
+        ),
+        range_end: cn(
+          selectedDayClassName,
           "after:mtx-block after:mtx-absolute after:mtx-top-0 after:mtx--z-10 after:mtx-content-[''] after:mtx-w-1/2 after:mtx-start-0 after:mtx-h-full after:mtx-bg-secondary/50 before:!mtx-w-0",
-        selected:
-          "[&>button]:mtx-bg-secondary [&>button]:mtx-rounded-full mtx-text-text mtx-font-bold [&>button]:hover:mtx-bg-secondary [&>button]:hover:mtx-text-text [&>button]:focus:mtx-bg-secondary [&>button]:focus:mtx-text-text [&>button]:mtx-text-xs",
+        ),
+        selected: props.mode === "range" ? "" : selectedDayClassName,
         today: "mtx-text-primary mtx-font-bold [&>button]:mtx-text-xs",
         outside:
           "mtx-day-outside mtx-text-muted-foreground mtx-opacity-50 mtx-aria-selected:mtx-bg-accent/50 mtx-aria-selected:mtx-text-muted-foreground mtx-aria-selected:mtx-opacity-30",
         disabled: "mtx-text-muted-foreground mtx-opacity-50",
-        range_middle:
-          "mtx-bg-secondary/50 [&>button]:mtx-data-[selected='true']:mtx-bg-secondary/0 [&>button]:mtx-data-[selected='true']:mtx-rounded-none mtx-text-accent-foreground",
+        range_middle: "mtx-bg-secondary/50 mtx-text-text",
         hidden: "mtx-invisible",
         ...classNames,
       }}
