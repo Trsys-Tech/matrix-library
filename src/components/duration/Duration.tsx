@@ -104,7 +104,7 @@ const Duration = React.forwardRef<HTMLInputElement, DurationProps>(
       const selection = input.selectionStart ?? 0;
       if (selection === 0) return;
 
-      let nextValue = "";
+      let nextValue: string;
       let nextCursor = selection - 1;
 
       if (value[selection - 1] === ":") {
