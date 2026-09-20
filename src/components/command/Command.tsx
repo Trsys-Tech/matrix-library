@@ -6,7 +6,7 @@ import { Magnifier } from "@trsys-tech/matrix-icons";
 import { type DialogProps } from "@radix-ui/react-dialog";
 
 import { cn } from "../../lib/utils";
-import { Dialog, DialogContent } from "../dialog/Dialog";
+import { Dialog, DialogContent, DialogTitle } from "../dialog/Dialog";
 
 const Command = React.forwardRef<React.ElementRef<typeof CommandPrimitive>, React.ComponentPropsWithoutRef<typeof CommandPrimitive>>(
   ({ className, ...props }, ref) => (
@@ -26,6 +26,7 @@ const CommandDialog = ({ children, ...props }: DialogProps) => {
   return (
     <Dialog {...props}>
       <DialogContent className="mtx-overflow-hidden mtx-p-0">
+        <DialogTitle className="mtx-sr-only">Command menu</DialogTitle>
         <Command className="[&_[cmdk-group-heading]]:mtx-px-2 [&_[cmdk-group-heading]]:mtx-font-medium [&_[cmdk-group-heading]]:mtx-text-muted-foreground [&_[cmdk-group]:not([hidden])_~[cmdk-group]]:mtx-pt-0 [&_[cmdk-group]]:mtx-px-2 [&_[cmdk-input-wrapper]_svg]:mtx-h-5 [&_[cmdk-input-wrapper]_svg]:mtx-w-5 [&_[cmdk-input]]:mtx-h-12 [&_[cmdk-item]]:mtx-px-2 [&_[cmdk-item]]:mtx-py-3 [&_[cmdk-item]_svg]:mtx-h-5 [&_[cmdk-item]_svg]:mtx-w-5">
           {children}
         </Command>
