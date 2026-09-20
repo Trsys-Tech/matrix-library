@@ -21,6 +21,7 @@ const TooltipProvider = Provider;
 const Tooltip = Root;
 
 const TooltipTrigger = Trigger;
+TooltipTrigger.displayName = "TooltipTrigger";
 
 const TooltipContent = React.forwardRef<React.ElementRef<typeof Content>, ContentProps>(({ className, sideOffset = 4, children, ...props }, ref) => (
   <Portal>
@@ -38,7 +39,7 @@ const TooltipContent = React.forwardRef<React.ElementRef<typeof Content>, Conten
     </Content>
   </Portal>
 ));
-TooltipContent.displayName = Content.displayName;
+TooltipContent.displayName = "TooltipContent";
 type TooltipContentProps = ContentProps & { ref: React.Ref<React.ElementRef<typeof Content>> };
 
 export {
