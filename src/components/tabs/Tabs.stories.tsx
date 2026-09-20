@@ -26,7 +26,9 @@ export const Default: Story = {
     <Tabs defaultValue="tab-1" className="mtx-w-96">
       <TabsList aria-label="Example tabs">
         <TabsTrigger value="tab-1">Tab 1</TabsTrigger>
-        <TabsTrigger value="tab-2">Tab 2</TabsTrigger>
+        <TabsTrigger value="tab-2" hasAlert>
+          Tab 2
+        </TabsTrigger>
         <TabsTrigger value="tab-3">Tab 3</TabsTrigger>
       </TabsList>
       <TabsContent value="tab-1">Tab 1 content</TabsContent>
