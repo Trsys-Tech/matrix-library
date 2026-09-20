@@ -1,11 +1,12 @@
 "use client";
 
 import React from "react";
-import { Slot } from "@radix-ui/react-slot";
+import { Slot, Slottable } from "@radix-ui/react-slot";
 import { tv, VariantProps } from "tailwind-variants";
 
 import { cn } from "../../lib/utils";
 import { XMark } from "@trsys-tech/matrix-icons";
+import { useIsMobile } from "../../lib/hooks/use-mobile";
 
 const chipVariants = tv({
   base: "mtx-inline-flex mtx-items-center mtx-justify-center mtx-gap-2 mtx-whitespace-nowrap mtx-rounded-full mtx-text-xs mtx-font-medium",
@@ -34,12 +35,15 @@ interface ChipProps extends React.ButtonHTMLAttributes<HTMLSpanElement>, Variant
 }
 
 const Chip = React.forwardRef<HTMLSpanElement, ChipProps>(({ className, variant, asChild = false, children, onClose, size, ...props }, ref) => {
+  const isDesktop = !useIsMobile();
   const Comp = asChild ? Slot : "span";
   return (
-    <Comp className={cn(chipVariants({ variant, size, className }))} ref={ref} {...props}>
-      {children}
+    <Comp className={cn(isDesktop ? "mtx-border-none" : "", chipVariants({ variant, size, className }))} ref={ref} {...props}>
+      <Slottable>{children}</Slottable>
       {onClose ? (
         <button
+          type="button"
+          aria-label="Remove chip"
           onClick={onClose}
           className={cn(
             { "-mtx-me-3 [&>svg]:mtx-w-5 [&>svg]:mtx-h-5": size === "lg" },
