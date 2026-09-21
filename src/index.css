@@ -154,7 +154,6 @@
     --mtx-drawer-width: 16rem;
   }
 
-
   .dark {
     --mtx-background: var(--mtx-gray-0);
     --mtx-foreground: var(--mtx-text-500);
@@ -293,8 +292,6 @@
     --mtx-turquoise-300: 90.52% 0.08 185.37;
     --mtx-turquoise-200: 94.761% 0.0609 186.08;
     --mtx-turquoise-100: 98.435% 0.0216 187.2;
-
-    
   }
 }
 
@@ -304,8 +301,11 @@
     height: 100dvh;
   }
 
+  .mtx-text-ss {
+    font-size: 0.625rem;
+    line-height: 0.75rem;
+  }
 
-  
   /* Make scrollbar thinner */
   /* width */
   @media screen and (min-width: 768px) {

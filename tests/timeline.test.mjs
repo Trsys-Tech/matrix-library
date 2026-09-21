@@ -16,7 +16,7 @@ test("renders arbitrary content and accessible statuses without requiring branch
   for (const text of ["Workflow", "Priority", "High", "Team", "Any string", "completed", "pending"]) assert.ok(html.includes(text));
   assert.match(html, /Priority<\/div><div class="mtx-font-semibold">High<\/div>/);
   assert.equal((html.match(/aria-current="step"/g) ?? []).length, 1);
-  assert.match(html, /class="mtx-text-text-400">End<\/div>/);
+  assert.match(html, /class="mtx-font-medium mtx-text-text-400">End<\/div>/);
   assert.doesNotMatch(html, /mtx-timeline-branch-path/);
 });
 

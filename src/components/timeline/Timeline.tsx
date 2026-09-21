@@ -46,7 +46,7 @@ export interface TimelineProps extends Omit<React.HTMLAttributes<HTMLDivElement>
 function Marker({ item, color }: { item: TimelineItem; color?: string }) {
   const status = item.status ?? "pending";
   return (
-    <span className="mtx-block mtx-size-6" data-status={status} style={{ color }}>
+    <span className="mtx-block mtx-size-5" data-status={status} style={{ color }}>
       <svg
         viewBox="0 0 24 24"
         aria-hidden="true"
@@ -83,9 +83,9 @@ const Timeline = React.forwardRef<HTMLDivElement, TimelineProps>(
     } as React.CSSProperties;
 
     return (
-      <div {...props} ref={ref} className={cn("mtx-text-foreground mtx-text-sm", className)} style={variables}>
+      <div {...props} ref={ref} className={cn("mtx-text-foreground mtx-text-xs", className)} style={variables}>
         {title != null && (
-          <div id={titleId} className="mtx-mb-5 mtx-text-base mtx-font-semibold">
+          <div id={titleId} className="mtx-mb-4 mtx-text-sm mtx-font-bold">
             {title}
           </div>
         )}
@@ -115,12 +115,12 @@ const Timeline = React.forwardRef<HTMLDivElement, TimelineProps>(
               return (
                 <li
                   key={item.id}
-                  className="mtx-relative mtx-grid mtx-min-w-0 mtx-row-span-full mtx-grid-rows-[subgrid]"
+                  className="mtx-relative mtx-grid mtx-min-w-0 mtx-row-span-full mtx-grid-rows-[subgrid] "
                   style={{ gridColumn: index + 1 }}
                   aria-current={item.status === "active" ? "step" : undefined}
                 >
                   <div
-                    className="mtx-min-h-8 mtx-break-words mtx-self-end mtx-pb-2 mtx-pr-3 mtx-text-[10px] mtx-leading-3 mtx-text-muted-foreground empty:mtx-p-0"
+                    className="mtx-min-h-8 mtx-break-words mtx-self-end mtx-pb-2 mtx-pr-3 mtx-text-ss mtx-leading-3 mtx-text-muted-foreground empty:mtx-p-0"
                     style={{ gridRow: superRow }}
                   >
                     {item.superTitle != null && <div>{item.superTitle}</div>}
@@ -129,19 +129,19 @@ const Timeline = React.forwardRef<HTMLDivElement, TimelineProps>(
                   {index > 0 && (
                     <span
                       aria-hidden="true"
-                      className="mtx-absolute mtx-top-[11px] mtx-left-[calc(-100%+12px)] mtx-z-[-1] mtx-h-0.5 mtx-w-full mtx-bg-[var(--timeline-pending)]"
+                      className="mtx-absolute mtx-top-2.5 mtx-left-[calc(-100%+12px)] mtx-z-10 mtx-h-0.5 mtx-w-full mtx-bg-[var(--timeline-pending)]"
                       style={{ gridRow: markerRow, backgroundColor: incoming }}
                     />
                   )}
-                  <div className="mtx-z-[2] mtx-size-6" style={{ gridRow: markerRow }}>
+                  <div className="mtx-z-20 mtx-size-5" style={{ gridRow: markerRow }}>
                     <Marker item={item} color={colorFor(item)} />
                   </div>
                   <div className="mtx-break-words mtx-pt-2.5 mtx-pr-3 mtx-leading-[1.4]" style={{ gridRow: markerRow + 1 }}>
-                    <div className={cn((item.status ?? "pending") === "pending" && "mtx-text-text-400")}>{item.label}</div>
-                    {item.subData != null && <div className="mtx-mt-0.5 mtx-text-xs">{item.subData}</div>}
+                    <div className={cn("mtx-font-medium", (item.status ?? "pending") === "pending" && "mtx-text-text-400")}>{item.label}</div>
+                    {item.subData != null && <div className="mtx-mt-0.5 mtx-text-ss">{item.subData}</div>}
                   </div>
                   <div
-                    className="mtx-break-words mtx-pr-3 mtx-pt-5 mtx-text-[11px] mtx-text-muted-foreground empty:mtx-p-0"
+                    className="mtx-break-words mtx-pr-3 mtx-pt-5 mtx-text-ss mtx-font-medium mtx-text-muted-foreground empty:mtx-p-0"
                     style={{ gridRow: markerRow + 2 }}
                   >
                     {item.footer}
@@ -156,7 +156,10 @@ const Timeline = React.forwardRef<HTMLDivElement, TimelineProps>(
               return (
                 <li
                   key={`branch-${branch.id}`}
-                  className="mtx-pointer-events-none mtx-grid mtx-min-w-0 mtx-row-span-full mtx-grid-cols-[subgrid] mtx-grid-rows-[subgrid]"
+                  className={cn(
+                    "mtx-pointer-events-none mtx-grid mtx-min-w-0 mtx-row-span-full mtx-grid-cols-[subgrid] mtx-grid-rows-[subgrid]",
+                    branch.active && "mtx-z-10",
+                  )}
                   data-active={branch.active || undefined}
                   style={{ gridColumn: `${index + 1} / -1` }}
                   aria-current={branch.status === "active" ? "step" : undefined}
@@ -166,22 +169,20 @@ const Timeline = React.forwardRef<HTMLDivElement, TimelineProps>(
                     className="mtx-pointer-events-auto mtx-col-[-2_/_-1] mtx-self-end mtx-break-words mtx-pb-2"
                     style={{ gridRow: lane * 2 + 1, color: branch.active ? branchColor : undefined }}
                   >
-                    {branch.superTitle != null && (
-                      <div className="mtx-break-words mtx-text-[11px] mtx-text-muted-foreground">{branch.superTitle}</div>
-                    )}
+                    {branch.superTitle != null && <div className="mtx-break-words mtx-text-ss mtx-text-muted-foreground">{branch.superTitle}</div>}
                     {branch.superSubtitle != null && (
-                      <div className="mtx-break-words mtx-pb-2 mtx-pr-3 mtx-text-[11px] mtx-font-semibold mtx-text-muted-foreground">
+                      <div className="mtx-break-words mtx-pb-2 mtx-pr-3 mtx-text-ss mtx-font-semibold mtx-text-muted-foreground">
                         {branch.superSubtitle}
                       </div>
                     )}
-                    <div className={cn((branch.status ?? "pending") === "pending" && "mtx-text-text-400")}>{branch.label}</div>
-                    {branch.subData != null && <div className="mtx-mt-0.5 mtx-text-xs">{branch.subData}</div>}
+                    <div className={cn("mtx-font-medium", (branch.status ?? "pending") === "pending" && "mtx-text-text-400")}>{branch.label}</div>
+                    {branch.subData != null && <div className="mtx-mt-0.5 mtx-text-ss">{branch.subData}</div>}
                     {branch.footer != null && (
-                      <div className="mtx-break-words mtx-pr-3 mtx-pt-1 mtx-text-[11px] mtx-text-muted-foreground">{branch.footer}</div>
+                      <div className="mtx-break-words mtx-pr-3 mtx-pt-1 mtx-text-ss mtx-font-bold mtx-text-muted-foreground">{branch.footer}</div>
                     )}
                   </div>
                   <div
-                    className="mtx-relative mtx-col-[1_/_-1] mtx-mb-3 mtx-ml-3 mtx-mt-3 mtx-overflow-visible mtx-fill-none mtx-stroke-2 mtx-stroke-current mtx-z-[-1]"
+                    className="mtx-relative mtx-col-[1_/_-1] mtx-mb-[13px] mtx-ml-3 mtx-mt-[11px] mtx-overflow-visible mtx-fill-none mtx-stroke-2 mtx-stroke-current mtx-z-[-1]"
                     aria-hidden="true"
                     style={{
                       gridRow: `${lane * 2 + 2} / ${markerRow + 1}`,
@@ -201,7 +202,7 @@ const Timeline = React.forwardRef<HTMLDivElement, TimelineProps>(
                       />
                     </svg>
                   </div>
-                  <div className="mtx-col-[-2_/_-1] mtx-z-[2] mtx-size-6" style={{ gridRow: lane * 2 + 2 }}>
+                  <div className="mtx-col-[-2_/_-1] mtx-z-[2] mtx-size-5" style={{ gridRow: lane * 2 + 2 }}>
                     <Marker item={branch} color={branchColor} />
                   </div>
                 </li>
