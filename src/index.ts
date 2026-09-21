@@ -307,6 +307,7 @@ export {
 } from "./components/tabs/Tabs";
 export { TextField, type TextFieldProps } from "./components/text-field/TextField";
 export { Textarea, type TextareaProps } from "./components/textarea/Textarea";
+export { Timeline, type TimelineBranch, type TimelineItem, type TimelineProps, type TimelineStatus } from "./components/timeline/Timeline";
 export { Toast, type ToastProps } from "./components/toast/Toast";
 export { toast } from "./components/toast/use-toast";
 export {
