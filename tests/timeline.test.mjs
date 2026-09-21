@@ -50,3 +50,20 @@ test("explicit connector overrides and localized statuses survive rendering", ()
   assert.match(html, /In Prüfung/);
   assert.equal((html.match(/background-color:/g) ?? []).length, 1);
 });
+
+test("loading renders a structure-preserving skeleton from items and branches", () => {
+  const html = render({
+    loading: true,
+    title: "Tender Timeline",
+    branches: [
+      { id: "alternate", from: "review", label: "Alternate" },
+      { id: "invalid", from: "missing", label: "Invalid" },
+    ],
+  });
+  assert.match(html, /aria-busy="true"/);
+  assert.match(html, /data-loading="true"/);
+  assert.equal((html.match(/data-slot="timeline-skeleton-item"/g) ?? []).length, items.length);
+  assert.equal((html.match(/data-slot="timeline-skeleton-branch"/g) ?? []).length, 1);
+  assert.equal((html.match(/mtx-animate-pulse/g) ?? []).length, items.length * 6 + (items.length - 1) + 4);
+  assert.doesNotMatch(html, /Start|Review|Alternate|Invalid/);
+});

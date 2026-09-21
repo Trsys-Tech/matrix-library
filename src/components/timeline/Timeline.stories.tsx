@@ -20,6 +20,7 @@ const meta = {
   tags: ["autodocs"],
   parameters: { layout: "padded" },
   argTypes: {
+    loading: { control: "boolean" },
     activeColor: { control: "color" },
     completedColor: { control: "color" },
     errorColor: { control: "color" },
@@ -35,6 +36,12 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const InProgress: Story = {};
+export const Loading: Story = {
+  args: {
+    title: "Tender Timeline",
+    loading: true,
+  },
+};
 export const FailedStep: Story = {
   args: { items: items.map((item, index) => ({ ...item, status: index < 2 ? "completed" : index === 2 ? "error" : "pending" })) },
 };
