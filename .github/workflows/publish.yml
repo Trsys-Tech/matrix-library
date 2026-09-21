@@ -8,6 +8,10 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    permissions:
+      contents: read
+      id-token: write
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
@@ -16,15 +20,14 @@ jobs:
         uses: actions/setup-node@v6
         with:
           node-version: 24.14.0
-          registry-url: "https://registry.npmjs.org/"
+          registry-url: https://registry.npmjs.org/
+          package-manager-cache: false
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
       - name: Build library
         run: npm run build
 
       - name: Push to npm
         run: npm publish --access public --tag latest
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
