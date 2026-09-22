@@ -30,6 +30,7 @@ const meta = {
     title: "Timeline",
     items,
     branches: [{ id: "declined", from: "submitted", label: "Declined" }],
+    loading: false,
   },
 } satisfies Meta<typeof Timeline>;
 export default meta;

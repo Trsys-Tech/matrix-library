@@ -303,7 +303,7 @@
 
   .mtx-text-ss {
     font-size: 0.625rem;
-    line-height: 0.75rem;
+    line-height: 0.75rem /* 12px */;
   }
 
   /* Make scrollbar thinner */
