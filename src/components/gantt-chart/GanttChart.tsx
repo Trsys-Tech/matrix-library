@@ -416,7 +416,7 @@ const GanttChart = React.forwardRef<HTMLDivElement, GanttChartProps>(
             {onAddItem ? (
               <div className="mtx-grid" style={{ gridTemplateColumns: `${nameColumnWidth}px minmax(${timelineWidth}px, 1fr)` }} role="row">
                 <div
-                  className="mtx-sticky mtx-left-0 mtx-z-30 mtx-flex mtx-items-center mtx-border-b mtx-border-r mtx-border-gray-200 mtx-bg-gray-0 mtx-px-4"
+                  className="mtx-sticky mtx-left-0 mtx-z-30 mtx-flex mtx-items-center mtx-border-b mtx-border-r mtx-border-gray-200 mtx-bg-gray-0 mtx-px-2"
                   style={{ height: rowHeight }}
                   role="cell"
                 >
@@ -450,7 +450,7 @@ const GanttChart = React.forwardRef<HTMLDivElement, GanttChartProps>(
                     role="row"
                   >
                     <div
-                      className="mtx-sticky mtx-left-0 mtx-z-30 mtx-flex mtx-items-center mtx-border-b mtx-border-r mtx-border-gray-200 mtx-bg-gray-0 mtx-px-4"
+                      className="mtx-sticky mtx-left-0 mtx-z-30 mtx-flex mtx-items-center mtx-border-b mtx-border-r mtx-border-gray-200 mtx-bg-gray-0 mtx-px-2"
                       style={{ height: rowHeight }}
                       role="rowheader"
                     >
