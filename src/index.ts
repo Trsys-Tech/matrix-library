@@ -322,3 +322,11 @@ export {
 } from "./components/tooltip/Tooltip";
 export { useIsMobile } from "./lib/hooks/use-mobile";
 export { cn } from "./lib/utils";
+export {
+  ResourceScheduler,
+  type ResourceSchedulerProps,
+  type ResourceSchedulerResource,
+  type ResourceSchedulerItem,
+  type ResourceSchedulerMove,
+  type ResourceSchedulerCellContext,
+} from "./components/resource-scheduler/ResourceScheduler";
