@@ -1,6 +1,7 @@
 "use client";
 
 import React, { forwardRef, useEffect, useId, useMemo, useRef, useState } from "react";
+import { DragDropProvider, DragOverlay, PointerSensor, useDraggable, useDroppable } from "@dnd-kit/react";
 
 import { cn } from "../../lib/utils";
 import { toCalendarDate, toDateOnlyString, type DateValue } from "../date-picker/dateValue";
@@ -70,7 +71,15 @@ type ResourceSchedulerProps = Omit<React.ComponentPropsWithoutRef<"div">, "child
 
 type ItemId = ResourceSchedulerItem["id"];
 type MoveTarget = { resourceId: ResourceSchedulerResource["id"]; day: string };
-type ActiveMove = { itemId: ItemId; keyboard: boolean; target: MoveTarget };
+type ActiveMove = { itemId: ItemId; keyboard: boolean; touch?: boolean; target: MoveTarget };
+
+// Native dragging handles desktop input; dnd-kit supplies long-press touch dragging.
+// Its default touch activation waits 250 ms and cancels after 5 px of movement.
+const touchSensors = [
+  PointerSensor.configure({
+    preventActivation: (event, source) => event.pointerType !== "touch" || !!PointerSensor.defaults.preventActivation?.(event, source),
+  }),
+];
 
 type ResourceSchedulerInteraction = {
   items: readonly ResourceSchedulerItem[];
@@ -159,6 +168,11 @@ const ResourceSchedulerCard = ({
 }: ResourceSchedulerCardProps) => {
   const { disabled, instructionsId, activeMove, draggedItemRef, cardRefs, setActiveMove, handleKeyDown } = interaction;
   const [focused, setFocused] = useState(false);
+  const { ref: draggableRef } = useDraggable({
+    id: item.id,
+    disabled: disabled || item.draggable === false || !!activeMove?.keyboard,
+    data: { resourceId, day },
+  });
   const dragImageRef = useRef<HTMLDivElement | null>(null);
   useEffect(() => () => dragImageRef.current?.remove(), []);
   const isMoving = activeMove?.itemId === item.id;
@@ -166,6 +180,7 @@ const ResourceSchedulerCard = ({
     <div
       {...slotProps?.card}
       ref={node => {
+        draggableRef(node);
         if (node) cardRefs.current.set(item.id, node);
         else cardRefs.current.delete(item.id);
       }}
@@ -185,6 +200,7 @@ const ResourceSchedulerCard = ({
         gridArea: "1 / 1",
         marginLeft: index * stackOffset,
         width: cardWidth,
+        touchAction: "manipulation",
         ...slotProps?.card?.style,
         zIndex: focused || isMoving ? count : index,
       }}
@@ -267,13 +283,21 @@ const ResourceSchedulerCell = ({
 }: ResourceSchedulerCellProps) => {
   const { disabled, activeMove, draggedItemRef, items, setActiveMove, handleMove } = interaction;
   const resourceId = resource.id;
+  const { ref: droppableRef, isDropTarget } = useDroppable({
+    id: JSON.stringify([typeof resourceId, resourceId, day]),
+    data: { resourceId, day },
+    disabled,
+    accept: source => source.data.resourceId === resourceId,
+  });
   const cell = { resource, date: day, items: cellItems };
   const button =
     !disabled && renderCellButton && (typeof showCellButton === "function" ? showCellButton(cell) : showCellButton) ? renderCellButton(cell) : null;
-  const isTarget = !disabled && activeMove?.target.resourceId === resourceId && activeMove.target.day === day;
+  const isTarget =
+    !disabled && (isDropTarget || (!activeMove?.touch && activeMove?.target.resourceId === resourceId && activeMove.target.day === day));
   return (
     <div
       {...slotProps?.cell}
+      ref={droppableRef}
       role="cell"
       data-resource-id={resourceId}
       data-date={day}
@@ -600,49 +624,86 @@ const ResourceScheduler = forwardRef<HTMLDivElement, ResourceSchedulerProps>(
     };
 
     return (
-      <div
-        {...props}
-        ref={ref}
-        className={cn("mtx-relative mtx-overflow-auto mtx-border mtx-border-gray-200 mtx-bg-gray-0 mtx-text-sm mtx-text-text-500", className)}
-        style={style}
+      <DragDropProvider<MoveTarget>
+        sensors={touchSensors}
+        onBeforeDragStart={event => {
+          const source = event.operation.source;
+          const item = items.find(item => item.id === source?.id);
+          if (disabled || activeMove || !item || item.draggable === false) event.preventDefault();
+        }}
+        onDragStart={event => {
+          const source = event.operation.source;
+          const item = items.find(item => item.id === source?.id);
+          if (!item) return;
+          setActiveMove({ itemId: item.id, keyboard: false, touch: true, target: { resourceId: item.resourceId, day: getDay(item.date)! } });
+          setAnnouncement(`Picked up ${item.label ?? item.id}. Drag to another day and release to drop.`);
+        }}
+        onDragEnd={event => {
+          const { source, target } = event.operation;
+          setActiveMove(null);
+          if (event.canceled || !source || !target) {
+            setAnnouncement("Move cancelled.");
+            return;
+          }
+          handleMove(source.id, target.data);
+        }}
       >
-        <p id={instructionsId} className="mtx-sr-only">
-          Use Tab or Up/Down to select a card. Press Space or Enter to pick it up, Left/Right to move, Enter to drop, or Escape to cancel.
-        </p>
-        <div aria-live="polite" className="mtx-sr-only">
-          {announcement}
-        </div>
-        <div role="table" aria-label="Resource scheduler" style={{ minWidth: resourceColumnWidth + dayColumnWidth * days.length }}>
-          <ResourceSchedulerHeader
-            today={today}
-            days={days}
-            dayKeys={dayKeys}
-            formatter={formatter}
-            resourceHeading={resourceHeading}
-            resourceColumnWidth={resourceColumnWidth}
-            dayColumnWidth={dayColumnWidth}
-            slotProps={slotProps}
-          />
-          {resources.map(resource => (
-            <ResourceSchedulerRow
+        <div
+          {...props}
+          ref={ref}
+          className={cn("mtx-relative mtx-overflow-auto mtx-border mtx-border-gray-200 mtx-bg-gray-0 mtx-text-sm mtx-text-text-500", className)}
+          style={style}
+        >
+          <p id={instructionsId} className="mtx-sr-only">
+            On touch devices, press and hold a card, then drag to another day and release. Use Tab or Up/Down to select a card. Press Space or Enter
+            to pick it up, Left/Right to move, Enter to drop, or Escape to cancel.
+          </p>
+          <div aria-live="polite" className="mtx-sr-only">
+            {announcement}
+          </div>
+          <div role="table" aria-label="Resource scheduler" style={{ minWidth: resourceColumnWidth + dayColumnWidth * days.length }}>
+            <ResourceSchedulerHeader
               today={today}
-              renderCellButton={renderCellButton}
-              showCellButton={showCellButton}
-              key={`${typeof resource.id}:${resource.id}`}
-              resource={resource}
+              days={days}
               dayKeys={dayKeys}
-              groupedItems={groupedItems}
+              formatter={formatter}
+              resourceHeading={resourceHeading}
               resourceColumnWidth={resourceColumnWidth}
               dayColumnWidth={dayColumnWidth}
-              rowMinHeight={rowMinHeight}
-              cardWidth={cardWidth}
-              stackOffset={stackOffset}
               slotProps={slotProps}
-              interaction={interaction}
             />
-          ))}
+            {resources.map(resource => (
+              <ResourceSchedulerRow
+                today={today}
+                renderCellButton={renderCellButton}
+                showCellButton={showCellButton}
+                key={`${typeof resource.id}:${resource.id}`}
+                resource={resource}
+                dayKeys={dayKeys}
+                groupedItems={groupedItems}
+                resourceColumnWidth={resourceColumnWidth}
+                dayColumnWidth={dayColumnWidth}
+                rowMinHeight={rowMinHeight}
+                cardWidth={cardWidth}
+                stackOffset={stackOffset}
+                slotProps={slotProps}
+                interaction={interaction}
+              />
+            ))}
+          </div>
         </div>
-      </div>
+        <DragOverlay dropAnimation={null}>
+          {source => (
+            <div
+              aria-hidden="true"
+              className={cn("mtx-pointer-events-none mtx-text-sm mtx-text-text-500", slotProps?.card?.className)}
+              style={{ width: cardWidth, ...slotProps?.card?.style, margin: 0 }}
+            >
+              {items.find(item => item.id === source.id)?.content}
+            </div>
+          )}
+        </DragOverlay>
+      </DragDropProvider>
     );
   },
 );
