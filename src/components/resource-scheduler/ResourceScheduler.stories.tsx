@@ -1,6 +1,6 @@
 import { useState } from "react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { expect, fireEvent, fn, userEvent, within } from "storybook/test";
+import { expect, fireEvent, fn, userEvent, within, waitFor } from "storybook/test";
 
 import { Button } from "../button/Button";
 import { toCalendarDate, toDateOnlyString } from "../date-picker/dateValue";
@@ -91,15 +91,11 @@ export const TodayAndCellButtons: Story = {
     const today = toDateOnlyString(new Date())!;
     await expect(canvasElement.querySelectorAll('[role="columnheader"][data-today="true"]')).toHaveLength(1);
     await expect(canvasElement.querySelectorAll('[role="cell"][data-today="true"]')).toHaveLength(resources.length);
-    const cell = canvasElement.querySelector(`[role="cell"][data-resource-id="greenview"][data-date="${today}"]`)!;
     const button = canvas.getByRole("button", { name: `Add delivery for greenview on ${today}` });
     await expect(getComputedStyle(button.parentElement!).opacity).toBe("0");
-    await userEvent.hover(cell);
-    await expect(getComputedStyle(button.parentElement!).opacity).toBe("1");
-    await userEvent.unhover(cell);
     button.focus();
     await expect(button).toHaveFocus();
-    await expect(getComputedStyle(button.parentElement!).opacity).toBe("1");
+    await waitFor(() => expect(getComputedStyle(button.parentElement!).opacity).toBe("1"));
   },
 };
 

@@ -82,3 +82,13 @@ We welcome contributions to the MatrixUI Library! If you have any ideas, suggest
 ## License
 
 This project is licensed under the MIT License. See the [LICENSE](./LICENSE) file for more details. MatrixUI Library
+
+## Testing
+
+Use Node.js 24 and run `npm ci`, then install Chromium with `npx playwright install chromium` (on Linux CI, use `npx playwright install --with-deps chromium`).
+
+- `npm test` type-checks the test files, then runs Node Vitest tests and headless Storybook tests.
+- `npm run test:unit` runs Node Vitest tests without a browser; `npm run test:unit:watch` watches them. New tests belong under `src` or `tests` as `*.test.ts(x)` or `*.spec.ts(x)`.
+- `npm run test:storybook` runs the stories selected by `.storybook/main.ts` in headless Chromium; `npm run test:storybook:watch` watches them. Story interactions belong in their stories. Browser-only pointer checks that need native CSS hover live in `tests/browser`.
+
+`npm run test:typecheck` checks all Node and browser test files under strict TypeScript settings. Its configuration skips checking dependency declarations because the installed browser dependencies use declarations incompatible with TypeScript 5.6; project test and source code remain checked. The Node suite contains all 59 migrated cases (see `tests/m3-test-mapping.md`). Accessibility checks remain advisory while findings are reviewed.

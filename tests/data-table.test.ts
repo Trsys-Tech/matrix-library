@@ -1,31 +1,55 @@
-import assert from "node:assert/strict";
-import test from "node:test";
+import type {
+  DataTableColumn,
+  DataTableContentProps,
+  DataTableApi,
+  DataTableInstance,
+  DataTableEditEvent,
+  DataTableState,
+} from "../src/components/data-table/DataTable.types";
+import { assert, test, afterEach, vi } from "vitest";
 import React from "react";
+
 import { renderToStaticMarkup } from "react-dom/server";
-import { DataTable, DataTableActionBar, DataTableContent } from "../dist/datatable.es.js";
-import { DataTableSearchAction } from "../dist/datatableactions.es.js";
-import { getActiveDataTableCell, getCellValue, setCellValue, matchesFilter, getFlexSizes, moveDataTableColumn, parseDateInputValue, toDateInputValue } from "../dist/datatablemodel.es.js";
+import { DataTable, DataTableActionBar, DataTableContent } from "../src/components/data-table/DataTable";
+import { DataTableSearchAction } from "../src/components/data-table/DataTableActions";
+import {
+  getActiveDataTableCell,
+  getCellValue,
+  setCellValue,
+  matchesFilter,
+  getFlexSizes,
+  moveDataTableColumn,
+  parseDateInputValue,
+  toDateInputValue,
+} from "../src/components/data-table/dataTableModel";
+
+import { functionalUpdate, type Updater, type ColumnFiltersState } from "@tanstack/react-table";
+
+type TestRow = { id: string | number; name: string; price: number; updated: string };
+
+afterEach(() => vi.unstubAllGlobals());
+
+function renderTable<T extends object>(props: DataTableContentProps<T>) {
+  return renderToStaticMarkup(React.createElement(DataTable, null, React.createElement(DataTableContent<T>, { virtualize: false, ...props })));
+}
 
 const rows = [
   { id: "a", name: "Alpha", price: 100, updated: "2026-10-01" },
   { id: "b", name: "Beta", price: 20, updated: "2026-10-02" },
   { id: "c", name: "Gamma", price: 3, updated: "2026-10-03" },
 ];
-const columns = [
+const columns: DataTableColumn<TestRow>[] = [
   { field: "name", headerName: "Name", width: 200, pinned: "start", filter: "text" },
   { field: "price", headerName: "Price", width: 120, cellDataType: "number", filter: "number" },
   { field: "updated", headerName: "Updated", width: 150, filter: "date", cellDataType: "dateString" },
 ];
-const render = props =>
-  renderToStaticMarkup(
-    React.createElement(DataTable, null, React.createElement(DataTableContent, { rowData: rows, columnDefs: columns, virtualize: false, ...props })),
-  );
-const ids = html => Array.from(html.matchAll(/role="row"[^>]*data-row-id="([^"]+)"/g), match => match[1]);
+const render = (props: Partial<DataTableContentProps<TestRow>> = {}) => renderTable({ rowData: rows, columnDefs: columns, ...props });
+const ids = (html: string) => Array.from(html.matchAll(/role="row"[^>]*data-row-id="([^"]+)"/g), match => match[1]);
 
 test("normalizes custom numeric row IDs for renderers, selection and pinning, including zero", () => {
   const rowData = rows.map((row, index) => ({ ...row, key: index }));
-  const renderedIds = [];
-  const html = render({
+  const renderedIds: string[] = [];
+  const html = renderTable({
     rowData,
     getRowId: row => row.key,
     rowSelection: { mode: "multiRow" },
@@ -38,7 +62,7 @@ test("normalizes custom numeric row IDs for renderers, selection and pinning, in
         },
       },
     ],
-    tableOptions: { state: { rowSelection: { 0: true }, rowPinning: { top: ["2"] } } },
+    tableOptions: { state: { rowSelection: { 0: true }, rowPinning: { top: ["2"], bottom: [] } } },
   });
   assert.deepEqual(ids(html), ["2", "0", "1"]);
   assert.deepEqual(renderedIds, ["2", "0", "1"]);
@@ -46,16 +70,11 @@ test("normalizes custom numeric row IDs for renderers, selection and pinning, in
   assert.deepEqual(ids(render({ rowData: rows.map((row, index) => ({ ...row, id: index })) })), ["0", "1", "2"]);
 });
 
-test("row APIs accept numeric and string IDs for selection, pinning, editing and pagination", t => {
-  const original = Object.getOwnPropertyDescriptor(globalThis, "requestAnimationFrame");
-  globalThis.requestAnimationFrame = () => 0;
-  t.after(() => {
-    if (original) Object.defineProperty(globalThis, "requestAnimationFrame", original);
-    else delete globalThis.requestAnimationFrame;
-  });
+test("row APIs accept numeric and string IDs for selection, pinning, editing and pagination", () => {
+  vi.stubGlobal("requestAnimationFrame", () => 0);
   for (const numeric of [false, true]) {
-    let api;
-    const events = [];
+    let api!: DataTableApi<TestRow>;
+    const events: DataTableEditEvent<TestRow>[] = [];
     render({
       rowData: rows.map((row, index) => ({ ...row, id: numeric ? index : String(index) })),
       getRowId: row => row.id,
@@ -74,27 +93,27 @@ test("row APIs accept numeric and string IDs for selection, pinning, editing and
         },
       ],
     });
-    const id = index => (numeric ? index : String(index));
-    api.setSelectedRowIds([id(0), id(2)]);
+    const id = (index: number) => (numeric ? index : String(index));
+    api.setSelectedRowIds(numeric ? [0, 2] : ["0", "2"]);
     assert.deepEqual(
       api.getSelectedRows().map(row => row.name),
       ["Alpha", "Gamma"],
     );
-    api.pinRows([id(0)], "top");
+    api.pinRows(numeric ? [0] : ["0"], "top");
     assert.deepEqual(api.table.atoms.rowPinning.get().top, ["0"]);
-    api.pinRows([id(0)], "bottom");
+    api.pinRows(numeric ? [0] : ["0"], "bottom");
     assert.deepEqual(api.table.atoms.rowPinning.get(), { top: [], bottom: ["0"] });
-    api.pinRows([id(0)], false);
+    api.pinRows(numeric ? [0] : ["0"], false);
     assert.deepEqual(api.table.atoms.rowPinning.get(), { top: [], bottom: [] });
-    assert.equal(api.startEditingRow(id(0)), true);
-    assert.equal(api.stopEditing(true), true);
-    assert.equal(events[0].rowId, "0");
-    assert.equal(api.startEditingCell({ rowId: id(2), columnId: "name" }), true);
-    assert.equal(api.table.atoms.pagination.get().pageIndex, 2);
-    assert.equal(api.stopEditing(true), true);
-    assert.equal(events[1].rowId, "2");
+    assert.strictEqual(api.startEditingRow(id(0)), true);
+    assert.strictEqual(api.stopEditing(true), true);
+    assert.strictEqual(events[0].rowId, "0");
+    assert.strictEqual(api.startEditingCell({ rowId: id(2), columnId: "name" }), true);
+    assert.strictEqual(api.table.atoms.pagination.get().pageIndex, 2);
+    assert.strictEqual(api.stopEditing(true), true);
+    assert.strictEqual(events[1].rowId, "2");
     api.scrollToRow(id(1));
-    assert.equal(api.table.atoms.pagination.get().pageIndex, 1);
+    assert.strictEqual(api.table.atoms.pagination.get().pageIndex, 1);
     api.deselectAll();
     assert.deepEqual(api.getSelectedRows(), []);
   }
@@ -107,7 +126,7 @@ test("renders semantic rows, named headers, pinned columns and an accessible loa
   assert.match(html, /aria-label="Sort Name"/);
   assert.match(html, /inset-inline-start:0/);
   assert.match(html, /role="status"[^>]*>Loading/);
-  assert.doesNotMatch(html, /__external|NaN|columnDefs=|rowData=/);
+  assert.notMatch(html, /__external|NaN|columnDefs=|rowData=/);
 });
 
 test("sorts numeric values numerically and honors multi-column controlled sorting", () => {
@@ -148,7 +167,10 @@ test("pinning renders each record once and keeps pinned records through filterin
 });
 
 test("keepPinnedRows false respects filters instead of forcing frozen records visible", () => {
-  assert.deepEqual(ids(render({ quickFilterText: "Gamma", tableOptions: { keepPinnedRows: false, state: { rowPinning: { top: ["a"] } } } })), ["c"]);
+  assert.deepEqual(
+    ids(render({ quickFilterText: "Gamma", tableOptions: { keepPinnedRows: false, state: { rowPinning: { top: ["a"], bottom: [] } } } })),
+    ["c"],
+  );
 });
 
 test("pagination slices rows while print layout expands the complete filtered result and includes totals", () => {
@@ -156,7 +178,7 @@ test("pagination slices rows while print layout expands the complete filtered re
   assert.deepEqual(ids(render(options)), ["b"]);
   const html = render({ ...options, domLayout: "print", pinnedBottomRowData: [{ id: "total", name: "Total", price: 123, updated: "" }] });
   assert.deepEqual(ids(html), ["a", "b", "c", "__summary_bottom_0"]);
-  assert.doesNotMatch(html, /Rows per page|Column options|Resize name|Select row/);
+  assert.notMatch(html, /Rows per page|Column options|Resize name|Select row/);
 });
 
 test("manual pagination trusts the supplied page and server total", () => {
@@ -183,10 +205,10 @@ test("initial global search filters the first render while controlled search tak
 });
 
 test("queued column filter updates compose against the owner's latest state and omit the external predicate", () => {
-  let table;
-  const updates = [];
+  let table!: DataTableInstance<TestRow>;
+  const updates: Updater<ColumnFiltersState>[] = [];
   const predicate = () => true;
-  const initialFilters = [{ id: "__external", value: predicate }];
+  const initialFilters: ColumnFiltersState = [{ id: "__external", value: predicate }];
   render({
     externalFilter: predicate,
     columnDefs: columns.map(column => ({
@@ -198,21 +220,26 @@ test("queued column filter updates compose against the owner's latest state and 
     })),
     tableOptions: { state: { columnFilters: initialFilters }, onColumnFiltersChange: updater => updates.push(updater) },
   });
-  table.getColumn("name").setFilterValue({ operator: "contains", value: "a" });
-  table.getColumn("price").setFilterValue({ operator: "greaterThan", value: "5" });
-  const apply = (state, updater) => (typeof updater === "function" ? updater(state) : updater);
-  assert.deepEqual(updates.reduce(apply, initialFilters), [
-    { id: "name", value: { operator: "contains", value: "a" } },
-    { id: "price", value: { operator: "greaterThan", value: "5" } },
-  ]);
-  table.getColumn("name").setFilterValue(undefined);
-  assert.deepEqual(updates.reduce(apply, initialFilters), [{ id: "price", value: { operator: "greaterThan", value: "5" } }]);
+  table.getColumn("name")!.setFilterValue({ operator: "contains", value: "a" });
+  table.getColumn("price")!.setFilterValue({ operator: "greaterThan", value: "5" });
+  assert.deepEqual(
+    updates.reduce((state, updater) => functionalUpdate(updater, state), initialFilters),
+    [
+      { id: "name", value: { operator: "contains", value: "a" } },
+      { id: "price", value: { operator: "greaterThan", value: "5" } },
+    ],
+  );
+  table.getColumn("name")!.setFilterValue(undefined);
+  assert.deepEqual(
+    updates.reduce((state, updater) => functionalUpdate(updater, state), initialFilters),
+    [{ id: "price", value: { operator: "greaterThan", value: "5" } }],
+  );
   assert.deepEqual(initialFilters, [{ id: "__external", value: predicate }]);
 });
 
 test("external processing trusts supplied rows and emits controlled filter, sort, search and page requests", () => {
-  let table;
-  const requests = {};
+  let table!: DataTableInstance<TestRow>;
+  const requests: Partial<DataTableState> = {};
   const state = {
     columnFilters: [{ id: "name", value: { operator: "equals", value: "not loaded" } }],
     globalFilter: "not loaded",
@@ -235,31 +262,30 @@ test("external processing trusts supplied rows and emits controlled filter, sort
       manualPagination: true,
       rowCount: 100,
       state,
-      ...Object.fromEntries(
-        [
-          ["columnFilters", "onColumnFiltersChange"],
-          ["globalFilter", "onGlobalFilterChange"],
-          ["sorting", "onSortingChange"],
-          ["pagination", "onPaginationChange"],
-        ].map(([key, callback]) => [
-          callback,
-          updater => {
-            requests[key] = typeof updater === "function" ? updater(state[key]) : updater;
-          },
-        ]),
-      ),
+      onColumnFiltersChange: updater => {
+        requests.columnFilters = functionalUpdate(updater, state.columnFilters);
+      },
+      onGlobalFilterChange: updater => {
+        requests.globalFilter = functionalUpdate(updater, state.globalFilter);
+      },
+      onSortingChange: updater => {
+        requests.sorting = functionalUpdate(updater, state.sorting);
+      },
+      onPaginationChange: updater => {
+        requests.pagination = functionalUpdate(updater, state.pagination);
+      },
     },
   });
   assert.deepEqual(ids(html), ["a", "b", "c"]);
   assert.match(html, /Page 3 of 10/);
-  table.getColumn("name").setFilterValue({ operator: "equals", value: "Alpha" });
+  table.getColumn("name")!.setFilterValue({ operator: "equals", value: "Alpha" });
   assert.deepEqual(requests.columnFilters, [{ id: "name", value: { operator: "equals", value: "Alpha" } }]);
-  table.getColumn("name").setFilterValue(undefined);
+  table.getColumn("name")!.setFilterValue(undefined);
   assert.deepEqual(requests.columnFilters, []);
-  table.getColumn("price").toggleSorting(true);
+  table.getColumn("price")!.toggleSorting(true);
   assert.deepEqual(requests.sorting, [{ id: "price", desc: true }]);
   table.setGlobalFilter("new search");
-  assert.equal(requests.globalFilter, "new search");
+  assert.strictEqual(requests.globalFilter, "new search");
   table.nextPage();
   assert.deepEqual(requests.pagination, { pageIndex: 3, pageSize: 10 });
   table.setPageSize(25);
@@ -279,8 +305,8 @@ test("selection respects disabled rows and supports a selected row outside the c
 });
 
 test("select all preserves selected rows outside the filtered or current-page scope", () => {
-  for (const scope of ["filtered", "currentPage"]) {
-    let api;
+  for (const scope of ["filtered", "currentPage"] as const) {
+    let api!: DataTableApi<TestRow>;
     render({
       rowSelection: { mode: "multiRow" },
       quickFilterText: scope === "filtered" ? "Alpha" : undefined,
@@ -300,7 +326,7 @@ test("select all preserves selected rows outside the filtered or current-page sc
     api.selectAll(scope);
     assert.deepEqual(api.table.atoms.rowSelection.get(), { a: true, c: true });
   }
-  let api;
+  let api!: DataTableApi<TestRow>;
   render({
     rowSelection: { mode: "multiRow" },
     pagination: true,
@@ -316,13 +342,13 @@ test("select all preserves selected rows outside the filtered or current-page sc
     ],
   });
   api.selectAll("currentPage");
-  assert.equal(api.table.atoms.rowSelection.get().unloaded, true);
+  assert.strictEqual(api.table.atoms.rowSelection.get().unloaded, true);
 });
 
 test("empty tables and filter misses show the configured empty content", () => {
   assert.match(render({ rowData: [] }), /No rows to display/);
   assert.match(render({ quickFilterText: "no match", emptyContent: "Nothing found" }), /Nothing found/);
-  assert.doesNotMatch(render({ rowData: [], loading: true, emptyContent: "Nothing found" }), /Nothing found/);
+  assert.notMatch(render({ rowData: [], loading: true, emptyContent: "Nothing found" }), /Nothing found/);
 });
 
 test("the grid tab stop follows mounted virtual rows while preserving a visible focused cell", () => {
@@ -347,63 +373,83 @@ test("custom renderers, nested/computed values, formatting and dynamic visibilit
   });
   assert.match(html, /Double 200/);
   assert.match(html, /Edit Alpha/);
-  assert.doesNotMatch(html, /secret|Sort hidden/);
-  assert.doesNotMatch(render({ columnDefs: [{ colId: "actions", hideInPrint: true }], domLayout: "print" }), /Sort actions/);
+  assert.notMatch(html, /secret|Sort hidden/);
+  assert.notMatch(render({ columnDefs: [{ colId: "actions", hideInPrint: true }], domLayout: "print" }), /Sort actions/);
 });
 
 test("invalid ids fail explicitly and compound parts require the provider", () => {
   assert.throws(() => render({ columnDefs: [{ colId: "x" }, { colId: "x" }] }), /column ids must be unique/);
   assert.throws(() => render({ rowData: [rows[0], rows[0]] }), /row ids must be unique/);
   assert.throws(() => render({ columnDefs: [{ colId: "__external" }] }), /reserved/);
-  assert.throws(() => renderToStaticMarkup(React.createElement(DataTableContent, { rowData: rows, columnDefs: columns })), /within <DataTable>/);
+  assert.throws(
+    () => renderToStaticMarkup(React.createElement(DataTableContent<TestRow>, { rowData: rows, columnDefs: columns })),
+    /within <DataTable>/,
+  );
   assert.throws(() => renderToStaticMarkup(React.createElement(DataTableSearchAction)), /within <DataTable>/);
   assert.match(
-    renderToStaticMarkup(React.createElement(DataTable, null, React.createElement(DataTableActionBar, { "data-testid": "toolbar" }, "Tools"))),
+    renderToStaticMarkup(
+      React.createElement(
+        DataTable,
+        null,
+        React.createElement<React.ComponentProps<typeof DataTableActionBar> & { "data-testid": string }>(
+          DataTableActionBar,
+          { "data-testid": "toolbar" },
+          "Tools",
+        ),
+      ),
+    ),
     /data-testid="toolbar"/,
   );
 });
 
 test("filters handle case, zero, blank, numeric ranges, dates and invalid numeric input", () => {
-  assert.equal(matchesFilter("Alpha", { operator: "contains", value: "ALP" }, "text"), true);
-  assert.equal(matchesFilter(0, { operator: "equals", value: "0" }, "number"), true);
-  assert.equal(matchesFilter(null, { operator: "blank" }, "text"), true);
-  assert.equal(matchesFilter(0, { operator: "notBlank" }, "number"), true);
-  assert.equal(matchesFilter(20, { operator: "inRange", value: "10", valueTo: "20" }, "number"), true);
-  assert.equal(matchesFilter(21, { operator: "inRange", value: "10", valueTo: "20" }, "number"), false);
-  assert.equal(matchesFilter("2026-10-02T15:00:00Z", { operator: "equals", value: "2026-10-02" }, "date"), true);
-  assert.equal(matchesFilter("n/a", { operator: "notEqual", value: "10" }, "number"), false);
+  assert.strictEqual(matchesFilter("Alpha", { operator: "contains", value: "ALP" }, "text"), true);
+  assert.strictEqual(matchesFilter(0, { operator: "equals", value: "0" }, "number"), true);
+  assert.strictEqual(matchesFilter(null, { operator: "blank" }, "text"), true);
+  assert.strictEqual(matchesFilter(0, { operator: "notBlank" }, "number"), true);
+  assert.strictEqual(matchesFilter(20, { operator: "inRange", value: "10", valueTo: "20" }, "number"), true);
+  assert.strictEqual(matchesFilter(21, { operator: "inRange", value: "10", valueTo: "20" }, "number"), false);
+  assert.strictEqual(matchesFilter("2026-10-02T15:00:00Z", { operator: "equals", value: "2026-10-02" }, "date"), true);
+  assert.strictEqual(matchesFilter("n/a", { operator: "notEqual", value: "10" }, "number"), false);
 });
 
 test("nested edits and custom setters preserve source records and unrelated fields", () => {
   const original = { id: 1, nested: { name: "Before", count: 2 } };
   const column = { field: "nested.name" };
   const edited = setCellValue(original, column, "After");
-  assert.equal(getCellValue(edited, column, 0), "After");
-  assert.equal(edited.nested.count, 2);
-  assert.equal(original.nested.name, "Before");
-  assert.notEqual(edited.nested, original.nested);
-  assert.deepEqual(setCellValue(original, { valueSetter: (row, value) => ({ ...row, id: value }) }, 10), { ...original, id: 10 });
+  assert.strictEqual(getCellValue(edited, column, 0), "After");
+  assert.strictEqual(edited.nested.count, 2);
+  assert.strictEqual(original.nested.name, "Before");
+  assert.notStrictEqual(edited.nested, original.nested);
+  assert.deepEqual(
+    setCellValue(
+      original,
+      {
+        valueSetter: (row, value) => {
+          if (typeof value !== "number") throw new TypeError("Expected a numeric ID");
+          return { ...row, id: value };
+        },
+      },
+      10,
+    ),
+    { ...original, id: 10 },
+  );
 });
 
 test("nested edits preserve array ancestors, sibling entries and source records", () => {
   const original = { id: 1, items: [{ names: ["Before", "Sibling"], count: 2 }, { names: ["Other"] }] };
   const edited = setCellValue(original, { field: "items.0.names.0" }, "After");
   assert.deepEqual(edited.items, [{ names: ["After", "Sibling"], count: 2 }, { names: ["Other"] }]);
-  assert.equal(original.items[0].names[0], "Before");
-  assert.notEqual(edited.items, original.items);
-  assert.notEqual(edited.items[0].names, original.items[0].names);
-  assert.equal(edited.items[1], original.items[1]);
+  assert.strictEqual(original.items[0].names[0], "Before");
+  assert.notStrictEqual(edited.items, original.items);
+  assert.notStrictEqual(edited.items[0].names, original.items[0].names);
+  assert.strictEqual(edited.items[1], original.items[1]);
 });
 
-test("column validation runs for hidden editable columns when a row edit commits", t => {
-  const original = Object.getOwnPropertyDescriptor(globalThis, "requestAnimationFrame");
-  globalThis.requestAnimationFrame = () => 0;
-  t.after(() => {
-    if (original) Object.defineProperty(globalThis, "requestAnimationFrame", original);
-    else delete globalThis.requestAnimationFrame;
-  });
-  let api;
-  const commits = [];
+test("column validation runs for hidden editable columns when a row edit commits", () => {
+  vi.stubGlobal("requestAnimationFrame", () => 0);
+  let api!: DataTableApi<TestRow>;
+  const commits: DataTableEditEvent<TestRow>[] = [];
   render({
     columnDefs: [
       {
@@ -414,40 +460,45 @@ test("column validation runs for hidden editable columns when a row edit commits
           return null;
         },
       },
-      { field: "price", editable: true, hide: true, validate: value => (value > 50 ? ["Price must be 50 or less"] : null) },
+      {
+        field: "price",
+        editable: true,
+        hide: true,
+        validate: value => (typeof value === "number" && value > 50 ? ["Price must be 50 or less"] : null),
+      },
     ],
     onEditCommit: event => commits.push(event),
   });
-  assert.equal(api.startEditingRow("a"), true);
-  assert.equal(api.stopEditing(), false);
+  assert.strictEqual(api.startEditingRow("a"), true);
+  assert.strictEqual(api.stopEditing(), false);
   assert.deepEqual(commits, []);
-  assert.equal(api.stopEditing(true), true);
-  assert.equal(api.startEditingRow("c"), true);
-  assert.equal(api.stopEditing(), true);
+  assert.strictEqual(api.stopEditing(true), true);
+  assert.strictEqual(api.startEditingRow("c"), true);
+  assert.strictEqual(api.stopEditing(), true);
 });
 
 test("date editors serialize Date values as yyyy-MM-dd and parse typed values back to Date", () => {
   const value = new Date(2026, 9, 5);
-  assert.equal(toDateInputValue(value), "2026-10-05");
-  assert.equal(toDateInputValue("2026-10-05T12:00:00"), "2026-10-05");
-  assert.equal(toDateInputValue("not a date"), "");
-  assert.equal(toDateInputValue(null), "");
+  assert.strictEqual(toDateInputValue(value), "2026-10-05");
+  assert.strictEqual(toDateInputValue("2026-10-05T12:00:00"), "2026-10-05");
+  assert.strictEqual(toDateInputValue("not a date"), "");
+  assert.strictEqual(toDateInputValue(null), "");
   const parsed = parseDateInputValue("2026-11-01", value, "date");
   assert.ok(parsed instanceof Date);
   assert.deepEqual([parsed.getFullYear(), parsed.getMonth(), parsed.getDate()], [2026, 10, 1]);
-  assert.equal(toDateInputValue(parsed), "2026-11-01");
+  assert.strictEqual(toDateInputValue(parsed), "2026-11-01");
   assert.ok(parseDateInputValue("2026-11-01", value) instanceof Date);
-  assert.equal(parseDateInputValue("", value, "date"), null);
-  assert.equal(parseDateInputValue("2026-11-01", "2026-10-05", "dateString"), "2026-11-01");
-  assert.equal(parseDateInputValue("2026-02-31", value, "date"), "2026-02-31");
-  assert.equal(parseDateInputValue("05/10/2026", value, "date"), "05/10/2026");
+  assert.strictEqual(parseDateInputValue("", value, "date"), null);
+  assert.strictEqual(parseDateInputValue("2026-11-01", "2026-10-05", "dateString"), "2026-11-01");
+  assert.strictEqual(parseDateInputValue("2026-02-31", value, "date"), "2026-02-31");
+  assert.strictEqual(parseDateInputValue("05/10/2026", value, "date"), "05/10/2026");
 });
 
 test("row disclosure and selection cells stay pinned at the row start while columns scroll", () => {
   const html = render({ rowSelection: { mode: "multiRow" }, renderSubComponent: () => null });
-  const tagWith = marker => {
+  const tagWith = (marker: string) => {
     const start = html.indexOf(marker);
-    assert.notEqual(start, -1, `missing ${marker}`);
+    assert.notStrictEqual(start, -1, `missing ${marker}`);
     return html.slice(html.lastIndexOf("<", start), html.indexOf(">", start) + 1);
   };
   const expanderCell = tagWith("data-row-expander-cell");
@@ -462,14 +513,16 @@ test("row disclosure and selection cells stay pinned at the row start while colu
 });
 
 test("headers and cells follow pinned regions and their explicit order, including print layout", () => {
-  for (const domLayout of ["normal", "print"]) {
+  for (const domLayout of ["normal", "print"] as const) {
     const html = render({
       domLayout,
       tableOptions: { state: { columnPinning: { start: ["updated", "name"], end: ["price"] } } },
     });
     const headers = Array.from(html.matchAll(/role="columnheader"[^>]*data-column-id="([^"]+)"/g), match => match[1]);
     assert.deepEqual(headers, ["updated", "name", "price"]);
-    const firstRow = html.match(/role="row"[^>]*data-row-id="a"[\s\S]*?(?=<div role="row"|$)/)[0];
+    const firstRowMatch = html.match(/role="row"[^>]*data-row-id="a"[\s\S]*?(?=<div role="row"|$)/);
+    assert.isNotNull(firstRowMatch);
+    const firstRow = firstRowMatch[0];
     const cells = Array.from(firstRow.matchAll(/role="gridcell"[^>]*data-column-id="([^"]+)"/g), match => match[1]);
     assert.deepEqual(cells, headers);
   }
@@ -478,12 +531,14 @@ test("headers and cells follow pinned regions and their explicit order, includin
 test("print layout removes the sticky top offset from frozen and summary rows", () => {
   const html = render({
     domLayout: "print",
-    pinnedTopRowData: [{ id: "summary", name: "Summary" }],
-    tableOptions: { state: { rowPinning: { top: ["a"] } } },
+    pinnedTopRowData: [{ ...rows[0], id: "summary", name: "Summary" }],
+    tableOptions: { state: { rowPinning: { top: ["a"], bottom: [] } } },
   });
-  const topGroup = html.match(/<div role="rowgroup"[^>]*>/)[0];
+  const topGroupMatch = html.match(/<div role="rowgroup"[^>]*>/);
+  assert.isNotNull(topGroupMatch);
+  const topGroup = topGroupMatch[0];
   assert.match(topGroup, /position:relative/);
-  assert.doesNotMatch(topGroup, /(?:style="|;)top:/);
+  assert.notMatch(topGroup, /(?:style="|;)top:/);
 });
 
 test("flex columns share remaining space and honor min/max constraints and manual widths", () => {
@@ -522,8 +577,8 @@ test("flex allocation redistributes mixed min/max constraints independently of c
   );
 });
 
-function orderingTable(columnDefs, tableOptions) {
-  let table;
+function orderingTable(columnDefs: DataTableColumn<TestRow>[], tableOptions: DataTableContentProps<TestRow>["tableOptions"] = {}) {
+  let table!: DataTableInstance<TestRow>;
   render({
     columnDefs: columnDefs.map(column => ({
       ...column,
@@ -541,7 +596,7 @@ test("column dragging changes header/body order without losing hidden or dynamic
   const table = orderingTable([{ field: "name" }, { colId: "hidden", hide: true }, { field: "price" }, { field: "updated" }], {
     initialState: { columnOrder: ["price", "name"] },
   });
-  assert.equal(moveDataTableColumn(table, "price", "updated"), true);
+  assert.strictEqual(moveDataTableColumn(table, "price", "updated"), true);
   assert.deepEqual(
     table.getVisibleLeafColumns().map(column => column.id),
     ["name", "updated", "price"],
@@ -558,13 +613,13 @@ test("column dragging changes header/body order without losing hidden or dynamic
 });
 
 test("column dragging reorders pinned sections while preserving their pinning", () => {
-  for (const region of ["start", "end"]) {
+  for (const region of ["start", "end"] as const) {
     const table = orderingTable([{ field: "name", pinned: region }, { field: "price", pinned: region }, { field: "updated" }]);
-    assert.equal(moveDataTableColumn(table, "name", "price"), true);
+    assert.strictEqual(moveDataTableColumn(table, "name", "price"), true);
     assert.deepEqual(table.atoms.columnPinning.get()[region], ["price", "name"]);
     assert.deepEqual(table.atoms.columnOrder.get(), []);
-    assert.equal(table.getColumn("name").getIsPinned(), region);
-    assert.equal(moveDataTableColumn(table, "name", "updated"), false);
+    assert.strictEqual(table.getColumn("name")!.getIsPinned(), region);
+    assert.strictEqual(moveDataTableColumn(table, "name", "updated"), false);
   }
 });
 
@@ -577,10 +632,10 @@ test("self/invalid/hidden targets cannot reorder columns; controlled order emits
       requested = typeof value === "function" ? value(initial) : value;
     },
   });
-  assert.equal(moveDataTableColumn(table, "name", "name"), false);
-  assert.equal(moveDataTableColumn(table, "name", "updated"), false);
-  assert.equal(moveDataTableColumn(table, "__external", "price"), false);
-  assert.equal(moveDataTableColumn(table, "name", "price"), true);
+  assert.strictEqual(moveDataTableColumn(table, "name", "name"), false);
+  assert.strictEqual(moveDataTableColumn(table, "name", "updated"), false);
+  assert.strictEqual(moveDataTableColumn(table, "__external", "price"), false);
+  assert.strictEqual(moveDataTableColumn(table, "name", "price"), true);
   assert.deepEqual(requested, ["price", "name", "updated", "__external"]);
   assert.deepEqual(initial, ["name", "price", "updated"]);
   assert.deepEqual(
@@ -592,24 +647,25 @@ test("self/invalid/hidden targets cannot reorder columns; controlled order emits
 test("whole headers support keyboard dragging without grip buttons and print omits drag instructions", () => {
   assert.match(render(), /role="columnheader" tabindex="0" aria-label="Name"/);
   assert.match(render(), /Drag to reorder/);
-  assert.doesNotMatch(render(), /aria-label="Move column/);
-  assert.doesNotMatch(render({ domLayout: "print" }), /Drag to reorder|role="columnheader" tabindex="0"/);
+  assert.notMatch(render(), /aria-label="Move column/);
+  assert.notMatch(render({ domLayout: "print" }), /Drag to reorder|role="columnheader" tabindex="0"/);
 });
 
 test("select filters match whole case-sensitive values, including numeric zero and booleans", () => {
-  assert.equal(matchesFilter("Alpha", "Alpha", "select"), true);
-  assert.equal(matchesFilter("Alphabet", "Alpha", "select"), false);
-  assert.equal(matchesFilter("alpha", "Alpha", "select"), false);
-  assert.equal(matchesFilter(0, { operator: "equals", value: "0" }, "select"), true);
-  assert.equal(matchesFilter(false, { operator: "equals", value: "false" }, "select"), true);
-  assert.equal(matchesFilter(null, { operator: "blank" }, "select"), true);
-  assert.equal(matchesFilter("", { operator: "blank" }, "select"), true);
-  assert.equal(matchesFilter("Alpha", { operator: "equals", value: "" }, "select"), true);
-  assert.equal(matchesFilter("Alpha", { operator: "notEqual", value: "Beta" }, "select"), true);
+  assert.strictEqual(matchesFilter("Alpha", "Alpha", "select"), true);
+  assert.strictEqual(matchesFilter("Alphabet", "Alpha", "select"), false);
+  assert.strictEqual(matchesFilter("alpha", "Alpha", "select"), false);
+  assert.strictEqual(matchesFilter(0, { operator: "equals", value: "0" }, "select"), true);
+  assert.strictEqual(matchesFilter(false, { operator: "equals", value: "false" }, "select"), true);
+  assert.strictEqual(matchesFilter(null, { operator: "blank" }, "select"), true);
+  assert.strictEqual(matchesFilter("", { operator: "blank" }, "select"), true);
+  assert.strictEqual(matchesFilter("Alpha", { operator: "equals", value: "" }, "select"), true);
+  assert.strictEqual(matchesFilter("Alpha", { operator: "notEqual", value: "Beta" }, "select"), true);
 });
 
 test("select filters integrate with nested/computed accessors, search, and pagination", () => {
-  const columnDefs = [
+  type NestedRow = { id: string; nested: { status: string } };
+  const columnDefs: DataTableColumn<NestedRow>[] = [
     { field: "nested.status", filter: "select" },
     { colId: "computed", filter: "select", valueGetter: ({ data }) => data.nested.status },
   ];
@@ -621,7 +677,7 @@ test("select filters integrate with nested/computed accessors, search, and pagin
   for (const id of ["nested.status", "computed"]) {
     assert.deepEqual(
       ids(
-        render({
+        renderTable({
           rowData,
           columnDefs,
           quickFilterText: "active",
@@ -636,9 +692,10 @@ test("select filters integrate with nested/computed accessors, search, and pagin
 });
 
 test("detail panels are opt-in, respect eligibility and span the visible columns", () => {
-  const renderSubComponent = ({ row }) => React.createElement("p", null, `Details for ${row.original.name}`);
-  assert.doesNotMatch(render(), /Expand row|Row details|data-expanded-row-id/);
-  const options = {
+  const renderSubComponent: DataTableContentProps<TestRow>["renderSubComponent"] = ({ row }) =>
+    React.createElement("p", null, `Details for ${row.original.name}`);
+  assert.notMatch(render(), /Expand row|Row details|data-expanded-row-id/);
+  const options: Partial<DataTableContentProps<TestRow>> = {
     renderSubComponent,
     getRowCanExpand: row => row.id !== "b",
     rowSelection: { mode: "multiRow" },
@@ -647,37 +704,39 @@ test("detail panels are opt-in, respect eligibility and span the visible columns
   const html = render(options);
   assert.match(html, /Details for Alpha/);
   assert.match(html, /Details for Gamma/);
-  assert.doesNotMatch(html, /Details for Beta|Collapse row b/);
+  assert.notMatch(html, /Details for Beta|Collapse row b/);
   assert.match(html, /aria-label="Collapse row a" aria-expanded="true" aria-controls=/);
   assert.match(html, /aria-colspan="4"/);
   assert.match(html, /aria-rowcount="6"/);
   assert.match(html, /aria-rowindex="4"[^>]*data-row-id="b"/);
-  assert.doesNotMatch(render({ ...options, tableOptions: { enableExpanding: false, state: { expanded: true } } }), /Details for|Collapse row/);
+  assert.notMatch(render({ ...options, tableOptions: { enableExpanding: false, state: { expanded: true } } }), /Details for|Collapse row/);
 });
 
 test("expanded details follow their parent through sorting, pagination, pinning and print", () => {
-  const renderSubComponent = ({ row }) => `Details for ${row.original.name}`;
-  const options = {
+  const renderSubComponent: DataTableContentProps<TestRow>["renderSubComponent"] = ({ row }) => `Details for ${row.original.name}`;
+  const options: Partial<DataTableContentProps<TestRow>> = {
     renderSubComponent,
     pagination: true,
     paginationPageSize: 1,
-    tableOptions: { initialState: { expanded: { a: true, b: true }, rowPinning: { top: ["a"] }, sorting: [{ id: "price", desc: false }] } },
+    tableOptions: {
+      initialState: { expanded: { a: true, b: true }, rowPinning: { top: ["a"], bottom: [] }, sorting: [{ id: "price", desc: false }] },
+    },
   };
   const html = render(options);
   assert.deepEqual(ids(html), ["a", "c"]);
   assert.match(html, /Details for Alpha/);
-  assert.doesNotMatch(html, /Details for Beta/);
+  assert.notMatch(html, /Details for Beta/);
   const printed = render({ ...options, domLayout: "print" });
   assert.match(printed, /Details for Alpha/);
   assert.match(printed, /Details for Beta/);
-  assert.doesNotMatch(printed, /Expand row|Collapse row|Row details/);
+  assert.notMatch(printed, /Expand row|Collapse row|Row details/);
 });
 
 test("native expansion APIs update internal state and emit controlled requests", () => {
   const table = orderingTable(columns, { initialState: { expanded: { a: true } } });
-  assert.equal(table.getRow("a").getIsExpanded(), true);
+  assert.strictEqual(table.getRow("a").getIsExpanded(), true);
   // Eligibility and disclosure are enabled by the detail renderer.
-  let detailTable;
+  let detailTable!: DataTableInstance<TestRow>;
   render({
     renderSubComponent: () => null,
     columnDefs: [
@@ -692,9 +751,9 @@ test("native expansion APIs update internal state and emit controlled requests",
   });
   const row = detailTable.getRow("a");
   row.getToggleExpandedHandler()();
-  assert.equal(row.getIsExpanded(), true);
+  assert.strictEqual(row.getIsExpanded(), true);
   row.toggleExpanded(false);
-  assert.equal(row.getIsExpanded(), false);
+  assert.strictEqual(row.getIsExpanded(), false);
   let requested;
   const controlled = orderingTable(columns, {
     state: { expanded: {} },
@@ -704,5 +763,5 @@ test("native expansion APIs update internal state and emit controlled requests",
   });
   controlled.setExpanded({ a: true });
   assert.deepEqual(requested, { a: true });
-  assert.equal(controlled.getRow("a").getIsExpanded(), false);
+  assert.strictEqual(controlled.getRow("a").getIsExpanded(), false);
 });

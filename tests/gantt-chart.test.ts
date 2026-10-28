@@ -1,15 +1,14 @@
-import assert from "node:assert/strict";
-import test from "node:test";
+import { assert, test } from "vitest";
 import React from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 
-import { toDate } from "../dist/gantt-chart.es.js";
-import { GanttChart } from "../dist/ganttchart.es.js";
+import { toDate } from "../src/components/gantt-chart/gantt-chart.utils";
+import { GanttChart } from "../src/components/gantt-chart/GanttChart";
 
 test("rejects invalid date-only values instead of normalizing them", () => {
-  assert.equal(toDate("2026-02-30"), null);
-  assert.equal(toDate("2026-13-01"), null);
-  assert.equal(toDate("2025-02-29"), null);
+  assert.strictEqual(toDate("2026-02-30"), null);
+  assert.strictEqual(toDate("2026-13-01"), null);
+  assert.strictEqual(toDate("2025-02-29"), null);
 
   const leapDay = toDate("2024-02-29");
 
@@ -29,7 +28,7 @@ test("renders table headers inside rows", () => {
   );
 
   assert.match(html, /role="rowgroup"><div[^>]*role="row"><div[^>]*role="columnheader"/);
-  assert.doesNotMatch(html, /role="rowgroup"><div[^>]*role="columnheader"/);
+  assert.notMatch(html, /role="rowgroup"><div[^>]*role="columnheader"/);
 });
 
 test("does not render fullscreen controls without browser support", () => {
@@ -41,5 +40,5 @@ test("does not render fullscreen controls without browser support", () => {
     }),
   );
 
-  assert.doesNotMatch(html, /aria-label="Toggle fullscreen"/);
+  assert.notMatch(html, /aria-label="Toggle fullscreen"/);
 });

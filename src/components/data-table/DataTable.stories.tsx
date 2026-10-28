@@ -248,12 +248,12 @@ export const SearchSelectionAndPinning: Story = {
     await userEvent.click(canvas.getByRole("button", { name: "Freeze" }));
     await userEvent.clear(search);
     await expect(canvasElement.querySelector('[role="row"][data-row-id="2"]')).toHaveAttribute("data-pinned", "top");
-    await userEvent.click(canvas.getByRole("button", { name: "Electric only" }));
+    await userEvent.click(canvas.getByRole("button", { name: "Cheap Cars" }));
     // Frozen rows remain visible through external filtering and pagination.
     await expect(canvas.getByText("F-Series")).toBeVisible();
     await userEvent.click(canvas.getByRole("button", { name: "Unfreeze" }));
     await expect(canvas.queryByText("F-Series")).not.toBeInTheDocument();
-    await userEvent.click(canvas.getByRole("button", { name: "Electric only" }));
+    await userEvent.click(canvas.getByRole("button", { name: "All" }));
   },
 };
 
@@ -320,10 +320,11 @@ export const ValidatedRowEditing: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     await userEvent.click(canvas.getByRole("button", { name: "Edit Tesla" }));
+    await waitFor(() => expect(canvas.getByRole("textbox", { name: "Edit Model" })).toHaveFocus());
     const fuel = canvas.getByRole("combobox");
     fuel.focus();
     await userEvent.keyboard("{Enter}");
-    await expect(fuel).toHaveAttribute("aria-expanded", "true");
+    await waitFor(() => expect(canvas.getByRole("combobox")).toHaveAttribute("aria-expanded", "true"));
     await userEvent.click(within(canvasElement.ownerDocument.body).getByRole("option", { name: "Gasoline" }));
     await expect(canvas.getByRole("button", { name: "Save" })).toBeVisible();
     await userEvent.clear(canvas.getByRole("textbox", { name: "Edit Model" }));
@@ -625,7 +626,7 @@ export const SummaryRows: Story = {
   ),
 };
 
-const keyboardRows = rows.slice(0, -1);
+const keyboardRows = rows.slice(0, 6);
 export const PinnedRowKeyboardNavigation: Story = {
   render: () => (
     <div className="mtx-h-96 mtx-p-4">
@@ -633,6 +634,7 @@ export const PinnedRowKeyboardNavigation: Story = {
         <DataTableContent
           rowData={keyboardRows}
           columnDefs={columns}
+          getRowId={getVehicleRowId}
           tableOptions={{ initialState: { rowPinning: { top: ["1", "2"], bottom: ["5", "6"] } } }}
         />
       </DataTable>
@@ -771,13 +773,13 @@ export const ExpandableRows: Story = {
     const toggle = canvas.getByRole("button", { name: "Expand row 1" });
     await userEvent.click(toggle);
     await expect(canvas.getByText("Tesla Model Y details")).toBeVisible();
-    await expect(toggle).toHaveAttribute("aria-expanded", "true");
+    await expect(canvas.getByRole("button", { name: "Collapse row 1" })).toHaveAttribute("aria-expanded", "true");
     await expect(canvas.getByRole("checkbox", { name: "Select row 1" })).toHaveAttribute("aria-checked", "false");
     await expect(canvas.queryByRole("button", { name: "Expand row 2" })).not.toBeInTheDocument();
     await userEvent.click(canvas.getByRole("button", { name: "Close details" }));
     await expect(canvas.queryByText("Tesla Model Y details")).not.toBeInTheDocument();
     await userEvent.tab();
-    toggle.focus();
+    canvas.getByRole("button", { name: "Expand row 1" }).focus();
     await userEvent.keyboard("{Enter}");
     await expect(canvas.getByText("Tesla Model Y details")).toBeVisible();
   },

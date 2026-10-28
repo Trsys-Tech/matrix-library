@@ -1,8 +1,14 @@
-import assert from "node:assert/strict";
-import test from "node:test";
+import { assert, test, afterEach, vi } from "vitest";
 import React from "react";
+
 import { renderToStaticMarkup } from "react-dom/server";
-import { ResourceScheduler } from "../dist/resourcescheduler.es.js";
+import {
+  ResourceScheduler,
+  type ResourceSchedulerProps,
+  type ResourceSchedulerCellContext,
+} from "../src/components/resource-scheduler/ResourceScheduler";
+
+afterEach(() => vi.useRealTimers());
 
 const resources = [
   { id: "first", label: "First resource" },
@@ -14,10 +20,12 @@ const item = {
   date: "2026-09-14",
   content: React.createElement("button", { type: "button" }, "Custom card action"),
 };
-const render = props =>
+const render = (props: Partial<ResourceSchedulerProps> & { "data-consumer"?: string } = {}) =>
   renderToStaticMarkup(React.createElement(ResourceScheduler, { resources, from: "2026-09-13", to: "2026-09-19", defaultItems: [item], ...props }));
 
 test("highlights only today's local header and resource cells when the date is in range", () => {
+  vi.useFakeTimers();
+  vi.setSystemTime(new Date(2026, 8, 14, 12));
   const now = new Date();
   const day = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
   const yesterday = new Date(now);
@@ -25,14 +33,14 @@ test("highlights only today's local header and resource cells when the date is i
   const tomorrow = new Date(now);
   tomorrow.setDate(now.getDate() + 1);
   const html = render({ from: yesterday, to: tomorrow });
-  assert.equal((html.match(/data-today="true"/g) ?? []).length, 3);
+  assert.strictEqual((html.match(/data-today="true"/g) ?? []).length, 3);
   assert.match(html, new RegExp(`role="columnheader" data-date="${day}" data-today="true" aria-current="date" class="[^"]*mtx-bg-primary-50`));
-  assert.equal((html.match(/data-today="true"[^>]*class="[^"]*mtx-bg-gray-50/g) ?? []).length, 2);
-  assert.doesNotMatch(render({ from: yesterday, to: yesterday }), /data-today|aria-current="date"/);
+  assert.strictEqual((html.match(/data-today="true"[^>]*class="[^"]*mtx-bg-gray-50/g) ?? []).length, 2);
+  assert.notMatch(render({ from: yesterday, to: yesterday }), /data-today|aria-current="date"/);
 });
 
 test("custom cell buttons receive resource, date and ordered items and can be omitted per cell", () => {
-  const cells = [];
+  const cells: ResourceSchedulerCellContext[] = [];
   const html = render({
     renderCellButton: cell => {
       cells.push(cell);
@@ -40,10 +48,10 @@ test("custom cell buttons receive resource, date and ordered items and can be om
     },
     showCellButton: ({ resource, date }) => resource.id === "first" && date === item.date,
   });
-  assert.equal(cells.length, 1);
+  assert.strictEqual(cells.length, 1);
   assert.deepEqual(cells[0], { resource: resources[0], date: item.date, items: [item] });
   assert.match(html, /Add first 2026-09-14/);
-  assert.doesNotMatch(html, /Add second/);
+  assert.notMatch(html, /Add second/);
 });
 
 test("custom actions are optional, can be hidden globally and are hidden when disabled", () => {
@@ -52,18 +60,18 @@ test("custom actions are optional, can be hidden globally and are hidden when di
     calls++;
     return React.createElement("button", { type: "button" }, "Cell action");
   };
-  assert.doesNotMatch(render(), /Cell action/);
-  assert.doesNotMatch(render({ renderCellButton, showCellButton: false }), /Cell action/);
-  assert.doesNotMatch(render({ renderCellButton, disabled: true }), /Cell action/);
-  assert.equal(calls, 0);
-  assert.equal((render({ renderCellButton }).match(/Cell action/g) ?? []).length, 14);
-  assert.doesNotMatch(render({ renderCellButton: () => null }), /mtx-bottom-1.5/);
+  assert.notMatch(render(), /Cell action/);
+  assert.notMatch(render({ renderCellButton, showCellButton: false }), /Cell action/);
+  assert.notMatch(render({ renderCellButton, disabled: true }), /Cell action/);
+  assert.strictEqual(calls, 0);
+  assert.strictEqual((render({ renderCellButton }).match(/Cell action/g) ?? []).length, 14);
+  assert.notMatch(render({ renderCellButton: () => null }), /mtx-bottom-1.5/);
 });
 
 test("renders an inclusive date range with empty resource rows and arbitrary card nodes", () => {
   const html = render();
-  assert.equal((html.match(/role="columnheader"/g) ?? []).length, 8);
-  assert.equal((html.match(/role="cell"/g) ?? []).length, 14);
+  assert.strictEqual((html.match(/role="columnheader"/g) ?? []).length, 8);
+  assert.strictEqual((html.match(/role="cell"/g) ?? []).length, 14);
   assert.match(html, /First resource/);
   assert.match(html, /Second resource/);
   assert.match(html, /<button type="button">Custom card action<\/button>/);
@@ -75,9 +83,9 @@ test("uses local calendar days for native timestamps and date-only strings, incl
   process.env.TZ = "America/New_York";
   try {
     const html = render({ from: "2026-03-07", to: "2026-03-09", items: [{ ...item, date: new Date(2026, 2, 8, 23, 30) }] });
-    assert.equal((html.match(/role="cell"/g) ?? []).length, 6);
+    assert.strictEqual((html.match(/role="cell"/g) ?? []).length, 6);
     assert.match(html, /data-date="2026-03-08"[^]*?data-item-id="delivery"/);
-    assert.equal((html.match(/data-item-id="delivery"/g) ?? []).length, 1);
+    assert.strictEqual((html.match(/data-item-id="delivery"/g) ?? []).length, 1);
   } finally {
     if (previousTimezone === undefined) delete process.env.TZ;
     else process.env.TZ = previousTimezone;
@@ -85,7 +93,7 @@ test("uses local calendar days for native timestamps and date-only strings, incl
 });
 
 test("controlled empty items override defaults and invalid or outside-range items stay hidden", () => {
-  assert.doesNotMatch(render({ items: [] }), /Custom card action/);
+  assert.notMatch(render({ items: [] }), /Custom card action/);
   const html = render({
     items: [
       { ...item, id: "outside", date: "2026-09-20" },
@@ -93,19 +101,19 @@ test("controlled empty items override defaults and invalid or outside-range item
       { ...item, id: "unknown", resourceId: "missing" },
     ],
   });
-  assert.doesNotMatch(html, /data-item-id=/);
+  assert.notMatch(html, /data-item-id=/);
 });
 
 test("invalid and reversed ranges produce no day cells rather than looping or normalizing dates", () => {
-  assert.doesNotMatch(render({ from: "2026-09-19", to: "2026-09-13" }), /role="cell"/);
-  assert.doesNotMatch(render({ from: "2026-02-30" }), /role="cell"/);
-  assert.equal((render({ from: "2026-09-14", to: "2026-09-14" }).match(/role="cell"/g) ?? []).length, 2);
+  assert.notMatch(render({ from: "2026-09-19", to: "2026-09-13" }), /role="cell"/);
+  assert.notMatch(render({ from: "2026-02-30" }), /role="cell"/);
+  assert.strictEqual((render({ from: "2026-09-14", to: "2026-09-14" }).match(/role="cell"/g) ?? []).length, 2);
 });
 
 test("global and item-level disabling prevents drag affordances while preserving content", () => {
   for (const html of [render({ disabled: true }), render({ items: [{ ...item, draggable: false }] })]) {
     assert.match(html, /draggable="false"/);
-    assert.doesNotMatch(html, /tabindex="0"|mtx-cursor-grab/);
+    assert.notMatch(html, /tabindex="0"|mtx-cursor-grab/);
     assert.match(html, /Custom card action/);
   }
 });
@@ -133,12 +141,12 @@ test("accepts numeric resource and item ids, including zero and distinct string 
       { ...item, id: "0", resourceId: "0" },
     ],
   });
-  assert.equal((html.match(/data-item-id="0"/g) ?? []).length, 2);
-  assert.equal((html.match(/aria-label="0"/g) ?? []).length, 2);
+  assert.strictEqual((html.match(/data-item-id="0"/g) ?? []).length, 2);
+  assert.strictEqual((html.match(/aria-label="0"/g) ?? []).length, 2);
 });
 
 test("formats each header with a function returning arbitrary React content", () => {
-  const dates = [];
+  const dates: number[] = [];
   const html = render({
     from: "2026-09-13",
     to: "2026-09-15",
