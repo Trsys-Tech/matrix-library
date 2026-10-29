@@ -38,7 +38,7 @@
     "test:typecheck": "tsc -p tests/tsconfig.json"
   },
   "lint-staged": {
-    "*.{ts,tsx}": [
+    "*.{js,jsx,ts,tsx}": [
       "eslint",
       "prettier --write"
     ]
