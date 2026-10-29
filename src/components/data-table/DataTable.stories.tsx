@@ -16,7 +16,7 @@ import {
   DataTableColumnsAction,
   DataTableExtraActions,
 } from "./DataTableActions";
-import type { DataTableApi, DataTableColumn, DataTableEditorProps, DataTableFilter, DataTableState } from "./DataTable.types";
+import type { DataTableApi, DataTableColumnDef, DataTableEditorProps, DataTableFilter, DataTableState } from "./DataTable.types";
 import { matchesFilter } from "./dataTableModel";
 import { Chip } from "../chip/Chip";
 
@@ -63,7 +63,7 @@ const rows: Vehicle[] = [
   { id: 32, make: "Porsche", model: "Taycan Cross Turismo", price: 93950, electric: true, date: "2026-10-06" },
 ];
 const getVehicleRowId = (row: Vehicle) => row.id;
-const columns: DataTableColumn<Vehicle>[] = [
+const columns: DataTableColumnDef<Vehicle>[] = [
   { field: "make", headerName: "Make", filter: "select", flex: 1, minWidth: 120 },
   {
     field: "model",
@@ -274,7 +274,7 @@ function FuelEditor({ value, onValueChange }: DataTableEditorProps<Vehicle>) {
     />
   );
 }
-const editingColumns: DataTableColumn<Vehicle>[] = [
+const editingColumns: DataTableColumnDef<Vehicle>[] = [
   ...columns.map(column => (column.field === "electric" ? { ...column, editable: true, cellEditor: FuelEditor } : column)),
   {
     colId: "actions",
@@ -492,7 +492,7 @@ export const SelectFilters: Story = {
   },
 };
 
-const externalColumns: DataTableColumn<Vehicle>[] = columns.map(column =>
+const externalColumns: DataTableColumnDef<Vehicle>[] = columns.map(column =>
   column.field === "make"
     ? { ...column, filterOptions: [...new Set(rows.map(row => row.make))].sort().map(value => ({ value, label: `${value} vehicles` })) }
     : column,
@@ -734,7 +734,7 @@ export const PinnedRowKeyboardNavigation: Story = {
   },
 };
 
-const reportColumns: DataTableColumn<Vehicle>[] = [
+const reportColumns: DataTableColumnDef<Vehicle>[] = [
   ...columns,
   ...Array.from({ length: 6 }, (_, index) => ({
     colId: `period-${index}`,

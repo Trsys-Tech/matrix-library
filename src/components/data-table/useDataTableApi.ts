@@ -2,12 +2,12 @@ import * as React from "react";
 import type { Virtualizer } from "@tanstack/react-virtual";
 import { getCellValue, getColumnId } from "./dataTableModel";
 import { printDataTable } from "./dataTablePrint";
-import type { DataTableApi, DataTableColumn, DataTableContentProps, DataTableEditEvent, DataTableInstance, DataTableRow } from "./DataTable.types";
+import type { DataTableApi, DataTableColumnDef, DataTableContentProps, DataTableEditEvent, DataTableInstance, DataTableRow } from "./DataTable.types";
 import type { DataTableEditSession } from "./dataTableEditing";
 
 export type DataTableRuntime<T extends object> = {
   table: DataTableInstance<T>;
-  definitionsById: Map<string, DataTableColumn<T>>;
+  definitionsById: Map<string, DataTableColumnDef<T>>;
   centerRows: DataTableRow<T>[];
   virtualizer: Virtualizer<HTMLDivElement, Element>;
   resolveId: (data: T, index: number) => string;

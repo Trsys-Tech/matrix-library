@@ -1,4 +1,4 @@
-import type { DataTableColumn, DataTableFilter, DataTableFilterType, DataTableInstance } from "./DataTable.types";
+import type { DataTableColumnDef, DataTableFilter, DataTableFilterType, DataTableInstance } from "./DataTable.types";
 
 /** Keep the roving tab stop on a mounted row when virtualization changes the viewport. */
 export function getActiveDataTableCell(
@@ -29,18 +29,18 @@ export function moveDataTableColumn<T extends object>(table: DataTableInstance<T
   return true;
 }
 
-export function getColumnId<T extends object>(column: DataTableColumn<T>): string {
+export function getColumnId<T extends object>(column: DataTableColumnDef<T>): string {
   const id = column.colId ?? column.field;
   if (!id || id.startsWith("__")) throw new Error("DataTable columns require a unique field or colId (ids starting with __ are reserved).");
   return id;
 }
 
-export function getCellValue<T extends object>(data: T, column: DataTableColumn<T>, rowIndex: number): unknown {
+export function getCellValue<T extends object>(data: T, column: DataTableColumnDef<T>, rowIndex: number): unknown {
   if (column.valueGetter) return column.valueGetter({ data, rowIndex });
   return column.field?.split(".").reduce<unknown>((value, key) => (value as Record<string, unknown> | null)?.[key], data);
 }
 
-export function setCellValue<T extends object>(data: T, column: DataTableColumn<T>, value: unknown): T {
+export function setCellValue<T extends object>(data: T, column: DataTableColumnDef<T>, value: unknown): T {
   if (column.valueSetter) return column.valueSetter(data, value);
   if (!column.field) return data;
   const keys = column.field.split(".");
@@ -69,7 +69,7 @@ export function toDateInputValue(value: unknown): string {
 export function parseDateInputValue(
   rawValue: string,
   previousValue: unknown,
-  cellDataType?: DataTableColumn<Record<string, unknown>>["cellDataType"],
+  cellDataType?: DataTableColumnDef<Record<string, unknown>>["cellDataType"],
 ): unknown {
   if (rawValue === "") return null;
   const match = dateInputValue.exec(rawValue);
@@ -81,7 +81,7 @@ export function parseDateInputValue(
   return date.getFullYear() === year && date.getMonth() === month && date.getDate() === day ? date : rawValue;
 }
 
-export function filterType<T extends object>(column: DataTableColumn<T>): DataTableFilterType {
+export function filterType<T extends object>(column: DataTableColumnDef<T>): DataTableFilterType {
   if (typeof column.filter === "string") return column.filter;
   if (column.cellDataType === "number") return "number";
   if (column.cellDataType === "date" || column.cellDataType === "dateString") return "date";
@@ -140,7 +140,7 @@ export function matchesFilter(value: unknown, filter: DataTableFilter | string |
 
 /** Distribute surplus width without allowing pinned offsets to differ from rendered widths. */
 export function getFlexSizes<T extends object>(
-  columns: readonly DataTableColumn<T>[],
+  columns: readonly DataTableColumnDef<T>[],
   available: number,
   sizes: Record<string, number>,
 ): Record<string, number> {

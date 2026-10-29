@@ -4,7 +4,7 @@ import { DataTableAlignmentContext } from "./DataTableContext";
 import { dataTableFeatures } from "./dataTableFeatures";
 import { filterType, getCellValue, getColumnId, getFlexSizes, matchesFilter } from "./dataTableModel";
 import type {
-  DataTableColumn,
+  DataTableColumnDef,
   DataTableContentProps,
   DataTableFeatures,
   DataTableFilter,
@@ -26,7 +26,7 @@ type DataTableInstanceOptions<T extends object> = Pick<
   | "getRowCanExpand"
   | "onQuickFilterTextChange"
 > & {
-  defaultColDef: Partial<DataTableColumn<T>>;
+  defaultColDef: Partial<DataTableColumnDef<T>>;
   paginationPageSize: number;
   pagination: boolean;
   patches: Record<string, { source: T; data: T }>;

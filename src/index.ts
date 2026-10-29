@@ -357,7 +357,7 @@ export {
 } from "./components/data-table/DataTableActions";
 export type {
   DataTableContentProps,
-  DataTableColumn,
+  DataTableColumnDef,
   DataTableApi,
   DataTableInstance,
   DataTableState,

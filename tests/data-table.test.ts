@@ -1,5 +1,5 @@
 import type {
-  DataTableColumn,
+  DataTableColumnDef,
   DataTableContentProps,
   DataTableApi,
   DataTableInstance,
@@ -38,7 +38,7 @@ const rows = [
   { id: "b", name: "Beta", price: 20, updated: "2026-10-02" },
   { id: "c", name: "Gamma", price: 3, updated: "2026-10-03" },
 ];
-const columns: DataTableColumn<TestRow>[] = [
+const columns: DataTableColumnDef<TestRow>[] = [
   { field: "name", headerName: "Name", width: 200, pinned: "start", filter: "text" },
   { field: "price", headerName: "Price", width: 120, cellDataType: "number", filter: "number" },
   { field: "updated", headerName: "Updated", width: 150, filter: "date", cellDataType: "dateString" },
@@ -577,7 +577,7 @@ test("flex allocation redistributes mixed min/max constraints independently of c
   );
 });
 
-function orderingTable(columnDefs: DataTableColumn<TestRow>[], tableOptions: DataTableContentProps<TestRow>["tableOptions"] = {}) {
+function orderingTable(columnDefs: DataTableColumnDef<TestRow>[], tableOptions: DataTableContentProps<TestRow>["tableOptions"] = {}) {
   let table!: DataTableInstance<TestRow>;
   render({
     columnDefs: columnDefs.map(column => ({
@@ -665,7 +665,7 @@ test("select filters match whole case-sensitive values, including numeric zero a
 
 test("select filters integrate with nested/computed accessors, search, and pagination", () => {
   type NestedRow = { id: string; nested: { status: string } };
-  const columnDefs: DataTableColumn<NestedRow>[] = [
+  const columnDefs: DataTableColumnDef<NestedRow>[] = [
     { field: "nested.status", filter: "select" },
     { colId: "computed", filter: "select", valueGetter: ({ data }) => data.nested.status },
   ];

@@ -5,7 +5,7 @@ import type { Column } from "@tanstack/react-table";
 import { Checkbox } from "../checkbox/Checkbox";
 import { DataTableColumnHeader } from "./DataTableColumnHeader";
 import { DataTableColumnMenu } from "./DataTableColumnMenu";
-import type { DataTableApi, DataTableColumn, DataTableContentProps, DataTableFeatures, DataTableInstance, DataTableRow } from "./DataTable.types";
+import type { DataTableApi, DataTableColumnDef, DataTableContentProps, DataTableFeatures, DataTableInstance, DataTableRow } from "./DataTable.types";
 
 type DataTableHeaderProps<T extends object> = Pick<DataTableContentProps<T>, "rowSelection"> & {
   table: DataTableInstance<T>;
@@ -19,7 +19,7 @@ type DataTableHeaderProps<T extends object> = Pick<DataTableContentProps<T>, "ro
   selectionRows: DataTableRow<T>[];
   selectedInScope: number;
   visibleColumns: Column<DataTableFeatures, T>[];
-  definitionsById: Map<string, DataTableColumn<T>>;
+  definitionsById: Map<string, DataTableColumnDef<T>>;
   columnStyle: (column: Column<DataTableFeatures, T>, header?: boolean) => React.CSSProperties;
   widths: Map<string, number>;
 };
