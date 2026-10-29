@@ -463,7 +463,11 @@ function DataTableContentInner<T extends object>(
           const cell = Array.from(contentRef.current?.querySelectorAll<HTMLElement>("[data-row-id][data-column-id]") ?? []).find(
             element => element.dataset.rowId === rowId && element.dataset.columnId === columnId,
           );
-          (cell?.querySelector<HTMLElement>("input,button,[tabindex='0']") ?? cell)?.focus();
+          const control = Array.from(cell?.querySelectorAll<HTMLElement>("input,button,[tabindex='0']") ?? []).find(
+            element =>
+              !element.matches(":disabled, input[type='hidden']") && !element.closest("[hidden],[inert]") && element.getClientRects().length > 0,
+          );
+          (control ?? cell)?.focus();
         }),
       );
     };
@@ -719,7 +723,9 @@ function DataTableContentInner<T extends object>(
     const rowIndex = navigableRows.findIndex(item => item.id === row.id);
     const columnIndex = visibleColumns.findIndex(item => item.id === column.id);
     const nextRow = event.key === "ArrowDown" ? rowIndex + 1 : event.key === "ArrowUp" ? rowIndex - 1 : rowIndex;
-    const nextColumn = event.key === "ArrowRight" ? columnIndex + 1 : event.key === "ArrowLeft" ? columnIndex - 1 : columnIndex;
+    const horizontalStep = getComputedStyle(event.currentTarget).direction === "rtl" ? -1 : 1;
+    const nextColumn =
+      event.key === "ArrowRight" ? columnIndex + horizontalStep : event.key === "ArrowLeft" ? columnIndex - horizontalStep : columnIndex;
     if (["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(event.key) && navigableRows[nextRow] && visibleColumns[nextColumn]) {
       event.preventDefault();
       const targetRow = navigableRows[nextRow];

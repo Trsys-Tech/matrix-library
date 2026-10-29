@@ -627,6 +627,61 @@ export const SummaryRows: Story = {
 };
 
 const keyboardRows = rows.slice(0, 6);
+export const CellKeyboardNavigation: Story = {
+  render: () => (
+    <div className="mtx-space-y-4 mtx-p-4">
+      {(["ltr", "rtl"] as const).map(direction => (
+        <DataTable key={direction} dir={direction}>
+          <DataTableContent
+            aria-label={`${direction} keyboard navigation`}
+            rowData={keyboardRows.slice(0, 1)}
+            virtualize={false}
+            columnDefs={[
+              { field: "make" },
+              {
+                colId: "disabled",
+                cellRenderer: () => (
+                  <button type="button" disabled>
+                    Unavailable
+                  </button>
+                ),
+              },
+              {
+                colId: "mixed",
+                cellRenderer: () => (
+                  <>
+                    <button type="button" disabled>
+                      Unavailable
+                    </button>
+                    <button type="button">Available</button>
+                  </>
+                ),
+              },
+            ]}
+          />
+        </DataTable>
+      ))}
+    </div>
+  ),
+  play: async ({ canvasElement }) => {
+    for (const direction of ["ltr", "rtl"]) {
+      const grid = within(canvasElement).getByRole("grid", { name: `${direction} keyboard navigation` });
+      const cell = (columnId: string) => grid.querySelector<HTMLElement>(`[role="gridcell"][data-column-id="${columnId}"]`)!;
+      const forward = direction === "rtl" ? "ArrowLeft" : "ArrowRight";
+      const backward = direction === "rtl" ? "ArrowRight" : "ArrowLeft";
+      cell("make").focus();
+      await userEvent.keyboard(`{${forward}}`);
+      await waitFor(() => expect(cell("disabled")).toHaveFocus());
+      await userEvent.keyboard(`{${backward}}`);
+      await waitFor(() => expect(cell("make")).toHaveFocus());
+      await userEvent.keyboard(`{${forward}}`);
+      await waitFor(() => expect(cell("disabled")).toHaveFocus());
+      await userEvent.keyboard(`{${forward}}`);
+      await waitFor(() => expect(within(cell("mixed")).getByRole("button", { name: "Available" })).toHaveFocus());
+    }
+  },
+};
+
 export const PinnedRowKeyboardNavigation: Story = {
   render: () => (
     <div className="mtx-h-96 mtx-p-4">
