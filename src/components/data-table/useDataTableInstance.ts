@@ -26,7 +26,7 @@ type DataTableInstanceOptions<T extends object> = Pick<
   | "getRowCanExpand"
   | "onQuickFilterTextChange"
 > & {
-  defaultColDef: Partial<DataTableColumnDef<T>>;
+  defaultColDef: NonNullable<DataTableContentProps<T>["defaultColDef"]>;
   paginationPageSize: number;
   pagination: boolean;
   patches: Record<string, { source: T; data: T }>;
@@ -68,7 +68,8 @@ export function useDataTableInstance<T extends object>({
     [getRowId],
   );
   const definitions = React.useMemo(() => {
-    const result = columnDefs.map(column => ({ ...defaultColDef, ...column }));
+    // Column overrides preserve the field/renderer pairing that TypeScript loses through the spread.
+    const result = columnDefs.map(column => ({ ...defaultColDef, ...column }) as DataTableColumnDef<T>);
     const ids = result.map(getColumnId);
     if (new Set(ids).size !== ids.length) throw new Error("DataTable column ids must be unique.");
     return result;

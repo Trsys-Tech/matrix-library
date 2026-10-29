@@ -25,9 +25,9 @@ export type DataTableFilterOperator =
 export type DataTableFilter = { operator: DataTableFilterOperator; value?: string; valueTo?: string };
 export type DataTableFilterOption = { value: string; label: string };
 
-export type DataTableCellParams<T extends object = Record<string, unknown>, K extends keyof T = keyof T> = {
+export type DataTableCellParams<T extends object, TValue = unknown> = {
   data: T;
-  value: T[K];
+  value: TValue;
   rowId: string;
   /** Original input index; identity and imperative actions use rowId instead. */
   rowIndex: number;
@@ -45,7 +45,7 @@ export type DataTableEditorProps<T extends object> = DataTableCellParams<T> & {
   cancel: () => void;
 };
 
-export type DataTableColumnDef<T extends object> = {
+type DataTableColumnOptions<T extends object> = {
   /** Stable id required for computed or action columns without a field. */
   colId?: string;
   field?: (keyof T & string) | (string & {});
@@ -84,6 +84,18 @@ export type DataTableColumnDef<T extends object> = {
   tableOptions?: Partial<Omit<ColumnDef<DataTableFeatures, T, any>, "id" | "header" | "cell" | "footer" | "accessorKey" | "accessorFn" | "columns">>;
 };
 
+/** A field discriminates the renderer props, preserving each property's exact value type. */
+export type DataTableColumnDef<T extends object> =
+  | {
+      [K in keyof T & string]-?: Omit<DataTableColumnOptions<T>, "field" | "cellRenderer" | "valueGetter"> & {
+        field: K;
+        cellRenderer?: React.ComponentType<DataTableCellParams<T, T[K]>>;
+        valueGetter?: never;
+      };
+    }[keyof T & string]
+  | (DataTableColumnOptions<T> & { field?: undefined | `${string}.${string}` })
+  | (DataTableColumnOptions<T> & { valueGetter: (params: { data: T; rowIndex: number }) => unknown });
+
 export type DataTableEditEvent<T extends object> = {
   rowId: string;
   original: T;
@@ -119,8 +131,8 @@ export type DataTableApi<T extends object> = {
 
 export type DataTableContentProps<T extends object> = Omit<React.HTMLAttributes<HTMLDivElement>, "onChange" | "onRowClick"> & {
   rowData: readonly T[] | null | undefined;
-  columnDefs: readonly DataTableColumnDef<T>[];
-  defaultColDef?: Partial<DataTableColumnDef<T>>;
+  columnDefs: NoInfer<readonly DataTableColumnDef<T>[]>;
+  defaultColDef?: Partial<DataTableColumnOptions<T>>;
   /** String or numeric application id. Normalized to a string internally and in callbacks. Defaults to data.id, then input index. */
   getRowId?: (data: T, index: number) => string | number;
   onReady?: (api: DataTableApi<T>) => void;

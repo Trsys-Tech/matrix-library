@@ -227,4 +227,25 @@ This first implementation targets the inspected Remap usages. Grouping/aggregati
 
 Storybook includes ordinary lists, search/selection/pinning, validated row editing, controlled edit requests, column filters, totals, aligned tables, 10,000 virtualized rows, and print layout. Interaction stories cover representative migration flows. `npm test` includes the DataTable model/rendering regression suite.
 
-`DataTableCellParams<Row>` exposes `value` as the union of the row property types. Use `DataTableCellParams<Row, "field">` for a specific field, or omit the type arguments for an unknown value. For computed values, the caller must ensure the selected value type matches `valueGetter`.
+For a `DataTableColumnDef<Row>[]` (or an array using `satisfies DataTableColumnDef<Row>[]`), omit the inline renderer parameter annotation to infer `value` from `field`:
+
+```tsx
+const columns: DataTableColumnDef<PriceListRow>[] = [
+  {
+    field: "modifiedAt",
+    cellRenderer: params => <FormattedDateTime date={params.value} toZonedTime />, // value: string
+  },
+];
+```
+
+For a reusable renderer component, annotate its row and value types explicitly. The column checks that the renderer accepts its field's value type:
+
+```tsx
+const ModifiedAtRenderer = (props: DataTableCellParams<PriceListRow, PriceListRow["modifiedAt"]>) => (
+  <FormattedDateTime date={props.value} toZonedTime />
+);
+
+const columns: DataTableColumnDef<PriceListRow>[] = [{ field: "modifiedAt", cellRenderer: ModifiedAtRenderer }];
+```
+
+`DataTableCellParams<Row>` alone exposes `value` as `unknown`. Columns with a `valueGetter`, nested paths, or no field also expose an unknown renderer value because a top-level row property does not determine their result. For a computed renderer with both `field` and `valueGetter`, annotate the parameter as `DataTableCellParams<Row>` and check its value before using it.
