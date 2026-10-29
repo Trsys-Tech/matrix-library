@@ -1,4 +1,6 @@
 import * as React from "react";
+// Refresh these snippets with node scripts/generate-data-table-story-sources.cjs after editing examples.
+import storySources from "./dataTableStorySources.json";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, userEvent, within, waitFor } from "storybook/test";
 
@@ -175,7 +177,7 @@ function ListExample() {
   );
 }
 
-export const WithActionBar: Story = { render: () => <ListExample /> };
+export const WithActionBar: Story = { parameters: { docs: { source: { code: storySources.WithActionBar } } }, render: () => <ListExample /> };
 
 function ColumnDraggingExample() {
   return (
@@ -194,6 +196,7 @@ function ColumnDraggingExample() {
 }
 
 export const ColumnDragAndDrop: Story = {
+  parameters: { docs: { source: { code: storySources.ColumnDragAndDrop } } },
   render: () => <ColumnDraggingExample />,
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -235,6 +238,7 @@ export const ColumnDragAndDrop: Story = {
 };
 
 export const SearchSelectionAndPinning: Story = {
+  parameters: { docs: { source: { code: storySources.SearchSelectionAndPinning } } },
   render: () => <ListExample />,
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -316,6 +320,7 @@ function EditingExample({ controlled = false }: { controlled?: boolean }) {
 }
 
 export const ValidatedRowEditing: Story = {
+  parameters: { docs: { source: { code: storySources.ValidatedRowEditing } } },
   render: () => <EditingExample />,
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -344,6 +349,7 @@ export const ValidatedRowEditing: Story = {
 };
 
 export const ControlledEditRequests: Story = {
+  parameters: { docs: { source: { code: storySources.ControlledEditRequests } } },
   render: () => <EditingExample controlled />,
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -357,6 +363,7 @@ export const ControlledEditRequests: Story = {
 };
 
 export const ColumnFilters: Story = {
+  parameters: { docs: { source: { code: storySources.ColumnFilters } } },
   render: () => <ListExample />,
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -421,6 +428,7 @@ function FilterStateExample({ controlled }: { controlled: boolean }) {
 }
 
 export const FilterState: Story = {
+  parameters: { docs: { source: { code: storySources.FilterState } } },
   render: () => (
     <>
       <FilterStateExample controlled={false} />
@@ -451,6 +459,7 @@ export const FilterState: Story = {
 };
 
 export const SelectFilters: Story = {
+  parameters: { docs: { source: { code: storySources.SelectFilters } } },
   render: () => (
     <div className="mtx-h-96 mtx-p-4">
       <DataTable>
@@ -576,6 +585,7 @@ function ExternalDataExample() {
 }
 
 export const ExternalData: Story = {
+  parameters: { docs: { source: { code: storySources.ExternalData } } },
   render: () => <ExternalDataExample />,
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -610,6 +620,7 @@ export const ExternalData: Story = {
 
 const summary: Vehicle = { id: 0, make: "Total", model: "", price: rows.reduce((sum, row) => sum + row.price, 0), electric: false, date: "" };
 export const SummaryRows: Story = {
+  parameters: { docs: { source: { code: storySources.SummaryRows } } },
   render: () => (
     <div className="mtx-h-96 mtx-p-4">
       <DataTable>
@@ -629,6 +640,7 @@ export const SummaryRows: Story = {
 
 const keyboardRows = rows.slice(0, 6);
 export const CellKeyboardNavigation: Story = {
+  parameters: { docs: { source: { code: storySources.CellKeyboardNavigation } } },
   render: () => (
     <div className="mtx-space-y-4 mtx-p-4">
       {(["ltr", "rtl"] as const).map(direction => (
@@ -684,6 +696,7 @@ export const CellKeyboardNavigation: Story = {
 };
 
 export const PinnedRowKeyboardNavigation: Story = {
+  parameters: { docs: { source: { code: storySources.PinnedRowKeyboardNavigation } } },
   render: () => (
     <div className="mtx-h-96 mtx-p-4">
       <DataTable>
@@ -731,6 +744,7 @@ const reportColumns: DataTableColumn<Vehicle>[] = [
   })),
 ];
 export const AlignedTables: Story = {
+  parameters: { docs: { source: { code: storySources.AlignedTables } } },
   render: () => (
     <DataTableAlignment>
       <div className="mtx-space-y-4 mtx-p-4">
@@ -771,6 +785,7 @@ function VirtualExample() {
   );
 }
 export const Virtualized: Story = {
+  parameters: { docs: { source: { code: storySources.Virtualized } } },
   render: () => <VirtualExample />,
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -781,6 +796,7 @@ export const Virtualized: Story = {
 };
 
 export const PrintLayout: Story = {
+  parameters: { docs: { source: { code: storySources.PrintLayout } } },
   render: () => (
     <div className="mtx-p-4">
       <DataTable style={{ height: "auto" }}>
@@ -798,6 +814,7 @@ export const PrintLayout: Story = {
 };
 
 export const ExpandableRows: Story = {
+  parameters: { docs: { source: { code: storySources.ExpandableRows } } },
   render: () => (
     <div className="mtx-h-96 mtx-p-4">
       <DataTable>
