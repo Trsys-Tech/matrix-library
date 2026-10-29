@@ -5,7 +5,6 @@ import { fileURLToPath } from "node:url";
 
 export default defineConfig({
   test: {
-    passWithNoTests: true,
     projects: [
       "./vitest.unit.config.ts",
       {

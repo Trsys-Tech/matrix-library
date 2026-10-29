@@ -7,6 +7,5 @@ export default defineConfig({
     pool: "forks",
     include: ["src/**/*.{test,spec}.{ts,tsx}", "tests/**/*.{test,spec}.{ts,tsx}"],
     exclude: ["**/*.stories.*", "**/node_modules/**", "**/dist/**", "tests/browser/**"],
-    passWithNoTests: true,
   },
 });

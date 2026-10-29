@@ -4,26 +4,25 @@ import storybook from "eslint-plugin-storybook";
 import js from "@eslint/js";
 import globals from "globals";
 import reactHooks from "eslint-plugin-react-hooks";
-import reactRefresh from "eslint-plugin-react-refresh";
 import tseslint from "typescript-eslint";
 import { defineConfig } from "eslint/config";
 
 export default defineConfig(
-  { ignores: ["dist", "vitest.shims.d.ts"] },
+  { ignores: ["dist/**", "storybook-static/**", "coverage/**", "node_modules/**", "vitest.shims.d.ts"] },
   {
     extends: [js.configs.recommended, ...tseslint.configs.recommended],
-    files: ["**/*.{ts,tsx}"],
+    files: ["**/*.{js,mjs,cjs,ts,tsx}"],
     languageOptions: {
       ecmaVersion: 2020,
       globals: globals.browser,
     },
     plugins: {
       "react-hooks": reactHooks,
-      "react-refresh": reactRefresh,
     },
     rules: {
       ...reactHooks.configs.recommended.rules,
-      "react-refresh/only-export-components": ["warn", { allowConstantExport: true }],
+      // Library modules intentionally export component helpers; Fast Refresh is a
+      // development-server constraint, not a requirement of the published API.
       camelcase: "error",
       "spaced-comment": "error",
       quotes: ["error", "double", { avoidEscape: true }],
@@ -37,6 +36,10 @@ export default defineConfig(
       ],
       "@typescript-eslint/no-explicit-any": "off",
     },
+  },
+  {
+    files: ["*.{js,mjs,cjs,ts}", ".storybook/**/*.{js,ts}", ".husky/**/*.mjs", "tests/**/*.{ts,tsx}"],
+    languageOptions: { globals: globals.node },
   },
   storybook.configs["flat/recommended"],
 );
