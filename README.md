@@ -15,7 +15,7 @@ MatrixUI Library is a comprehensive UI component library built with React and Ty
 
 To install the MatrixUI Library, use npm or yarn:
 
-This package supports React 18 and React 19. Your application must provide matching `react` and `react-dom` peer dependencies.
+The intended peer support is React 18 and React 19. Your application must provide matching `react` and `react-dom` versions; consumer verification is pending as described below.
 
 ```sh
 npm install @trsys-tech/matrix-library
@@ -52,18 +52,16 @@ For a full list of components and their usage, please refer to the [Storybook](h
 
 ### React Version Support
 
-This library supports both React 18 (`^18.3.1`) and React 19 (`^19.2.4`) as peer dependencies. The library is built as ESM with React externalized, meaning it does not bundle React and relies on the consumer's installed React version.
+The intended consumer matrix is:
 
-**Known Limitation:** During development and testing, we use React 18 type definitions even when testing against React 19 runtime. This is due to a transitive dependency type incompatibility in the Storybook ecosystem:
+| Runtime peers (`react` and `react-dom`) | Consumer types (`@types/react` and `@types/react-dom`) | Verification |
+| --- | --- | --- |
+| `^18.3.1` | 18 | Pending packed-consumer checks (T04) |
+| `^19.2.4` | 19 | Pending packed-consumer checks (T04) |
 
-```
-@storybook/addon-essentials
-  → @storybook/addon-docs
-    → @mdx-js/mdx
-      → @types/mdx (does not support React 19 types)
-```
+The build externalizes React. Development and Storybook currently use React 18 types, including in the React 19 build job, as a development dependency workaround. A successful library build does not establish consumer type or runtime compatibility. Do not release the widened peer range until T04 verifies both rows.
 
-Since Storybook is dev-only, this limitation does not affect the shipped library. Runtime compatibility with React 19 is fully validated during the build process.
+The package is ESM-only. The previous manifest advertised a CommonJS `require` entry, but the build did not emit it. The maintainer confirmed no known consumers need CommonJS. Removing that advertised entry is a breaking contract change: publish it in a major version, and migrate any CommonJS consumer to an ESM `import` (or dynamic `import()` where appropriate) before upgrading. No release is performed as part of this change.
 
 ## Development
 
@@ -91,4 +89,4 @@ Use Node.js 24 and run `npm ci`, then install Chromium with `npx playwright inst
 - `npm run test:unit` runs Node Vitest tests without a browser; `npm run test:unit:watch` watches them. New tests belong under `src` or `tests` as `*.test.ts(x)` or `*.spec.ts(x)`.
 - `npm run test:storybook` runs the stories selected by `.storybook/main.ts` in headless Chromium; `npm run test:storybook:watch` watches them. Story interactions belong in their stories. Browser-only pointer checks that need native CSS hover live in `tests/browser`.
 
-`npm run test:typecheck` checks all Node and browser test files under strict TypeScript settings. Its configuration skips checking dependency declarations because the installed browser dependencies use declarations incompatible with TypeScript 5.6; project test and source code remain checked. The Node suite contains all 59 migrated cases (see `tests/m3-test-mapping.md`). Accessibility checks remain advisory while findings are reviewed.
+`npm run test:typecheck` checks all Node and browser test files under strict TypeScript settings. Its configuration skips checking dependency declarations because the installed browser dependencies use declarations incompatible with TypeScript 5.6; project test and source code remain checked. The Node suite contains all 59 migrated cases. Accessibility checks remain advisory while findings are reviewed.
