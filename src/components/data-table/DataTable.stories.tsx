@@ -241,18 +241,18 @@ export const SearchSelectionAndPinning: Story = {
     const search = canvas.getByRole("textbox", { name: "Search table" });
     await expect(canvas.getByRole("checkbox", { name: "Select row 3" })).toBeDisabled();
     await userEvent.type(search, "Ford");
-    await expect(canvas.getByText("F-Series")).toBeVisible();
-    await expect(canvas.queryByText("Model Y")).not.toBeInTheDocument();
+    await waitFor(() => expect(canvas.getByText("F-Series")).toBeVisible());
+    await waitFor(() => expect(canvas.queryByText("Model Y")).not.toBeInTheDocument());
     await userEvent.click(canvas.getByRole("checkbox", { name: "Select row 2" }));
-    await expect(canvas.getByText("Selected: Ford")).toBeVisible();
+    await waitFor(() => expect(canvas.getByText("Selected: Ford")).toBeVisible());
     await userEvent.click(canvas.getByRole("button", { name: "Freeze" }));
     await userEvent.clear(search);
     await expect(canvasElement.querySelector('[role="row"][data-row-id="2"]')).toHaveAttribute("data-pinned", "top");
     await userEvent.click(canvas.getByRole("button", { name: "Cheap Cars" }));
     // Frozen rows remain visible through external filtering and pagination.
-    await expect(canvas.getByText("F-Series")).toBeVisible();
+    await waitFor(() => expect(canvas.getByText("F-Series")).toBeVisible());
     await userEvent.click(canvas.getByRole("button", { name: "Unfreeze" }));
-    await expect(canvas.queryByText("F-Series")).not.toBeInTheDocument();
+    await waitFor(() => expect(canvas.queryByText("F-Series")).not.toBeInTheDocument());
     await userEvent.click(canvas.getByRole("button", { name: "All" }));
   },
 };
@@ -365,9 +365,10 @@ export const ColumnFilters: Story = {
     await userEvent.selectOptions(body.getByRole("combobox", { name: "Filter operator" }), "greaterThan");
     await userEvent.type(body.getByRole("spinbutton", { name: "Filter value" }), "40000");
     await userEvent.click(body.getByRole("button", { name: "Apply" }));
-    await expect(canvas.getByText("Model Y")).toBeVisible();
-    await expect(canvas.getByText("EQA")).toBeVisible();
-    await expect(canvas.queryByText("F-Series")).not.toBeInTheDocument();
+    await waitFor(() => expect(canvas.getByText("Model Y")).toBeVisible());
+    await waitFor(() => expect(canvas.getByText("EQA")).toBeVisible());
+    // Exit copies stay in the DOM until the fade finishes. Verify removal after that transition.
+    await waitFor(() => expect(canvas.queryByText("F-Series")).not.toBeInTheDocument());
     await userEvent.click(canvas.getByRole("button", { name: "Sort Price" }));
     const dataRows = canvasElement.querySelectorAll('[role="row"][data-row-id]');
     await expect(dataRows[0]).toHaveAttribute("data-row-id", "11");
@@ -375,11 +376,11 @@ export const ColumnFilters: Story = {
     await userEvent.clear(body.getByRole("spinbutton", { name: "Filter value" }));
     await userEvent.type(body.getByRole("spinbutton", { name: "Filter value" }), "999999999");
     await userEvent.click(body.getByRole("button", { name: "Apply" }));
-    await expect(canvas.getByText("No rows to display")).toBeVisible();
+    await waitFor(() => expect(canvas.getByText("No rows to display")).toBeVisible());
     await userEvent.click(canvas.getByRole("button", { name: "Column options price" }));
     await userEvent.click(body.getByRole("button", { name: "Reset" }));
     await expect(canvas.queryByText("No rows to display")).not.toBeInTheDocument();
-    await expect(canvas.getByText("500", { exact: true })).toBeVisible();
+    await waitFor(() => expect(canvas.getByText("500", { exact: true })).toBeVisible());
   },
 };
 
@@ -431,20 +432,20 @@ export const FilterState: Story = {
     for (const table of tables) {
       const canvas = within(table);
       await expect(canvas.getByRole("textbox", { name: "Search table" })).toHaveValue("Tesla");
-      await expect(canvas.getByText("Model Y", { exact: true })).toBeVisible();
-      await expect(canvas.queryByText("F-Series", { exact: true })).not.toBeInTheDocument();
+      await waitFor(() => expect(canvas.getByText("Model Y", { exact: true })).toBeVisible());
+      await waitFor(() => expect(canvas.queryByText("F-Series", { exact: true })).not.toBeInTheDocument());
       await userEvent.click(canvas.getByRole("button", { name: "Apply filter preset" }));
       await userEvent.click(canvas.getByRole("button", { name: "Clear search" }));
-      await expect(canvas.getByText("Model S", { exact: true })).toBeVisible();
-      await expect(canvas.queryByText("Model Y", { exact: true })).not.toBeInTheDocument();
-      await expect(canvas.queryByText("EQS", { exact: true })).not.toBeInTheDocument();
+      await waitFor(() => expect(canvas.getByText("Model S", { exact: true })).toBeVisible());
+      await waitFor(() => expect(canvas.queryByText("Model Y", { exact: true })).not.toBeInTheDocument());
+      await waitFor(() => expect(canvas.queryByText("EQS", { exact: true })).not.toBeInTheDocument());
       await userEvent.click(canvas.getByRole("button", { name: "Clear column filters" }));
-      await expect(canvas.getByText("Model Y", { exact: true })).toBeVisible();
-      await expect(canvas.getByText("F-Series", { exact: true })).toBeVisible();
+      await waitFor(() => expect(canvas.getByText("Model Y", { exact: true })).toBeVisible());
+      await waitFor(() => expect(canvas.getByText("F-Series", { exact: true })).toBeVisible());
       await userEvent.type(canvas.getByRole("textbox", { name: "Search table" }), "Ford");
-      await expect(canvas.queryByText("Model Y", { exact: true })).not.toBeInTheDocument();
+      await waitFor(() => expect(canvas.queryByText("Model Y", { exact: true })).not.toBeInTheDocument());
       await userEvent.click(canvas.getByRole("button", { name: "Clear search" }));
-      await expect(canvas.getByText("Model Y", { exact: true })).toBeVisible();
+      await waitFor(() => expect(canvas.getByText("Model Y", { exact: true })).toBeVisible());
     }
   },
 };
@@ -467,18 +468,18 @@ export const SelectFilters: Story = {
     await userEvent.click(canvas.getByRole("button", { name: "Column options make" }));
     await userEvent.selectOptions(body.getByRole("combobox", { name: "Filter value" }), "Tesla");
     await userEvent.click(body.getByRole("button", { name: "Apply" }));
-    await expect(canvas.getByText("Model Y")).toBeVisible();
-    await expect(canvas.queryByText("F-Series")).not.toBeInTheDocument();
+    await waitFor(() => expect(canvas.getByText("Model Y")).toBeVisible());
+    await waitFor(() => expect(canvas.queryByText("F-Series")).not.toBeInTheDocument());
     await userEvent.click(canvas.getByRole("button", { name: "Column options make" }));
     await expect(body.getByRole("option", { name: "Ford" })).toBeInTheDocument();
     await userEvent.selectOptions(body.getByRole("combobox", { name: "Filter value" }), "Ford");
     await userEvent.click(body.getByRole("button", { name: "Apply" }));
-    await expect(canvas.getByText("F-Series")).toBeVisible();
-    await expect(canvas.queryByText("Model Y")).not.toBeInTheDocument();
+    await waitFor(() => expect(canvas.getByText("F-Series")).toBeVisible());
+    await waitFor(() => expect(canvas.queryByText("Model Y")).not.toBeInTheDocument());
     await userEvent.click(canvas.getByRole("button", { name: "Column options make" }));
     await userEvent.click(body.getByRole("button", { name: "Reset" }));
-    await expect(canvas.getByText("Model Y")).toBeVisible();
-    await expect(canvas.getByText("F-Series")).toBeVisible();
+    await waitFor(() => expect(canvas.getByText("Model Y")).toBeVisible());
+    await waitFor(() => expect(canvas.getByText("F-Series")).toBeVisible());
   },
 };
 
@@ -590,13 +591,13 @@ export const ExternalData: Story = {
     await userEvent.selectOptions(body.getByRole("combobox", { name: "Filter value" }), "Tesla");
     await userEvent.click(body.getByRole("button", { name: "Apply" }));
     await waitFor(() => expect(canvas.getByText("Model 3")).toBeVisible());
-    await expect(canvas.queryByText("500")).not.toBeInTheDocument();
+    await waitFor(() => expect(canvas.queryByText("500")).not.toBeInTheDocument());
     await userEvent.click(canvas.getByRole("button", { name: "Column options make" }));
     await userEvent.click(body.getByRole("button", { name: "Reset" }));
     await waitFor(() => expect(canvas.getByText("500")).toBeVisible());
     await userEvent.type(canvas.getByRole("textbox", { name: "Search table" }), "Corolla");
     await waitFor(() => expect(canvas.getByText("Corolla")).toBeVisible());
-    await expect(canvas.queryByText("500")).not.toBeInTheDocument();
+    await waitFor(() => expect(canvas.queryByText("500")).not.toBeInTheDocument());
     await userEvent.clear(canvas.getByRole("textbox", { name: "Search table" }));
     await userEvent.type(canvas.getByRole("textbox", { name: "Search table" }), "no matching vehicle");
     await waitFor(() => expect(canvas.getByText("No rows to display")).toBeVisible());
