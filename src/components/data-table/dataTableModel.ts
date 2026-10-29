@@ -29,18 +29,22 @@ export function moveDataTableColumn<T extends object>(table: DataTableInstance<T
   return true;
 }
 
-export function getColumnId<T extends object>(column: DataTableColumnDef<T>): string {
+export function getColumnId(column: { colId?: string; field?: string }): string {
   const id = column.colId ?? column.field;
   if (!id || id.startsWith("__")) throw new Error("DataTable columns require a unique field or colId (ids starting with __ are reserved).");
   return id;
 }
 
-export function getCellValue<T extends object>(data: T, column: DataTableColumnDef<T>, rowIndex: number): unknown {
+export function getCellValue<T extends object>(
+  data: T,
+  column: { field?: string; valueGetter?: (params: { data: T; rowIndex: number }) => unknown },
+  rowIndex: number,
+): unknown {
   if (column.valueGetter) return column.valueGetter({ data, rowIndex });
   return column.field?.split(".").reduce<unknown>((value, key) => (value as Record<string, unknown> | null)?.[key], data);
 }
 
-export function setCellValue<T extends object>(data: T, column: DataTableColumnDef<T>, value: unknown): T {
+export function setCellValue<T extends object>(data: T, column: { field?: string; valueSetter?: (data: T, value: unknown) => T }, value: unknown): T {
   if (column.valueSetter) return column.valueSetter(data, value);
   if (!column.field) return data;
   const keys = column.field.split(".");
@@ -139,8 +143,8 @@ export function matchesFilter(value: unknown, filter: DataTableFilter | string |
 }
 
 /** Distribute surplus width without allowing pinned offsets to differ from rendered widths. */
-export function getFlexSizes<T extends object>(
-  columns: readonly DataTableColumnDef<T>[],
+export function getFlexSizes(
+  columns: readonly Pick<DataTableColumnDef<Record<string, unknown>>, "field" | "colId" | "width" | "minWidth" | "maxWidth" | "flex">[],
   available: number,
   sizes: Record<string, number>,
 ): Record<string, number> {

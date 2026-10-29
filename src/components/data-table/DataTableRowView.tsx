@@ -167,7 +167,7 @@ export function DataTableRowView<T extends object>({ data, rowId, index, row, pi
             (!!definition.field || !!definition.valueSetter);
           const params: DataTableCellParams<T> = {
             data,
-            value: value as T[keyof T],
+            value,
             rowId,
             rowIndex: index,
             columnId: column.id,
@@ -175,7 +175,8 @@ export function DataTableRowView<T extends object>({ data, rowId, index, row, pi
             isEditing: !!editing,
             pinned,
           };
-          const Renderer = definition.cellRenderer;
+          // The definition and value were resolved together; erase the field only at this runtime dispatch boundary.
+          const Renderer = definition.cellRenderer as React.ComponentType<DataTableCellParams<T>> | undefined;
           const Editor = definition.cellEditor && typeof definition.cellEditor !== "string" ? definition.cellEditor : undefined;
           const editorType =
             typeof definition.cellEditor === "string"

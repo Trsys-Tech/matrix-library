@@ -73,6 +73,7 @@ const columns: DataTableColumnDef<Vehicle>[] = [
     minWidth: 140,
     editable: true,
     tableOptions: { enableHiding: true, enablePinning: true },
+    cellRenderer: params => <span>{params.value}</span>,
   },
   {
     field: "price",
