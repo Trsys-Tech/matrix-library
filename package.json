@@ -2,12 +2,14 @@
   "name": "@trsys-tech/matrix-library",
   "description": "MatrixUI Library",
   "private": false,
-  "version": "1.1.6",
+  "version": "1.1.7",
   "type": "module",
   "main": "dist/index.es.js",
   "module": "dist/index.es.js",
   "types": "dist/index.d.ts",
-  "sideEffects": ["**/*.css"],
+  "sideEffects": [
+    "**/*.css"
+  ],
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
