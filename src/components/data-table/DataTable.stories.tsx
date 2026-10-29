@@ -1,5 +1,5 @@
 import * as React from "react";
-// Refresh these snippets with node scripts/generate-data-table-story-sources.cjs after editing examples.
+// Refresh these snippets with node scripts/generate-data-table-story-sources.mjs after editing examples.
 import storySources from "./dataTableStorySources.json";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, userEvent, within, waitFor } from "storybook/test";
