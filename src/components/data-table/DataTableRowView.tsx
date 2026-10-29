@@ -11,7 +11,7 @@ import { dataTableInputClass } from "./dataTableStyles";
 import type {
   DataTableApi,
   DataTableCellParams,
-  DataTableColumn,
+  DataTableColumnDef,
   DataTableContentProps,
   DataTableFeatures,
   DataTableInstance,
@@ -41,7 +41,7 @@ type DataTableRowViewProps<T extends object> = Pick<
   expanderWidth: number;
   showCheckboxes: boolean;
   visibleColumns: Column<DataTableFeatures, T>[];
-  definitionsById: Map<string, DataTableColumn<T>>;
+  definitionsById: Map<string, DataTableColumnDef<T>>;
   activeCell: { rowId?: string; columnId?: string };
   setFocusedCell: React.Dispatch<React.SetStateAction<{ rowId: string; columnId: string } | null>>;
   columnStyle: (column: Column<DataTableFeatures, T>, header?: boolean) => React.CSSProperties;
@@ -165,7 +165,16 @@ export function DataTableRowView<T extends object>({ data, rowId, index, row, pi
             (!edit.columnId || edit.columnId === column.id) &&
             (typeof definition.editable === "function" ? definition.editable(data) : definition.editable) &&
             (!!definition.field || !!definition.valueSetter);
-          const params: DataTableCellParams<T> = { data, value, rowId, rowIndex: index, columnId: column.id, api, isEditing: !!editing, pinned };
+          const params: DataTableCellParams<T> = {
+            data,
+            value: value as T[keyof T],
+            rowId,
+            rowIndex: index,
+            columnId: column.id,
+            api,
+            isEditing: !!editing,
+            pinned,
+          };
           const Renderer = definition.cellRenderer;
           const Editor = definition.cellEditor && typeof definition.cellEditor !== "string" ? definition.cellEditor : undefined;
           const editorType =

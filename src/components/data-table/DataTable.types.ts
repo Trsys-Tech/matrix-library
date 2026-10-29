@@ -25,9 +25,9 @@ export type DataTableFilterOperator =
 export type DataTableFilter = { operator: DataTableFilterOperator; value?: string; valueTo?: string };
 export type DataTableFilterOption = { value: string; label: string };
 
-export type DataTableCellParams<T extends object> = {
+export type DataTableCellParams<T extends object = Record<string, unknown>, K extends keyof T = keyof T> = {
   data: T;
-  value: unknown;
+  value: T[K];
   rowId: string;
   /** Original input index; identity and imperative actions use rowId instead. */
   rowIndex: number;
@@ -45,7 +45,7 @@ export type DataTableEditorProps<T extends object> = DataTableCellParams<T> & {
   cancel: () => void;
 };
 
-export type DataTableColumn<T extends object> = {
+export type DataTableColumnDef<T extends object> = {
   /** Stable id required for computed or action columns without a field. */
   colId?: string;
   field?: (keyof T & string) | (string & {});
@@ -119,8 +119,8 @@ export type DataTableApi<T extends object> = {
 
 export type DataTableContentProps<T extends object> = Omit<React.HTMLAttributes<HTMLDivElement>, "onChange" | "onRowClick"> & {
   rowData: readonly T[] | null | undefined;
-  columnDefs: readonly DataTableColumn<T>[];
-  defaultColDef?: Partial<DataTableColumn<T>>;
+  columnDefs: readonly DataTableColumnDef<T>[];
+  defaultColDef?: Partial<DataTableColumnDef<T>>;
   /** String or numeric application id. Normalized to a string internally and in callbacks. Defaults to data.id, then input index. */
   getRowId?: (data: T, index: number) => string | number;
   onReady?: (api: DataTableApi<T>) => void;

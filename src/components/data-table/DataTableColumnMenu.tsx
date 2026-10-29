@@ -8,7 +8,7 @@ import { Button } from "../button/Button";
 import { Popover, PopoverContent, PopoverTrigger } from "../popover/Popover";
 import { filterType } from "./dataTableModel";
 import { dataTableInputClass } from "./dataTableStyles";
-import type { DataTableInstance, DataTableFeatures, DataTableColumn, DataTableFilter, DataTableFilterOperator } from "./DataTable.types";
+import type { DataTableInstance, DataTableFeatures, DataTableColumnDef, DataTableFilter, DataTableFilterOperator } from "./DataTable.types";
 
 export function DataTableColumnMenu<T extends object>({
   table,
@@ -17,7 +17,7 @@ export function DataTableColumnMenu<T extends object>({
 }: {
   table: DataTableInstance<T>;
   column: Column<DataTableFeatures, T>;
-  definition: DataTableColumn<T>;
+  definition: DataTableColumnDef<T>;
 }) {
   const [open, setOpen] = React.useState(false);
   const [draft, setDraft] = React.useState<DataTableFilter>({ operator: filterType(definition) === "text" ? "contains" : "equals", value: "" });

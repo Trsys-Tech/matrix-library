@@ -13,12 +13,12 @@ import {
   DataTableFreezeAction,
   DataTableColumnsAction,
   DataTablePrintAction,
-  type DataTableColumn,
+  type DataTableColumnDef,
 } from "@trsys-tech/matrix-library";
 
 type Vehicle = { id: string; model: string; price: number };
 
-const columns: DataTableColumn<Vehicle>[] = [
+const columns: DataTableColumnDef<Vehicle>[] = [
   { field: "model", headerName: "Model", flex: 1, minWidth: 150, filter: "text", pinned: "start" },
   {
     field: "price",
@@ -62,7 +62,7 @@ Keep column definitions and derived row arrays stable with module constants, sta
 | ------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- |
 | `DataGrid`, `DataGridContent`, `DataGridActionBar`                              | `DataTable`, `DataTableContent`, `DataTableActionBar`                                                                 |
 | `SearchAction`, `FreezeAction`, `PrintAction`, etc.                             | `DataTableSearchAction`, `DataTableFreezeAction`, `DataTablePrintAction`, etc.                                        |
-| `ColDef<T>`                                                                     | `DataTableColumn<T>`; independent of AG Grid                                                                          |
+| `ColDef<T>`                                                                     | `DataTableColumnDef<T>`; independent of AG Grid                                                                          |
 | `rowData`, `columnDefs`, `defaultColDef`                                        | Same names                                                                                                            |
 | `field`, `colId`, `headerName`, `width`, `minWidth`, `maxWidth`, `flex`, `hide` | Same names                                                                                                            |
 | `pinned: "left" / "right"`                                                      | Accepted; prefer logical `"start" / "end"` for RTL                                                                    |
@@ -169,7 +169,7 @@ const [pagination, setPagination] = React.useState({ pageIndex: 0, pageSize: 25 
 const [search, setSearch] = React.useState("");
 const resetPage = () => setPagination(previous => ({ ...previous, pageIndex: 0 }));
 // A selection column can include choices absent from result.rows:
-const serverColumns: DataTableColumn<Vehicle>[] = [
+const serverColumns: DataTableColumnDef<Vehicle>[] = [
   { field: "model", filter: "select", filterOptions: [{ value: "Model Y", label: "Tesla Model Y" }, "Corolla"] },
 ];
 
@@ -226,3 +226,5 @@ The returned restore functions are idempotent. `domLayout="print"` also supports
 This first implementation targets the inspected Remap usages. Grouping/aggregation engines, hierarchical subrows, faceted filter controls, cell ranges/spanning, row drag-and-drop, clipboard/export, and variable-height/column virtualization are not exposed by this renderer. Add those as explicit capabilities rather than assuming every TanStack feature is rendered automatically.
 
 Storybook includes ordinary lists, search/selection/pinning, validated row editing, controlled edit requests, column filters, totals, aligned tables, 10,000 virtualized rows, and print layout. Interaction stories cover representative migration flows. `npm test` includes the DataTable model/rendering regression suite.
+
+`DataTableCellParams<Row>` exposes `value` as the union of the row property types. Use `DataTableCellParams<Row, "field">` for a specific field, or omit the type arguments for an unknown value. For computed values, the caller must ensure the selected value type matches `valueGetter`.
