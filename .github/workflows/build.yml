@@ -5,7 +5,13 @@ on:
     branches:
       - master
 
+permissions:
+  contents: read
+
 jobs:
+  validate:
+    uses: ./.github/workflows/validate.yml
+
   build:
     runs-on: ubuntu-latest
     strategy:
@@ -31,13 +37,28 @@ jobs:
           node-version: 24.14.0
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
       - name: Install React ${{ matrix.react-version }}
         run: npm install --no-save react@${{ matrix.react-version }} react-dom@${{ matrix.react-version }} @types/react@^${{ matrix.react-types-major }} @types/react-dom@^${{ matrix.react-types-major }}
 
       - name: Build library
         run: npm run build
+
+  publish-dist:
+    needs: [validate, build]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: ${{ github.sha }}
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24.14.0
+      - run: npm ci
+      - run: npm run build
 
       - name: Push to dist branch
         run: |

@@ -2,7 +2,6 @@ import dts from "vite-plugin-dts";
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import { resolve, basename } from "path";
-
 import { dependencies, peerDependencies } from "./package.json";
 
 function getComponentName(entryName: string): string {
@@ -15,7 +14,15 @@ export default defineConfig({
   plugins: [
     dts({
       include: ["src"],
-      exclude: ["src/**/*.stories.ts", "src/**/*.stories.tsx"],
+      exclude: [
+        "src/**/*.stories.ts",
+        "src/**/*.stories.tsx",
+        "src/**/*.test.ts",
+        "src/**/*.test.tsx",
+        "src/**/*.spec.ts",
+        "src/**/*.spec.tsx",
+        "src/**/__tests__/**",
+      ],
       staticImport: true,
     }),
     react({
@@ -34,7 +41,10 @@ export default defineConfig({
     },
     rollupOptions: {
       external: [...Object.keys(peerDependencies), ...Object.keys(dependencies), "react/jsx-runtime"],
-      output: { preserveModules: true, exports: "named" },
+      output: {
+        preserveModules: true,
+        exports: "named",
+      },
     },
     target: "esnext",
     sourcemap: true,

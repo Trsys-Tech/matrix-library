@@ -12,7 +12,11 @@ permissions:
 
 # List of jobs
 jobs:
+  validate:
+    uses: ./.github/workflows/validate.yml
+
   deploy:
+    needs: validate
     runs-on: ubuntu-latest
     steps:
       - id: build-publish

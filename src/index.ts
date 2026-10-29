@@ -322,3 +322,53 @@ export {
 } from "./components/tooltip/Tooltip";
 export { useIsMobile } from "./lib/hooks/use-mobile";
 export { cn } from "./lib/utils";
+export {
+  ResourceScheduler,
+  type ResourceSchedulerProps,
+  type ResourceSchedulerResource,
+  type ResourceSchedulerItem,
+  type ResourceSchedulerMove,
+  type ResourceSchedulerCellContext,
+} from "./components/resource-scheduler/ResourceScheduler";
+export {
+  DataTable,
+  DataTableContent,
+  DataTableActionBar,
+  type DataTableProps,
+  type DataTableActionBarProps,
+} from "./components/data-table/DataTable";
+export { DataTableAlignment, type DataTableAlignmentProps } from "./components/data-table/DataTableAlignment";
+export { useDataTable } from "./components/data-table/DataTableContext";
+export {
+  DataTableSearchAction,
+  DataTableFreezeAction,
+  DataTablePrintAction,
+  DataTableRefreshAction,
+  DataTableDeleteAction,
+  DataTableExtraActions,
+  DataTableColumnsAction,
+  type DataTableSearchActionProps,
+  type DataTableFreezeActionProps,
+  type DataTablePrintActionProps,
+  type DataTableRefreshActionProps,
+  type DataTableDeleteActionProps,
+  type DataTableExtraActionsProps,
+  type DataTableColumnsActionProps,
+} from "./components/data-table/DataTableActions";
+export type {
+  DataTableContentProps,
+  DataTableColumn,
+  DataTableApi,
+  DataTableInstance,
+  DataTableState,
+  DataTableFeatures,
+  DataTableRow,
+  DataTableCellParams,
+  DataTableEditorProps,
+  DataTableEditEvent,
+  DataTableSelection,
+  DataTableFilter,
+  DataTableFilterOption,
+  DataTableFilterType,
+  DataTableFilterOperator,
+} from "./components/data-table/DataTable.types";
