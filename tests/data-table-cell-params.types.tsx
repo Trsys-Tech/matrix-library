@@ -72,6 +72,16 @@ export function checkUnboundParams(params: DataTableCellParams<PriceListRow>) {
   return params.value;
 }
 
+const GenericRenderer = (params: DataTableCellParams) => {
+  expectType<Equal<typeof params.value, unknown>>(true);
+  return String(params.value);
+};
+
+export const genericRendererColumns: DataTableColumnDef<PriceListRow>[] = [
+  { field: "modifiedAt", cellRenderer: GenericRenderer },
+  { colId: "actions", cellRenderer: GenericRenderer },
+];
+
 const DateRenderer = (props: DataTableCellParams<PriceListRow, PriceListRow["modifiedAt"]>) => {
   expectType<Equal<typeof props.value, string>>(true);
   expectType<Equal<typeof props.data, PriceListRow>>(true);

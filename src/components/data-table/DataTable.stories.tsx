@@ -72,6 +72,7 @@ const columns: DataTableColumnDef<Vehicle>[] = [
     flex: 1,
     minWidth: 140,
     editable: true,
+    resizable: true,
     tableOptions: { enableHiding: true, enablePinning: true },
     cellRenderer: params => <span>{params.value}</span>,
   },
@@ -82,7 +83,6 @@ const columns: DataTableColumnDef<Vehicle>[] = [
     cellDataType: "number",
     width: 130,
     align: "end",
-    editable: true,
     valueFormatter: ({ value }) => Number(value).toLocaleString("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 }),
   },
   {
@@ -279,10 +279,11 @@ const editingColumns: DataTableColumnDef<Vehicle>[] = [
   ...columns.map(column => (column.field === "electric" ? { ...column, editable: true, cellEditor: FuelEditor } : column)),
   {
     colId: "actions",
-    headerName: "Actions",
-    width: 100,
+    headerName: "",
+    width: 60,
     pinned: "end",
     sortable: false,
+    resizable: false,
     hideInPrint: true,
     cellRenderer: ({ data, api }) => (
       <Button type="button" variant="text" size="sm" aria-label={`Edit ${data.make}`} onClick={() => api.startEditingRow(data.id)}>
@@ -506,7 +507,6 @@ function ExternalDataExample() {
   const [search, setSearch] = React.useState("");
   const [result, setResult] = React.useState({ rows: rows.slice(0, 5), total: rows.length });
   const [loading, setLoading] = React.useState(false);
-  console.log(sorting);
 
   React.useEffect(() => {
     const loadingTimer = setTimeout(() => setLoading(true), 0);

@@ -20,6 +20,22 @@ function mount(content: React.ReactNode) {
   root.render(content);
 }
 
+test("reverses the menu, sort indicator, and label for end-aligned headers", async () => {
+  mount(
+    <DataTable style={{ height: 200 }}>
+      <DataTableContent rowData={[{ id: 1, name: "Example" }]} columnDefs={[{ field: "name", headerName: "Name", align: "end", filter: "text" }]} />
+    </DataTable>,
+  );
+  const sort = page.getByRole("button", { name: "Sort Name" });
+  await sort.click();
+  await expect.element(page.getByRole("columnheader", { name: /Name/ })).toHaveAttribute("aria-sort", "ascending");
+  const button = container.querySelector<HTMLElement>('[aria-label="Sort Name"]')!;
+  const menu = container.querySelector<HTMLElement>('[aria-label="Column options name"]')!;
+  const [label, indicator] = Array.from(button.children) as HTMLElement[];
+  expect(menu.getBoundingClientRect().right).toBeLessThanOrEqual(indicator.getBoundingClientRect().left);
+  expect(indicator.getBoundingClientRect().right).toBeLessThanOrEqual(label.getBoundingClientRect().left);
+});
+
 test("keeps the API stable and cancels a draft when its source record is replaced", async () => {
   const ref = React.createRef<DataTableApi<Item>>();
   const ready = vi.fn();
