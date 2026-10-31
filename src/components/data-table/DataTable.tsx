@@ -38,10 +38,7 @@ const DataTableActionBar = React.forwardRef<HTMLDivElement, DataTableActionBarPr
     <div
       ref={ref}
       data-print-hidden=""
-      className={cn(
-        "mtx-flex mtx-min-h-12 mtx-shrink-0 mtx-items-center mtx-gap-1 mtx-rounded-t-lg mtx-border-b mtx-border-gray-200 mtx-p-2",
-        className,
-      )}
+      className={cn("mtx-flex mtx-min-h-12 mtx-shrink-0 mtx-items-center mtx-gap-1 mtx-rounded-t-lg mtx-p-2", className)}
       {...props}
     />
   );

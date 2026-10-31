@@ -20,6 +20,36 @@ function mount(content: React.ReactNode) {
   root.render(content);
 }
 
+test("scrolls rows below the header while keeping columns aligned", async () => {
+  const ref = React.createRef<DataTableApi<Item>>();
+  mount(
+    <DataTable style={{ height: 200, width: 240 }}>
+      <DataTableContent
+        ref={ref}
+        rowData={Array.from({ length: 100 }, (_, id) => ({ id, name: `Item ${id}` }))}
+        columnDefs={[
+          { field: "id", width: 180 },
+          { field: "name", headerName: "Name", width: 180 },
+        ]}
+        pinnedTopRowData={[{ id: -1, name: "Pinned" }]}
+      />
+    </DataTable>,
+  );
+  await expect.element(page.getByRole("gridcell", { name: "Item 0", exact: true })).toBeInTheDocument();
+  const viewport = container.querySelector<HTMLElement>("[data-data-table-viewport]")!;
+  const header = container.querySelector<HTMLElement>('[role="columnheader"][data-column-id="name"]')!;
+  const headerTop = header.getBoundingClientRect().top;
+  expect(viewport.getBoundingClientRect().top).toBeCloseTo(header.parentElement!.getBoundingClientRect().bottom, 0);
+  viewport.scrollLeft = 100;
+  viewport.scrollTop = 200;
+  await expect.poll(() => header.parentElement!.parentElement!.scrollLeft).toBe(100);
+  expect(header.getBoundingClientRect().top).toBeCloseTo(headerTop, 0);
+  const pinned = container.querySelector<HTMLElement>('[data-row-id="__summary_top_0"]')!;
+  expect(pinned.getBoundingClientRect().top).toBeCloseTo(viewport.getBoundingClientRect().top, 0);
+  ref.current!.scrollToRow(90, "start");
+  await expect.element(page.getByRole("gridcell", { name: "Item 90", exact: true })).toBeInTheDocument();
+});
+
 test("reverses the menu, sort indicator, and label for end-aligned headers", async () => {
   mount(
     <DataTable style={{ height: 200 }}>

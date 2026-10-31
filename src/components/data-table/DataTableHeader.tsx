@@ -65,6 +65,7 @@ export function DataTableHeader<T extends object>({
           {rowSelection?.mode === "multiRow" && (
             <Checkbox
               aria-label="Select all rows"
+              className="mtx-bg-gray-0"
               disabled={!selectionRows.length}
               checked={selectionRows.length > 0 && selectedInScope === selectionRows.length ? true : selectedInScope > 0 ? "indeterminate" : false}
               onCheckedChange={checked => {
