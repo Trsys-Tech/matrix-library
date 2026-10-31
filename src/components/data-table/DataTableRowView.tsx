@@ -94,7 +94,7 @@ export function DataTableRowView<T extends object>({ data, rowId, index, row, pi
         data-selected={selected || undefined}
         className={cn(
           "mtx-flex mtx-border-b mtx-border-gray-200 mtx-bg-gray-0 hover:mtx-bg-primary-25",
-          selected && "mtx-bg-primary-50",
+          selected && "mtx-bg-primary-25 hover:mtx-bg-primary-50",
           pinned && "mtx-bg-gray-50",
           getRowClass?.(data),
           ...Object.entries(rowClassRules ?? {})
@@ -225,7 +225,6 @@ export function DataTableRowView<T extends object>({ data, rowId, index, row, pi
               className={cn(
                 "mtx-flex mtx-min-w-0 mtx-items-center mtx-overflow-hidden mtx-px-3 focus:mtx-outline-none focus:mtx-ring-1 focus:mtx-ring-inset focus:mtx-ring-primary",
                 definition.align === "end" && "mtx-justify-end",
-                definition.align === "center" && "mtx-justify-center",
                 typeof definition.cellClass === "function" ? definition.cellClass(params) : definition.cellClass,
               )}
               style={columnStyle(column)}

@@ -3,6 +3,7 @@
 import * as React from "react";
 import type { Column } from "@tanstack/react-table";
 import { Checkbox } from "../checkbox/Checkbox";
+import { cn } from "../../lib/utils";
 import { DataTableColumnHeader } from "./DataTableColumnHeader";
 import { DataTableColumnMenu } from "./DataTableColumnMenu";
 import type { DataTableApi, DataTableColumnDef, DataTableContentProps, DataTableFeatures, DataTableInstance, DataTableRow } from "./DataTable.types";
@@ -89,7 +90,10 @@ export function DataTableHeader<T extends object>({
             region={column.getIsPinned()}
             disabled={isPrinting}
             aria-sort={sorted === "asc" ? "ascending" : sorted === "desc" ? "descending" : "none"}
-            className="mtx-relative mtx-flex mtx-min-w-0 mtx-items-center mtx-gap-1 mtx-px-3"
+            className={cn(
+              "mtx-relative mtx-flex mtx-min-w-0 mtx-items-center mtx-gap-1 mtx-px-3",
+              definition.align === "end" && "mtx-flex-row-reverse",
+            )}
             style={columnStyle(column, true)}
           >
             <button
@@ -100,7 +104,10 @@ export function DataTableHeader<T extends object>({
               onClick={event => {
                 if (!event.defaultPrevented && column.getCanSort()) column.getToggleSortingHandler()?.(event);
               }}
-              className="mtx-flex mtx-min-w-0 mtx-flex-1 mtx-cursor-inherit mtx-items-center mtx-gap-1 mtx-text-start disabled:mtx-cursor-default"
+              className={cn(
+                "mtx-flex mtx-min-w-0 mtx-flex-1 mtx-cursor-inherit mtx-items-center mtx-gap-1 mtx-text-start disabled:mtx-cursor-default",
+                definition.align === "end" && "mtx-flex-row-reverse mtx-text-end",
+              )}
               aria-label={`Sort ${typeof definition.headerName === "string" ? definition.headerName : column.id}`}
             >
               <span className="mtx-truncate">{definition.headerName ?? column.id}</span>
@@ -119,7 +126,7 @@ export function DataTableHeader<T extends object>({
                 aria-label={`Resize ${column.id}`}
                 aria-orientation="vertical"
                 tabIndex={0}
-                className="mtx-absolute mtx-inset-y-0 mtx-end-0 mtx-w-1 mtx-cursor-col-resize mtx-touch-none hover:mtx-bg-primary-300"
+                className="mtx-absolute mtx-inset-y-3 mtx-end-0 mtx-w-2 mtx-cursor-col-resize mtx-touch-none after:mtx-bg-gray-400/70 after:mtx-w-0.5 after:mtx-h-full after:mtx-block after:mtx-absolute after:mtx-start-1/2 after:-mtx-translate-x-1/2"
                 onMouseDown={header.getResizeHandler()}
                 onTouchStart={header.getResizeHandler()}
                 onDoubleClick={() => column.resetSize()}

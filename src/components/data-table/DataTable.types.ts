@@ -25,7 +25,7 @@ export type DataTableFilterOperator =
 export type DataTableFilter = { operator: DataTableFilterOperator; value?: string; valueTo?: string };
 export type DataTableFilterOption = { value: string; label: string };
 
-export type DataTableCellParams<T extends object, TValue = unknown> = {
+export type DataTableCellParams<T extends object = any, TValue = unknown> = {
   data: T;
   value: TValue;
   rowId: string;
@@ -72,7 +72,7 @@ type DataTableColumnOptions<T extends object> = {
   valueSetter?: (data: T, value: unknown) => T;
   getQuickFilterText?: (params: { data: T; value: unknown }) => string;
   cellClass?: string | ((params: DataTableCellParams<T>) => string);
-  align?: "start" | "center" | "end";
+  align?: "start" | "end";
   /** Omit this column when printing (typically an actions column). */
   hideInPrint?: boolean;
   /** Prevent row selection/click callbacks for interactive content in this column. */

@@ -248,4 +248,4 @@ const ModifiedAtRenderer = (props: DataTableCellParams<PriceListRow, PriceListRo
 const columns: DataTableColumnDef<PriceListRow>[] = [{ field: "modifiedAt", cellRenderer: ModifiedAtRenderer }];
 ```
 
-`DataTableCellParams<Row>` alone exposes `value` as `unknown`. Columns with a `valueGetter`, nested paths, or no field also expose an unknown renderer value because a top-level row property does not determine their result. For a computed renderer with both `field` and `valueGetter`, annotate the parameter as `DataTableCellParams<Row>` and check its value before using it.
+`DataTableCellParams` can be used without type arguments for a reusable renderer. Its row data and API default to `any`, while `value` remains `unknown`. Supply `DataTableCellParams<Row>` for type-safe row data and API, and `DataTableCellParams<Row, Value>` to also specify the value type. Columns with a `valueGetter`, nested paths, or no field expose an unknown renderer value because a top-level row property does not determine their result. For a computed renderer with both `field` and `valueGetter`, annotate the parameter as `DataTableCellParams<Row>` and check its value before using it.
