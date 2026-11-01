@@ -103,7 +103,7 @@ export type DataTableEditEvent<T extends object> = {
   changes: Readonly<Record<string, unknown>>;
 };
 
-export type DataTableSelection<T extends object> = {
+export type DataTableSelection<T extends object = object> = {
   mode: "singleRow" | "multiRow";
   checkboxes?: boolean;
   enableClickSelection?: boolean;
