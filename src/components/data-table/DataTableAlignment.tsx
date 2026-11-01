@@ -13,6 +13,7 @@ export type DataTableAlignmentProps = {
 export function DataTableAlignment({ children, initialState = {} }: DataTableAlignmentProps) {
   const [state, setState] = React.useState(initialState);
   const viewports = React.useRef(new Set<HTMLDivElement>());
-  const value = React.useMemo(() => ({ state, setState, viewports }), [state]);
+  const synchronizedScrolls = React.useRef(new WeakMap<HTMLDivElement, number>());
+  const value = React.useMemo(() => ({ state, setState, viewports, synchronizedScrolls }), [state]);
   return <DataTableAlignmentContext.Provider value={value}>{children}</DataTableAlignmentContext.Provider>;
 }

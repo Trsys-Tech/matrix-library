@@ -40,7 +40,7 @@ function DataTableContentInner<T extends object>(
     loading = false,
     emptyContent = "No rows to display",
     loadingContent = "Loading…",
-    rowHeight = 36,
+    rowHeight = 40,
     headerHeight = 40,
     getRowClass,
     rowClassRules,
@@ -74,6 +74,8 @@ function DataTableContentInner<T extends object>(
   const alignment = React.useContext(DataTableAlignmentContext);
   const detailId = React.useId();
   const viewportRef = React.useRef<HTMLDivElement>(null);
+  const headerViewportRef = React.useRef<HTMLDivElement>(null);
+  const synchronizedHeaderScroll = React.useRef<number | null>(null);
   const contentRef = React.useRef<HTMLDivElement>(null);
   const [viewportWidth, setViewportWidth] = React.useState(0);
   const [printing, setPrinting] = React.useState(false);
@@ -146,7 +148,7 @@ function DataTableContentInner<T extends object>(
     estimateSize: () => rowHeight,
     getItemKey: index => centerRows[index].id,
     overscan,
-    scrollMargin: headerHeight + topHeight,
+    scrollMargin: topHeight,
     enabled: useVirtualRows,
     useFlushSync: false,
   });
@@ -412,93 +414,117 @@ function DataTableContentInner<T extends object>(
           </div>
         )}
         <div
-          ref={viewportRef}
-          data-data-table-viewport=""
           role="grid"
           aria-label={props["aria-label"] ?? "Data table"}
           aria-busy={loading}
           aria-rowcount={displayedRowCount + 1}
           aria-colcount={visibleColumns.length + (showCheckboxes ? 1 : 0) + (showExpanders ? 1 : 0)}
           aria-multiselectable={rowSelection?.mode === "multiRow" || undefined}
-          className="mtx-relative mtx-min-h-0 mtx-flex-1 mtx-rounded-b-lg"
-          style={{
-            ...containerStyle,
-            overflow: naturalHeight ? "visible" : (containerStyle?.overflow ?? "auto"),
-            overflowX: isPrinting ? "visible" : suppressHorizontalScroll ? "hidden" : containerStyle?.overflowX,
-          }}
-          onScroll={event => {
-            if (alignment && !isPrinting)
-              for (const element of alignment.viewports.current) {
-                if (element !== event.currentTarget && element.scrollLeft !== event.currentTarget.scrollLeft)
-                  element.scrollLeft = event.currentTarget.scrollLeft;
-              }
-          }}
+          className="mtx-flex mtx-min-h-0 mtx-flex-1 mtx-flex-col"
         >
-          <DataTableHeader
-            {...{
-              table,
-              api,
-              headerHeight,
-              totalWidth,
-              isPrinting,
-              showExpanders,
-              expanderWidth,
-              showCheckboxes,
-              rowSelection,
-              selectionRows,
-              selectedInScope,
-              visibleColumns,
-              definitionsById,
-              columnStyle,
-              widths,
-            }}
-          />
-          {(topRows.length > 0 || pinnedTopRowData.length > 0) && (
+          <div className="mtx-shrink-0 mtx-bg-primary-50">
             <div
-              role="rowgroup"
-              className="mtx-sticky mtx-z-20"
-              style={{ top: isPrinting ? undefined : headerHeight, position: isPrinting ? "relative" : "sticky" }}
+              ref={headerViewportRef}
+              style={{ overflow: isPrinting ? "visible" : "hidden", width: isPrinting ? "100%" : viewportWidth || "100%" }}
+              onScroll={event => {
+                const synchronized = synchronizedHeaderScroll.current === event.currentTarget.scrollLeft;
+                synchronizedHeaderScroll.current = null;
+                if (synchronized) return;
+                if (!isPrinting && viewportRef.current) viewportRef.current.scrollLeft = event.currentTarget.scrollLeft;
+              }}
             >
-              {pinnedTopRowData.map((row, index) => renderRow(row, `__summary_top_${index}`, index, undefined, "top"))}
-              {topRows.map(row => renderRow(row.original, row.id, row.index, row, "top"))}
+              <DataTableHeader
+                {...{
+                  table,
+                  api,
+                  headerHeight,
+                  totalWidth,
+                  isPrinting,
+                  showExpanders,
+                  expanderWidth,
+                  showCheckboxes,
+                  rowSelection,
+                  selectionRows,
+                  selectedInScope,
+                  visibleColumns,
+                  definitionsById,
+                  columnStyle,
+                  widths,
+                }}
+              />
             </div>
-          )}
-          <div role="rowgroup">
-            {useVirtualRows ? (
-              <div style={{ height: virtualizer.getTotalSize(), position: "relative", width: totalWidth, minWidth: "100%" }}>
-                {virtualItems.map(item => {
-                  const row = centerRows[item.index];
-                  return (
-                    <div
-                      key={row.id}
-                      style={{ position: "absolute", top: 0, width: "100%", transform: `translateY(${item.start - headerHeight - topHeight}px)` }}
-                    >
-                      {renderRow(row.original, row.id, rowIndices.get(row.original) ?? row.index, row)}
-                    </div>
-                  );
-                })}
+          </div>
+          <div
+            ref={viewportRef}
+            data-data-table-viewport=""
+            className="mtx-relative mtx-min-h-0 mtx-flex-1 mtx-rounded-b-lg"
+            style={{
+              ...containerStyle,
+              overflow: naturalHeight ? "visible" : (containerStyle?.overflow ?? "auto"),
+              overflowX: isPrinting ? "visible" : suppressHorizontalScroll ? "hidden" : containerStyle?.overflowX,
+            }}
+            onScroll={event => {
+              const viewport = event.currentTarget;
+              const header = headerViewportRef.current;
+              if (header && header.scrollLeft !== viewport.scrollLeft) {
+                header.scrollLeft = viewport.scrollLeft;
+                synchronizedHeaderScroll.current = header.scrollLeft;
+              }
+              const synchronized = alignment?.synchronizedScrolls.current.get(viewport) === viewport.scrollLeft;
+              alignment?.synchronizedScrolls.current.delete(viewport);
+              if (alignment && !isPrinting && !synchronized)
+                for (const element of alignment.viewports.current) {
+                  if (element !== viewport && element.scrollLeft !== viewport.scrollLeft) {
+                    element.scrollLeft = viewport.scrollLeft;
+                    alignment.synchronizedScrolls.current.set(element, element.scrollLeft);
+                  }
+                }
+            }}
+          >
+            {(topRows.length > 0 || pinnedTopRowData.length > 0) && (
+              <div
+                role="rowgroup"
+                className="mtx-sticky mtx-z-20"
+                style={{ top: isPrinting ? undefined : 0, position: isPrinting ? "relative" : "sticky" }}
+              >
+                {pinnedTopRowData.map((row, index) => renderRow(row, `__summary_top_${index}`, index, undefined, "top"))}
+                {topRows.map(row => renderRow(row.original, row.id, row.index, row, "top"))}
               </div>
-            ) : (
-              centerRows.map(row => renderRow(row.original, row.id, rowIndices.get(row.original) ?? row.index, row))
+            )}
+            <div role="rowgroup">
+              {useVirtualRows ? (
+                <div style={{ height: virtualizer.getTotalSize(), position: "relative", width: totalWidth, minWidth: "100%" }}>
+                  {virtualItems.map(item => {
+                    const row = centerRows[item.index];
+                    return (
+                      <div key={row.id} style={{ position: "absolute", top: 0, width: "100%", transform: `translateY(${item.start - topHeight}px)` }}>
+                        {renderRow(row.original, row.id, rowIndices.get(row.original) ?? row.index, row)}
+                      </div>
+                    );
+                  })}
+                </div>
+              ) : (
+                centerRows.map(row => renderRow(row.original, row.id, rowIndices.get(row.original) ?? row.index, row))
+              )}
+            </div>
+            {(bottomRows.length > 0 || pinnedBottomRowData.length > 0) && (
+              <div role="rowgroup" className="mtx-sticky mtx-bottom-0 mtx-z-20" style={{ position: isPrinting ? "relative" : "sticky" }}>
+                {bottomRows.map(row => renderRow(row.original, row.id, row.index, row, "bottom"))}
+                {pinnedBottomRowData.map((row, index) => renderRow(row, `__summary_bottom_${index}`, index, undefined, "bottom"))}
+              </div>
+            )}
+            {(loading || (!centerRows.length && !topRows.length && !bottomRows.length)) && (
+              <div
+                role="status"
+                className={cn(
+                  "mtx-flex mtx-items-center mtx-justify-center mtx-p-6 mtx-text-text-300",
+                  loading && "mtx-absolute mtx-top-0 mtx-start-0 mtx-z-50 mtx-h-full mtx-w-full mtx-bg-gray-100/25",
+                )}
+              >
+                {loading ? loadingContent : emptyContent}
+              </div>
             )}
           </div>
-          {(bottomRows.length > 0 || pinnedBottomRowData.length > 0) && (
-            <div role="rowgroup" className="mtx-sticky mtx-bottom-0 mtx-z-20" style={{ position: isPrinting ? "relative" : "sticky" }}>
-              {bottomRows.map(row => renderRow(row.original, row.id, row.index, row, "bottom"))}
-              {pinnedBottomRowData.map((row, index) => renderRow(row, `__summary_bottom_${index}`, index, undefined, "bottom"))}
-            </div>
-          )}
-          {(loading || (!centerRows.length && !topRows.length && !bottomRows.length)) && (
-            <div
-              role="status"
-              className={cn(
-                "mtx-flex mtx-items-center mtx-justify-center mtx-p-6 mtx-text-text-300",
-                loading && "mtx-absolute mtx-top-0 mtx-start-0 mtx-z-50 mtx-h-full mtx-w-full mtx-bg-gray-100/25",
-              )}
-            >
-              {loading ? loadingContent : emptyContent}
-            </div>
-          )}
         </div>
         {pagination && !isPrinting && <DataTablePagination table={table} paginationPageSizeSelector={paginationPageSizeSelector} />}
       </div>
