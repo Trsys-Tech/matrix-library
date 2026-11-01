@@ -3,6 +3,7 @@ import { createRoot } from "react-dom/client";
 import { afterEach, expect, test, vi } from "vitest";
 import { page } from "vitest/browser";
 import { DataTable, DataTableContent } from "../../src/components/data-table/DataTable";
+import { DataTableAlignment } from "../../src/components/data-table/DataTableAlignment";
 import type { DataTableApi } from "../../src/components/data-table/DataTable.types";
 
 let root: ReturnType<typeof createRoot>;
@@ -48,6 +49,42 @@ test("scrolls rows below the header while keeping columns aligned", async () => 
   expect(pinned.getBoundingClientRect().top).toBeCloseTo(viewport.getBoundingClientRect().top, 0);
   ref.current!.scrollToRow(90, "start");
   await expect.element(page.getByRole("gridcell", { name: "Item 90", exact: true })).toBeInTheDocument();
+});
+
+test("does not feed synchronized scroll events back into an actively scrolling table", async () => {
+  mount(
+    <DataTableAlignment>
+      {[0, 1, 2].map(index => (
+        <DataTable key={index} style={{ height: 150, width: 240 }}>
+          <DataTableContent
+            rowData={[{ id: index, name: `Item ${index}` }]}
+            columnDefs={[
+              { field: "id", width: 200 },
+              { field: "name", width: 200 },
+            ]}
+          />
+        </DataTable>
+      ))}
+    </DataTableAlignment>,
+  );
+  await expect.element(page.getByRole("gridcell", { name: "Item 0" })).toBeInTheDocument();
+  const viewports = Array.from(container.querySelectorAll<HTMLDivElement>("[data-data-table-viewport]"));
+  const header = container.querySelector<HTMLElement>('[role="columnheader"]')!.parentElement!.parentElement!;
+  viewports[0].scrollLeft = 50;
+  viewports[0].dispatchEvent(new Event("scroll"));
+  expect(viewports.map(viewport => viewport.scrollLeft)).toEqual([50, 50, 50]);
+
+  // The source has moved again before the browser delivers the follower events.
+  viewports[0].scrollLeft = 80;
+  header.dispatchEvent(new Event("scroll"));
+  viewports[1].dispatchEvent(new Event("scroll"));
+  expect(viewports[0].scrollLeft).toBe(80);
+  viewports[0].dispatchEvent(new Event("scroll"));
+  expect(viewports.map(viewport => viewport.scrollLeft)).toEqual([80, 80, 80]);
+
+  viewports[2].scrollLeft = 120;
+  viewports[2].dispatchEvent(new Event("scroll"));
+  expect(viewports.map(viewport => viewport.scrollLeft)).toEqual([120, 120, 120]);
 });
 
 test("reverses the menu, sort indicator, and label for end-aligned headers", async () => {

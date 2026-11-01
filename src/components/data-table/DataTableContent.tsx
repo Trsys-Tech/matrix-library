@@ -75,6 +75,7 @@ function DataTableContentInner<T extends object>(
   const detailId = React.useId();
   const viewportRef = React.useRef<HTMLDivElement>(null);
   const headerViewportRef = React.useRef<HTMLDivElement>(null);
+  const synchronizedHeaderScroll = React.useRef<number | null>(null);
   const contentRef = React.useRef<HTMLDivElement>(null);
   const [viewportWidth, setViewportWidth] = React.useState(0);
   const [printing, setPrinting] = React.useState(false);
@@ -426,6 +427,9 @@ function DataTableContentInner<T extends object>(
               ref={headerViewportRef}
               style={{ overflow: isPrinting ? "visible" : "hidden", width: isPrinting ? "100%" : viewportWidth || "100%" }}
               onScroll={event => {
+                const synchronized = synchronizedHeaderScroll.current === event.currentTarget.scrollLeft;
+                synchronizedHeaderScroll.current = null;
+                if (synchronized) return;
                 if (!isPrinting && viewportRef.current) viewportRef.current.scrollLeft = event.currentTarget.scrollLeft;
               }}
             >
@@ -460,11 +464,20 @@ function DataTableContentInner<T extends object>(
               overflowX: isPrinting ? "visible" : suppressHorizontalScroll ? "hidden" : containerStyle?.overflowX,
             }}
             onScroll={event => {
-              if (headerViewportRef.current) headerViewportRef.current.scrollLeft = event.currentTarget.scrollLeft;
-              if (alignment && !isPrinting)
+              const viewport = event.currentTarget;
+              const header = headerViewportRef.current;
+              if (header && header.scrollLeft !== viewport.scrollLeft) {
+                header.scrollLeft = viewport.scrollLeft;
+                synchronizedHeaderScroll.current = header.scrollLeft;
+              }
+              const synchronized = alignment?.synchronizedScrolls.current.get(viewport) === viewport.scrollLeft;
+              alignment?.synchronizedScrolls.current.delete(viewport);
+              if (alignment && !isPrinting && !synchronized)
                 for (const element of alignment.viewports.current) {
-                  if (element !== event.currentTarget && element.scrollLeft !== event.currentTarget.scrollLeft)
-                    element.scrollLeft = event.currentTarget.scrollLeft;
+                  if (element !== viewport && element.scrollLeft !== viewport.scrollLeft) {
+                    element.scrollLeft = viewport.scrollLeft;
+                    alignment.synchronizedScrolls.current.set(element, element.scrollLeft);
+                  }
                 }
             }}
           >
