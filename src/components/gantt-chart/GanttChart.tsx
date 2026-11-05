@@ -186,8 +186,11 @@ const TimelineMarkers: React.FC<TimelineMarkersProps> = ({ markers, showLabels =
         return (
           <React.Fragment key={marker.id}>
             <div
-              className={cn("mtx-absolute mtx-inset-y-0 mtx-w-0.5 -mtx-translate-x-1/2", marker.lineClassName)}
-              style={{ left: `${left}%`, backgroundColor: marker.color }}
+              className={cn(
+                "mtx-absolute mtx-inset-y-0 mtx-w-0.5 -mtx-translate-x-1/2 mtx-border mtx-border-dashed mtx-border-l",
+                marker.lineClassName,
+              )}
+              style={{ left: `${left}%`, borderColor: marker.color }}
               aria-hidden="true"
             />
             {showLabels ? (
@@ -210,7 +213,7 @@ const TimelineMarkers: React.FC<TimelineMarkersProps> = ({ markers, showLabels =
                     else labelRefs.current.delete(key);
                   }}
                   className={cn(
-                    "mtx-absolute mtx-z-20 mtx-max-w-48 mtx-truncate mtx-whitespace-nowrap mtx-rounded-sm mtx-border mtx-bg-gray-0 mtx-px-2 mtx-py-1 mtx-text-xs mtx-font-semibold mtx-shadow-card",
+                    "mtx-absolute mtx-z-20 mtx-max-w-48 mtx-truncate mtx-whitespace-nowrap mtx-rounded-sm mtx-border mtx-bg-gray-0 mtx-px-2 mtx-py-0.5 mtx-text-xs mtx-font-semibold mtx-shadow-card",
                     marker.labelClassName,
                   )}
                   style={{ left: `calc(${left}% + ${MARKER_LABEL_OFFSET}px)`, top: MARKER_LABEL_TOP, borderColor: marker.color, color: marker.color }}
@@ -258,13 +261,13 @@ type TimelineHeaderProps = {
 const TimelineHeader: React.FC<TimelineHeaderProps> = ({ intervals, groups, highlightedDate, nameColumnHeader, nameColumnWidth }) => (
   <div className="mtx-bg-primary-50" role="rowgroup">
     <div
-      className="mtx-grid mtx-h-9 mtx-border-b mtx-border-gray-200"
+      className="mtx-grid mtx-h-8 mtx-border-b mtx-border-gray-200"
       style={{ gridTemplateColumns: `${nameColumnWidth}px repeat(${intervals.length}, minmax(0, 1fr))` }}
       role="row"
     >
       <div
-        className="mtx-sticky mtx-left-0 mtx-z-20 mtx-flex mtx-items-center mtx-border-b mtx-border-r mtx-border-gray-200 mtx-bg-primary-50 mtx-px-4 mtx-text-sm mtx-font-semibold mtx-text-text-500"
-        style={{ gridColumn: 1, height: 80 }}
+        className="mtx-sticky mtx-left-0 mtx-z-20 mtx-flex mtx-items-center mtx-border-b mtx-border-r mtx-border-gray-200 mtx-bg-primary-50 mtx-px-4 mtx-text-xs mtx-font-semibold mtx-text-text-500"
+        style={{ gridColumn: 1, height: 64 }}
         role="columnheader"
         aria-colindex={1}
         aria-rowspan={2}
@@ -274,7 +277,7 @@ const TimelineHeader: React.FC<TimelineHeaderProps> = ({ intervals, groups, high
       {groups.map(group => (
         <div
           key={group.key}
-          className="mtx-flex mtx-items-start mtx-justify-center mtx-py-1.5 mtx-border-l mtx-border-gray-200 mtx-text-sm mtx-font-medium mtx-text-text-500"
+          className="mtx-flex mtx-items-center mtx-justify-center mtx-pb-8 mtx-border-l mtx-border-gray-200 mtx-text-xs mtx-font-medium mtx-text-text-500 mtx-text-center"
           style={{ gridColumn: `${group.startIndex + 2} / span ${group.intervalCount}` }}
           role="columnheader"
           aria-colindex={group.startIndex + 2}
@@ -284,7 +287,7 @@ const TimelineHeader: React.FC<TimelineHeaderProps> = ({ intervals, groups, high
         </div>
       ))}
     </div>
-    <div className="mtx-grid mtx-h-11" style={{ gridTemplateColumns: `${nameColumnWidth}px repeat(${intervals.length}, minmax(0, 1fr))` }} role="row">
+    <div className="mtx-grid mtx-h-8" style={{ gridTemplateColumns: `${nameColumnWidth}px repeat(${intervals.length}, minmax(0, 1fr))` }} role="row">
       <div aria-hidden="true" />
       {intervals.map((interval, index) => (
         <div
@@ -318,7 +321,7 @@ const GanttChart = React.forwardRef<HTMLDivElement, GanttChartProps>(
       highlightedDate,
       locale = "en-US",
       nameColumnWidth = 320,
-      rowHeight = 64,
+      rowHeight = 56,
       cellWidths,
       nameColumnHeader = "Name",
       addItemLabel = "New item",
@@ -422,7 +425,7 @@ const GanttChart = React.forwardRef<HTMLDivElement, GanttChartProps>(
                 >
                   <button
                     type="button"
-                    className="mtx-inline-flex mtx-items-center mtx-gap-2 mtx-text-sm mtx-font-medium mtx-text-primary hover:mtx-text-primary-700 focus-visible:mtx-outline-none focus-visible:mtx-ring focus-visible:mtx-ring-primary-300"
+                    className="mtx-inline-flex mtx-items-center mtx-gap-2 mtx-text-xs mtx-font-medium mtx-text-primary hover:mtx-text-primary-700 focus-visible:mtx-outline-none focus-visible:mtx-ring focus-visible:mtx-ring-primary-300"
                     onClick={onAddItem}
                   >
                     <Plus className="mtx-h-4 mtx-w-4" />
@@ -458,7 +461,7 @@ const GanttChart = React.forwardRef<HTMLDivElement, GanttChartProps>(
                         renderItem({ item, formattedDateRange })
                       ) : (
                         <div className="mtx-flex mtx-w-full mtx-min-w-0 mtx-items-center mtx-justify-between mtx-gap-3">
-                          <span className="mtx-truncate mtx-text-sm mtx-font-semibold mtx-text-text-500">{item.name}</span>
+                          <span className="mtx-truncate mtx-text-xs mtx-font-semibold mtx-text-text-500">{item.name}</span>
                           <span className="mtx-shrink-0 mtx-text-xs mtx-text-text-300">{formattedDateRange}</span>
                         </div>
                       )}
@@ -470,7 +473,7 @@ const GanttChart = React.forwardRef<HTMLDivElement, GanttChartProps>(
                       {barPosition && barPosition.width > 0 ? (
                         <div
                           className={cn(
-                            "mtx-absolute mtx-top-1/2 mtx-z-10 mtx-h-10 -mtx-translate-y-1/2 mtx-overflow-hidden mtx-rounded mtx-border-r-2 mtx-border-secondary-800 mtx-bg-secondary-200",
+                            "mtx-absolute mtx-top-1/2 mtx-z-10 mtx-h-6 -mtx-translate-y-1/2 mtx-overflow-hidden mtx-rounded mtx-border-r-2 mtx-border-secondary-800 mtx-bg-secondary-200",
                             item.barClassName,
                           )}
                           style={{ left: `${barPosition.left}%`, width: `${barPosition.width}%` }}
@@ -486,16 +489,16 @@ const GanttChart = React.forwardRef<HTMLDivElement, GanttChartProps>(
                             aria-hidden="true"
                           />
                           <div
-                            className="mtx-absolute mtx-top-1/2 mtx-min-w-max -mtx-translate-x-1/2 -mtx-translate-y-1/2 mtx-text-center mtx-text-xs mtx-leading-4 mtx-text-text-600"
+                            className="mtx-absolute mtx-top-1/2 mtx-min-w-max -mtx-translate-x-1/2 -mtx-translate-y-1/2 mtx-text-center mtx-text-xs mtx-text-text-600"
                             style={{ left: `clamp(3rem, ${progress / 2}%, calc(100% - 3rem))` }}
                           >
                             {renderBar ? (
                               renderBar({ item, progress })
                             ) : (
-                              <>
+                              <div className="mtx-flex mtx-items-center mtx-gap-0.5">
                                 <span className="mtx-block">Progress</span>
-                                <strong className="mtx-block mtx-text-sm">{progress}%</strong>
-                              </>
+                                <strong className="mtx-block mtx-text-xs">{progress}%</strong>
+                              </div>
                             )}
                           </div>
                         </div>
