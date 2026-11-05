@@ -1,5 +1,5 @@
 import React from "react";
-import { ArrowsMaximize, Refresh } from "@trsys-tech/matrix-icons";
+import { ArrowsOutward, Refresh } from "@trsys-tech/matrix-icons";
 
 import { cn } from "../../lib/utils";
 import { IconButton } from "../icon-botton/IconButton";
@@ -28,7 +28,7 @@ const GanttToolbar: React.FC<GanttToolbarProps> = ({
 }) => (
   <div
     className={cn(
-      "mtx-flex mtx-min-h-16 mtx-items-center mtx-justify-between mtx-gap-4 mtx-border-b mtx-border-gray-200 mtx-bg-gray-0 mtx-p-3",
+      "mtx-flex mtx-min-h-12 mtx-items-center mtx-justify-between mtx-gap-4 mtx-border-b mtx-border-gray-200 mtx-bg-gray-0 mtx-p-3",
       className,
     )}
     {...props}
@@ -40,7 +40,7 @@ const GanttToolbar: React.FC<GanttToolbarProps> = ({
           type="button"
           aria-pressed={activeView === view}
           className={cn(
-            "mtx-h-9 mtx-rounded-full mtx-px-4 mtx-text-sm mtx-font-medium mtx-transition-colors focus-visible:mtx-outline-none focus-visible:mtx-ring focus-visible:mtx-ring-primary-300",
+            "mtx-h-6 mtx-rounded-full mtx-px-4 mtx-text-xs mtx-font-medium mtx-transition-colors focus-visible:mtx-outline-none focus-visible:mtx-ring focus-visible:mtx-ring-primary-300",
             activeView === view ? "mtx-bg-primary-50 mtx-text-primary-600" : "mtx-bg-gray-50 mtx-text-text-400 hover:mtx-bg-gray-100",
           )}
           onClick={() => onViewChange(view)}
@@ -53,13 +53,27 @@ const GanttToolbar: React.FC<GanttToolbarProps> = ({
     <div className="mtx-flex mtx-items-center mtx-gap-1">
       {toolbarActions}
       {onRefresh ? (
-        <IconButton type="button" variant="toolbar" aria-label="Refresh chart" title="Refresh chart" onClick={onRefresh}>
+        <IconButton
+          type="button"
+          variant="toolbar"
+          aria-label="Refresh chart"
+          title="Refresh chart"
+          className="mtx-size-6 mtx-p-0.5"
+          onClick={onRefresh}
+        >
           <Refresh />
         </IconButton>
       ) : null}
       {onToggleFullscreen ? (
-        <IconButton type="button" variant="toolbar" aria-label="Toggle fullscreen" title="Toggle fullscreen" onClick={onToggleFullscreen}>
-          <ArrowsMaximize />
+        <IconButton
+          type="button"
+          variant="toolbar"
+          aria-label="Toggle fullscreen"
+          title="Toggle fullscreen"
+          className="mtx-size-6 mtx-p-0.5"
+          onClick={onToggleFullscreen}
+        >
+          <ArrowsOutward />
         </IconButton>
       ) : null}
     </div>
