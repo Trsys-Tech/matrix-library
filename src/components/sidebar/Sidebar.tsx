@@ -168,15 +168,15 @@ const Sidebar = React.forwardRef<
           data-sidebar="sidebar"
           data-mobile="true"
           data-side={side}
-          className="data-[side=left]:mtx-w-[--sidebar-left-width] data-[side=right]:mtx-w-[--sidebar-right-width] mtx-bg-gray-50 mtx-p-0 [&>button]:mtx-hidden"
+          className="data-[side=left]:mtx-w-[--sidebar-left-width] data-[side=right]:mtx-w-[--sidebar-right-width] mtx-bg-gray-50 mtx-p-0 [&>button]:mtx-hidden sm:mtx-max-w-full"
           style={
             {
               ...(side === "left"
                 ? {
-                    "--sidebar-left-width": widthMobile ?? SIDEBAR_WIDTH_MOBILE,
+                    "--sidebar-left-width": isMobile ? (widthMobile ?? SIDEBAR_WIDTH_MOBILE) : (width ?? SIDEBAR_WIDTH),
                   }
                 : {
-                    "--sidebar-right-width": widthMobile ?? SIDEBAR_WIDTH_MOBILE,
+                    "--sidebar-right-width": isMobile ? (widthMobile ?? SIDEBAR_WIDTH_MOBILE) : (width ?? SIDEBAR_WIDTH),
                   }),
             } as React.CSSProperties
           }
