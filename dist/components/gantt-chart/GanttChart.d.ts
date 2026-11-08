@@ -25,8 +25,10 @@ type GanttChartProps = Omit<React.HTMLAttributes<HTMLDivElement>, "children"> & 
     locale?: string;
     /** Width of the sticky row-name column in pixels. */
     nameColumnWidth?: number;
-    /** Height of each item row in pixels. */
-    rowHeight?: number;
+    /** Minimum Height of each item row in pixels. */
+    minRowHeight?: number;
+    /** height of the header row */
+    headerHeight?: number;
     /** Minimum width of an individual timeline cell, by scale. */
     cellWidths?: Partial<Record<GanttView, number>>;
     /** Header shown above item names. */
@@ -75,8 +77,10 @@ declare const GanttChart: React.ForwardRefExoticComponent<Omit<React.HTMLAttribu
     locale?: string;
     /** Width of the sticky row-name column in pixels. */
     nameColumnWidth?: number;
-    /** Height of each item row in pixels. */
-    rowHeight?: number;
+    /** Minimum Height of each item row in pixels. */
+    minRowHeight?: number;
+    /** height of the header row */
+    headerHeight?: number;
     /** Minimum width of an individual timeline cell, by scale. */
     cellWidths?: Partial<Record<GanttView, number>>;
     /** Header shown above item names. */

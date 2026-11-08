@@ -2,8 +2,8 @@ import { jsxs as z, jsx as l } from "react/jsx-runtime";
 import * as ie from "react";
 import { ChevronDown as re, ChevronRight as le } from "@trsys-tech/matrix-icons";
 import { cn as O } from "./utils.es.js";
-import { IconButton as ne } from "./iconbutton.es.js";
-import { Checkbox as se } from "./checkbox.es.js";
+import { IconButton as se } from "./iconbutton.es.js";
+import { Checkbox as ne } from "./checkbox.es.js";
 import { getCellValue as B, parseDateInputValue as oe, toDateInputValue as de, setCellValue as ce } from "./datatablemodel.es.js";
 import { dataTableInputClass as me } from "./datatablestyles.es.js";
 function be({ data: o, rowId: i, index: g, row: a, pinned: y, ...P }) {
@@ -34,7 +34,7 @@ function be({ data: o, rowId: i, index: g, row: a, pinned: y, ...P }) {
     editType: ee,
     renderSubComponent: te,
     isDetailExpanded: ae
-  } = P, E = c?.rowId === i, m = a?.getIsSelected() ?? !1, x = !!a && ae(a), w = `${A}-${i}`;
+  } = P, v = c?.rowId === i, m = a?.getIsSelected() ?? !1, p = !!a && ae(a), w = `${A}-${i}`;
   return /* @__PURE__ */ z(ie.Fragment, { children: [
     /* @__PURE__ */ z(
       "div",
@@ -47,7 +47,7 @@ function be({ data: o, rowId: i, index: g, row: a, pinned: y, ...P }) {
         "data-selected": m || void 0,
         className: O(
           "mtx-flex mtx-border-b mtx-border-gray-200 mtx-bg-gray-0 hover:mtx-bg-primary-25",
-          m && "mtx-bg-primary-50",
+          m && "mtx-bg-primary-25 hover:mtx-bg-primary-50",
           y && "mtx-bg-gray-50",
           J?.(o),
           ...Object.entries(M ?? {}).filter(([, t]) => t(o)).map(([t]) => t)
@@ -70,15 +70,15 @@ function be({ data: o, rowId: i, index: g, row: a, pinned: y, ...P }) {
               className: "mtx-sticky mtx-start-0 mtx-z-10 mtx-flex mtx-shrink-0 mtx-items-center mtx-justify-center mtx-bg-inherit",
               style: { width: K },
               children: a?.getCanExpand() && /* @__PURE__ */ l(
-                ne,
+                se,
                 {
                   type: "button",
                   size: "sm",
-                  "aria-label": `${x ? "Collapse" : "Expand"} row ${i}`,
-                  "aria-expanded": x,
-                  "aria-controls": x ? w : void 0,
+                  "aria-label": `${p ? "Collapse" : "Expand"} row ${i}`,
+                  "aria-expanded": p,
+                  "aria-controls": p ? w : void 0,
                   onClick: a.getToggleExpandedHandler(),
-                  children: x ? /* @__PURE__ */ l(re, { "aria-hidden": "true" }) : /* @__PURE__ */ l(le, { "aria-hidden": "true", className: "rtl:mtx-rotate-180" })
+                  children: p ? /* @__PURE__ */ l(re, { "aria-hidden": "true" }) : /* @__PURE__ */ l(le, { "aria-hidden": "true", className: "rtl:mtx-rotate-180" })
                 }
               )
             }
@@ -91,7 +91,7 @@ function be({ data: o, rowId: i, index: g, row: a, pinned: y, ...P }) {
               className: "mtx-sticky mtx-start-0 mtx-z-10 mtx-flex mtx-shrink-0 mtx-items-center mtx-justify-center mtx-bg-inherit",
               style: { width: 44, insetInlineStart: K },
               children: a && /* @__PURE__ */ l(
-                se,
+                ne,
                 {
                   "aria-label": `Select row ${i}`,
                   checked: m,
@@ -102,21 +102,30 @@ function be({ data: o, rowId: i, index: g, row: a, pinned: y, ...P }) {
             }
           ),
           T.map((t, u) => {
-            const e = U.get(t.id), n = B(E ? c.draft : o, e, g), v = !!E && (!c.columnId || c.columnId === t.id) && (typeof e.editable == "function" ? e.editable(o) : e.editable) && (!!e.field || !!e.valueSetter), f = { data: o, value: n, rowId: i, rowIndex: g, columnId: t.id, api: d, isEditing: !!E, pinned: y }, I = e.cellRenderer, V = e.cellEditor && typeof e.cellEditor != "string" ? e.cellEditor : void 0, $ = typeof e.cellEditor == "string" ? e.cellEditor : e.cellDataType === "number" ? "number" : e.cellDataType === "date" ? "date" : "text", F = e.cellEditor === "number" || e.cellDataType === "number", H = $ === "date" || !F && n instanceof Date, W = (r) => {
-              const s = L.current;
-              if (s)
+            const e = U.get(t.id), s = B(v ? c.draft : o, e, g), E = !!v && (!c.columnId || c.columnId === t.id) && (typeof e.editable == "function" ? e.editable(o) : e.editable) && (!!e.field || !!e.valueSetter), h = {
+              data: o,
+              value: s,
+              rowId: i,
+              rowIndex: g,
+              columnId: t.id,
+              api: d,
+              isEditing: !!v,
+              pinned: y
+            }, I = e.cellRenderer, V = e.cellEditor && typeof e.cellEditor != "string" ? e.cellEditor : void 0, $ = typeof e.cellEditor == "string" ? e.cellEditor : e.cellDataType === "number" ? "number" : e.cellDataType === "date" ? "date" : "text", F = e.cellEditor === "number" || e.cellDataType === "number", H = $ === "date" || !F && s instanceof Date, W = (r) => {
+              const n = L.current;
+              if (n)
                 try {
-                  const p = e.valueParser ? e.valueParser({ data: s.draft, oldValue: B(s.original, e, g), newValue: r }) : r, h = ce(s.draft, e, p), k = { ...s.parseErrors };
+                  const x = e.valueParser ? e.valueParser({ data: n.draft, oldValue: B(n.original, e, g), newValue: r }) : r, f = ce(n.draft, e, x), k = { ...n.parseErrors };
                   delete k[t.id], D({
-                    ...s,
-                    draft: h,
-                    changes: { ...s.changes, [t.id]: p },
+                    ...n,
+                    draft: f,
+                    changes: { ...n.changes, [t.id]: x },
                     parseErrors: k,
                     errors: Object.values(k)
                   });
-                } catch (p) {
-                  const h = { ...s.parseErrors, [t.id]: p instanceof Error ? p.message : "Invalid value" };
-                  D({ ...s, parseErrors: h, errors: Object.values(h) });
+                } catch (x) {
+                  const f = { ...n.parseErrors, [t.id]: x instanceof Error ? x.message : "Invalid value" };
+                  D({ ...n, parseErrors: f, errors: Object.values(f) });
                 }
             };
             return /* @__PURE__ */ l(
@@ -127,28 +136,27 @@ function be({ data: o, rowId: i, index: g, row: a, pinned: y, ...P }) {
                 "aria-colindex": u + 1 + (C ? 1 : 0) + (b ? 1 : 0),
                 "data-column-id": t.id,
                 "data-row-id": i,
-                "data-editing": v || void 0,
+                "data-editing": E || void 0,
                 "data-row-action": e.suppressRowClick || t.id === "actions" || t.id === "action" ? "" : void 0,
                 "aria-readonly": !e.editable || !a,
-                "aria-invalid": v && c.errors.length > 0 || void 0,
+                "aria-invalid": E && c.errors.length > 0 || void 0,
                 className: O(
                   "mtx-flex mtx-min-w-0 mtx-items-center mtx-overflow-hidden mtx-px-3 focus:mtx-outline-none focus:mtx-ring-1 focus:mtx-ring-inset focus:mtx-ring-primary",
                   e.align === "end" && "mtx-justify-end",
-                  e.align === "center" && "mtx-justify-center",
-                  typeof e.cellClass == "function" ? e.cellClass(f) : e.cellClass
+                  typeof e.cellClass == "function" ? e.cellClass(h) : e.cellClass
                 ),
                 style: Y(t),
                 onFocus: () => X((r) => r?.rowId === i && r.columnId === t.id ? r : { rowId: i, columnId: t.id }),
                 onKeyDown: (r) => {
-                  e.onKeyDown?.(r, f), a && Z(r, a, t);
+                  e.onKeyDown?.(r, h), a && Z(r, a, t);
                 },
                 onDoubleClick: (r) => {
                   a && !_ && !r.target.closest("button,a,input,select,[data-row-action]") && (ee === "fullRow" ? d.startEditingRow(i) : d.startEditingCell({ rowId: i, columnId: t.id }));
                 },
-                children: v ? V ? /* @__PURE__ */ l(
+                children: E ? V ? /* @__PURE__ */ l(
                   V,
                   {
-                    ...f,
+                    ...h,
                     errors: c.errors,
                     onValueChange: W,
                     commit: () => d.stopEditing(),
@@ -160,12 +168,12 @@ function be({ data: o, rowId: i, index: g, row: a, pinned: y, ...P }) {
                     "aria-label": `Edit ${typeof e.headerName == "string" ? e.headerName : t.id}`,
                     className: me,
                     type: $,
-                    value: H ? de(n) : n == null ? "" : String(n),
+                    value: H ? de(s) : s == null ? "" : String(s),
                     onChange: (r) => W(
-                      F ? r.target.value === "" ? null : Number(r.target.value) : H ? oe(r.target.value, n, e.cellDataType) : r.target.value
+                      F ? r.target.value === "" ? null : Number(r.target.value) : H ? oe(r.target.value, s, e.cellDataType) : r.target.value
                     )
                   }
-                ) : I ? /* @__PURE__ */ l(I, { ...f }) : e.valueFormatter ? e.valueFormatter({ data: o, value: n }) : /* @__PURE__ */ l("span", { className: "mtx-truncate", children: n instanceof Date ? n.toLocaleDateString() : String(n ?? "") })
+                ) : I ? /* @__PURE__ */ l(I, { ...h }) : e.valueFormatter ? e.valueFormatter({ data: o, value: s }) : /* @__PURE__ */ l("span", { className: "mtx-truncate", children: s instanceof Date ? s.toLocaleDateString() : String(s ?? "") })
               },
               t.id
             );
@@ -173,7 +181,7 @@ function be({ data: o, rowId: i, index: g, row: a, pinned: y, ...P }) {
         ]
       }
     ),
-    x && a && /* @__PURE__ */ l(
+    p && a && /* @__PURE__ */ l(
       "div",
       {
         role: "row",

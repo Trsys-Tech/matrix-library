@@ -1,5 +1,5 @@
 import { Column } from '@tanstack/react-table';
-import { DataTableApi, DataTableColumn, DataTableContentProps, DataTableFeatures, DataTableInstance, DataTableRow } from './DataTable.types';
+import { DataTableApi, DataTableColumnDef, DataTableContentProps, DataTableFeatures, DataTableInstance, DataTableRow } from './DataTable.types';
 import * as React from "react";
 type DataTableHeaderProps<T extends object> = Pick<DataTableContentProps<T>, "rowSelection"> & {
     table: DataTableInstance<T>;
@@ -13,7 +13,7 @@ type DataTableHeaderProps<T extends object> = Pick<DataTableContentProps<T>, "ro
     selectionRows: DataTableRow<T>[];
     selectedInScope: number;
     visibleColumns: Column<DataTableFeatures, T>[];
-    definitionsById: Map<string, DataTableColumn<T>>;
+    definitionsById: Map<string, DataTableColumnDef<T>>;
     columnStyle: (column: Column<DataTableFeatures, T>, header?: boolean) => React.CSSProperties;
     widths: Map<string, number>;
 };

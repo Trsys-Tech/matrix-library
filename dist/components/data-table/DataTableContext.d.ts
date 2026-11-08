@@ -31,6 +31,7 @@ type AlignmentContextValue = {
     state: Partial<AlignmentState>;
     setState: React.Dispatch<React.SetStateAction<Partial<AlignmentState>>>;
     viewports: React.MutableRefObject<Set<HTMLDivElement>>;
+    synchronizedScrolls: React.MutableRefObject<WeakMap<HTMLDivElement, number>>;
 };
 export declare const DataTableAlignmentContext: React.Context<AlignmentContextValue | null>;
 export {};

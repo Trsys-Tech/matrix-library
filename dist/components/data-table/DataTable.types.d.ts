@@ -16,9 +16,9 @@ export type DataTableFilterOption = {
     value: string;
     label: string;
 };
-export type DataTableCellParams<T extends object> = {
+export type DataTableCellParams<T extends object = any, TValue = unknown> = {
     data: T;
-    value: unknown;
+    value: TValue;
     rowId: string;
     /** Original input index; identity and imperative actions use rowId instead. */
     rowIndex: number;
@@ -34,7 +34,7 @@ export type DataTableEditorProps<T extends object> = DataTableCellParams<T> & {
     commit: () => boolean;
     cancel: () => void;
 };
-export type DataTableColumn<T extends object> = {
+type DataTableColumnOptions<T extends object> = {
     /** Stable id required for computed or action columns without a field. */
     colId?: string;
     field?: (keyof T & string) | (string & {});
@@ -74,7 +74,7 @@ export type DataTableColumn<T extends object> = {
         value: unknown;
     }) => string;
     cellClass?: string | ((params: DataTableCellParams<T>) => string);
-    align?: "start" | "center" | "end";
+    align?: "start" | "end";
     /** Omit this column when printing (typically an actions column). */
     hideInPrint?: boolean;
     /** Prevent row selection/click callbacks for interactive content in this column. */
@@ -85,13 +85,28 @@ export type DataTableColumn<T extends object> = {
     /** Native TanStack options. Hiding and pinning default to false; opt in with enableHiding/enablePinning. */
     tableOptions?: Partial<Omit<ColumnDef<DataTableFeatures, T, any>, "id" | "header" | "cell" | "footer" | "accessorKey" | "accessorFn" | "columns">>;
 };
+/** A field discriminates the renderer props, preserving each property's exact value type. */
+export type DataTableColumnDef<T extends object> = {
+    [K in keyof T & string]-?: Omit<DataTableColumnOptions<T>, "field" | "cellRenderer" | "valueGetter"> & {
+        field: K;
+        cellRenderer?: React.ComponentType<DataTableCellParams<T, T[K]>>;
+        valueGetter?: never;
+    };
+}[keyof T & string] | (DataTableColumnOptions<T> & {
+    field?: undefined | `${string}.${string}`;
+}) | (DataTableColumnOptions<T> & {
+    valueGetter: (params: {
+        data: T;
+        rowIndex: number;
+    }) => unknown;
+});
 export type DataTableEditEvent<T extends object> = {
     rowId: string;
     original: T;
     data: T;
     changes: Readonly<Record<string, unknown>>;
 };
-export type DataTableSelection<T extends object> = {
+export type DataTableSelection<T extends object = object> = {
     mode: "singleRow" | "multiRow";
     checkboxes?: boolean;
     enableClickSelection?: boolean;
@@ -120,8 +135,8 @@ export type DataTableApi<T extends object> = {
 };
 export type DataTableContentProps<T extends object> = Omit<React.HTMLAttributes<HTMLDivElement>, "onChange" | "onRowClick"> & {
     rowData: readonly T[] | null | undefined;
-    columnDefs: readonly DataTableColumn<T>[];
-    defaultColDef?: Partial<DataTableColumn<T>>;
+    columnDefs: NoInfer<readonly DataTableColumnDef<T>[]>;
+    defaultColDef?: Partial<DataTableColumnOptions<T>>;
     /** String or numeric application id. Normalized to a string internally and in callbacks. Defaults to data.id, then input index. */
     getRowId?: (data: T, index: number) => string | number;
     onReady?: (api: DataTableApi<T>) => void;
@@ -173,4 +188,5 @@ export type DataTableContentProps<T extends object> = Omit<React.HTMLAttributes<
     /** Styles on the scroll viewport, rather than the outer content wrapper. */
     containerStyle?: React.CSSProperties;
 };
+export {};
 //# sourceMappingURL=DataTable.types.d.ts.map

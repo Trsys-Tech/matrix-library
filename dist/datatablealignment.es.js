@@ -1,9 +1,9 @@
 import { jsx as m } from "react/jsx-runtime";
-import * as t from "react";
-import { DataTableAlignmentContext as i } from "./datatablecontext.es.js";
-function f({ children: o, initialState: a = {} }) {
-  const [e, n] = t.useState(a), r = t.useRef(/* @__PURE__ */ new Set()), s = t.useMemo(() => ({ state: e, setState: n, viewports: r }), [e]);
-  return /* @__PURE__ */ m(i.Provider, { value: s, children: o });
+import * as e from "react";
+import { DataTableAlignmentContext as c } from "./datatablecontext.es.js";
+function f({ children: o, initialState: n = {} }) {
+  const [t, s] = e.useState(n), a = e.useRef(/* @__PURE__ */ new Set()), r = e.useRef(/* @__PURE__ */ new WeakMap()), i = e.useMemo(() => ({ state: t, setState: s, viewports: a, synchronizedScrolls: r }), [t]);
+  return /* @__PURE__ */ m(c.Provider, { value: i, children: o });
 }
 export {
   f as DataTableAlignment

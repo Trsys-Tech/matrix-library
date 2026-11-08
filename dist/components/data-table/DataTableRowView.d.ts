@@ -1,5 +1,5 @@
 import { Column } from '@tanstack/react-table';
-import { DataTableApi, DataTableColumn, DataTableContentProps, DataTableFeatures, DataTableInstance, DataTableRow } from './DataTable.types';
+import { DataTableApi, DataTableColumnDef, DataTableContentProps, DataTableFeatures, DataTableInstance, DataTableRow } from './DataTable.types';
 import { DataTableEditSession } from './dataTableEditing';
 import * as React from "react";
 type DataTableRowViewProps<T extends object> = Pick<DataTableContentProps<T>, "rowSelection" | "getRowClass" | "rowClassRules" | "onRowClick" | "suppressClickEdit" | "renderSubComponent"> & {
@@ -21,7 +21,7 @@ type DataTableRowViewProps<T extends object> = Pick<DataTableContentProps<T>, "r
     expanderWidth: number;
     showCheckboxes: boolean;
     visibleColumns: Column<DataTableFeatures, T>[];
-    definitionsById: Map<string, DataTableColumn<T>>;
+    definitionsById: Map<string, DataTableColumnDef<T>>;
     activeCell: {
         rowId?: string;
         columnId?: string;

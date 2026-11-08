@@ -1,376 +1,391 @@
-import { jsxs as S, jsx as m } from "react/jsx-runtime";
-import * as r from "react";
-import { DragDropProvider as be, DragOverlay as we } from "@dnd-kit/react";
-import { useVirtualizer as ye } from "@tanstack/react-virtual";
-import { cn as Ct } from "./utils.es.js";
-import { Button as kt } from "./button.es.js";
-import { useDataTable as Ie, DataTableAlignmentContext as ve } from "./datatablecontext.es.js";
-import { dataTableColumnSensors as Re } from "./datatablecolumndrag.es.js";
-import { getActiveDataTableCell as Ce } from "./datatablemodel.es.js";
-import { useDataTableInstance as ke } from "./usedatatableinstance.es.js";
-import { DataTableHeader as Ee } from "./datatableheader.es.js";
-import { DataTablePagination as Se } from "./datatablepagination.es.js";
-import { DataTableRowView as _e } from "./datatablerowview.es.js";
-import { useDataTableColumnDrag as Pe } from "./usedatatablecolumndrag.es.js";
-import { useDataTableMotion as De } from "./usedatatablemotion.es.js";
+import { jsxs as C, jsx as d } from "react/jsx-runtime";
+import * as n from "react";
+import { DragDropProvider as ye, DragOverlay as ve } from "@dnd-kit/react";
+import { useVirtualizer as Ie } from "@tanstack/react-virtual";
+import { cn as kt } from "./utils.es.js";
+import { Button as Et } from "./button.es.js";
+import { useDataTable as Re, DataTableAlignmentContext as Ce } from "./datatablecontext.es.js";
+import { dataTableColumnSensors as Se } from "./datatablecolumndrag.es.js";
+import { getActiveDataTableCell as ke } from "./datatablemodel.es.js";
+import { useDataTableInstance as Ee } from "./usedatatableinstance.es.js";
+import { DataTableHeader as _e } from "./datatableheader.es.js";
+import { DataTablePagination as Pe } from "./datatablepagination.es.js";
+import { DataTableRowView as De } from "./datatablerowview.es.js";
+import { useDataTableColumnDrag as ze } from "./usedatatablecolumndrag.es.js";
+import { useDataTableMotion as Le } from "./usedatatablemotion.es.js";
 import { useDataTableApi as Te } from "./usedatatableapi.es.js";
-const Et = [], Ae = {};
-function ze({
-  rowData: St,
-  columnDefs: J,
-  defaultColDef: _t = Ae,
-  getRowId: Pt,
+const _t = [], Ae = {};
+function Ne({
+  rowData: Pt,
+  columnDefs: H,
+  defaultColDef: Dt = Ae,
+  getRowId: zt,
   onReady: et,
-  rowSelection: p,
-  renderSubComponent: z,
-  getRowCanExpand: Dt,
-  onSelectionChanged: nt,
+  rowSelection: h,
+  renderSubComponent: T,
+  getRowCanExpand: Lt,
+  onSelectionChanged: rt,
   quickFilterText: Tt,
   onQuickFilterTextChange: At,
-  externalFilter: zt,
-  loading: N = !1,
-  emptyContent: Nt = "No rows to display",
-  loadingContent: jt = "Loading…",
-  rowHeight: K = 36,
-  headerHeight: j = 40,
-  getRowClass: Mt,
-  rowClassRules: Lt,
-  pinnedTopRowData: _ = Et,
-  pinnedBottomRowData: M = Et,
-  pagination: L = !1,
-  paginationPageSize: Vt = 25,
-  paginationPageSizeSelector: Wt = [10, 25, 50, 100],
-  virtualize: Ft = !0,
-  overscan: $t = 8,
-  domLayout: rt = "normal",
-  suppressHorizontalScroll: Ot = !1,
+  externalFilter: Nt,
+  loading: A = !1,
+  emptyContent: jt = "No rows to display",
+  loadingContent: Mt = "Loading…",
+  rowHeight: O = 40,
+  headerHeight: Vt = 40,
+  getRowClass: Wt,
+  rowClassRules: Ft,
+  pinnedTopRowData: P = _t,
+  pinnedBottomRowData: N = _t,
+  pagination: j = !1,
+  paginationPageSize: $t = 25,
+  paginationPageSizeSelector: Ht = [10, 25, 50, 100],
+  virtualize: Ot = !0,
+  overscan: Jt = 8,
+  domLayout: nt = "normal",
+  suppressHorizontalScroll: Kt = !1,
   editType: st = "cell",
-  suppressClickEdit: Jt = !1,
+  suppressClickEdit: Ut = !1,
   readOnlyEdit: ot = !1,
   validateRow: it,
   onEditCommit: lt,
   onEditRequest: at,
   onEditCancel: ct,
-  onRowClick: Kt,
-  tableOptions: P,
-  containerStyle: U,
-  className: Ut,
-  style: Xt,
+  onRowClick: Xt,
+  tableOptions: D,
+  containerStyle: J,
+  className: Bt,
+  style: Yt,
   ...dt
-}, Bt) {
+}, Gt) {
   "use no memo";
-  const { setApi: X, search: Ht, hasSearch: Yt, setSearch: Gt, setCounts: mt } = Ie(), D = r.useContext(ve), Qt = r.useId(), y = r.useRef(null), B = r.useRef(null), [Zt, qt] = r.useState(0), [te, ee] = r.useState(!1), [H, ne] = r.useState(null), [re, se] = r.useState(null), [oe, ut] = r.useState({}), [T, ie] = r.useState(null), [le] = r.useState(() => P?.initialState?.globalFilter ?? ""), x = r.useRef(T), ft = r.useRef({ columnDefs: J, validateRow: it, readOnlyEdit: ot, onEditCommit: lt, onEditRequest: at, onEditCancel: ct });
-  ft.current = { columnDefs: J, validateRow: it, readOnlyEdit: ot, onEditCommit: lt, onEditRequest: at, onEditCancel: ct };
-  const gt = r.useCallback((t) => {
-    x.current = t, ie(t);
-  }, []), l = te || rt === "print", pt = l || rt === "autoHeight", ae = Tt ?? P?.state?.globalFilter ?? (Yt ? Ht : le), V = !!p && p.checkboxes !== !1 && !l, W = !!z && !l, Y = W ? 44 : 0, G = (V ? 44 : 0) + Y, { table: o, definitionsById: R, sourcesById: h, data: ce, rowIndices: F, resolveId: xt } = ke({
-    rowData: St,
-    columnDefs: J,
-    defaultColDef: _t,
-    getRowId: Pt,
-    paginationPageSize: Vt,
-    tableOptions: P,
-    externalFilter: zt,
-    rowSelection: p,
-    pagination: L,
-    renderSubComponent: z,
-    getRowCanExpand: Dt,
+  const { setApi: K, search: Qt, hasSearch: Zt, setSearch: qt, setCounts: mt } = Re(), x = n.useContext(Ce), te = n.useId(), g = n.useRef(null), ut = n.useRef(null), U = n.useRef(null), X = n.useRef(null), [ft, ee] = n.useState(0), [re, ne] = n.useState(!1), [B, se] = n.useState(null), [oe, ie] = n.useState(null), [le, gt] = n.useState({}), [z, ae] = n.useState(null), [ce] = n.useState(() => D?.initialState?.globalFilter ?? ""), b = n.useRef(z), pt = n.useRef({ columnDefs: H, validateRow: it, readOnlyEdit: ot, onEditCommit: lt, onEditRequest: at, onEditCancel: ct });
+  pt.current = { columnDefs: H, validateRow: it, readOnlyEdit: ot, onEditCommit: lt, onEditRequest: at, onEditCancel: ct };
+  const ht = n.useCallback((t) => {
+    b.current = t, ae(t);
+  }, []), s = re || nt === "print", xt = s || nt === "autoHeight", de = Tt ?? D?.state?.globalFilter ?? (Zt ? Qt : ce), M = !!h && h.checkboxes !== !1 && !s, V = !!T && !s, Y = V ? 44 : 0, G = (M ? 44 : 0) + Y, { table: a, definitionsById: S, sourcesById: w, data: me, rowIndices: W, resolveId: bt } = Ee({
+    rowData: Pt,
+    columnDefs: H,
+    defaultColDef: Dt,
+    getRowId: zt,
+    paginationPageSize: $t,
+    tableOptions: D,
+    externalFilter: Nt,
+    rowSelection: h,
+    pagination: j,
+    renderSubComponent: T,
+    getRowCanExpand: Lt,
     onQuickFilterTextChange: At,
-    patches: oe,
-    alignment: D,
-    isPrinting: l,
-    viewportWidth: Zt,
+    patches: le,
+    alignment: x,
+    isPrinting: s,
+    viewportWidth: ft,
     selectionWidth: G,
-    searchText: ae,
-    setSearch: Gt
-  }), a = [...o.getStartVisibleLeafColumns(), ...o.getCenterVisibleLeafColumns(), ...o.getEndVisibleLeafColumns()].filter(
-    (t) => t.id !== "__external" && (!l || !R.get(t.id)?.hideInPrint)
+    searchText: de,
+    setSearch: qt
+  }), c = [...a.getStartVisibleLeafColumns(), ...a.getCenterVisibleLeafColumns(), ...a.getEndVisibleLeafColumns()].filter(
+    (t) => t.id !== "__external" && (!s || !S.get(t.id)?.hideInPrint)
   );
-  if (H) {
-    const t = a.findIndex((n) => n.id === H.sourceId), e = a.findIndex((n) => n.id === H.targetId);
-    t >= 0 && e >= 0 && a.splice(e, 0, a.splice(t, 1)[0]);
+  if (B) {
+    const t = c.findIndex((r) => r.id === B.sourceId), e = c.findIndex((r) => r.id === B.targetId);
+    t >= 0 && e >= 0 && c.splice(e, 0, c.splice(t, 1)[0]);
   }
-  const A = new Map(a.map((t) => [t.id, t.getSize()])), Q = G + a.reduce((t, e) => t + A.get(e.id), 0), g = o.getTopRows(), b = o.getBottomRows(), ht = new Set([...g, ...b].map((t) => t.id)), d = (l ? o.getPrePaginatedRowModel().rows : o.getRowModel().rows).filter((t) => !ht.has(t.id)), Z = (t) => !!z && t.getCanExpand() && t.getIsExpanded(), de = [...g, ...d, ...b].some(Z), C = Ft && !pt && !de, bt = (g.length + _.length) * K, $ = ye({
-    count: d.length,
-    getScrollElement: () => y.current,
-    estimateSize: () => K,
-    getItemKey: (t) => d[t].id,
-    overscan: $t,
-    scrollMargin: j + bt,
-    enabled: C,
+  const L = new Map(c.map((t) => [t.id, t.getSize()])), Q = G + c.reduce((t, e) => t + L.get(e.id), 0), p = a.getTopRows(), y = a.getBottomRows(), wt = new Set([...p, ...y].map((t) => t.id)), m = (s ? a.getPrePaginatedRowModel().rows : a.getRowModel().rows).filter((t) => !wt.has(t.id)), Z = (t) => !!T && t.getCanExpand() && t.getIsExpanded(), ue = [...p, ...m, ...y].some(Z), k = Ot && !xt && !ue, yt = (p.length + P.length) * O, F = Ie({
+    count: m.length,
+    getScrollElement: () => g.current,
+    estimateSize: () => O,
+    getItemKey: (t) => m[t].id,
+    overscan: Jt,
+    scrollMargin: yt,
+    enabled: k,
     useFlushSync: !1
-  }), I = r.useRef({
-    table: o,
-    definitionsById: R,
-    centerRows: d,
-    virtualizer: $,
-    resolveId: xt,
-    rowIndices: F,
-    sourcesById: h,
-    useVirtualRows: C,
-    pagination: L,
-    serverPagination: P?.manualPagination === !0
+  }), I = n.useRef({
+    table: a,
+    definitionsById: S,
+    centerRows: m,
+    virtualizer: F,
+    resolveId: bt,
+    rowIndices: W,
+    sourcesById: w,
+    useVirtualRows: k,
+    pagination: j,
+    serverPagination: D?.manualPagination === !0
   });
   I.current = {
-    table: o,
-    definitionsById: R,
-    centerRows: d,
-    virtualizer: $,
-    resolveId: xt,
-    rowIndices: F,
-    sourcesById: h,
-    useVirtualRows: C,
-    pagination: L,
-    serverPagination: P?.manualPagination === !0
+    table: a,
+    definitionsById: S,
+    centerRows: m,
+    virtualizer: F,
+    resolveId: bt,
+    rowIndices: W,
+    sourcesById: w,
+    useVirtualRows: k,
+    pagination: j,
+    serverPagination: D?.manualPagination === !0
   };
-  const me = Pe({ runtime: I, viewportRef: y, contentRef: B, setColumnDrag: ne }), s = Te({ runtime: I, editRef: x, configRef: ft, updateEdit: gt, setPatches: ut, contentRef: B, viewportRef: y, setPrinting: ee });
-  r.useImperativeHandle(Bt, () => s, [s]), r.useEffect(() => (X(s), () => X((t) => t === s ? null : t)), [s, X]);
-  const wt = r.useRef(et);
-  wt.current = et, r.useEffect(() => {
-    wt.current?.(s);
-  }, [s]);
-  const yt = r.useRef(nt);
-  yt.current = nt, r.useEffect(() => {
-    const t = I.current.table, e = t.getSelectedRowModel().rows.map((n) => n.original);
-    yt.current?.(e, t.getSelectedRowIds());
-  }, [o.state.rowSelection, ce]), r.useEffect(() => {
-    const t = I.current.table, e = t.getSelectedRowIds().length, n = (t.state.rowPinning.top?.length ?? 0) + (t.state.rowPinning.bottom?.length ?? 0);
+  const fe = ze({ runtime: I, viewportRef: g, contentRef: X, setColumnDrag: se }), o = Te({ runtime: I, editRef: b, configRef: pt, updateEdit: ht, setPatches: gt, contentRef: X, viewportRef: g, setPrinting: ne });
+  n.useImperativeHandle(Gt, () => o, [o]), n.useEffect(() => (K(o), () => K((t) => t === o ? null : t)), [o, K]);
+  const vt = n.useRef(et);
+  vt.current = et, n.useEffect(() => {
+    vt.current?.(o);
+  }, [o]);
+  const It = n.useRef(rt);
+  It.current = rt, n.useEffect(() => {
+    const t = I.current.table, e = t.getSelectedRowModel().rows.map((r) => r.original);
+    It.current?.(e, t.getSelectedRowIds());
+  }, [a.state.rowSelection, me]), n.useEffect(() => {
+    const t = I.current.table, e = t.getSelectedRowIds().length, r = (t.state.rowPinning.top?.length ?? 0) + (t.state.rowPinning.bottom?.length ?? 0);
     mt(
-      (i) => i.selectedCount === e && i.pinnedCount === n ? i : { selectedCount: e, pinnedCount: n }
+      (i) => i.selectedCount === e && i.pinnedCount === r ? i : { selectedCount: e, pinnedCount: r }
     );
-  }, [o.state.rowSelection, o.state.rowPinning, mt]), r.useEffect(() => {
-    const t = y.current;
+  }, [a.state.rowSelection, a.state.rowPinning, mt]), n.useEffect(() => {
+    const t = g.current;
     if (!t) return;
-    const e = () => qt(t.clientWidth);
+    const e = () => ee(t.clientWidth);
     e();
-    const n = new ResizeObserver(e);
-    return n.observe(t), () => n.disconnect();
-  }, []), r.useEffect(() => {
-    const t = y.current, e = D?.viewports.current;
+    const r = new ResizeObserver(e);
+    return r.observe(t), () => r.disconnect();
+  }, []), n.useEffect(() => {
+    const t = g.current, e = x?.viewports.current;
     if (!(!t || !e))
       return e.add(t), () => {
         e.delete(t);
       };
-  }, [D?.viewports]), r.useEffect(() => {
-    x.current && h.get(x.current.rowId) !== x.current.source && s.stopEditing(!0), ut((e) => {
-      const n = Object.entries(e).filter(([i, c]) => h.get(i) === c.source);
-      return n.length === Object.keys(e).length ? e : Object.fromEntries(n);
+  }, [x?.viewports]), n.useEffect(() => {
+    b.current && w.get(b.current.rowId) !== b.current.source && o.stopEditing(!0), gt((e) => {
+      const r = Object.entries(e).filter(([i, l]) => w.get(i) === l.source);
+      return r.length === Object.keys(e).length ? e : Object.fromEntries(r);
     });
     const t = I.current.table;
     if (!I.current.serverPagination) {
-      const e = t.atoms.rowSelection.get(), n = Object.entries(e).filter(([u]) => h.has(u));
-      n.length !== Object.keys(e).length && t.setRowSelection(Object.fromEntries(n));
-      const i = t.atoms.rowPinning.get(), c = i.top?.filter((u) => h.has(u)), w = i.bottom?.filter((u) => h.has(u));
-      (c?.length !== i.top?.length || w?.length !== i.bottom?.length) && t.setRowPinning({ top: c, bottom: w });
+      const e = t.atoms.rowSelection.get(), r = Object.entries(e).filter(([u]) => w.has(u));
+      r.length !== Object.keys(e).length && t.setRowSelection(Object.fromEntries(r));
+      const i = t.atoms.rowPinning.get(), l = i.top?.filter((u) => w.has(u)), v = i.bottom?.filter((u) => w.has(u));
+      (l?.length !== i.top?.length || v?.length !== i.bottom?.length) && t.setRowPinning({ top: l, bottom: v });
     }
-  }, [h, s]);
-  const O = [...g, ...d, ...b], q = [
-    ..._.map((t, e) => `__summary_top_${e}`),
-    ...g.map((t) => t.id),
-    ...d.map((t) => t.id),
-    ...b.map((t) => t.id),
-    ...M.map((t, e) => `__summary_bottom_${e}`)
-  ], ue = new Set(O.filter(Z).map((t) => t.id));
+  }, [w, o]);
+  const $ = [...p, ...m, ...y], q = [
+    ...P.map((t, e) => `__summary_top_${e}`),
+    ...p.map((t) => t.id),
+    ...m.map((t) => t.id),
+    ...y.map((t) => t.id),
+    ...N.map((t, e) => `__summary_bottom_${e}`)
+  ], ge = new Set($.filter(Z).map((t) => t.id));
   let tt = 0;
-  const fe = new Map(
+  const pe = new Map(
     q.map((t) => {
       const e = tt;
-      return tt += ue.has(t) ? 2 : 1, [t, e];
+      return tt += ge.has(t) ? 2 : 1, [t, e];
     })
-  ), It = C ? $.getVirtualItems() : [], ge = C ? [
-    ...q.slice(0, _.length + g.length),
-    ...It.map((t) => d[t.index].id),
-    ...b.map((t) => t.id),
-    ...M.map((t, e) => `__summary_bottom_${e}`)
-  ] : q, pe = Ce(
-    re,
-    ge,
-    a.map((t) => t.id)
+  ), Rt = k ? F.getVirtualItems() : [], he = k ? [
+    ...q.slice(0, P.length + p.length),
+    ...Rt.map((t) => m[t.index].id),
+    ...y.map((t) => t.id),
+    ...N.map((t, e) => `__summary_bottom_${e}`)
+  ] : q, xe = ke(
+    oe,
+    he,
+    c.map((t) => t.id)
   );
-  De(y, JSON.stringify(d.map((t) => t.id)), JSON.stringify(a.map((t) => t.id)), l);
-  const vt = (t, e = !1) => {
-    const n = l ? !1 : t.getIsPinned(), i = a.filter((f) => f.getIsPinned() === n), c = i.findIndex((f) => f.id === t.id), w = i.slice(0, c).reduce((f, E) => f + A.get(E.id), G), u = i.slice(c + 1).reduce((f, E) => f + A.get(E.id), 0);
+  Le(g, JSON.stringify(m.map((t) => t.id)), JSON.stringify(c.map((t) => t.id)), s);
+  const Ct = (t, e = !1) => {
+    const r = s ? !1 : t.getIsPinned(), i = c.filter((f) => f.getIsPinned() === r), l = i.findIndex((f) => f.id === t.id), v = i.slice(0, l).reduce((f, _) => f + L.get(_.id), G), u = i.slice(l + 1).reduce((f, _) => f + L.get(_.id), 0);
     return {
-      width: A.get(t.id),
+      width: L.get(t.id),
       flexShrink: 0,
-      position: n ? "sticky" : "relative",
-      insetInlineStart: n === "start" ? w : void 0,
-      insetInlineEnd: n === "end" ? u : void 0,
-      zIndex: n ? 2 : void 0,
-      background: n ? e ? "oklch(var(--mtx-primary-50))" : "inherit" : void 0
+      position: r ? "sticky" : "relative",
+      insetInlineStart: r === "start" ? v : void 0,
+      insetInlineEnd: r === "end" ? u : void 0,
+      zIndex: r ? 2 : void 0,
+      background: r ? e ? "oklch(var(--mtx-primary-50))" : "inherit" : void 0
     };
-  }, xe = (t, e, n) => {
+  }, be = (t, e, r) => {
     if (t.defaultPrevented) return;
-    if (t.key === "Escape" && x.current) {
-      t.preventDefault(), s.stopEditing(!0);
+    if (t.key === "Escape" && b.current) {
+      t.preventDefault(), o.stopEditing(!0);
       return;
     }
-    if (t.key === "Enter" && x.current) {
+    if (t.key === "Enter" && b.current) {
       if (t.target.closest("button,select,textarea,[contenteditable=true],[role=combobox],[role=listbox]")) return;
-      t.preventDefault(), s.stopEditing();
+      t.preventDefault(), o.stopEditing();
       return;
     }
     if (t.target.closest("input,select,textarea,button,[contenteditable=true]")) return;
     if (t.key === "Enter" || t.key === "F2") {
-      t.preventDefault(), st === "fullRow" ? s.startEditingRow(e.id) : s.startEditingCell({ rowId: e.id, columnId: n.id });
+      t.preventDefault(), st === "fullRow" ? o.startEditingRow(e.id) : o.startEditingCell({ rowId: e.id, columnId: r.id });
       return;
     }
-    const c = O.findIndex((v) => v.id === e.id), w = a.findIndex((v) => v.id === n.id), u = t.key === "ArrowDown" ? c + 1 : t.key === "ArrowUp" ? c - 1 : c, f = getComputedStyle(t.currentTarget).direction === "rtl" ? -1 : 1, E = t.key === "ArrowRight" ? w + f : t.key === "ArrowLeft" ? w - f : w;
-    if (["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(t.key) && O[u] && a[E]) {
+    const l = $.findIndex((R) => R.id === e.id), v = c.findIndex((R) => R.id === r.id), u = t.key === "ArrowDown" ? l + 1 : t.key === "ArrowUp" ? l - 1 : l, f = getComputedStyle(t.currentTarget).direction === "rtl" ? -1 : 1, _ = t.key === "ArrowRight" ? v + f : t.key === "ArrowLeft" ? v - f : v;
+    if (["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(t.key) && $[u] && c[_]) {
       t.preventDefault();
-      const v = O[u];
-      ht.has(v.id) || s.scrollToRow(v.id), s.focusCell(v.id, a[E].id);
+      const R = $[u];
+      wt.has(R.id) || o.scrollToRow(R.id), o.focusCell(R.id, c[_].id);
     }
-  }, k = (t, e, n, i, c) => /* @__PURE__ */ m(
-    _e,
+  }, E = (t, e, r, i, l) => /* @__PURE__ */ d(
+    De,
     {
       data: t,
       rowId: e,
-      index: n,
+      index: r,
       row: i,
-      pinned: c,
-      edit: T,
-      editRef: x,
-      updateEdit: gt,
-      api: s,
-      table: o,
-      detailId: Qt,
-      displayedIndices: fe,
-      rowSelection: p,
-      rowHeight: K,
+      pinned: l,
+      edit: z,
+      editRef: b,
+      updateEdit: ht,
+      api: o,
+      table: a,
+      detailId: te,
+      displayedIndices: pe,
+      rowSelection: h,
+      rowHeight: O,
       totalWidth: Q,
-      getRowClass: Mt,
-      rowClassRules: Lt,
-      onRowClick: Kt,
-      showExpanders: W,
+      getRowClass: Wt,
+      rowClassRules: Ft,
+      onRowClick: Xt,
+      showExpanders: V,
       expanderWidth: Y,
-      showCheckboxes: V,
-      visibleColumns: a,
-      definitionsById: R,
-      activeCell: pe,
-      setFocusedCell: se,
-      columnStyle: vt,
-      handleCellKeyDown: xe,
-      suppressClickEdit: Jt,
+      showCheckboxes: M,
+      visibleColumns: c,
+      definitionsById: S,
+      activeCell: xe,
+      setFocusedCell: ie,
+      columnStyle: Ct,
+      handleCellKeyDown: be,
+      suppressClickEdit: Ut,
       editType: st,
-      renderSubComponent: z,
+      renderSubComponent: T,
       isDetailExpanded: Z
     },
     e
-  ), Rt = (p?.selectAll === "all" ? o.getCoreRowModel() : p?.selectAll === "currentPage" ? o.getRowModel() : o.getFilteredRowModel()).rows.filter((t) => t.getCanSelect()), he = Rt.filter((t) => t.getIsSelected()).length;
-  return /* @__PURE__ */ S(be, { sensors: Re, ...me, children: [
-    /* @__PURE__ */ m(we, { dropAnimation: null, style: { position: "fixed", pointerEvents: "none" }, children: (t) => {
-      const e = R.get(t.data.columnId);
-      return /* @__PURE__ */ m("div", { className: "mtx-rounded-sm mtx-border mtx-border-gray-200 mtx-bg-primary-50 mtx-px-3 mtx-py-2 mtx-text-xs mtx-font-bold mtx-shadow-md", children: e?.headerName ?? t.data.columnId });
+  ), St = (h?.selectAll === "all" ? a.getCoreRowModel() : h?.selectAll === "currentPage" ? a.getRowModel() : a.getFilteredRowModel()).rows.filter((t) => t.getCanSelect()), we = St.filter((t) => t.getIsSelected()).length;
+  return /* @__PURE__ */ C(ye, { sensors: Se, ...fe, children: [
+    /* @__PURE__ */ d(ve, { dropAnimation: null, style: { position: "fixed", pointerEvents: "none" }, children: (t) => {
+      const e = S.get(t.data.columnId);
+      return /* @__PURE__ */ d("div", { className: "mtx-rounded-sm mtx-border mtx-border-gray-200 mtx-bg-primary-50 mtx-px-3 mtx-py-2 mtx-text-xs mtx-font-bold mtx-shadow-md", children: e?.headerName ?? t.data.columnId });
     } }),
-    /* @__PURE__ */ S(
+    /* @__PURE__ */ C(
       "div",
       {
-        ref: B,
+        ref: X,
         "data-data-table-content": "",
-        "data-print-layout": l || void 0,
-        className: Ct("mtx-relative mtx-flex mtx-min-h-0 mtx-flex-1 mtx-flex-col mtx-rounded-b-lg", Ut),
-        style: Xt,
+        "data-print-layout": s || void 0,
+        className: kt("mtx-relative mtx-flex mtx-min-h-0 mtx-flex-1 mtx-flex-col mtx-rounded-b-lg", Bt),
+        style: Yt,
         ...dt,
         children: [
-          T && /* @__PURE__ */ S("div", { "data-print-hidden": "", className: "mtx-flex mtx-shrink-0 mtx-items-center mtx-gap-2 mtx-border-b mtx-border-gray-200 mtx-p-2", children: [
-            /* @__PURE__ */ m(kt, { type: "button", size: "sm", onClick: () => s.stopEditing(), children: "Save" }),
-            /* @__PURE__ */ m(kt, { type: "button", size: "sm", variant: "text", onClick: () => s.stopEditing(!0), children: "Cancel" }),
-            T.errors.length > 0 && /* @__PURE__ */ m("span", { role: "alert", className: "mtx-text-danger", children: T.errors.join(". ") })
+          z && /* @__PURE__ */ C("div", { "data-print-hidden": "", className: "mtx-flex mtx-shrink-0 mtx-items-center mtx-gap-2 mtx-border-b mtx-border-gray-200 mtx-p-2", children: [
+            /* @__PURE__ */ d(Et, { type: "button", size: "sm", onClick: () => o.stopEditing(), children: "Save" }),
+            /* @__PURE__ */ d(Et, { type: "button", size: "sm", variant: "text", onClick: () => o.stopEditing(!0), children: "Cancel" }),
+            z.errors.length > 0 && /* @__PURE__ */ d("span", { role: "alert", className: "mtx-text-danger", children: z.errors.join(". ") })
           ] }),
-          /* @__PURE__ */ S(
+          /* @__PURE__ */ C(
             "div",
             {
-              ref: y,
-              "data-data-table-viewport": "",
               role: "grid",
               "aria-label": dt["aria-label"] ?? "Data table",
-              "aria-busy": N,
+              "aria-busy": A,
               "aria-rowcount": tt + 1,
-              "aria-colcount": a.length + (V ? 1 : 0) + (W ? 1 : 0),
-              "aria-multiselectable": p?.mode === "multiRow" || void 0,
-              className: "mtx-relative mtx-min-h-0 mtx-flex-1 mtx-rounded-b-lg",
-              style: {
-                ...U,
-                overflow: pt ? "visible" : U?.overflow ?? "auto",
-                overflowX: l ? "visible" : Ot ? "hidden" : U?.overflowX
-              },
-              onScroll: (t) => {
-                if (D && !l)
-                  for (const e of D.viewports.current)
-                    e !== t.currentTarget && e.scrollLeft !== t.currentTarget.scrollLeft && (e.scrollLeft = t.currentTarget.scrollLeft);
-              },
+              "aria-colcount": c.length + (M ? 1 : 0) + (V ? 1 : 0),
+              "aria-multiselectable": h?.mode === "multiRow" || void 0,
+              className: "mtx-flex mtx-min-h-0 mtx-flex-1 mtx-flex-col",
               children: [
-                /* @__PURE__ */ m(
-                  Ee,
-                  {
-                    table: o,
-                    api: s,
-                    headerHeight: j,
-                    totalWidth: Q,
-                    isPrinting: l,
-                    showExpanders: W,
-                    expanderWidth: Y,
-                    showCheckboxes: V,
-                    rowSelection: p,
-                    selectionRows: Rt,
-                    selectedInScope: he,
-                    visibleColumns: a,
-                    definitionsById: R,
-                    columnStyle: vt,
-                    widths: A
-                  }
-                ),
-                (g.length > 0 || _.length > 0) && /* @__PURE__ */ S(
+                /* @__PURE__ */ d("div", { className: "mtx-shrink-0 mtx-bg-primary-50", children: /* @__PURE__ */ d(
                   "div",
                   {
-                    role: "rowgroup",
-                    className: "mtx-sticky mtx-z-20",
-                    style: { top: l ? void 0 : j, position: l ? "relative" : "sticky" },
-                    children: [
-                      _.map((t, e) => k(t, `__summary_top_${e}`, e, void 0, "top")),
-                      g.map((t) => k(t.original, t.id, t.index, t, "top"))
-                    ]
-                  }
-                ),
-                /* @__PURE__ */ m("div", { role: "rowgroup", children: C ? /* @__PURE__ */ m("div", { style: { height: $.getTotalSize(), position: "relative", width: Q, minWidth: "100%" }, children: It.map((t) => {
-                  const e = d[t.index];
-                  return /* @__PURE__ */ m(
-                    "div",
-                    {
-                      style: { position: "absolute", top: 0, width: "100%", transform: `translateY(${t.start - j - bt}px)` },
-                      children: k(e.original, e.id, F.get(e.original) ?? e.index, e)
+                    ref: ut,
+                    style: { overflow: s ? "visible" : "hidden", width: s ? "100%" : ft || "100%" },
+                    onScroll: (t) => {
+                      const e = U.current === t.currentTarget.scrollLeft;
+                      U.current = null, !e && !s && g.current && (g.current.scrollLeft = t.currentTarget.scrollLeft);
                     },
-                    e.id
-                  );
-                }) }) : d.map((t) => k(t.original, t.id, F.get(t.original) ?? t.index, t)) }),
-                (b.length > 0 || M.length > 0) && /* @__PURE__ */ S("div", { role: "rowgroup", className: "mtx-sticky mtx-bottom-0 mtx-z-20", style: { position: l ? "relative" : "sticky" }, children: [
-                  b.map((t) => k(t.original, t.id, t.index, t, "bottom")),
-                  M.map((t, e) => k(t, `__summary_bottom_${e}`, e, void 0, "bottom"))
-                ] }),
-                (N || !d.length && !g.length && !b.length) && /* @__PURE__ */ m(
+                    children: /* @__PURE__ */ d(
+                      _e,
+                      {
+                        table: a,
+                        api: o,
+                        headerHeight: Vt,
+                        totalWidth: Q,
+                        isPrinting: s,
+                        showExpanders: V,
+                        expanderWidth: Y,
+                        showCheckboxes: M,
+                        rowSelection: h,
+                        selectionRows: St,
+                        selectedInScope: we,
+                        visibleColumns: c,
+                        definitionsById: S,
+                        columnStyle: Ct,
+                        widths: L
+                      }
+                    )
+                  }
+                ) }),
+                /* @__PURE__ */ C(
                   "div",
                   {
-                    role: "status",
-                    className: Ct(
-                      "mtx-flex mtx-items-center mtx-justify-center mtx-p-6 mtx-text-text-300",
-                      N && "mtx-absolute mtx-top-0 mtx-start-0 mtx-z-50 mtx-h-full mtx-w-full mtx-bg-gray-100/25"
-                    ),
-                    children: N ? jt : Nt
+                    ref: g,
+                    "data-data-table-viewport": "",
+                    className: "mtx-relative mtx-min-h-0 mtx-flex-1 mtx-rounded-b-lg",
+                    style: {
+                      ...J,
+                      overflow: xt ? "visible" : J?.overflow ?? "auto",
+                      overflowX: s ? "visible" : Kt ? "hidden" : J?.overflowX
+                    },
+                    onScroll: (t) => {
+                      const e = t.currentTarget, r = ut.current;
+                      r && r.scrollLeft !== e.scrollLeft && (r.scrollLeft = e.scrollLeft, U.current = r.scrollLeft);
+                      const i = x?.synchronizedScrolls.current.get(e) === e.scrollLeft;
+                      if (x?.synchronizedScrolls.current.delete(e), x && !s && !i)
+                        for (const l of x.viewports.current)
+                          l !== e && l.scrollLeft !== e.scrollLeft && (l.scrollLeft = e.scrollLeft, x.synchronizedScrolls.current.set(l, l.scrollLeft));
+                    },
+                    children: [
+                      (p.length > 0 || P.length > 0) && /* @__PURE__ */ C(
+                        "div",
+                        {
+                          role: "rowgroup",
+                          className: "mtx-sticky mtx-z-20",
+                          style: { top: s ? void 0 : 0, position: s ? "relative" : "sticky" },
+                          children: [
+                            P.map((t, e) => E(t, `__summary_top_${e}`, e, void 0, "top")),
+                            p.map((t) => E(t.original, t.id, t.index, t, "top"))
+                          ]
+                        }
+                      ),
+                      /* @__PURE__ */ d("div", { role: "rowgroup", children: k ? /* @__PURE__ */ d("div", { style: { height: F.getTotalSize(), position: "relative", width: Q, minWidth: "100%" }, children: Rt.map((t) => {
+                        const e = m[t.index];
+                        return /* @__PURE__ */ d("div", { style: { position: "absolute", top: 0, width: "100%", transform: `translateY(${t.start - yt}px)` }, children: E(e.original, e.id, W.get(e.original) ?? e.index, e) }, e.id);
+                      }) }) : m.map((t) => E(t.original, t.id, W.get(t.original) ?? t.index, t)) }),
+                      (y.length > 0 || N.length > 0) && /* @__PURE__ */ C("div", { role: "rowgroup", className: "mtx-sticky mtx-bottom-0 mtx-z-20", style: { position: s ? "relative" : "sticky" }, children: [
+                        y.map((t) => E(t.original, t.id, t.index, t, "bottom")),
+                        N.map((t, e) => E(t, `__summary_bottom_${e}`, e, void 0, "bottom"))
+                      ] }),
+                      (A || !m.length && !p.length && !y.length) && /* @__PURE__ */ d(
+                        "div",
+                        {
+                          role: "status",
+                          className: kt(
+                            "mtx-flex mtx-items-center mtx-justify-center mtx-p-6 mtx-text-text-300",
+                            A && "mtx-absolute mtx-top-0 mtx-start-0 mtx-z-50 mtx-h-full mtx-w-full mtx-bg-gray-100/25"
+                          ),
+                          children: A ? Mt : jt
+                        }
+                      )
+                    ]
                   }
                 )
               ]
             }
           ),
-          L && !l && /* @__PURE__ */ m(Se, { table: o, paginationPageSizeSelector: Wt })
+          j && !s && /* @__PURE__ */ d(Pe, { table: a, paginationPageSizeSelector: Ht })
         ]
       }
     )
   ] });
 }
-const Ne = r.forwardRef(ze);
-Ne.displayName = "DataTableContent";
+const je = n.forwardRef(Ne);
+je.displayName = "DataTableContent";
 export {
-  Ne as DataTableContent
+  je as DataTableContent
 };
 //# sourceMappingURL=datatablecontent.es.js.map
