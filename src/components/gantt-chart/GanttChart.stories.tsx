@@ -11,6 +11,7 @@ import { FormInput } from "../form-input/FormInput";
 import { IconButton } from "../icon-botton/IconButton";
 import { DATE_ONLY_PATTERN, toCalendarDate } from "../date-picker/dateValue";
 import { GanttChart, type GanttItem } from "./GanttChart";
+import storySource from "./GanttChart.stories.tsx?raw";
 
 const items: GanttItem[] = [
   { id: "stairwells", name: "Stairwells", start: "2026-06-01", end: "2027-02-26", progress: 8 },
@@ -52,7 +53,7 @@ const DraftStackForm = ({ item, onApprove, onReject }: DraftStackFormProps) => {
 
   return (
     <Form {...form}>
-      <form onSubmit={handleSubmit} className="mtx-flex mtx-flex-col mtx-w-full mtx-items-start mtx-gap-1">
+      <form onSubmit={handleSubmit} className="mtx-flex mtx-flex-col mtx-gap-2 mtx-w-full mtx-items-start mtx-h-20 py-1">
         <div className="mtx-flex mtx-w-full mtx-items-start mtx-gap-1">
           <FormInput
             name="name"
@@ -216,6 +217,7 @@ const AddStackStory = () => {
       startDate="2026-01-01"
       endDate="2027-06-30"
       highlightedDate="2026-09-11"
+      headerHeight={80}
       markers={[
         { id: "today", date: "2026-09-11", label: "Today", color: "oklch(var(--mtx-text-800))" },
         { id: "city-walkthrough", date: "2026-11-16", label: "City walkthrough", color: "oklch(var(--mtx-success-600))" },
@@ -267,6 +269,18 @@ const MonthView: Story = {
 };
 
 const AddStack: Story = {
+  parameters: {
+    docs: {
+      source: {
+        code:
+          storySource
+            .split("const meta = {")[0]
+            .replace('import type { Meta, StoryObj } from "@storybook/react-vite";\n', "")
+            .replace('import storySource from "./GanttChart.stories.tsx?raw";\n', "")
+            .trimEnd() + "\n\nexport default AddStackStory;\n",
+      },
+    },
+  },
   render: () => <AddStackStory />,
 };
 
