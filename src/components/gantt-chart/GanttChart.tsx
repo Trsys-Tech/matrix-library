@@ -64,8 +64,10 @@ type GanttChartProps = Omit<React.HTMLAttributes<HTMLDivElement>, "children"> & 
   locale?: string;
   /** Width of the sticky row-name column in pixels. */
   nameColumnWidth?: number;
-  /** Height of each item row in pixels. */
-  rowHeight?: number;
+  /** Minimum Height of each item row in pixels. */
+  minRowHeight?: number;
+  /** height of the header row */
+  headerHeight?: number;
   /** Minimum width of an individual timeline cell, by scale. */
   cellWidths?: Partial<Record<GanttView, number>>;
   /** Header shown above item names. */
@@ -256,18 +258,19 @@ type TimelineHeaderProps = {
   highlightedDate: Date | null;
   nameColumnHeader: React.ReactNode;
   nameColumnWidth: number;
+  headerHeight: number;
 };
 
-const TimelineHeader: React.FC<TimelineHeaderProps> = ({ intervals, groups, highlightedDate, nameColumnHeader, nameColumnWidth }) => (
+const TimelineHeader: React.FC<TimelineHeaderProps> = ({ intervals, groups, highlightedDate, nameColumnHeader, nameColumnWidth, headerHeight }) => (
   <div className="mtx-bg-primary-50" role="rowgroup">
     <div
-      className="mtx-grid mtx-h-8 mtx-border-b mtx-border-gray-200"
-      style={{ gridTemplateColumns: `${nameColumnWidth}px repeat(${intervals.length}, minmax(0, 1fr))` }}
+      className="mtx-grid mtx-border-b mtx-border-gray-200"
+      style={{ gridTemplateColumns: `${nameColumnWidth}px repeat(${intervals.length}, minmax(0, 1fr))`, height: headerHeight / 2 }}
       role="row"
     >
       <div
         className="mtx-sticky mtx-left-0 mtx-z-20 mtx-flex mtx-items-center mtx-border-b mtx-border-r mtx-border-gray-200 mtx-bg-primary-50 mtx-px-4 mtx-text-xs mtx-font-semibold mtx-text-text-500"
-        style={{ gridColumn: 1, height: 64 }}
+        style={{ gridColumn: 1, height: headerHeight }}
         role="columnheader"
         aria-colindex={1}
         aria-rowspan={2}
@@ -277,8 +280,8 @@ const TimelineHeader: React.FC<TimelineHeaderProps> = ({ intervals, groups, high
       {groups.map(group => (
         <div
           key={group.key}
-          className="mtx-flex mtx-items-center mtx-justify-center mtx-pb-8 mtx-border-l mtx-border-gray-200 mtx-text-xs mtx-font-medium mtx-text-text-500 mtx-text-center"
-          style={{ gridColumn: `${group.startIndex + 2} / span ${group.intervalCount}` }}
+          className="mtx-flex mtx-items-center mtx-justify-center mtx-border-l mtx-border-gray-200 mtx-text-xs mtx-font-medium mtx-text-text-500 mtx-text-center"
+          style={{ gridColumn: `${group.startIndex + 2} / span ${group.intervalCount}`, paddingBottom: headerHeight / 2 }}
           role="columnheader"
           aria-colindex={group.startIndex + 2}
           aria-colspan={group.intervalCount}
@@ -287,7 +290,11 @@ const TimelineHeader: React.FC<TimelineHeaderProps> = ({ intervals, groups, high
         </div>
       ))}
     </div>
-    <div className="mtx-grid mtx-h-8" style={{ gridTemplateColumns: `${nameColumnWidth}px repeat(${intervals.length}, minmax(0, 1fr))` }} role="row">
+    <div
+      className="mtx-grid"
+      style={{ gridTemplateColumns: `${nameColumnWidth}px repeat(${intervals.length}, minmax(0, 1fr))`, height: headerHeight / 2 }}
+      role="row"
+    >
       <div aria-hidden="true" />
       {intervals.map((interval, index) => (
         <div
@@ -321,7 +328,8 @@ const GanttChart = React.forwardRef<HTMLDivElement, GanttChartProps>(
       highlightedDate,
       locale = "en-US",
       nameColumnWidth = 320,
-      rowHeight = 56,
+      minRowHeight = 56,
+      headerHeight = 64,
       cellWidths,
       nameColumnHeader = "Name",
       addItemLabel = "New item",
@@ -414,13 +422,14 @@ const GanttChart = React.forwardRef<HTMLDivElement, GanttChartProps>(
               highlightedDate={activeHighlightedDate}
               nameColumnHeader={nameColumnHeader}
               nameColumnWidth={nameColumnWidth}
+              headerHeight={headerHeight}
             />
 
             {onAddItem ? (
               <div className="mtx-grid" style={{ gridTemplateColumns: `${nameColumnWidth}px minmax(${timelineWidth}px, 1fr)` }} role="row">
                 <div
                   className="mtx-sticky mtx-left-0 mtx-z-30 mtx-flex mtx-items-center mtx-border-b mtx-border-r mtx-border-gray-200 mtx-bg-gray-0 mtx-px-2"
-                  style={{ height: rowHeight }}
+                  style={{ minHeight: minRowHeight }}
                   role="cell"
                 >
                   <button
@@ -432,7 +441,7 @@ const GanttChart = React.forwardRef<HTMLDivElement, GanttChartProps>(
                     {addItemLabel}
                   </button>
                 </div>
-                <div className="mtx-relative mtx-border-b mtx-border-gray-200" style={{ height: rowHeight }} role="cell">
+                <div className="mtx-relative mtx-border-b mtx-border-gray-200" style={{ minHeight: minRowHeight }} role="cell">
                   <TimelineGrid intervals={timeline.intervals} highlightedDate={activeHighlightedDate} />
                   <TimelineMarkers markers={positionedMarkers} showLabels />
                 </div>
@@ -454,7 +463,7 @@ const GanttChart = React.forwardRef<HTMLDivElement, GanttChartProps>(
                   >
                     <div
                       className="mtx-sticky mtx-left-0 mtx-z-30 mtx-flex mtx-items-center mtx-border-b mtx-border-r mtx-border-gray-200 mtx-bg-gray-0 mtx-px-2"
-                      style={{ height: rowHeight }}
+                      style={{ minHeight: minRowHeight }}
                       role="rowheader"
                     >
                       {renderItem ? (
@@ -467,7 +476,7 @@ const GanttChart = React.forwardRef<HTMLDivElement, GanttChartProps>(
                       )}
                     </div>
 
-                    <div className="mtx-relative mtx-border-b mtx-border-gray-200" style={{ height: rowHeight }} role="cell">
+                    <div className="mtx-relative mtx-border-b mtx-border-gray-200" style={{ minHeight: minRowHeight }} role="cell">
                       <TimelineGrid intervals={timeline.intervals} highlightedDate={activeHighlightedDate} />
                       <TimelineMarkers markers={positionedMarkers} showLabels={!onAddItem && itemIndex === 0} />
                       {barPosition && barPosition.width > 0 ? (
