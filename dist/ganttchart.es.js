@@ -1,132 +1,132 @@
-import { jsxs as n, jsx as e, Fragment as me } from "react/jsx-runtime";
-import m from "react";
-import { Plus as oe } from "@trsys-tech/matrix-icons";
-import { cn as y } from "./utils.es.js";
-import { GanttToolbar as ie } from "./gantttoolbar.es.js";
-import { getTimelineRange as xe, createTimeline as ce, toDate as W, getMarkerPosition as de, clampProgress as ue, getBarPosition as fe, formatDateRange as be, includesDate as I } from "./gantt-chart.es.js";
-const he = {
+import { jsxs as o, jsx as t, Fragment as it } from "react/jsx-runtime";
+import x from "react";
+import { Plus as xt } from "@trsys-tech/matrix-icons";
+import { cn as v } from "./utils.es.js";
+import { GanttToolbar as ct } from "./gantttoolbar.es.js";
+import { getTimelineRange as dt, createTimeline as ut, toDate as G, getMarkerPosition as ft, formatDateRange as O, includesDate as V, clampProgress as bt, getBarPosition as ht } from "./gantt-chart.es.js";
+const pt = {
   week: "Weeks",
   month: "Month",
   quarter: "Quarter"
-}, ge = {
+}, gt = {
   week: 72,
   month: 120,
   quarter: 220
-}, S = 8, D = 12, z = 4, pe = 30, q = ({ markers: s, showLabels: c = !1 }) => {
-  const f = m.useRef(null), d = m.useRef(/* @__PURE__ */ new Map()), h = m.useRef(/* @__PURE__ */ new Map());
-  return m.useEffect(() => {
-    const t = f.current;
-    if (!t || !c) return;
+}, M = 8, A = 12, z = 4, vt = 30, W = ({ markers: l, showLabels: s = !1 }) => {
+  const u = x.useRef(null), c = x.useRef(/* @__PURE__ */ new Map()), f = x.useRef(/* @__PURE__ */ new Map());
+  return x.useEffect(() => {
+    const e = u.current;
+    if (!e || !s) return;
     const r = () => {
-      const o = t.clientWidth, $ = s.flatMap(({ marker: a, left: x }) => {
-        const N = String(a.id), g = d.current.get(N);
+      const m = e.clientWidth, $ = l.flatMap(({ marker: i, left: d }) => {
+        const y = String(i.id), g = c.current.get(y);
         if (!g) return [];
-        const w = x / 100 * o, R = g.offsetWidth;
-        let u = w + D;
-        return u + R > o - S && (u = w - R - D), u = Math.max(S, Math.min(u, o - R - S)), [{ key: N, label: g, labelLeft: u, labelRight: u + R }];
-      }), v = [];
-      $.sort((a, x) => a.labelLeft - x.labelLeft).forEach((a) => {
-        let x = v.findIndex((w) => w + S <= a.labelLeft);
-        x === -1 && (x = v.length), v[x] = a.labelRight;
-        const N = z + x * pe;
-        a.label.style.left = `${a.labelLeft}px`, a.label.style.top = `${N}px`;
-        const g = h.current.get(a.key);
-        g && (g.style.top = `${N + 8}px`);
+        const N = d / 100 * m, w = g.offsetWidth;
+        let b = N + A;
+        return b + w > m - M && (b = N - w - A), b = Math.max(M, Math.min(b, m - w - M)), [{ key: y, label: g, labelLeft: b, labelRight: b + w }];
+      }), p = [];
+      $.sort((i, d) => i.labelLeft - d.labelLeft).forEach((i) => {
+        let d = p.findIndex((N) => N + M <= i.labelLeft);
+        d === -1 && (d = p.length), p[d] = i.labelRight;
+        const y = z + d * vt;
+        i.label.style.left = `${i.labelLeft}px`, i.label.style.top = `${y}px`;
+        const g = f.current.get(i.key);
+        g && (g.style.top = `${y + 8}px`);
       });
     };
     if (r(), typeof ResizeObserver > "u") return;
-    const i = new ResizeObserver(r);
-    return i.observe(t), d.current.forEach((o) => i.observe(o)), () => i.disconnect();
-  }, [s, c]), /* @__PURE__ */ e("div", { ref: f, className: "mtx-pointer-events-none mtx-absolute mtx-inset-0 mtx-z-20", children: s.map(({ marker: t, left: r }) => {
-    const i = String(t.id);
-    return /* @__PURE__ */ n(m.Fragment, { children: [
-      /* @__PURE__ */ e(
+    const n = new ResizeObserver(r);
+    return n.observe(e), c.current.forEach((m) => n.observe(m)), () => n.disconnect();
+  }, [l, s]), /* @__PURE__ */ t("div", { ref: u, className: "mtx-pointer-events-none mtx-absolute mtx-inset-0 mtx-z-20", children: l.map(({ marker: e, left: r }) => {
+    const n = String(e.id);
+    return /* @__PURE__ */ o(x.Fragment, { children: [
+      /* @__PURE__ */ t(
         "div",
         {
-          className: y(
+          className: v(
             "mtx-absolute mtx-inset-y-0 mtx-w-0.5 -mtx-translate-x-1/2 mtx-border mtx-border-dashed mtx-border-l",
-            t.lineClassName
+            e.lineClassName
           ),
-          style: { left: `${r}%`, borderColor: t.color },
+          style: { left: `${r}%`, borderColor: e.color },
           "aria-hidden": "true"
         }
       ),
-      c ? /* @__PURE__ */ n(me, { children: [
-        /* @__PURE__ */ e(
+      s ? /* @__PURE__ */ o(it, { children: [
+        /* @__PURE__ */ t(
           "div",
           {
-            ref: (o) => {
-              o ? h.current.set(i, o) : h.current.delete(i);
+            ref: (m) => {
+              m ? f.current.set(n, m) : f.current.delete(n);
             },
-            className: y(
+            className: v(
               "mtx-absolute mtx-z-20 mtx-h-2 mtx-w-2 -mtx-translate-x-1/2 mtx-rotate-45 mtx-border mtx-border-gray-0",
-              t.diamondClassName
+              e.diamondClassName
             ),
-            style: { left: `${r}%`, top: z + 8, backgroundColor: t.color },
+            style: { left: `${r}%`, top: z + 8, backgroundColor: e.color },
             "aria-hidden": "true"
           }
         ),
-        /* @__PURE__ */ e(
+        /* @__PURE__ */ t(
           "div",
           {
-            ref: (o) => {
-              o ? d.current.set(i, o) : d.current.delete(i);
+            ref: (m) => {
+              m ? c.current.set(n, m) : c.current.delete(n);
             },
-            className: y(
+            className: v(
               "mtx-absolute mtx-z-20 mtx-max-w-48 mtx-truncate mtx-whitespace-nowrap mtx-rounded-sm mtx-border mtx-bg-gray-0 mtx-px-2 mtx-py-0.5 mtx-text-xs mtx-font-semibold mtx-shadow-card",
-              t.labelClassName
+              e.labelClassName
             ),
-            style: { left: `calc(${r}% + ${D}px)`, top: z, borderColor: t.color, color: t.color },
-            title: typeof t.label == "string" ? t.label : void 0,
+            style: { left: `calc(${r}% + ${A}px)`, top: z, borderColor: e.color, color: e.color },
+            title: typeof e.label == "string" ? e.label : void 0,
             role: "note",
-            children: t.label
+            children: e.label
           }
         )
       ] }) : null
-    ] }, t.id);
+    ] }, e.id);
   }) });
-}, B = ({ intervals: s, highlightedDate: c }) => /* @__PURE__ */ e(
+}, q = ({ intervals: l, highlightedDate: s }) => /* @__PURE__ */ t(
   "div",
   {
     "aria-hidden": "true",
     className: "mtx-pointer-events-none mtx-absolute mtx-inset-0 mtx-grid",
-    style: { gridTemplateColumns: `repeat(${s.length}, minmax(0, 1fr))` },
-    children: s.map((f, d) => /* @__PURE__ */ e(
+    style: { gridTemplateColumns: `repeat(${l.length}, minmax(0, 1fr))` },
+    children: l.map((u, c) => /* @__PURE__ */ t(
       "div",
       {
-        className: y(
+        className: v(
           "mtx-border-l mtx-border-gray-200",
-          d === s.length - 1 && "mtx-border-r",
-          I(f, c) && "mtx-bg-gray-50"
+          c === l.length - 1 && "mtx-border-r",
+          V(u, s) && "mtx-bg-gray-50"
         )
       },
-      f.start.toISOString()
+      u.start.toISOString()
     ))
   }
-), ye = ({ intervals: s, groups: c, highlightedDate: f, nameColumnHeader: d, nameColumnWidth: h, headerHeight: t }) => /* @__PURE__ */ n("div", { className: "mtx-bg-primary-50", role: "rowgroup", children: [
-  /* @__PURE__ */ n(
+), yt = ({ intervals: l, groups: s, highlightedDate: u, nameColumnHeader: c, nameColumnWidth: f, headerHeight: e }) => /* @__PURE__ */ o("div", { className: "mtx-bg-primary-50", role: "rowgroup", children: [
+  /* @__PURE__ */ o(
     "div",
     {
       className: "mtx-grid mtx-border-b mtx-border-gray-200",
-      style: { gridTemplateColumns: `${h}px repeat(${s.length}, minmax(0, 1fr))`, height: t / 2 },
+      style: { gridTemplateColumns: `${f}px repeat(${l.length}, minmax(0, 1fr))`, height: e / 2 },
       role: "row",
       children: [
-        /* @__PURE__ */ e(
+        /* @__PURE__ */ t(
           "div",
           {
             className: "mtx-sticky mtx-left-0 mtx-z-20 mtx-flex mtx-items-center mtx-border-b mtx-border-r mtx-border-gray-200 mtx-bg-primary-50 mtx-px-4 mtx-text-xs mtx-font-semibold mtx-text-text-500",
-            style: { gridColumn: 1, height: t },
+            style: { gridColumn: 1, height: e },
             role: "columnheader",
             "aria-colindex": 1,
             "aria-rowspan": 2,
-            children: d
+            children: c
           }
         ),
-        c.map((r) => /* @__PURE__ */ e(
+        s.map((r) => /* @__PURE__ */ t(
           "div",
           {
             className: "mtx-flex mtx-items-center mtx-justify-center mtx-border-l mtx-border-gray-200 mtx-text-xs mtx-font-medium mtx-text-text-500 mtx-text-center",
-            style: { gridColumn: `${r.startIndex + 2} / span ${r.intervalCount}`, paddingBottom: t / 2 },
+            style: { gridColumn: `${r.startIndex + 2} / span ${r.intervalCount}`, paddingBottom: e / 2 },
             role: "columnheader",
             "aria-colindex": r.startIndex + 2,
             "aria-colspan": r.intervalCount,
@@ -137,23 +137,23 @@ const he = {
       ]
     }
   ),
-  /* @__PURE__ */ n(
+  /* @__PURE__ */ o(
     "div",
     {
       className: "mtx-grid",
-      style: { gridTemplateColumns: `${h}px repeat(${s.length}, minmax(0, 1fr))`, height: t / 2 },
+      style: { gridTemplateColumns: `${f}px repeat(${l.length}, minmax(0, 1fr))`, height: e / 2 },
       role: "row",
       children: [
-        /* @__PURE__ */ e("div", { "aria-hidden": "true" }),
-        s.map((r, i) => /* @__PURE__ */ e(
+        /* @__PURE__ */ t("div", { "aria-hidden": "true" }),
+        l.map((r, n) => /* @__PURE__ */ t(
           "div",
           {
-            className: y(
+            className: v(
               "mtx-flex mtx-items-center mtx-justify-center mtx-border-l mtx-border-gray-200 mtx-px-2 mtx-text-center mtx-text-xs mtx-font-medium mtx-text-text-500",
-              I(r, f) && "mtx-bg-primary-100 mtx-font-semibold"
+              V(r, u) && "mtx-bg-primary-100 mtx-font-semibold"
             ),
             role: "columnheader",
-            "aria-colindex": i + 2,
+            "aria-colindex": n + 2,
             children: r.label
           },
           r.start.toISOString()
@@ -161,180 +161,203 @@ const he = {
       ]
     }
   )
-] }), ve = m.forwardRef(
+] }), I = ({ item: l, bar: s, intervals: u, formattedDateRange: c, renderBar: f }) => {
+  const e = s ?? l, r = !s || s.progress !== void 0, n = bt(e.progress), m = ht(e, u);
+  return m && m.width > 0 ? /* @__PURE__ */ o(
+    "div",
+    {
+      className: v(
+        "mtx-absolute mtx-top-1/2 mtx-z-10 mtx-h-6 -mtx-translate-y-1/2 mtx-rounded mtx-border mtx-border-secondary-300 mtx-bg-secondary-50",
+        e.barClassName
+      ),
+      style: { left: `${m.left}%`, width: `${m.width}%` },
+      title: r ? `${c}, ${n}% complete` : c,
+      role: r ? "progressbar" : "img",
+      "aria-label": s ? `${s.label}, ${c}` : typeof l.name == "string" ? l.name : void 0,
+      "aria-valuemin": r ? 0 : void 0,
+      "aria-valuemax": r ? 100 : void 0,
+      "aria-valuenow": r ? n : void 0,
+      children: [
+        /* @__PURE__ */ t(
+          "div",
+          {
+            className: v("mtx-bg-secondary-300 mtx-absolute -mtx-top-px -mtx-left-px mtx-h-[inherit] mtx-rounded-l", e.progressClassName),
+            style: { width: `${n}%` },
+            "aria-hidden": "true"
+          }
+        ),
+        /* @__PURE__ */ t(
+          "div",
+          {
+            className: "mtx-absolute mtx-top-0 mtx-left-0 mtx-w-full mtx-text-center mtx-text-xs mtx-text-text-600 mtx-flex mtx-items-center mtx-h-full mtx-px-1",
+            children: f ? f(s ? { item: l, progress: n, bar: s } : { item: l, progress: n }) : /* @__PURE__ */ o("div", { className: "mtx-w-full mtx-flex mtx-items-center mtx-justify-between mtx-gap-0.5 mtx-rounded-l mtx-overflow-hidden", children: [
+              /* @__PURE__ */ t("span", { className: "mtx-truncate mtx-font-semibold mtx-block", children: s?.label ?? "Progress" }),
+              r ? /* @__PURE__ */ o("strong", { className: "mtx-block mtx-text-xs", children: [
+                n,
+                "%"
+              ] }) : null
+            ] })
+          }
+        )
+      ]
+    }
+  ) : null;
+}, Nt = x.forwardRef(
   ({
-    items: s,
-    view: c,
-    defaultView: f = "quarter",
-    views: d = ["week", "month", "quarter"],
-    viewLabels: h,
-    onViewChange: t,
+    items: l,
+    view: s,
+    defaultView: u = "quarter",
+    views: c = ["week", "month", "quarter"],
+    viewLabels: f,
+    onViewChange: e,
     startDate: r,
-    endDate: i,
-    markers: o = [],
+    endDate: n,
+    markers: m = [],
     highlightedDate: $,
-    locale: v = "en-US",
-    nameColumnWidth: a = 320,
-    minRowHeight: x = 56,
-    headerHeight: N = 64,
+    locale: p = "en-US",
+    nameColumnWidth: i = 320,
+    minRowHeight: d = 56,
+    headerHeight: y = 64,
     cellWidths: g,
-    nameColumnHeader: w = "Name",
-    addItemLabel: R = "New item",
-    onAddItem: u,
-    onRefresh: V,
-    showFullscreen: j = !0,
-    toolbarActions: H,
-    renderItem: k,
-    renderBar: P,
-    formatDateRange: K,
-    className: U,
-    "aria-label": G = "Gantt chart",
-    ...Q
-  }, J) => {
-    const L = m.useRef(null), [X, Y] = m.useState(!1), [Z, ee] = m.useState(f), E = c ?? Z, C = m.useMemo(() => xe(s, r, i), [i, s, r]), p = m.useMemo(() => ce(C.start, C.end, E, v), [E, v, C.end, C.start]), _ = m.useMemo(() => $ === null ? null : W($ ?? /* @__PURE__ */ new Date()), [$]), te = { ...he, ...h }, O = m.useMemo(
-      () => o.flatMap((l) => {
-        const M = W(l.date), b = M ? de(M, p.intervals) : null;
-        return b === null ? [] : [{ marker: l, left: b }];
+    nameColumnHeader: N = "Name",
+    addItemLabel: w = "New item",
+    onAddItem: b,
+    onRefresh: H,
+    showFullscreen: K = !0,
+    toolbarActions: U,
+    renderItem: B,
+    renderBar: D,
+    formatDateRange: Q,
+    className: J,
+    "aria-label": k = "Gantt chart",
+    ...X
+  }, Y) => {
+    const L = x.useRef(null), [Z, tt] = x.useState(!1), [et, rt] = x.useState(u), E = s ?? et, C = x.useMemo(() => dt(l, r, n), [n, l, r]), h = x.useMemo(() => ut(C.start, C.end, E, p), [E, p, C.end, C.start]), S = x.useMemo(() => $ === null ? null : G($ ?? /* @__PURE__ */ new Date()), [$]), lt = { ...pt, ...f }, P = x.useMemo(
+      () => m.flatMap((a) => {
+        const T = G(a.date), R = T ? ft(T, h.intervals) : null;
+        return R === null ? [] : [{ marker: a, left: R }];
       }),
-      [o, p.intervals]
-    ), re = g?.[E] ?? ge[E], F = p.intervals.length * re, le = a + F, ne = m.useCallback((l) => {
-      L.current = l, l && typeof document < "u" && Y(
-        document.fullscreenEnabled !== !1 && typeof l.requestFullscreen == "function" && typeof document.exitFullscreen == "function"
+      [m, h.intervals]
+    ), nt = g?.[E] ?? gt[E], _ = h.intervals.length * nt, st = i + _, mt = x.useCallback((a) => {
+      L.current = a, a && typeof document < "u" && tt(
+        document.fullscreenEnabled !== !1 && typeof a.requestFullscreen == "function" && typeof document.exitFullscreen == "function"
       );
     }, []);
-    m.useImperativeHandle(J, () => L.current);
-    const se = (l) => {
-      c === void 0 && ee(l), t?.(l);
-    }, ae = () => {
+    x.useImperativeHandle(Y, () => L.current);
+    const at = (a) => {
+      s === void 0 && rt(a), e?.(a);
+    }, ot = () => {
       !L.current || typeof document > "u" || (document.fullscreenElement === L.current ? document.exitFullscreen().catch(() => {
       }) : L.current.requestFullscreen().catch(() => {
       }));
     };
-    return /* @__PURE__ */ n(
+    return /* @__PURE__ */ o(
       "div",
       {
-        ref: ne,
-        className: y("mtx-overflow-hidden mtx-rounded-lg mtx-border mtx-border-gray-200 mtx-bg-gray-0 mtx-[font-family:DMSans]", U),
-        "aria-label": G,
-        ...Q,
+        ref: mt,
+        className: v("mtx-overflow-hidden mtx-rounded-lg mtx-border mtx-border-gray-200 mtx-bg-gray-0 mtx-[font-family:DMSans]", J),
+        "aria-label": k,
+        ...X,
         children: [
-          /* @__PURE__ */ e(
-            ie,
+          /* @__PURE__ */ t(
+            ct,
             {
               activeView: E,
-              views: d,
-              viewLabels: te,
-              onViewChange: se,
-              onRefresh: V,
-              onToggleFullscreen: j && X ? ae : void 0,
-              toolbarActions: H
+              views: c,
+              viewLabels: lt,
+              onViewChange: at,
+              onRefresh: H,
+              onToggleFullscreen: K && Z ? ot : void 0,
+              toolbarActions: U
             }
           ),
-          /* @__PURE__ */ e("div", { className: "mtx-overflow-auto", children: /* @__PURE__ */ n("div", { style: { minWidth: le }, role: "table", "aria-label": G, children: [
-            /* @__PURE__ */ e(
-              ye,
+          /* @__PURE__ */ t("div", { className: "mtx-overflow-auto", children: /* @__PURE__ */ o("div", { style: { minWidth: st }, role: "table", "aria-label": k, children: [
+            /* @__PURE__ */ t(
+              yt,
               {
-                intervals: p.intervals,
-                groups: p.groups,
-                highlightedDate: _,
-                nameColumnHeader: w,
-                nameColumnWidth: a,
-                headerHeight: N
+                intervals: h.intervals,
+                groups: h.groups,
+                highlightedDate: S,
+                nameColumnHeader: N,
+                nameColumnWidth: i,
+                headerHeight: y
               }
             ),
-            u ? /* @__PURE__ */ n("div", { className: "mtx-grid", style: { gridTemplateColumns: `${a}px minmax(${F}px, 1fr)` }, role: "row", children: [
-              /* @__PURE__ */ e(
+            b ? /* @__PURE__ */ o("div", { className: "mtx-grid", style: { gridTemplateColumns: `${i}px minmax(${_}px, 1fr)` }, role: "row", children: [
+              /* @__PURE__ */ t(
                 "div",
                 {
                   className: "mtx-sticky mtx-left-0 mtx-z-30 mtx-flex mtx-items-center mtx-border-b mtx-border-r mtx-border-gray-200 mtx-bg-gray-0 mtx-px-2",
-                  style: { minHeight: x },
+                  style: { minHeight: d },
                   role: "cell",
-                  children: /* @__PURE__ */ n(
+                  children: /* @__PURE__ */ o(
                     "button",
                     {
                       type: "button",
                       className: "mtx-inline-flex mtx-items-center mtx-gap-2 mtx-text-xs mtx-font-medium mtx-text-primary hover:mtx-text-primary-700 focus-visible:mtx-outline-none focus-visible:mtx-ring focus-visible:mtx-ring-primary-300",
-                      onClick: u,
+                      onClick: b,
                       children: [
-                        /* @__PURE__ */ e(oe, { className: "mtx-h-4 mtx-w-4" }),
-                        R
+                        /* @__PURE__ */ t(xt, { className: "mtx-h-4 mtx-w-4" }),
+                        w
                       ]
                     }
                   )
                 }
               ),
-              /* @__PURE__ */ n("div", { className: "mtx-relative mtx-border-b mtx-border-gray-200", style: { minHeight: x }, role: "cell", children: [
-                /* @__PURE__ */ e(B, { intervals: p.intervals, highlightedDate: _ }),
-                /* @__PURE__ */ e(q, { markers: O, showLabels: !0 })
+              /* @__PURE__ */ o("div", { className: "mtx-relative mtx-border-b mtx-border-gray-200", style: { minHeight: d }, role: "cell", children: [
+                /* @__PURE__ */ t(q, { intervals: h.intervals, highlightedDate: S }),
+                /* @__PURE__ */ t(W, { markers: P, showLabels: !0 })
               ] })
             ] }) : null,
-            /* @__PURE__ */ e("div", { role: "rowgroup", children: s.map((l, M) => {
-              const b = ue(l.progress), T = fe(l, p.intervals), A = K?.(l) ?? be(l, v);
-              return /* @__PURE__ */ n(
+            /* @__PURE__ */ t("div", { role: "rowgroup", children: l.map((a, T) => {
+              const R = Q?.(a) ?? O(a, p), j = /* @__PURE__ */ t(I, { item: a, intervals: h.intervals, formattedDateRange: R, renderBar: D });
+              return /* @__PURE__ */ o(
                 "div",
                 {
                   className: "mtx-grid",
-                  style: { gridTemplateColumns: `${a}px minmax(${F}px, 1fr)` },
+                  style: { gridTemplateColumns: `${i}px minmax(${_}px, 1fr)` },
                   role: "row",
                   children: [
-                    /* @__PURE__ */ e(
+                    /* @__PURE__ */ t(
                       "div",
                       {
                         className: "mtx-sticky mtx-left-0 mtx-z-30 mtx-flex mtx-items-center mtx-border-b mtx-border-r mtx-border-gray-200 mtx-bg-gray-0 mtx-px-2",
-                        style: { minHeight: x },
+                        style: { minHeight: d },
                         role: "rowheader",
-                        children: k ? k({ item: l, formattedDateRange: A }) : /* @__PURE__ */ n("div", { className: "mtx-flex mtx-w-full mtx-min-w-0 mtx-items-center mtx-justify-between mtx-gap-3", children: [
-                          /* @__PURE__ */ e("span", { className: "mtx-truncate mtx-text-xs mtx-font-semibold mtx-text-text-500", children: l.name }),
-                          /* @__PURE__ */ e("span", { className: "mtx-shrink-0 mtx-text-xs mtx-text-text-300", children: A })
+                        children: B ? B({ item: a, formattedDateRange: R }) : /* @__PURE__ */ o("div", { className: "mtx-flex mtx-w-full mtx-min-w-0 mtx-items-center mtx-justify-between mtx-gap-3", children: [
+                          /* @__PURE__ */ t("span", { className: "mtx-truncate mtx-text-xs mtx-font-semibold mtx-text-text-500", children: a.name }),
+                          /* @__PURE__ */ t("span", { className: "mtx-shrink-0 mtx-text-xs mtx-text-text-300", children: R })
                         ] })
                       }
                     ),
-                    /* @__PURE__ */ n("div", { className: "mtx-relative mtx-border-b mtx-border-gray-200", style: { minHeight: x }, role: "cell", children: [
-                      /* @__PURE__ */ e(B, { intervals: p.intervals, highlightedDate: _ }),
-                      /* @__PURE__ */ e(q, { markers: O, showLabels: !u && M === 0 }),
-                      T && T.width > 0 ? /* @__PURE__ */ n(
-                        "div",
-                        {
-                          className: y(
-                            "mtx-absolute mtx-top-1/2 mtx-z-10 mtx-h-6 -mtx-translate-y-1/2 mtx-overflow-hidden mtx-rounded mtx-border-r-2 mtx-border-secondary-800 mtx-bg-secondary-200",
-                            l.barClassName
-                          ),
-                          style: { left: `${T.left}%`, width: `${T.width}%` },
-                          title: `${A}, ${b}% complete`,
-                          role: "progressbar",
-                          "aria-valuemin": 0,
-                          "aria-valuemax": 100,
-                          "aria-valuenow": b,
-                          children: [
-                            /* @__PURE__ */ e(
-                              "div",
+                    /* @__PURE__ */ o(
+                      "div",
+                      {
+                        className: "mtx-relative mtx-flex mtx-flex-col mtx-justify-center mtx-border-b mtx-border-gray-200",
+                        style: { minHeight: d },
+                        role: "cell",
+                        children: [
+                          /* @__PURE__ */ t(q, { intervals: h.intervals, highlightedDate: S }),
+                          /* @__PURE__ */ t(W, { markers: P, showLabels: !b && T === 0 }),
+                          a.additionalBars?.length ? /* @__PURE__ */ o("div", { className: "mtx-flex mtx-flex-col mtx-gap-1 mtx-py-2", children: [
+                            /* @__PURE__ */ t("div", { className: "mtx-relative mtx-h-6", children: j }),
+                            a.additionalBars.map((F) => /* @__PURE__ */ t("div", { className: "mtx-relative mtx-h-6", children: /* @__PURE__ */ t(
+                              I,
                               {
-                                className: y("mtx-h-full mtx-bg-secondary-500", l.progressClassName),
-                                style: { width: `${b}%` },
-                                "aria-hidden": "true"
+                                item: a,
+                                bar: F,
+                                intervals: h.intervals,
+                                formattedDateRange: O(F, p),
+                                renderBar: D
                               }
-                            ),
-                            /* @__PURE__ */ e(
-                              "div",
-                              {
-                                className: "mtx-absolute mtx-top-1/2 mtx-min-w-max -mtx-translate-x-1/2 -mtx-translate-y-1/2 mtx-text-center mtx-text-xs mtx-text-text-600",
-                                style: { left: `clamp(3rem, ${b / 2}%, calc(100% - 3rem))` },
-                                children: P ? P({ item: l, progress: b }) : /* @__PURE__ */ n("div", { className: "mtx-flex mtx-items-center mtx-gap-0.5", children: [
-                                  /* @__PURE__ */ e("span", { className: "mtx-block", children: "Progress" }),
-                                  /* @__PURE__ */ n("strong", { className: "mtx-block mtx-text-xs", children: [
-                                    b,
-                                    "%"
-                                  ] })
-                                ] })
-                              }
-                            )
-                          ]
-                        }
-                      ) : null
-                    ] })
+                            ) }, F.id))
+                          ] }) : j
+                        ]
+                      }
+                    )
                   ]
                 },
-                l.id
+                a.id
               );
             }) })
           ] }) })
@@ -343,8 +366,8 @@ const he = {
     );
   }
 );
-ve.displayName = "GanttChart";
+Nt.displayName = "GanttChart";
 export {
-  ve as GanttChart
+  Nt as GanttChart
 };
 //# sourceMappingURL=ganttchart.es.js.map

@@ -23,12 +23,12 @@ declare const createTimeline: (rangeStart: Date, rangeEnd: Date, view: GanttView
     groups: TimelineGroup[];
 };
 declare const getMarkerPosition: (date: Date, intervals: TimelineInterval[]) => number | null;
-declare const getBarPosition: (item: GanttItem, intervals: TimelineInterval[]) => {
+declare const getBarPosition: (item: Pick<GanttItem, "start" | "end">, intervals: TimelineInterval[]) => {
     left: number;
     width: number;
 } | null;
 declare const clampProgress: (progress?: number) => number;
-declare const formatDateRange: (item: GanttItem, locale: string) => string;
+declare const formatDateRange: (item: Pick<GanttItem, "start" | "end">, locale: string) => string;
 declare const includesDate: (interval: TimelineInterval, date: Date | null) => boolean;
 export { addDays, clampProgress, createTimeline, formatDateRange, getBarPosition, getMarkerPosition, getTimelineRange, includesDate, toDate, type TimelineGroup, type TimelineInterval, };
 //# sourceMappingURL=gantt-chart.utils.d.ts.map

@@ -1,5 +1,5 @@
 import { default as React } from 'react';
-import { GanttDate, GanttItem, GanttMarker, GanttRenderBarContext, GanttRenderItemContext, GanttView, GanttViewLabels } from './gantt-chart.types';
+import { GanttBar, GanttDate, GanttItem, GanttMarker, GanttRenderBarContext, GanttRenderItemContext, GanttView, GanttViewLabels } from './gantt-chart.types';
 type GanttChartProps = Omit<React.HTMLAttributes<HTMLDivElement>, "children"> & {
     /** Rows displayed by the chart. */
     items: GanttItem[];
@@ -45,7 +45,7 @@ type GanttChartProps = Omit<React.HTMLAttributes<HTMLDivElement>, "children"> & 
     toolbarActions?: React.ReactNode;
     /** Replaces the default item-name and date-range content. */
     renderItem?: (context: GanttRenderItemContext) => React.ReactNode;
-    /** Replaces the default progress label inside a bar. */
+    /** Replaces the default label inside each bar. */
     renderBar?: (context: GanttRenderBarContext) => React.ReactNode;
     /** Replaces the compact date range shown alongside each item. */
     formatDateRange?: (item: GanttItem) => string;
@@ -97,12 +97,12 @@ declare const GanttChart: React.ForwardRefExoticComponent<Omit<React.HTMLAttribu
     toolbarActions?: React.ReactNode;
     /** Replaces the default item-name and date-range content. */
     renderItem?: (context: GanttRenderItemContext) => React.ReactNode;
-    /** Replaces the default progress label inside a bar. */
+    /** Replaces the default label inside each bar. */
     renderBar?: (context: GanttRenderBarContext) => React.ReactNode;
     /** Replaces the compact date range shown alongside each item. */
     formatDateRange?: (item: GanttItem) => string;
     /** Accessible label for the chart. */
     "aria-label"?: string;
 } & React.RefAttributes<HTMLDivElement>>;
-export { GanttChart, type GanttChartProps, type GanttDate, type GanttItem, type GanttMarker, type GanttRenderBarContext, type GanttRenderItemContext, type GanttView, };
+export { GanttChart, type GanttBar, type GanttChartProps, type GanttDate, type GanttItem, type GanttMarker, type GanttRenderBarContext, type GanttRenderItemContext, type GanttView, };
 //# sourceMappingURL=GanttChart.d.ts.map
