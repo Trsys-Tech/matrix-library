@@ -74,8 +74,6 @@ function DataTableContentInner<T extends object>(
   const alignment = React.useContext(DataTableAlignmentContext);
   const detailId = React.useId();
   const viewportRef = React.useRef<HTMLDivElement>(null);
-  const headerViewportRef = React.useRef<HTMLDivElement>(null);
-  const synchronizedHeaderScroll = React.useRef<number | null>(null);
   const contentRef = React.useRef<HTMLDivElement>(null);
   const [viewportWidth, setViewportWidth] = React.useState(0);
   const [printing, setPrinting] = React.useState(false);
@@ -93,6 +91,8 @@ function DataTableContentInner<T extends object>(
   }, []);
   const isPrinting = printing || domLayout === "print";
   const naturalHeight = isPrinting || domLayout === "autoHeight";
+  const viewportOverflow = naturalHeight ? "visible" : (containerStyle?.overflow ?? "auto");
+  const viewportOverflowX = isPrinting ? "visible" : suppressHorizontalScroll ? "hidden" : containerStyle?.overflowX;
   const searchText = quickFilterText ?? tableOptions?.state?.globalFilter ?? (hasSearch ? search : initialSearch);
   const showCheckboxes = !!rowSelection && rowSelection.checkboxes !== false && !isPrinting;
   const showExpanders = !!renderSubComponent && !isPrinting;
@@ -135,11 +135,22 @@ function DataTableContentInner<T extends object>(
   const bottomRows = table.getBottomRows();
   const pinnedIds = new Set([...topRows, ...bottomRows].map(row => row.id));
   const centerRows = (isPrinting ? table.getPrePaginatedRowModel().rows : table.getRowModel().rows).filter(row => !pinnedIds.has(row.id));
+  const hasRows = centerRows.length + topRows.length + bottomRows.length + pinnedTopRowData.length + pinnedBottomRowData.length > 0;
+  const overlayRows = loading && (!naturalHeight || hasRows);
+  const { pageIndex, pageSize } = table.state.pagination;
+  const setRowGroupRef = React.useCallback(
+    (element: HTMLDivElement | null) => {
+      if (element) element.inert = loading;
+    },
+    [loading],
+  );
   const isDetailExpanded = (row: DataTableRow<T>) => !!renderSubComponent && row.getCanExpand() && row.getIsExpanded();
   // Detail panels can have arbitrary height. Resume fixed-height virtualization when all visible panels close.
   const hasExpandedDetails = [...topRows, ...centerRows, ...bottomRows].some(isDetailExpanded);
   const useVirtualRows = virtualize && !naturalHeight && !hasExpandedDetails;
   const topHeight = (topRows.length + pinnedTopRowData.length) * rowHeight;
+  const bottomHeight = (bottomRows.length + pinnedBottomRowData.length) * rowHeight;
+  const scrollMargin = headerHeight + topHeight;
   // This renderer opts out of React Compiler above; Virtual exposes a mutable measurement instance.
   // eslint-disable-next-line react-hooks/incompatible-library
   const virtualizer = useVirtualizer({
@@ -148,7 +159,9 @@ function DataTableContentInner<T extends object>(
     estimateSize: () => rowHeight,
     getItemKey: index => centerRows[index].id,
     overscan,
-    scrollMargin: topHeight,
+    scrollMargin,
+    scrollPaddingStart: scrollMargin,
+    scrollPaddingEnd: bottomHeight,
     enabled: useVirtualRows,
     useFlushSync: false,
   });
@@ -162,6 +175,7 @@ function DataTableContentInner<T extends object>(
     rowIndices,
     sourcesById,
     useVirtualRows,
+    loading,
     pagination,
     serverPagination: tableOptions?.manualPagination === true,
   });
@@ -174,6 +188,7 @@ function DataTableContentInner<T extends object>(
     rowIndices,
     sourcesById,
     useVirtualRows,
+    loading,
     pagination,
     serverPagination: tableOptions?.manualPagination === true,
   };
@@ -223,10 +238,16 @@ function DataTableContentInner<T extends object>(
       viewports.delete(element);
     };
   }, [alignment?.viewports]);
-  React.useEffect(() => {
-    if (editRef.current && sourcesById.get(editRef.current.rowId) !== editRef.current.source) {
+  React.useLayoutEffect(() => {
+    const session = editRef.current;
+    if (
+      session &&
+      (loading || pageIndex !== session.pageIndex || pageSize !== session.pageSize || sourcesById.get(session.rowId) !== session.source)
+    ) {
       api.stopEditing(true);
     }
+  }, [api, loading, pageIndex, pageSize, sourcesById]);
+  React.useEffect(() => {
     setPatches(previous => {
       const entries = Object.entries(previous).filter(([id, patch]) => sourcesById.get(id) === patch.source);
       return entries.length === Object.keys(previous).length ? previous : Object.fromEntries(entries);
@@ -420,56 +441,21 @@ function DataTableContentInner<T extends object>(
           aria-rowcount={displayedRowCount + 1}
           aria-colcount={visibleColumns.length + (showCheckboxes ? 1 : 0) + (showExpanders ? 1 : 0)}
           aria-multiselectable={rowSelection?.mode === "multiRow" || undefined}
-          className="mtx-flex mtx-min-h-0 mtx-flex-1 mtx-flex-col"
+          className="mtx-relative mtx-isolate mtx-flex mtx-min-h-0 mtx-flex-1 mtx-flex-col"
         >
-          <div className="mtx-shrink-0 mtx-bg-primary-50">
-            <div
-              ref={headerViewportRef}
-              style={{ overflow: isPrinting ? "visible" : "hidden", width: isPrinting ? "100%" : viewportWidth || "100%" }}
-              onScroll={event => {
-                const synchronized = synchronizedHeaderScroll.current === event.currentTarget.scrollLeft;
-                synchronizedHeaderScroll.current = null;
-                if (synchronized) return;
-                if (!isPrinting && viewportRef.current) viewportRef.current.scrollLeft = event.currentTarget.scrollLeft;
-              }}
-            >
-              <DataTableHeader
-                {...{
-                  table,
-                  api,
-                  headerHeight,
-                  totalWidth,
-                  isPrinting,
-                  showExpanders,
-                  expanderWidth,
-                  showCheckboxes,
-                  rowSelection,
-                  selectionRows,
-                  selectedInScope,
-                  visibleColumns,
-                  definitionsById,
-                  columnStyle,
-                  widths,
-                }}
-              />
-            </div>
-          </div>
           <div
             ref={viewportRef}
             data-data-table-viewport=""
             className="mtx-relative mtx-min-h-0 mtx-flex-1 mtx-rounded-b-lg"
             style={{
+              scrollPaddingTop: isPrinting ? undefined : scrollMargin,
+              scrollPaddingBottom: isPrinting ? undefined : bottomHeight,
               ...containerStyle,
-              overflow: naturalHeight ? "visible" : (containerStyle?.overflow ?? "auto"),
-              overflowX: isPrinting ? "visible" : suppressHorizontalScroll ? "hidden" : containerStyle?.overflowX,
+              overflow: viewportOverflow,
+              overflowX: viewportOverflowX,
             }}
             onScroll={event => {
               const viewport = event.currentTarget;
-              const header = headerViewportRef.current;
-              if (header && header.scrollLeft !== viewport.scrollLeft) {
-                header.scrollLeft = viewport.scrollLeft;
-                synchronizedHeaderScroll.current = header.scrollLeft;
-              }
               const synchronized = alignment?.synchronizedScrolls.current.get(viewport) === viewport.scrollLeft;
               alignment?.synchronizedScrolls.current.delete(viewport);
               if (alignment && !isPrinting && !synchronized)
@@ -481,23 +467,47 @@ function DataTableContentInner<T extends object>(
                 }
             }}
           >
+            <DataTableHeader
+              {...{
+                table,
+                api,
+                headerHeight,
+                totalWidth,
+                isPrinting,
+                loading,
+                showExpanders,
+                expanderWidth,
+                showCheckboxes,
+                rowSelection,
+                selectionRows,
+                selectedInScope,
+                visibleColumns,
+                definitionsById,
+                columnStyle,
+                widths,
+              }}
+            />
             {(topRows.length > 0 || pinnedTopRowData.length > 0) && (
               <div
                 role="rowgroup"
+                ref={setRowGroupRef}
                 className="mtx-sticky mtx-z-20"
-                style={{ top: isPrinting ? undefined : 0, position: isPrinting ? "relative" : "sticky" }}
+                style={{ top: isPrinting ? undefined : headerHeight, position: isPrinting ? "relative" : "sticky" }}
               >
                 {pinnedTopRowData.map((row, index) => renderRow(row, `__summary_top_${index}`, index, undefined, "top"))}
                 {topRows.map(row => renderRow(row.original, row.id, row.index, row, "top"))}
               </div>
             )}
-            <div role="rowgroup">
+            <div role="rowgroup" ref={setRowGroupRef}>
               {useVirtualRows ? (
                 <div style={{ height: virtualizer.getTotalSize(), position: "relative", width: totalWidth, minWidth: "100%" }}>
                   {virtualItems.map(item => {
                     const row = centerRows[item.index];
                     return (
-                      <div key={row.id} style={{ position: "absolute", top: 0, width: "100%", transform: `translateY(${item.start - topHeight}px)` }}>
+                      <div
+                        key={row.id}
+                        style={{ position: "absolute", top: 0, width: "100%", transform: `translateY(${item.start - scrollMargin}px)` }}
+                      >
                         {renderRow(row.original, row.id, rowIndices.get(row.original) ?? row.index, row)}
                       </div>
                     );
@@ -508,25 +518,34 @@ function DataTableContentInner<T extends object>(
               )}
             </div>
             {(bottomRows.length > 0 || pinnedBottomRowData.length > 0) && (
-              <div role="rowgroup" className="mtx-sticky mtx-bottom-0 mtx-z-20" style={{ position: isPrinting ? "relative" : "sticky" }}>
+              <div
+                ref={setRowGroupRef}
+                role="rowgroup"
+                className="mtx-sticky mtx-bottom-0 mtx-z-20"
+                style={{ position: isPrinting ? "relative" : "sticky" }}
+              >
                 {bottomRows.map(row => renderRow(row.original, row.id, row.index, row, "bottom"))}
                 {pinnedBottomRowData.map((row, index) => renderRow(row, `__summary_bottom_${index}`, index, undefined, "bottom"))}
               </div>
             )}
-            {(loading || (!centerRows.length && !topRows.length && !bottomRows.length)) && (
-              <div
-                role="status"
-                className={cn(
-                  "mtx-flex mtx-items-center mtx-justify-center mtx-p-6 mtx-text-text-300",
-                  loading && "mtx-absolute mtx-top-0 mtx-start-0 mtx-z-50 mtx-h-full mtx-w-full mtx-bg-gray-100/25",
-                )}
-              >
-                {loading ? loadingContent : emptyContent}
-              </div>
-            )}
           </div>
+          {(loading || (!centerRows.length && !topRows.length && !bottomRows.length)) && (
+            <div
+              role="status"
+              style={overlayRows ? { top: headerHeight } : undefined}
+              className={cn(
+                "mtx-flex mtx-items-center mtx-justify-center mtx-p-6 mtx-text-text-300",
+                loading && "mtx-bg-gray-300/25",
+                overlayRows && "mtx-absolute mtx-inset-x-0 mtx-bottom-0 mtx-z-30",
+              )}
+            >
+              {loading ? loadingContent : emptyContent}
+            </div>
+          )}
         </div>
-        {pagination && !isPrinting && <DataTablePagination table={table} paginationPageSizeSelector={paginationPageSizeSelector} />}
+        {pagination && !isPrinting && (
+          <DataTablePagination table={table} paginationPageSizeSelector={paginationPageSizeSelector} disabled={loading} />
+        )}
       </div>
     </DragDropProvider>
   );

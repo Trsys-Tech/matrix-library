@@ -4,6 +4,7 @@ import { afterEach, expect, test, vi } from "vitest";
 import { page } from "vitest/browser";
 import { DataTable, DataTableContent } from "../../src/components/data-table/DataTable";
 import { DataTableAlignment } from "../../src/components/data-table/DataTableAlignment";
+import { DataTableRefreshAction } from "../../src/components/data-table/DataTableActions";
 import type { DataTableApi } from "../../src/components/data-table/DataTable.types";
 
 let root: ReturnType<typeof createRoot>;
@@ -40,15 +41,30 @@ test("scrolls rows below the header while keeping columns aligned", async () => 
   const viewport = container.querySelector<HTMLElement>("[data-data-table-viewport]")!;
   const header = container.querySelector<HTMLElement>('[role="columnheader"][data-column-id="name"]')!;
   const headerTop = header.getBoundingClientRect().top;
-  expect(viewport.getBoundingClientRect().top).toBeCloseTo(header.parentElement!.getBoundingClientRect().bottom, 0);
+  const row = container.querySelector<HTMLElement>('[data-row-id="0"]')!;
+  const cell = row.querySelector<HTMLElement>('[data-column-id="name"]')!;
+  const grid = viewport.closest('[role="grid"]')!;
+  const horizontalGaps: number[] = [];
+  const measureAlignment = () => horizontalGaps.push(header.getBoundingClientRect().left - cell.getBoundingClientRect().left);
+  grid.addEventListener("scroll", measureAlignment, true);
+  await page
+    .getByRole("columnheader")
+    .first()
+    .wheel({ delta: { x: 10 }, times: 8 });
+  await expect.poll(() => viewport.scrollLeft).toBe(80);
+  grid.removeEventListener("scroll", measureAlignment, true);
+  expect(horizontalGaps.length).toBeGreaterThan(0);
+  expect(Math.max(...horizontalGaps.map(Math.abs))).toBeLessThan(1);
   viewport.scrollLeft = 100;
   viewport.scrollTop = 200;
-  await expect.poll(() => header.parentElement!.parentElement!.scrollLeft).toBe(100);
+  expect(header.getBoundingClientRect().left).toBeCloseTo(cell.getBoundingClientRect().left, 0);
   expect(header.getBoundingClientRect().top).toBeCloseTo(headerTop, 0);
   const pinned = container.querySelector<HTMLElement>('[data-row-id="__summary_top_0"]')!;
-  expect(pinned.getBoundingClientRect().top).toBeCloseTo(viewport.getBoundingClientRect().top, 0);
+  expect(pinned.getBoundingClientRect().top).toBeCloseTo(header.closest('[role="row"]')!.getBoundingClientRect().bottom, 0);
   ref.current!.scrollToRow(90, "start");
   await expect.element(page.getByRole("gridcell", { name: "Item 90", exact: true })).toBeInTheDocument();
+  const target = container.querySelector<HTMLElement>('[data-row-id="90"]')!;
+  expect(target.getBoundingClientRect().top).toBeCloseTo(pinned.getBoundingClientRect().bottom, 0);
 });
 
 test("does not feed synchronized scroll events back into an actively scrolling table", async () => {
@@ -69,14 +85,12 @@ test("does not feed synchronized scroll events back into an actively scrolling t
   );
   await expect.element(page.getByRole("gridcell", { name: "Item 0" })).toBeInTheDocument();
   const viewports = Array.from(container.querySelectorAll<HTMLDivElement>("[data-data-table-viewport]"));
-  const header = container.querySelector<HTMLElement>('[role="columnheader"]')!.parentElement!.parentElement!;
   viewports[0].scrollLeft = 50;
   viewports[0].dispatchEvent(new Event("scroll"));
   expect(viewports.map(viewport => viewport.scrollLeft)).toEqual([50, 50, 50]);
 
   // The source has moved again before the browser delivers the follower events.
   viewports[0].scrollLeft = 80;
-  header.dispatchEvent(new Event("scroll"));
   viewports[1].dispatchEvent(new Event("scroll"));
   expect(viewports[0].scrollLeft).toBe(80);
   viewports[0].dispatchEvent(new Event("scroll"));
@@ -130,6 +144,110 @@ test("keeps the API stable and cancels a draft when its source record is replace
   expect(ready).toHaveBeenCalledTimes(1);
   expect(cancel).toHaveBeenCalledWith(expect.objectContaining({ original: { id: 1, name: "Original" }, data: { id: 1, name: "Draft" } }));
   expect(api.table.getCoreRowModel().rows[0].original.name).toBe("Replacement");
+});
+
+test("discards drafts when navigating, resizing the page, or refreshing", async () => {
+  const ref = React.createRef<DataTableApi<Item>>();
+  const cancel = vi.fn();
+  const commit = vi.fn();
+  const refresh = vi.fn();
+  mount(
+    <DataTable style={{ height: 300 }}>
+      <DataTableRefreshAction onRefresh={refresh} />
+      <DataTableContent
+        ref={ref}
+        rowData={[
+          { id: 1, name: "First" },
+          { id: 2, name: "Second" },
+        ]}
+        columnDefs={columns}
+        pagination
+        paginationPageSize={1}
+        paginationPageSizeSelector={[1, 2]}
+        onEditCancel={cancel}
+        onEditCommit={commit}
+      />
+    </DataTable>,
+  );
+  const editor = page.getByRole("textbox", { name: "Edit Name" });
+  await expect.element(page.getByText("First", { exact: true })).toBeInTheDocument();
+  expect(ref.current!.startEditingRow(1)).toBe(true);
+  await editor.fill("First draft");
+  await page.getByRole("button", { name: "Next page" }).click();
+  await expect.element(page.getByText("Second", { exact: true })).toBeInTheDocument();
+  await expect.element(page.getByRole("button", { name: "Save", exact: true })).not.toBeInTheDocument();
+
+  expect(ref.current!.startEditingRow(2)).toBe(true);
+  await editor.fill("Second draft");
+  await page.getByRole("combobox", { name: "Rows per page" }).selectOptions("2");
+  await expect.element(editor).not.toBeInTheDocument();
+
+  expect(ref.current!.startEditingRow(1)).toBe(true);
+  await editor.fill("Refresh draft");
+  await page.getByRole("button", { name: "Refresh table" }).click();
+  await expect.element(editor).not.toBeInTheDocument();
+  expect(refresh).toHaveBeenCalledTimes(1);
+  expect(cancel.mock.calls.map(([event]) => event.data.name)).toEqual(["First draft", "Second draft", "Refresh draft"]);
+  expect(commit).not.toHaveBeenCalled();
+});
+
+test("confines loading to the rows and disables dimmed header and pagination controls", async () => {
+  const ref = React.createRef<DataTableApi<Item>>();
+  const cancel = vi.fn();
+  const rows = [{ id: 1, name: "First" }];
+  function Fixture() {
+    const [loading, setLoading] = React.useState(false);
+    return (
+      <>
+        <button onClick={() => setLoading(value => !value)}>Toggle loading</button>
+        <DataTable style={{ height: 300 }}>
+          <DataTableContent
+            ref={ref}
+            rowData={rows}
+            columnDefs={[{ ...columns[0], filter: "text", resizable: true }]}
+            onEditCancel={cancel}
+            rowSelection={{ mode: "multiRow" }}
+            pagination
+            tableOptions={{ manualPagination: true, rowCount: 100 }}
+            loading={loading}
+          />
+        </DataTable>
+      </>
+    );
+  }
+  mount(<Fixture />);
+  const sort = page.getByRole("button", { name: "Sort Name" });
+  const menu = page.getByRole("button", { name: "Column options name" });
+  const next = page.getByRole("button", { name: "Next page" });
+  const size = page.getByRole("combobox", { name: "Rows per page" });
+  const toggle = page.getByRole("button", { name: "Toggle loading" });
+  await expect.element(sort).toBeEnabled();
+  expect(ref.current!.startEditingRow(1)).toBe(true);
+  await page.getByRole("textbox", { name: "Edit Name" }).fill("Pending draft");
+  await menu.click();
+  await expect.element(page.getByRole("button", { name: "Apply" })).toBeInTheDocument();
+  await toggle.click();
+
+  await expect.element(page.getByRole("grid").getByRole("status")).toHaveTextContent("Loading…");
+  await expect.element(page.getByRole("button", { name: "Save", exact: true })).not.toBeInTheDocument();
+  await expect.element(page.getByRole("button", { name: "Apply" })).not.toBeInTheDocument();
+  await expect.element(page.getByRole("separator", { name: "Resize name" })).not.toBeInTheDocument();
+  for (const control of [sort, menu, next, size, page.getByRole("checkbox", { name: "Select all rows" })]) {
+    await expect.element(control).toBeDisabled();
+  }
+  const overlay = container.querySelector('[role="status"]')!.getBoundingClientRect();
+  const header = container.querySelector('[role="columnheader"][data-column-id="name"]')!.parentElement!;
+  const pagination = container.querySelector('[aria-label="Next page"]')!.parentElement!;
+  expect(overlay.top).toBeCloseTo(header.getBoundingClientRect().bottom, 0);
+  expect(overlay.bottom).toBeLessThanOrEqual(pagination.getBoundingClientRect().top);
+  expect(Number(getComputedStyle(header).opacity)).toBeLessThan(1);
+  expect(Number(getComputedStyle(pagination).opacity)).toBeLessThan(1);
+  expect(ref.current!.startEditingRow(1)).toBe(false);
+  expect(cancel).toHaveBeenCalledWith(expect.objectContaining({ data: { id: 1, name: "Pending draft" } }));
+  await toggle.click();
+  for (const control of [sort, menu, next, size]) {
+    await expect.element(control).toBeEnabled();
+  }
 });
 
 test("retains print layout until every print session is restored and restores scrolling once", async () => {
