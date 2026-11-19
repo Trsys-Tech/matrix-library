@@ -1,15 +1,16 @@
 import { jsxs as r, jsx as a, Fragment as g } from "react/jsx-runtime";
 import * as d from "react";
-import { Filter as q } from "@trsys-tech/matrix-icons";
-import { cn as N } from "./utils.es.js";
+import { Filter as N } from "@trsys-tech/matrix-icons";
+import { cn as T } from "./utils.es.js";
 import { Button as i } from "./button.es.js";
-import { Popover as T, PopoverTrigger as F, PopoverContent as w } from "./popover.es.js";
+import { Popover as F, PopoverTrigger as w, PopoverContent as E } from "./popover.es.js";
 import { filterType as b } from "./datatablemodel.es.js";
 import { dataTableInputClass as c } from "./datatablestyles.es.js";
-function V({
+function D({
   table: f,
   column: l,
-  definition: o
+  definition: o,
+  disabled: C
 }) {
   const [h, s] = d.useState(!1), [t, p] = d.useState({ operator: b(o) === "text" ? "contains" : "equals", value: "" }), n = b(o), v = f.getCoreRowModel().rows, x = d.useMemo(
     () => h && n === "select" ? o.filterOptions?.map((e) => typeof e == "string" ? { value: e, label: e } : e) ?? Array.from(
@@ -18,7 +19,7 @@ function V({
       )
     ).sort().map((e) => ({ value: e, label: e })) : [],
     [h, n, v, l.id, o.filterOptions]
-  ), C = n === "text" ? ["contains", "notContains", "equals", "notEqual", "startsWith", "endsWith", "blank", "notBlank"] : n === "select" ? ["equals", "notEqual", "blank", "notBlank"] : ["equals", "notEqual", "greaterThan", "greaterThanOrEqual", "lessThan", "lessThanOrEqual", "inRange", "blank", "notBlank"], k = {
+  ), k = n === "text" ? ["contains", "notContains", "equals", "notEqual", "startsWith", "endsWith", "blank", "notBlank"] : n === "select" ? ["equals", "notEqual", "blank", "notBlank"] : ["equals", "notEqual", "greaterThan", "greaterThanOrEqual", "lessThan", "lessThanOrEqual", "inRange", "blank", "notBlank"], y = {
     contains: "Contains",
     notContains: "Does not contain",
     equals: "Equals",
@@ -34,23 +35,24 @@ function V({
     notBlank: "Not blank"
   }, u = l.getCanPin(), m = l.getCanHide();
   return !l.getCanFilter() && !u && !m ? null : /* @__PURE__ */ r(
-    T,
+    F,
     {
       open: h,
       onOpenChange: (e) => {
         e && p(l.getFilterValue() ?? { operator: n === "text" ? "contains" : "equals", value: "" }), s(e);
       },
       children: [
-        /* @__PURE__ */ a(F, { asChild: !0, children: /* @__PURE__ */ a(
+        /* @__PURE__ */ a(w, { asChild: !0, children: /* @__PURE__ */ a(
           "button",
           {
             type: "button",
+            disabled: C,
             "aria-label": `Column options ${l.id}`,
-            className: N("mtx-shrink-0 mtx-rounded-sm mtx-p-0.5 hover:mtx-bg-primary-100/80", l.getIsFiltered() && "mtx-text-primary"),
-            children: /* @__PURE__ */ a(q, { className: "mtx-h-4.5 mtx-w-4.5" })
+            className: T("mtx-shrink-0 mtx-rounded-sm mtx-p-0.5 enabled:hover:mtx-bg-primary-100/80", l.getIsFiltered() && "mtx-text-primary"),
+            children: /* @__PURE__ */ a(N, { className: "mtx-h-4.5 mtx-w-4.5" })
           }
         ) }),
-        /* @__PURE__ */ r(w, { align: "end", className: "mtx-w-56 mtx-space-y-2 mtx-text-xs mtx-font-normal", children: [
+        /* @__PURE__ */ r(E, { align: "end", className: "mtx-w-56 mtx-space-y-2 mtx-text-xs mtx-font-normal", children: [
           l.getCanFilter() && /* @__PURE__ */ r(g, { children: [
             /* @__PURE__ */ r("label", { className: "mtx-block", children: [
               "Filter ",
@@ -62,7 +64,7 @@ function V({
                   className: c,
                   value: t.operator,
                   onChange: (e) => p({ ...t, operator: e.target.value }),
-                  children: C.map((e) => /* @__PURE__ */ a("option", { value: e, children: k[e] }, e))
+                  children: k.map((e) => /* @__PURE__ */ a("option", { value: e, children: y[e] }, e))
                 }
               )
             ] }),
@@ -76,7 +78,7 @@ function V({
                 children: [
                   /* @__PURE__ */ a("option", { value: "", children: "All" }),
                   t.value && !x.some((e) => e.value === t.value) && /* @__PURE__ */ a("option", { value: t.value, children: t.value }),
-                  x.map(({ value: e, label: y }) => /* @__PURE__ */ a("option", { value: e, children: y }, e))
+                  x.map(({ value: e, label: q }) => /* @__PURE__ */ a("option", { value: e, children: q }, e))
                 ]
               }
             ) : /* @__PURE__ */ a(
@@ -186,6 +188,6 @@ function V({
   );
 }
 export {
-  V as DataTableColumnMenu
+  D as DataTableColumnMenu
 };
 //# sourceMappingURL=datatablecolumnmenu.es.js.map

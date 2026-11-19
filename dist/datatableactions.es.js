@@ -1,4 +1,4 @@
-import { jsxs as C, jsx as t, Fragment as M } from "react/jsx-runtime";
+import { jsxs as w, jsx as t, Fragment as M } from "react/jsx-runtime";
 import * as o from "react";
 import { ElipsisVertical as P, Trashcan as U, Snowflake as _, Print as G, Refresh as H, CircleXmark as L, Magnifier as A } from "@trsys-tech/matrix-icons";
 import { cn as f } from "./utils.es.js";
@@ -7,45 +7,45 @@ import { IconButton as x } from "./iconbutton.es.js";
 import { TextField as W } from "./textfield.es.js";
 import { Checkbox as X } from "./checkbox.es.js";
 import { Popover as E, PopoverTrigger as F, PopoverContent as z } from "./popover.es.js";
-import { useDataTable as g } from "./datatablecontext.es.js";
-function et({
+import { useDataTable as g, DataTableContext as q } from "./datatablecontext.es.js";
+function at({
   value: r,
   defaultValue: n = "",
   onValueChange: i,
   defaultOpen: c = !1,
-  defaultOpenAutoFocus: l = !0,
+  defaultOpenAutoFocus: s = !0,
   placeholder: e = "Search…",
   label: a = "Search table",
   className: d,
   ...m
 }) {
-  const { api: u, search: h, setSearch: p } = g(), [N, B] = o.useState(n), [w, R] = o.useState(c), [y, k] = o.useState(!1), S = o.useRef(null), D = o.useRef(!0), b = o.useRef(null);
+  const { api: u, search: h, setSearch: p } = g(), [N, B] = o.useState(n), [C, R] = o.useState(c), [y, k] = o.useState(!1), T = o.useRef(null), D = o.useRef(!0), b = o.useRef(null);
   o.useEffect(
     () => () => {
       b.current && clearTimeout(b.current);
     },
     []
   ), o.useEffect(() => {
-    w && (!D.current || l) && S.current?.focus(), D.current = !1;
-  }, [w, l]);
-  const T = (s) => {
+    C && (!D.current || s) && T.current?.focus(), D.current = !1;
+  }, [C, s]);
+  const S = (l) => {
     if (i) {
-      r === void 0 && B(s), i(s);
+      r === void 0 && B(l), i(l);
       return;
     }
-    u ? u.table.setGlobalFilter(s) : p(s);
+    u ? u.table.setGlobalFilter(l) : p(l);
   }, V = () => {
-    k(!0), T(""), b.current && clearTimeout(b.current), b.current = setTimeout(() => {
+    k(!0), S(""), b.current && clearTimeout(b.current), b.current = setTimeout(() => {
       R(!1), k(!1), b.current = null;
     }, 200);
-  }, v = (s) => /* @__PURE__ */ t("div", { className: f("mtx-max-w-60", d), ...m, children: w || y ? /* @__PURE__ */ t(
+  }, v = (l) => /* @__PURE__ */ t("div", { className: f("mtx-max-w-60", d), ...m, children: C || y ? /* @__PURE__ */ t(
     W,
     {
-      ref: S,
+      ref: T,
       size: "sm",
-      className: f("mtx-relative mtx-h-7.5", w && !y && "mtx-animate-input-open", y && "mtx-animate-input-close"),
-      value: s,
-      onChange: (j) => T(j.target.value),
+      className: f("mtx-relative mtx-h-7.5", C && !y && "mtx-animate-input-open", y && "mtx-animate-input-close"),
+      value: l,
+      onChange: (j) => S(j.target.value),
       slotProps: { inputProps: { "aria-label": a, placeholder: e } },
       startAdornment: /* @__PURE__ */ t(
         x,
@@ -58,7 +58,7 @@ function et({
           children: /* @__PURE__ */ t(A, { className: "mtx-w-5 mtx-h-5" })
         }
       ),
-      endAdornment: s && /* @__PURE__ */ t(
+      endAdornment: l && /* @__PURE__ */ t(
         x,
         {
           type: "button",
@@ -66,21 +66,21 @@ function et({
           "aria-label": "Clear search",
           className: "mtx-p-0.5 mtx-w-6 mtx-h-6 mtx-border-none mtx-mx-1",
           onClick: () => {
-            T(""), S.current?.focus();
+            S(""), T.current?.focus();
           },
           children: /* @__PURE__ */ t(L, { className: "mtx-w-5 mtx-h-5" })
         }
       )
     }
   ) : /* @__PURE__ */ t(x, { type: "button", variant: "toolbar", "aria-label": a, className: "mtx-p-0.5 mtx-w-6 mtx-h-6 mtx-m-1", onClick: () => R(!0), children: /* @__PURE__ */ t(A, { className: "mtx-w-5 mtx-h-5" }) }) });
-  return i ? v(r ?? N) : u ? /* @__PURE__ */ t(u.table.Subscribe, { selector: (s) => s.globalFilter, children: (s) => v(String(s ?? "")) }) : v(h);
+  return i ? v(r ?? N) : u ? /* @__PURE__ */ t(u.table.Subscribe, { selector: (l) => l.globalFilter, children: (l) => v(String(l ?? "")) }) : v(h);
 }
-function at({
+function rt({
   freezeText: r = "Freeze",
   unFreezeText: n = "Unfreeze",
   position: i = "top",
   disabled: c,
-  onClick: l,
+  onClick: s,
   ...e
 }) {
   const { api: a, selectedCount: d, pinnedCount: m } = g();
@@ -93,15 +93,15 @@ function at({
       ...e,
       disabled: c || !a || !d && !m,
       onClick: (u) => {
-        a && (m ? a.table.setRowPinning({ top: [], bottom: [] }) : (a.pinRows(a.table.getSelectedRowIds(), i), a.deselectAll())), l?.(u);
+        a && (m ? a.table.setRowPinning({ top: [], bottom: [] }) : (a.pinRows(a.table.getSelectedRowIds(), i), a.deselectAll())), s?.(u);
       },
       children: m ? n : r
     }
   );
 }
-function rt({ onClick: r, children: n, disabled: i, onPrintError: c, className: l, ...e }) {
+function nt({ onClick: r, children: n, disabled: i, onPrintError: c, className: s, ...e }) {
   const { api: a } = g(), [d, m] = o.useState(!1), [u, h] = o.useState(!1);
-  return /* @__PURE__ */ C(M, { children: [
+  return /* @__PURE__ */ w(M, { children: [
     /* @__PURE__ */ t(
       x,
       {
@@ -109,7 +109,7 @@ function rt({ onClick: r, children: n, disabled: i, onPrintError: c, className: 
         variant: "toolbar",
         "aria-label": "Print table",
         ...e,
-        className: f("mtx-h-6 mtx-w-6 mtx-p-0.5", l),
+        className: f("mtx-h-6 mtx-w-6 mtx-p-0.5", s),
         disabled: i || d || !a,
         onClick: async (p) => {
           if (r?.(p), !(p.defaultPrevented || !a)) {
@@ -129,7 +129,8 @@ function rt({ onClick: r, children: n, disabled: i, onPrintError: c, className: 
     u && /* @__PURE__ */ t("span", { role: "alert", className: "mtx-text-danger", children: "Unable to print table" })
   ] });
 }
-function nt({ onRefresh: r, loading: n, children: i, disabled: c, className: l, ...e }) {
+function it({ onRefresh: r, loading: n, children: i, disabled: c, className: s, ...e }) {
+  const a = o.useContext(q);
   return /* @__PURE__ */ t(
     x,
     {
@@ -137,25 +138,27 @@ function nt({ onRefresh: r, loading: n, children: i, disabled: c, className: l, 
       variant: "toolbar",
       "aria-label": "Refresh table",
       ...e,
-      className: f("mtx-h-6 mtx-w-6 mtx-p-0.5", l),
+      className: f("mtx-h-6 mtx-w-6 mtx-p-0.5", s),
       disabled: c || n,
-      onClick: r,
+      onClick: () => {
+        a?.api?.stopEditing(!0), r();
+      },
       children: i ?? /* @__PURE__ */ t(H, { className: f("mtx-h-4.5 mtx-w-4.5", n && "mtx-animate-spin") })
     }
   );
 }
-function it({ onDelete: r, ...n }) {
+function st({ onDelete: r, ...n }) {
   return /* @__PURE__ */ t(I, { type: "button", variant: "danger", startIcon: /* @__PURE__ */ t(U, { className: "mtx-h-4.5 mtx-w-4.5" }), ...n, onClick: r });
 }
 function lt({ children: r, label: n = "More actions", ...i }) {
-  return /* @__PURE__ */ C(E, { children: [
+  return /* @__PURE__ */ w(E, { children: [
     /* @__PURE__ */ t(F, { asChild: !0, children: /* @__PURE__ */ t(x, { type: "button", variant: "toolbar", "aria-label": n, className: "mtx-h-6 mtx-w-6 mtx-p-0.5", children: /* @__PURE__ */ t(P, { className: "mtx-h-4.5 mtx-w-4.5" }) }) }),
     /* @__PURE__ */ t(z, { align: "end", ...i, children: r })
   ] });
 }
-function st({ children: r, disabled: n, className: i, ...c }) {
-  const { api: l } = g();
-  return /* @__PURE__ */ C(E, { children: [
+function ot({ children: r, disabled: n, className: i, ...c }) {
+  const { api: s } = g();
+  return /* @__PURE__ */ w(E, { children: [
     /* @__PURE__ */ t(F, { asChild: !0, children: /* @__PURE__ */ t(
       x,
       {
@@ -164,11 +167,11 @@ function st({ children: r, disabled: n, className: i, ...c }) {
         "aria-label": "Show or hide columns",
         ...c,
         className: f("mtx-h-6 mtx-w-6 mtx-p-0.5", i),
-        disabled: n || !l,
+        disabled: n || !s,
         children: r ?? /* @__PURE__ */ t(P, { className: "mtx-h-4.5 mtx-w-4.5" })
       }
     ) }),
-    /* @__PURE__ */ t(z, { align: "end", className: "mtx-w-56 mtx-space-y-2", children: l && /* @__PURE__ */ t(l.table.Subscribe, { selector: (e) => e.columnVisibility, children: () => l.table.getAllLeafColumns().filter((e) => !e.id.startsWith("__")).map((e) => /* @__PURE__ */ C("label", { className: "mtx-flex mtx-items-center mtx-gap-2 mtx-text-xs", children: [
+    /* @__PURE__ */ t(z, { align: "end", className: "mtx-w-56 mtx-space-y-2", children: s && /* @__PURE__ */ t(s.table.Subscribe, { selector: (e) => e.columnVisibility, children: () => s.table.getAllLeafColumns().filter((e) => !e.id.startsWith("__")).map((e) => /* @__PURE__ */ w("label", { className: "mtx-flex mtx-items-center mtx-gap-2 mtx-text-xs", children: [
       /* @__PURE__ */ t(
         X,
         {
@@ -182,12 +185,12 @@ function st({ children: r, disabled: n, className: i, ...c }) {
   ] });
 }
 export {
-  st as DataTableColumnsAction,
-  it as DataTableDeleteAction,
+  ot as DataTableColumnsAction,
+  st as DataTableDeleteAction,
   lt as DataTableExtraActions,
-  at as DataTableFreezeAction,
-  rt as DataTablePrintAction,
-  nt as DataTableRefreshAction,
-  et as DataTableSearchAction
+  rt as DataTableFreezeAction,
+  nt as DataTablePrintAction,
+  it as DataTableRefreshAction,
+  at as DataTableSearchAction
 };
 //# sourceMappingURL=datatableactions.es.js.map

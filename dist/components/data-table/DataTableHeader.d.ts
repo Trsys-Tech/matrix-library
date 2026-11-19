@@ -7,6 +7,7 @@ type DataTableHeaderProps<T extends object> = Pick<DataTableContentProps<T>, "ro
     headerHeight: number;
     totalWidth: number;
     isPrinting: boolean;
+    loading: boolean;
     showExpanders: boolean;
     expanderWidth: number;
     showCheckboxes: boolean;
@@ -17,6 +18,6 @@ type DataTableHeaderProps<T extends object> = Pick<DataTableContentProps<T>, "ro
     columnStyle: (column: Column<DataTableFeatures, T>, header?: boolean) => React.CSSProperties;
     widths: Map<string, number>;
 };
-export declare function DataTableHeader<T extends object>({ table, api, headerHeight, totalWidth, isPrinting, showExpanders, expanderWidth, showCheckboxes, rowSelection, selectionRows, selectedInScope, visibleColumns, definitionsById, columnStyle, widths, }: DataTableHeaderProps<T>): React.JSX.Element;
+export declare function DataTableHeader<T extends object>({ table, api, headerHeight, totalWidth, isPrinting, loading, showExpanders, expanderWidth, showCheckboxes, rowSelection, selectionRows, selectedInScope, visibleColumns, definitionsById, columnStyle, widths, }: DataTableHeaderProps<T>): React.JSX.Element;
 export {};
 //# sourceMappingURL=DataTableHeader.d.ts.map

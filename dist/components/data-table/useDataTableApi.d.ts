@@ -11,6 +11,7 @@ export type DataTableRuntime<T extends object> = {
     rowIndices: Map<T, number>;
     sourcesById: Map<string, T>;
     useVirtualRows: boolean;
+    loading: boolean;
     pagination: boolean;
     serverPagination: boolean;
 };

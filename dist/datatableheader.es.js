@@ -1,120 +1,129 @@
-import { jsxs as x, jsx as i } from "react/jsx-runtime";
-import { Checkbox as C } from "./checkbox.es.js";
-import { cn as f } from "./utils.es.js";
-import { DataTableColumnHeader as S } from "./datatablecolumnheader.es.js";
-import { DataTableColumnMenu as v } from "./datatablecolumnmenu.es.js";
-function I({
-  table: d,
-  api: h,
-  headerHeight: c,
-  totalWidth: b,
-  isPrinting: m,
-  showExpanders: y,
-  expanderWidth: n,
-  showCheckboxes: p,
-  rowSelection: o,
-  selectionRows: s,
+import { jsxs as n, jsx as s } from "react/jsx-runtime";
+import { Checkbox as D } from "./checkbox.es.js";
+import { cn as o } from "./utils.es.js";
+import { DataTableColumnHeader as R } from "./datatablecolumnheader.es.js";
+import { DataTableColumnMenu as j } from "./datatablecolumnmenu.es.js";
+import { useDataTableColumnResize as A } from "./usedatatablecolumnresize.es.js";
+function F({
+  table: m,
+  api: b,
+  headerHeight: y,
+  totalWidth: p,
+  isPrinting: d,
+  loading: r,
+  showExpanders: u,
+  expanderWidth: h,
+  showCheckboxes: k,
+  rowSelection: c,
+  selectionRows: x,
   selectedInScope: g,
-  visibleColumns: u,
-  definitionsById: k,
-  columnStyle: w,
-  widths: N
+  visibleColumns: w,
+  definitionsById: N,
+  columnStyle: C,
+  widths: z
 }) {
-  return /* @__PURE__ */ x(
+  const l = d || r, S = A(l);
+  return /* @__PURE__ */ n(
     "div",
     {
       role: "row",
-      className: "mtx-sticky mtx-top-0 mtx-z-30 mtx-flex mtx-rounded-t-[inherit] mtx-border-b mtx-border-gray-200 mtx-bg-primary-50 mtx-font-bold",
-      style: { height: c, width: b, minWidth: "100%", position: m ? "relative" : "sticky" },
+      className: o(
+        "mtx-sticky mtx-top-0 mtx-z-30 mtx-flex mtx-rounded-t-[inherit] mtx-border-b mtx-border-gray-200 mtx-bg-primary-50 mtx-font-bold",
+        r && "mtx-opacity-80"
+      ),
+      style: { height: y, width: p, minWidth: "100%", position: d ? "relative" : "sticky" },
       children: [
-        y && /* @__PURE__ */ i(
+        u && /* @__PURE__ */ s(
           "div",
           {
             role: "columnheader",
             "aria-label": "Row details",
             className: "mtx-sticky mtx-start-0 mtx-z-10 mtx-shrink-0 mtx-bg-primary-50",
-            style: { width: n }
+            style: { width: h }
           }
         ),
-        p && /* @__PURE__ */ i(
+        k && /* @__PURE__ */ s(
           "div",
           {
             role: "columnheader",
             className: "mtx-sticky mtx-start-0 mtx-z-10 mtx-flex mtx-shrink-0 mtx-items-center mtx-justify-center mtx-bg-primary-50",
-            style: { width: 44, insetInlineStart: n },
-            children: o?.mode === "multiRow" && /* @__PURE__ */ i(
-              C,
+            style: { width: 44, insetInlineStart: h },
+            children: c?.mode === "multiRow" && /* @__PURE__ */ s(
+              D,
               {
                 "aria-label": "Select all rows",
                 className: "mtx-bg-gray-0",
-                disabled: !s.length,
-                checked: s.length > 0 && g === s.length ? !0 : g > 0 ? "indeterminate" : !1,
+                disabled: r || !x.length,
+                checked: x.length > 0 && g === x.length ? !0 : g > 0 ? "indeterminate" : !1,
                 onCheckedChange: (e) => {
-                  e === !0 ? h.selectAll(o.selectAll) : d.setRowSelection(
-                    (t) => Object.fromEntries(Object.entries(t).filter(([l]) => !s.some((a) => a.id === l)))
+                  e === !0 ? b.selectAll(c.selectAll) : m.setRowSelection(
+                    (a) => Object.fromEntries(Object.entries(a).filter(([f]) => !x.some((i) => i.id === f)))
                   );
                 }
               }
             )
           }
         ),
-        u.map((e) => {
-          const t = k.get(e.id), l = d.getFlatHeaders().find((r) => r.column.id === e.id), a = e.getIsSorted();
-          return /* @__PURE__ */ x(
-            S,
+        w.map((e) => {
+          const a = N.get(e.id), f = m.getFlatHeaders().find((t) => t.column.id === e.id), i = e.getIsSorted();
+          return /* @__PURE__ */ n(
+            R,
             {
               columnId: e.id,
-              label: typeof t.headerName == "string" ? t.headerName : e.id,
+              label: typeof a.headerName == "string" ? a.headerName : e.id,
               region: e.getIsPinned(),
-              disabled: m,
-              "aria-sort": a === "asc" ? "ascending" : a === "desc" ? "descending" : "none",
-              className: f(
+              disabled: l,
+              "aria-sort": i === "asc" ? "ascending" : i === "desc" ? "descending" : "none",
+              className: o(
                 "mtx-relative mtx-flex mtx-min-w-0 mtx-items-center mtx-gap-1 mtx-px-3",
-                t.align === "end" && "mtx-flex-row-reverse"
+                a.align === "end" && "mtx-flex-row-reverse"
               ),
-              style: w(e, !0),
+              style: C(e, !0),
               children: [
-                /* @__PURE__ */ x(
+                /* @__PURE__ */ n(
                   "button",
                   {
                     type: "button",
                     "data-column-sort": "",
-                    disabled: m,
-                    "aria-disabled": !e.getCanSort() || void 0,
-                    onClick: (r) => {
-                      !r.defaultPrevented && e.getCanSort() && e.getToggleSortingHandler()?.(r);
+                    disabled: l,
+                    "aria-disabled": l || !e.getCanSort() || void 0,
+                    onClick: (t) => {
+                      !t.defaultPrevented && e.getCanSort() && e.getToggleSortingHandler()?.(t);
                     },
-                    className: f(
+                    className: o(
                       "mtx-flex mtx-min-w-0 mtx-flex-1 mtx-cursor-inherit mtx-items-center mtx-gap-1 mtx-text-start disabled:mtx-cursor-default",
-                      t.align === "end" && "mtx-flex-row-reverse mtx-text-end"
+                      a.align === "end" && "mtx-flex-row-reverse mtx-text-end"
                     ),
-                    "aria-label": `Sort ${typeof t.headerName == "string" ? t.headerName : e.id}`,
+                    "aria-label": `Sort ${typeof a.headerName == "string" ? a.headerName : e.id}`,
                     children: [
-                      /* @__PURE__ */ i("span", { className: "mtx-truncate", children: t.headerName ?? e.id }),
-                      a && /* @__PURE__ */ x("span", { "aria-hidden": "true", children: [
-                        a === "asc" ? "↑" : "↓",
-                        d.state.sorting.length > 1 ? e.getSortIndex() + 1 : ""
+                      /* @__PURE__ */ s("span", { className: "mtx-truncate", children: a.headerName ?? e.id }),
+                      i && /* @__PURE__ */ n("span", { "aria-hidden": "true", children: [
+                        i === "asc" ? "↑" : "↓",
+                        m.state.sorting.length > 1 ? e.getSortIndex() + 1 : ""
                       ] })
                     ]
                   }
                 ),
-                !m && /* @__PURE__ */ i(v, { table: d, column: e, definition: t }),
-                !m && e.getCanResize() && /* @__PURE__ */ i(
+                !d && /* @__PURE__ */ s(j, { table: m, column: e, definition: a, disabled: r }, String(r)),
+                !d && e.getCanResize() && /* @__PURE__ */ s(
                   "div",
                   {
                     role: "separator",
                     "data-column-drag-ignore": "",
                     "aria-label": `Resize ${e.id}`,
                     "aria-orientation": "vertical",
-                    tabIndex: 0,
-                    className: "mtx-absolute mtx-inset-y-3 mtx-end-0 mtx-w-2 mtx-cursor-col-resize mtx-touch-none after:mtx-bg-gray-400/70 after:mtx-w-0.5 after:mtx-h-full after:mtx-block after:mtx-absolute after:mtx-start-1/2 after:-mtx-translate-x-1/2",
-                    onMouseDown: l.getResizeHandler(),
-                    onTouchStart: l.getResizeHandler(),
-                    onDoubleClick: () => e.resetSize(),
-                    onKeyDown: (r) => {
-                      (r.key === "ArrowRight" || r.key === "ArrowLeft") && (r.preventDefault(), d.setColumnSizing((z) => ({
-                        ...z,
-                        [e.id]: (N.get(e.id) ?? e.getSize()) + (r.key === "ArrowRight" ? 10 : -10)
+                    "aria-disabled": r || void 0,
+                    tabIndex: r ? -1 : 0,
+                    className: o(
+                      "mtx-absolute mtx-inset-y-3 mtx-end-0 mtx-w-2 after:mtx-bg-gray-400/70 after:mtx-w-0.5 after:mtx-h-full after:mtx-block after:mtx-absolute after:mtx-start-1/2 after:-mtx-translate-x-1/2",
+                      !r && "mtx-cursor-col-resize mtx-touch-none"
+                    ),
+                    onPointerDown: (t) => S(f, t),
+                    onDoubleClick: r ? void 0 : () => e.resetSize(),
+                    onKeyDown: (t) => {
+                      !r && (t.key === "ArrowRight" || t.key === "ArrowLeft") && (t.preventDefault(), m.setColumnSizing((v) => ({
+                        ...v,
+                        [e.id]: (z.get(e.id) ?? e.getSize()) + (t.key === "ArrowRight" ? 10 : -10)
                       })));
                     }
                   }
@@ -129,6 +138,6 @@ function I({
   );
 }
 export {
-  I as DataTableHeader
+  F as DataTableHeader
 };
 //# sourceMappingURL=datatableheader.es.js.map
