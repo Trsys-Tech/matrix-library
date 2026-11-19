@@ -17,7 +17,7 @@ import {
   DataTableExtraActions,
 } from "./DataTableActions";
 import type { DataTableApi, DataTableColumnDef, DataTableEditorProps, DataTableFilter, DataTableState } from "./DataTable.types";
-import { matchesFilter } from "./dataTableModel";
+import { filterType, matchesFilter } from "./dataTableModel";
 import { Chip } from "../chip/Chip";
 
 const meta = {
@@ -29,48 +29,68 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-type Vehicle = { id: number; make: string; model: string; price: number; electric: boolean; date: string };
+type Vehicle = {
+  id: number;
+  make: string;
+  model: string;
+  price: number;
+  electric: boolean;
+  date: string;
+  bodyStyle: string;
+  color: string;
+  power: number | null;
+};
 type PriceType = "all" | "expensive" | "cheap";
 
 const rows: Vehicle[] = [
-  { id: 1, make: "Tesla", model: "Model Y", price: 64950, electric: true, date: "2026-10-01" },
-  { id: 2, make: "Ford", model: "F-Series", price: 33850, electric: false, date: "2026-10-02" },
-  { id: 3, make: "Toyota", model: "Corolla", price: 29600, electric: false, date: "2026-10-03" },
-  { id: 4, make: "Mercedes", model: "EQA", price: 48890, electric: true, date: "2026-10-04" },
-  { id: 5, make: "Fiat", model: "500", price: 15774, electric: false, date: "2026-10-05" },
-  { id: 6, make: "Nissan", model: "Juke", price: 20675, electric: false, date: "2026-10-06" },
-  { id: 11, make: "BMW", model: "i3", price: 44450, electric: true, date: "2026-10-06" },
-  { id: 12, make: "Renault", model: "ZOE", price: 32990, electric: true, date: "2026-11-06" },
-  { id: 13, make: "Peugeot", model: "e-208", price: 29900, electric: true, date: "2026-10-06" },
-  { id: 14, make: "Opel", model: "Corsa-e", price: 29900, electric: true, date: "2026-08-01" },
-  { id: 15, make: "Citroen", model: "C4", price: 29900, electric: true, date: "2026-10-06" },
-  { id: 16, make: "Mazda", model: "mtx-30", price: 33990, electric: true, date: "2026-07-18" },
-  { id: 17, make: "Mini", model: "Cooper SE", price: 32000, electric: true, date: "2025-02-11" },
-  { id: 18, make: "Seat", model: "Mii Electric", price: 20990, electric: true, date: "2026-10-06" },
-  { id: 19, make: "Skoda", model: "Citigo-e", price: 20990, electric: true, date: "2026-10-06" },
-  { id: 20, make: "Smart", model: "EQ forfour", price: 22900, electric: true, date: "2026-10-06" },
-  { id: 21, make: "Honda", model: "e", price: 34900, electric: true, date: "2026-10-06" },
-  { id: 22, make: "DS", model: "3 Crossback E-Tense", price: 39900, electric: true, date: "2026-10-06" },
-  { id: 23, make: "Lexus", model: "UX 300e", price: 49900, electric: true, date: "2026-10-06" },
-  { id: 24, make: "Polestar", model: "2", price: 59900, electric: true, date: "2026-10-06" },
-  { id: 25, make: "Volvo", model: "XC40 Recharge", price: 59900, electric: true, date: "2026-10-06" },
-  { id: 26, make: "Jaguar", model: "I-Pace", price: 69900, electric: true, date: "2026-10-06" },
-  { id: 27, make: "Porsche", model: "Taycan", price: 83950, electric: true, date: "2026-10-06" },
-  { id: 28, make: "Audi", model: "e-tron GT", price: 99900, electric: true, date: "2026-10-06" },
-  { id: 29, make: "Mercedes", model: "EQS", price: 106374, electric: true, date: "2026-10-06" },
-  { id: 30, make: "Tesla", model: "Model S", price: 79490, electric: true, date: "2026-10-06" },
-  { id: 31, make: "Tesla", model: "Model 3", price: 39990, electric: true, date: "2026-10-06" },
-  { id: 32, make: "Porsche", model: "Taycan Cross Turismo", price: 93950, electric: true, date: "2026-10-06" },
+  { id: 1, make: "Tesla", model: "Model Y", price: 64950, electric: true, date: "2026-10-01", bodyStyle: "SUV", color: "White", power: 384 },
+  { id: 2, make: "Ford", model: "F-Series", price: 33850, electric: false, date: "2026-10-02", bodyStyle: "Pickup", color: "Blue", power: 325 },
+  { id: 3, make: "Toyota", model: "Corolla", price: 29600, electric: false, date: "2026-10-03", bodyStyle: "Sedan", color: "Silver", power: 169 },
+  { id: 4, make: "Mercedes", model: "EQA", price: 48890, electric: true, date: "2026-10-04", bodyStyle: "SUV", color: "Black", power: 188 },
+  { id: 5, make: "Fiat", model: "500", price: 15774, electric: false, date: "2026-10-05", bodyStyle: "Hatchback", color: "Red", power: 70 },
+  { id: 6, make: "Nissan", model: "Juke", price: 20675, electric: false, date: "2026-10-06", bodyStyle: "SUV", color: "Gray", power: 114 },
+  { id: 11, make: "BMW", model: "i3", price: 44450, electric: true, date: "2026-10-06", bodyStyle: "Hatchback", color: "Blue", power: 170 },
+  { id: 12, make: "Renault", model: "ZOE", price: 32990, electric: true, date: "2026-11-06", bodyStyle: "Hatchback", color: "White", power: 135 },
+  { id: 13, make: "Peugeot", model: "e-208", price: 29900, electric: true, date: "2026-10-06", bodyStyle: "Hatchback", color: "Yellow", power: 136 },
+  { id: 14, make: "Opel", model: "Corsa-e", price: 29900, electric: true, date: "2026-08-01", bodyStyle: "Hatchback", color: "Red", power: 136 },
+  { id: 15, make: "Citroen", model: "C4", price: 29900, electric: true, date: "2026-10-06", bodyStyle: "Crossover", color: "Silver", power: 136 },
+  { id: 16, make: "Mazda", model: "mtx-30", price: 33990, electric: true, date: "2026-07-18", bodyStyle: "SUV", color: "Gray", power: 143 },
+  { id: 17, make: "Mini", model: "Cooper SE", price: 32000, electric: true, date: "2025-02-11", bodyStyle: "Hatchback", color: "Green", power: 181 },
+  { id: 18, make: "Seat", model: "Mii Electric", price: 20990, electric: true, date: "2026-10-06", bodyStyle: "Hatchback", color: "Blue", power: 83 },
+  { id: 19, make: "Skoda", model: "Citigo-e", price: 20990, electric: true, date: "2026-10-06", bodyStyle: "Hatchback", color: "White", power: 83 },
+  { id: 20, make: "Smart", model: "EQ forfour", price: 22900, electric: true, date: "2026-10-06", bodyStyle: "Hatchback", color: "Black", power: 82 },
+  { id: 21, make: "Honda", model: "e", price: 34900, electric: true, date: "2026-10-06", bodyStyle: "Hatchback", color: "Yellow", power: 154 },
+  { id: 22, make: "DS", model: "3 Crossback E-Tense", price: 39900, electric: true, date: "2026-10-06", bodyStyle: "SUV", color: "Red", power: 136 },
+  { id: 23, make: "Lexus", model: "UX 300e", price: 49900, electric: true, date: "2026-10-06", bodyStyle: "SUV", color: "Silver", power: 204 },
+  { id: 24, make: "Polestar", model: "2", price: 59900, electric: true, date: "2026-10-06", bodyStyle: "Liftback", color: "Gray", power: 299 },
+  { id: 25, make: "Volvo", model: "XC40 Recharge", price: 59900, electric: true, date: "2026-10-06", bodyStyle: "SUV", color: "Blue", power: 402 },
+  { id: 26, make: "Jaguar", model: "I-Pace", price: 69900, electric: true, date: "2026-10-06", bodyStyle: "SUV", color: "Black", power: 394 },
+  { id: 27, make: "Porsche", model: "Taycan", price: 83950, electric: true, date: "2026-10-06", bodyStyle: "Sedan", color: "White", power: 402 },
+  { id: 28, make: "Audi", model: "e-tron GT", price: 99900, electric: true, date: "2026-10-06", bodyStyle: "Sedan", color: "Red", power: 469 },
+  { id: 29, make: "Mercedes", model: "EQS", price: 106374, electric: true, date: "2026-10-06", bodyStyle: "Liftback", color: "Silver", power: 329 },
+  { id: 30, make: "Tesla", model: "Model S", price: 79490, electric: true, date: "2026-10-06", bodyStyle: "Liftback", color: "Black", power: 670 },
+  { id: 31, make: "Tesla", model: "Model 3", price: 39990, electric: true, date: "2026-10-06", bodyStyle: "Sedan", color: "Blue", power: 283 },
+  {
+    id: 32,
+    make: "Porsche",
+    model: "Taycan Cross Turismo",
+    price: 93950,
+    electric: true,
+    date: "2026-10-06",
+    bodyStyle: "Wagon",
+    color: "Gray",
+    power: 469,
+  },
 ];
 const getVehicleRowId = (row: Vehicle) => row.id;
 const columns: DataTableColumnDef<Vehicle>[] = [
-  { field: "make", headerName: "Make", filter: "select", flex: 1, minWidth: 120 },
+  { field: "make", headerName: "Make", filter: "select", flex: 1, minWidth: 160 },
   {
     field: "model",
     headerName: "Model",
     filter: "text",
     flex: 1,
-    minWidth: 140,
+    minWidth: 160,
     editable: true,
     resizable: true,
     tableOptions: { enableHiding: true, enablePinning: true },
@@ -95,6 +115,9 @@ const columns: DataTableColumnDef<Vehicle>[] = [
     // getQuickFilterText: ({ value }) => (value ? "Electric" : "Gasoline"),
   },
   { field: "date", headerName: "Updated", filter: "date", cellDataType: "dateString", width: 135 },
+  { field: "bodyStyle", headerName: "Body Style", filter: "select", width: 145 },
+  { field: "color", headerName: "Color", filter: "select", width: 120 },
+  { field: "power", headerName: "Power (hp)", filter: "number", cellDataType: "number", width: 130, align: "end" },
 ];
 
 function ListExample() {
@@ -214,6 +237,9 @@ export const ColumnDragAndDrop: Story = {
           "model",
           "electric",
           "date",
+          "bodyStyle",
+          "color",
+          "power",
         ]);
         const row = grid.querySelector('[role="row"][data-row-id]')!;
         expect(Array.from(row.querySelectorAll('[role="gridcell"]'), cell => cell.getAttribute("data-column-id"))).toEqual([
@@ -222,6 +248,9 @@ export const ColumnDragAndDrop: Story = {
           "model",
           "electric",
           "date",
+          "bodyStyle",
+          "color",
+          "power",
         ]);
       }
     });
@@ -230,7 +259,7 @@ export const ColumnDragAndDrop: Story = {
     await userEvent.keyboard("[Space][ArrowLeft][Escape]");
     await waitFor(() =>
       expect(Array.from(grids[0].querySelectorAll('[role="columnheader"][data-column-id]'), header => header.getAttribute("data-column-id"))).toEqual(
-        ["make", "price", "model", "electric", "date"],
+        ["make", "price", "model", "electric", "date", "bodyStyle", "color", "power"],
       ),
     );
     await userEvent.click(first.getByRole("button", { name: "Sort Model" }));
@@ -494,11 +523,16 @@ export const SelectFilters: Story = {
   },
 };
 
-const externalColumns: DataTableColumnDef<Vehicle>[] = columns.map(column =>
-  column.field === "make"
-    ? { ...column, filterOptions: [...new Set(rows.map(row => row.make))].sort().map(value => ({ value, label: `${value} vehicles` })) }
-    : column,
-);
+const externalColumns: DataTableColumnDef<Vehicle>[] = columns.map(column => {
+  const field = (["make", "bodyStyle", "color"] as const).find(field => field === column.field);
+  if (field === undefined) return column;
+
+  const values = [...new Set(rows.map(row => row[field]))].sort();
+  return {
+    ...column,
+    filterOptions: values.map(value => ({ value, label: field === "make" ? `${value} vehicles` : value })),
+  };
+});
 
 function ExternalDataExample() {
   const [columnFilters, setColumnFilters] = React.useState<DataTableState["columnFilters"]>([]);
@@ -515,13 +549,10 @@ function ExternalDataExample() {
       const filtered = rows.filter(
         row =>
           `${row.make} ${row.model}`.toLowerCase().includes(search.toLowerCase()) &&
-          columnFilters.every(({ id, value }) =>
-            matchesFilter(
-              row[id as keyof Vehicle],
-              value as DataTableFilter,
-              id === "price" ? "number" : id === "date" ? "date" : id === "make" ? "select" : "text",
-            ),
-          ),
+          columnFilters.every(({ id, value }) => {
+            const column = externalColumns.find(column => column.field === id);
+            return matchesFilter(row[id as keyof Vehicle], value as DataTableFilter, column ? filterType(column) : "text");
+          }),
       );
       filtered.sort((a, b) => {
         for (const { id, desc } of sorting) {
@@ -591,21 +622,23 @@ export const ExternalData: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     const body = within(canvasElement.ownerDocument.body);
-    await waitFor(() => expect(canvas.getByText("Model Y")).toBeVisible());
+    await waitFor(() => expect(canvas.getByRole("grid")).toHaveAttribute("aria-busy", "true"));
+    await waitFor(() => expect(canvas.getByRole("button", { name: "Next page" })).toBeEnabled());
+    await waitFor(() => expect(canvas.getByRole("gridcell", { name: "Model Y" })).toBeVisible());
     await userEvent.click(canvas.getByRole("button", { name: "Next page" }));
-    await waitFor(() => expect(canvas.getByText("Juke")).toBeVisible());
+    await waitFor(() => expect(canvas.getByRole("gridcell", { name: "Juke" })).toBeVisible());
     await userEvent.click(canvas.getByRole("button", { name: "Sort Price" }));
-    await waitFor(() => expect(canvas.getByText("500")).toBeVisible());
+    await waitFor(() => expect(canvas.getByRole("gridcell", { name: "500" })).toBeVisible());
     await expect(canvas.getByText("Page 1 of 6")).toBeVisible();
     await userEvent.click(canvas.getByRole("button", { name: "Column options make" }));
     await expect(body.getByRole("option", { name: "Tesla vehicles" })).toBeInTheDocument();
     await userEvent.selectOptions(body.getByRole("combobox", { name: "Filter value" }), "Tesla");
     await userEvent.click(body.getByRole("button", { name: "Apply" }));
-    await waitFor(() => expect(canvas.getByText("Model 3")).toBeVisible());
-    await waitFor(() => expect(canvas.queryByText("500")).not.toBeInTheDocument());
+    await waitFor(() => expect(canvas.getByRole("gridcell", { name: "Model 3" })).toBeVisible());
+    await waitFor(() => expect(canvas.queryByRole("gridcell", { name: "500" })).not.toBeInTheDocument());
     await userEvent.click(canvas.getByRole("button", { name: "Column options make" }));
     await userEvent.click(body.getByRole("button", { name: "Reset" }));
-    await waitFor(() => expect(canvas.getByText("500")).toBeVisible());
+    await waitFor(() => expect(canvas.getByRole("gridcell", { name: "500" })).toBeVisible());
     await userEvent.type(canvas.getByRole("textbox", { name: "Search table" }), "Corolla");
     await waitFor(() => expect(canvas.getByText("Corolla")).toBeVisible());
     await waitFor(() => expect(canvas.queryByText("500")).not.toBeInTheDocument());
@@ -613,13 +646,23 @@ export const ExternalData: Story = {
     await userEvent.type(canvas.getByRole("textbox", { name: "Search table" }), "no matching vehicle");
     await waitFor(() => expect(canvas.getByText("No rows to display")).toBeVisible());
     await userEvent.click(canvas.getByRole("button", { name: "Clear search" }));
-    await waitFor(() => expect(canvas.getByText("500")).toBeVisible());
+    await waitFor(() => expect(canvas.getByRole("gridcell", { name: "500" })).toBeVisible());
     await userEvent.selectOptions(canvas.getByRole("combobox", { name: "Rows per page" }), "10");
     await waitFor(() => expect(canvas.getByText("Page 1 of 3")).toBeVisible());
   },
 };
 
-const summary: Vehicle = { id: 0, make: "Total", model: "", price: rows.reduce((sum, row) => sum + row.price, 0), electric: false, date: "" };
+const summary: Vehicle = {
+  id: 0,
+  make: "Total",
+  model: "",
+  price: rows.reduce((sum, row) => sum + row.price, 0),
+  electric: false,
+  date: "",
+  bodyStyle: "",
+  color: "",
+  power: null,
+};
 export const SummaryRows: Story = {
   parameters: { docs: { source: { code: storySources.SummaryRows } } },
   render: () => (

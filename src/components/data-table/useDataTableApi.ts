@@ -14,6 +14,7 @@ export type DataTableRuntime<T extends object> = {
   rowIndices: Map<T, number>;
   sourcesById: Map<string, T>;
   useVirtualRows: boolean;
+  loading: boolean;
   pagination: boolean;
   serverPagination: boolean;
 };
@@ -99,8 +100,11 @@ export function useDataTableApi<T extends object>({
       const rowId = String(id);
       const current = runtime.current;
       const allIndex = current.table.getPrePaginatedRowModel().rows.findIndex(row => row.id === rowId);
+      const { pageIndex, pageSize } = current.table.atoms.pagination.get();
+      let targetPage = pageIndex;
       if (allIndex >= 0 && current.pagination && !current.table.options.manualPagination) {
-        current.table.setPageIndex(Math.floor(allIndex / current.table.atoms.pagination.get().pageSize));
+        targetPage = Math.floor(allIndex / pageSize);
+        current.table.setPageIndex(targetPage);
       }
       requestAnimationFrame(() => {
         const latest = runtime.current;
@@ -111,10 +115,11 @@ export function useDataTableApi<T extends object>({
             .find(element => element.dataset.rowId === rowId)
             ?.scrollIntoView({ block: align, inline: "nearest" });
       });
+      return { pageIndex: targetPage, pageSize };
     };
     const start = (id: string | number, columnId?: string) => {
       const rowId = String(id);
-      if (!stopEditing()) return false;
+      if (runtime.current.loading || !stopEditing()) return false;
       const row = getRow(rowId);
       if (!row) return false;
       const editable = Array.from(runtime.current.definitionsById.values()).filter(column => {
@@ -126,9 +131,11 @@ export function useDataTableApi<T extends object>({
       });
       const column = columnId ? editable.find(item => getColumnId(item) === columnId) : editable[0];
       if (!column) return false;
+      const editPage = scrollToRow(rowId);
       updateEdit({
         rowId,
         columnId,
+        ...editPage,
         source: runtime.current.sourcesById.get(rowId)!,
         original: row.original,
         draft: row.original,
@@ -136,7 +143,6 @@ export function useDataTableApi<T extends object>({
         parseErrors: {},
         errors: [],
       });
-      scrollToRow(rowId);
       focusCell(rowId, getColumnId(column));
       return true;
     };
@@ -196,7 +202,9 @@ export function useDataTableApi<T extends object>({
       startEditingRow: rowId => start(rowId),
       stopEditing,
       focusCell,
-      scrollToRow,
+      scrollToRow: (id, align) => {
+        scrollToRow(id, align);
+      },
       preparePrint,
       print: async () => {
         const restore = await preparePrint();

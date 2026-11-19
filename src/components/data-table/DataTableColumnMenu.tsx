@@ -14,10 +14,12 @@ export function DataTableColumnMenu<T extends object>({
   table,
   column,
   definition,
+  disabled,
 }: {
   table: DataTableInstance<T>;
   column: Column<DataTableFeatures, T>;
   definition: DataTableColumnDef<T>;
+  disabled: boolean;
 }) {
   const [open, setOpen] = React.useState(false);
   const [draft, setDraft] = React.useState<DataTableFilter>({ operator: filterType(definition) === "text" ? "contains" : "equals", value: "" });
@@ -76,8 +78,9 @@ export function DataTableColumnMenu<T extends object>({
       <PopoverTrigger asChild>
         <button
           type="button"
+          disabled={disabled}
           aria-label={`Column options ${column.id}`}
-          className={cn("mtx-shrink-0 mtx-rounded-sm mtx-p-0.5 hover:mtx-bg-primary-100/80", column.getIsFiltered() && "mtx-text-primary")}
+          className={cn("mtx-shrink-0 mtx-rounded-sm mtx-p-0.5 enabled:hover:mtx-bg-primary-100/80", column.getIsFiltered() && "mtx-text-primary")}
         >
           <Filter className="mtx-h-4.5 mtx-w-4.5" />
         </button>

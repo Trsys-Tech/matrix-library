@@ -1,6 +1,8 @@
 export type DataTableEditSession<T extends object> = {
   rowId: string;
   columnId?: string;
+  pageIndex: number;
+  pageSize: number;
   source: T;
   original: T;
   draft: T;

@@ -9,7 +9,7 @@ import { IconButton, type IconButtonProps } from "../icon-botton/IconButton";
 import { TextField } from "../text-field/TextField";
 import { Checkbox } from "../checkbox/Checkbox";
 import { Popover, PopoverContent, PopoverTrigger, type PopoverContentProps } from "../popover/Popover";
-import { useDataTable } from "./DataTableContext";
+import { DataTableContext, useDataTable } from "./DataTableContext";
 
 export type DataTableSearchActionProps = Omit<React.HTMLAttributes<HTMLDivElement>, "defaultValue"> & {
   /** Input value for externally managed search. Use with onValueChange. */
@@ -205,6 +205,7 @@ export function DataTablePrintAction({ onClick, children, disabled, onPrintError
 
 export type DataTableRefreshActionProps = Omit<IconButtonProps, "onClick"> & { onRefresh: () => void };
 export function DataTableRefreshAction({ onRefresh, loading, children, disabled, className, ...props }: DataTableRefreshActionProps) {
+  const context = React.useContext(DataTableContext);
   return (
     <IconButton
       type="button"
@@ -213,7 +214,10 @@ export function DataTableRefreshAction({ onRefresh, loading, children, disabled,
       {...props}
       className={cn("mtx-h-6 mtx-w-6 mtx-p-0.5", className)}
       disabled={disabled || loading}
-      onClick={onRefresh}
+      onClick={() => {
+        context?.api?.stopEditing(true);
+        onRefresh();
+      }}
     >
       {children ?? <Refresh className={cn("mtx-h-4.5 mtx-w-4.5", loading && "mtx-animate-spin")} />}
     </IconButton>
