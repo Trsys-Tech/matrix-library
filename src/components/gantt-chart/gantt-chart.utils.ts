@@ -126,7 +126,10 @@ const getDefaultRange = () => {
 };
 
 const getTimelineRange = (items: GanttItem[], startDate?: GanttDate, endDate?: GanttDate) => {
-  const validDates = items.flatMap(item => [toDate(item.start), toDate(item.end)]).filter((date): date is Date => date !== null);
+  const validDates = items
+    .flatMap(item => [item, ...(item.additionalBars ?? [])])
+    .flatMap(bar => [toDate(bar.start), toDate(bar.end)])
+    .filter((date): date is Date => date !== null);
   const defaultRange = getDefaultRange();
   let start = toDate(startDate) ?? (validDates.length > 0 ? new Date(Math.min(...validDates.map(date => date.getTime()))) : defaultRange.start);
   let end = toDate(endDate) ?? (validDates.length > 0 ? new Date(Math.max(...validDates.map(date => date.getTime()))) : defaultRange.end);
@@ -203,7 +206,7 @@ const getMarkerPosition = (date: Date, intervals: TimelineInterval[]) => {
   return getDatePosition(date, intervals);
 };
 
-const getBarPosition = (item: GanttItem, intervals: TimelineInterval[]) => {
+const getBarPosition = (item: Pick<GanttItem, "start" | "end">, intervals: TimelineInterval[]) => {
   const itemStart = toDate(item.start);
   const itemEnd = toDate(item.end);
 
@@ -224,7 +227,7 @@ const getBarPosition = (item: GanttItem, intervals: TimelineInterval[]) => {
 
 const clampProgress = (progress = 0) => Math.min(100, Math.max(0, progress));
 
-const formatDateRange = (item: GanttItem, locale: string) => {
+const formatDateRange = (item: Pick<GanttItem, "start" | "end">, locale: string) => {
   const start = toDate(item.start);
   const end = toDate(item.end);
 

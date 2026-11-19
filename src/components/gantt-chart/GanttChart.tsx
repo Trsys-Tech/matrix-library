@@ -18,6 +18,7 @@ import {
   type TimelineInterval,
 } from "./gantt-chart.utils";
 import type {
+  GanttBar,
   GanttDate,
   GanttItem,
   GanttMarker,
@@ -84,7 +85,7 @@ type GanttChartProps = Omit<React.HTMLAttributes<HTMLDivElement>, "children"> & 
   toolbarActions?: React.ReactNode;
   /** Replaces the default item-name and date-range content. */
   renderItem?: (context: GanttRenderItemContext) => React.ReactNode;
-  /** Replaces the default progress label inside a bar. */
+  /** Replaces the default label inside each bar. */
   renderBar?: (context: GanttRenderBarContext) => React.ReactNode;
   /** Replaces the compact date range shown alongside each item. */
   formatDateRange?: (item: GanttItem) => string;
@@ -313,6 +314,56 @@ const TimelineHeader: React.FC<TimelineHeaderProps> = ({ intervals, groups, high
   </div>
 );
 
+type TimelineBarProps = {
+  item: GanttItem;
+  bar?: GanttBar;
+  intervals: TimelineInterval[];
+  formattedDateRange: string;
+  renderBar?: GanttChartProps["renderBar"];
+};
+
+const TimelineBar = ({ item, bar, intervals, formattedDateRange, renderBar }: TimelineBarProps) => {
+  const timelineBar = bar ?? item;
+  const showsProgress = !bar || bar.progress !== undefined;
+  const progress = clampProgress(timelineBar.progress);
+  const barPosition = getBarPosition(timelineBar, intervals);
+
+  return barPosition && barPosition.width > 0 ? (
+    <div
+      className={cn(
+        "mtx-absolute mtx-top-1/2 mtx-z-10 mtx-h-6 -mtx-translate-y-1/2 mtx-rounded mtx-border mtx-border-secondary-300 mtx-bg-secondary-50",
+        timelineBar.barClassName,
+      )}
+      style={{ left: `${barPosition.left}%`, width: `${barPosition.width}%` }}
+      title={showsProgress ? `${formattedDateRange}, ${progress}% complete` : formattedDateRange}
+      role={showsProgress ? "progressbar" : "img"}
+      aria-label={bar ? `${bar.label}, ${formattedDateRange}` : typeof item.name === "string" ? item.name : undefined}
+      aria-valuemin={showsProgress ? 0 : undefined}
+      aria-valuemax={showsProgress ? 100 : undefined}
+      aria-valuenow={showsProgress ? progress : undefined}
+    >
+      <div
+        className={cn("mtx-bg-secondary-300 mtx-absolute -mtx-top-px -mtx-left-px mtx-h-[inherit] mtx-rounded-l", timelineBar.progressClassName)}
+        style={{ width: `${progress}%` }}
+        aria-hidden="true"
+      />
+      <div
+        className="mtx-absolute mtx-top-0 mtx-left-0 mtx-w-full mtx-text-center mtx-text-xs mtx-text-text-600 mtx-flex mtx-items-center mtx-h-full mtx-px-1"
+        // style={{ left: showsProgress ? `clamp(3rem, ${progress / 2}%, calc(100% - 3rem))` : "50%" }}
+      >
+        {renderBar ? (
+          renderBar(bar ? { item, progress, bar } : { item, progress })
+        ) : (
+          <div className="mtx-w-full mtx-flex mtx-items-center mtx-justify-between mtx-gap-0.5 mtx-rounded-l mtx-overflow-hidden">
+            <span className="mtx-truncate mtx-font-semibold mtx-block">{bar?.label ?? "Progress"}</span>
+            {showsProgress ? <strong className="mtx-block mtx-text-xs">{progress}%</strong> : null}
+          </div>
+        )}
+      </div>
+    </div>
+  ) : null;
+};
+
 const GanttChart = React.forwardRef<HTMLDivElement, GanttChartProps>(
   (
     {
@@ -450,9 +501,10 @@ const GanttChart = React.forwardRef<HTMLDivElement, GanttChartProps>(
 
             <div role="rowgroup">
               {items.map((item, itemIndex) => {
-                const progress = clampProgress(item.progress);
-                const barPosition = getBarPosition(item, timeline.intervals);
                 const formattedDateRange = formatDateRange?.(item) ?? defaultFormatDateRange(item, locale);
+                const primaryBar = (
+                  <TimelineBar item={item} intervals={timeline.intervals} formattedDateRange={formattedDateRange} renderBar={renderBar} />
+                );
 
                 return (
                   <div
@@ -476,42 +528,31 @@ const GanttChart = React.forwardRef<HTMLDivElement, GanttChartProps>(
                       )}
                     </div>
 
-                    <div className="mtx-relative mtx-border-b mtx-border-gray-200" style={{ minHeight: minRowHeight }} role="cell">
+                    <div
+                      className="mtx-relative mtx-flex mtx-flex-col mtx-justify-center mtx-border-b mtx-border-gray-200"
+                      style={{ minHeight: minRowHeight }}
+                      role="cell"
+                    >
                       <TimelineGrid intervals={timeline.intervals} highlightedDate={activeHighlightedDate} />
                       <TimelineMarkers markers={positionedMarkers} showLabels={!onAddItem && itemIndex === 0} />
-                      {barPosition && barPosition.width > 0 ? (
-                        <div
-                          className={cn(
-                            "mtx-absolute mtx-top-1/2 mtx-z-10 mtx-h-6 -mtx-translate-y-1/2 mtx-overflow-hidden mtx-rounded mtx-border-r-2 mtx-border-secondary-800 mtx-bg-secondary-200",
-                            item.barClassName,
-                          )}
-                          style={{ left: `${barPosition.left}%`, width: `${barPosition.width}%` }}
-                          title={`${formattedDateRange}, ${progress}% complete`}
-                          role="progressbar"
-                          aria-valuemin={0}
-                          aria-valuemax={100}
-                          aria-valuenow={progress}
-                        >
-                          <div
-                            className={cn("mtx-h-full mtx-bg-secondary-500", item.progressClassName)}
-                            style={{ width: `${progress}%` }}
-                            aria-hidden="true"
-                          />
-                          <div
-                            className="mtx-absolute mtx-top-1/2 mtx-min-w-max -mtx-translate-x-1/2 -mtx-translate-y-1/2 mtx-text-center mtx-text-xs mtx-text-text-600"
-                            style={{ left: `clamp(3rem, ${progress / 2}%, calc(100% - 3rem))` }}
-                          >
-                            {renderBar ? (
-                              renderBar({ item, progress })
-                            ) : (
-                              <div className="mtx-flex mtx-items-center mtx-gap-0.5">
-                                <span className="mtx-block">Progress</span>
-                                <strong className="mtx-block mtx-text-xs">{progress}%</strong>
-                              </div>
-                            )}
-                          </div>
+                      {item.additionalBars?.length ? (
+                        <div className="mtx-flex mtx-flex-col mtx-gap-1 mtx-py-2">
+                          <div className="mtx-relative mtx-h-6">{primaryBar}</div>
+                          {item.additionalBars.map(bar => (
+                            <div key={bar.id} className="mtx-relative mtx-h-6">
+                              <TimelineBar
+                                item={item}
+                                bar={bar}
+                                intervals={timeline.intervals}
+                                formattedDateRange={defaultFormatDateRange(bar, locale)}
+                                renderBar={renderBar}
+                              />
+                            </div>
+                          ))}
                         </div>
-                      ) : null}
+                      ) : (
+                        primaryBar
+                      )}
                     </div>
                   </div>
                 );
@@ -528,6 +569,7 @@ GanttChart.displayName = "GanttChart";
 
 export {
   GanttChart,
+  type GanttBar,
   type GanttChartProps,
   type GanttDate,
   type GanttItem,

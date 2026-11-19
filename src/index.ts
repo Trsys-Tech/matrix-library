@@ -92,6 +92,7 @@ export {
 } from "./components/data-grid/DataGrid";
 export {
   GanttChart,
+  type GanttBar,
   type GanttChartProps,
   type GanttDate,
   type GanttItem,

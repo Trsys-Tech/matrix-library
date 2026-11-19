@@ -1,5 +1,6 @@
 import * as React from "react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { expect, within } from "storybook/test";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -12,11 +13,12 @@ import { IconButton } from "../icon-botton/IconButton";
 import { DATE_ONLY_PATTERN, toCalendarDate } from "../date-picker/dateValue";
 import { GanttChart, type GanttItem } from "./GanttChart";
 import storySource from "./GanttChart.stories.tsx?raw";
+import { cn } from "../../lib/utils";
 
 const items: GanttItem[] = [
   { id: "stairwells", name: "Stairwells", start: "2026-06-01", end: "2027-02-26", progress: 8 },
   { id: "landscape", name: "Landscape", start: "2026-08-01", end: "2027-02-26", progress: 38 },
-  { id: "parkade", name: "Parkade", start: "2026-11-12", end: "2026-12-18", progress: 85 },
+  { id: "parkade", name: "Parkade", start: "2026-09-29", end: "2026-12-18", progress: 30 },
 ];
 
 const dateOnlyStringSchema = z
@@ -268,6 +270,97 @@ const MonthView: Story = {
   args: { defaultView: "month" },
 };
 
+const PlannedAndActual: Story = {
+  args: {
+    startDate: "2026-04-01",
+    endDate: "2027-03-31",
+    markers: [],
+    renderBar: ({ item, progress, bar }) => (
+      <span
+        className={cn(
+          "mtx-w-full mtx-flex mtx-items-center mtx-justify-between mtx-gap-2 mtx-overflow-hidden mtx-text-text-500",
+          bar && "mtx-text-secondary-800",
+        )}
+      >
+        <span className="mtx-truncate mtx-font-semibold">{bar?.label ?? item.name}</span>
+        {(!bar || bar.progress !== undefined) && (
+          <strong
+            className={cn(
+              "mtx-rounded mtx-border mtx-border-purple-500 mtx-bg-gray-0 mtx-text-purple-500 mtx-px-2",
+              bar && "mtx-border-secondary-300 mtx-text-success-800",
+            )}
+          >
+            {progress}%
+          </strong>
+        )}
+      </span>
+    ),
+
+    items: [
+      {
+        ...items[0],
+        barClassName: "mtx-bg-purple-200 mtx-border-purple-400",
+        progressClassName: "mtx-bg-purple-400",
+        additionalBars: [
+          {
+            id: "planned",
+            label: "Planned",
+            start: "2026-05-15",
+            end: "2027-01-30",
+            progress: 20,
+            barClassName: "mtx-bg-secondary-50 mtx-border-secondary-300",
+            progressClassName: "mtx-bg-secondary-300",
+          },
+        ],
+      },
+      {
+        ...items[1],
+        barClassName: "mtx-bg-purple-200 mtx-border-purple-400",
+        progressClassName: "mtx-bg-purple-400",
+
+        additionalBars: [
+          {
+            id: "planned",
+            label: "Planned",
+            start: "2026-07-10",
+            end: "2026-12-15",
+            progress: 30,
+            barClassName: "mtx-bg-secondary-50 mtx-border-secondary-300",
+            progressClassName: "mtx-bg-secondary-300",
+          },
+        ],
+      },
+      {
+        ...items[2],
+        barClassName: "mtx-bg-purple-200 mtx-border-purple-400",
+        progressClassName: "mtx-bg-purple-400",
+        additionalBars: [
+          {
+            id: "planned",
+            label: "Planned",
+            start: "2026-12-1",
+            end: "2026-10-15",
+            progress: 30,
+            barClassName: "mtx-bg-secondary-50 mtx-border-secondary-300",
+            progressClassName: "mtx-bg-secondary-300",
+          },
+        ],
+      },
+    ],
+  },
+  play: async ({ canvas }) => {
+    const row = within(canvas.getByRole("row", { name: /Stairwells/ }));
+    const actual = row.getByRole("progressbar", { name: "Stairwells", value: { now: 8 } });
+    const planned = row.getByRole("progressbar", { name: /^Planned,/, value: { now: 20 } });
+    const actualBounds = actual.getBoundingClientRect();
+    const plannedBounds = planned.getBoundingClientRect();
+
+    await expect(plannedBounds.top).toBeGreaterThan(actualBounds.bottom);
+    await expect(plannedBounds.left).toBeLessThan(actualBounds.left);
+    await expect(getComputedStyle(planned).backgroundColor).not.toBe(getComputedStyle(actual).backgroundColor);
+  },
+};
+
 const AddStack: Story = {
   parameters: {
     docs: {
@@ -276,6 +369,7 @@ const AddStack: Story = {
           storySource
             .split("const meta = {")[0]
             .replace('import type { Meta, StoryObj } from "@storybook/react-vite";\n', "")
+            .replace('import { expect, within } from "storybook/test";\n', "")
             .replace('import storySource from "./GanttChart.stories.tsx?raw";\n', "")
             .trimEnd() + "\n\nexport default AddStackStory;\n",
       },
@@ -284,5 +378,5 @@ const AddStack: Story = {
   render: () => <AddStackStory />,
 };
 
-export { Default, MonthView, AddStack };
+export { Default, MonthView, PlannedAndActual, AddStack };
 export default meta;
