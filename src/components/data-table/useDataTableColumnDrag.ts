@@ -4,20 +4,30 @@ import { moveDataTableColumn } from "./dataTableModel";
 import type { DataTableRuntime } from "./useDataTableApi";
 
 type DataTableColumnDragOptions<T extends object> = {
+  loading: boolean;
   runtime: React.MutableRefObject<DataTableRuntime<T>>;
   viewportRef: React.RefObject<HTMLDivElement>;
   contentRef: React.RefObject<HTMLDivElement>;
   setColumnDrag: React.Dispatch<React.SetStateAction<{ sourceId: string; targetId: string } | null>>;
 };
 
-type DataTableColumnDragHandlers = Pick<React.ComponentProps<typeof DragDropProvider>, "onDragStart" | "onDragMove" | "onDragEnd">;
+type DataTableColumnDragHandlers = Pick<
+  React.ComponentProps<typeof DragDropProvider>,
+  "onBeforeDragStart" | "onDragStart" | "onDragMove" | "onDragEnd"
+>;
 
 export function useDataTableColumnDrag<T extends object>({
+  loading,
   runtime,
   viewportRef,
   contentRef,
   setColumnDrag,
 }: DataTableColumnDragOptions<T>): DataTableColumnDragHandlers {
+  const cancelDrag = React.useRef<(() => void) | null>(null);
+  React.useLayoutEffect(() => {
+    if (loading) cancelDrag.current?.();
+  }, [loading]);
+
   const columnDragRef = React.useRef<{
     sourceId: string;
     targetId: string;
@@ -25,7 +35,11 @@ export function useDataTableColumnDrag<T extends object>({
     columns: { id: string; left: number; right: number }[];
   } | null>(null);
   const handlers: DataTableColumnDragHandlers = {
-    onDragStart: event => {
+    onBeforeDragStart: event => {
+      if (runtime.current.loading) event.preventDefault();
+    },
+    onDragStart: (event, manager) => {
+      cancelDrag.current = () => manager.actions.stop({ canceled: true });
       const sourceId = event.operation.source?.data.columnId;
       if (typeof sourceId !== "string" || !event.nativeEvent?.type.startsWith("pointer")) return;
       const region = runtime.current.table.getColumn(sourceId)?.getIsPinned();
@@ -54,10 +68,11 @@ export function useDataTableColumnDrag<T extends object>({
       setColumnDrag({ sourceId: drag.sourceId, targetId: target.id });
     },
     onDragEnd: event => {
+      cancelDrag.current = null;
       const { source, target } = event.operation;
       const drag = columnDragRef.current;
       const targetId = drag?.targetId ?? target?.data.columnId;
-      if (!event.canceled && typeof source?.data.columnId === "string" && typeof targetId === "string") {
+      if (!runtime.current.loading && !event.canceled && typeof source?.data.columnId === "string" && typeof targetId === "string") {
         moveDataTableColumn(runtime.current.table, source.data.columnId, targetId);
       }
       columnDragRef.current = null;

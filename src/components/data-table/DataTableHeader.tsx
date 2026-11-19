@@ -6,6 +6,7 @@ import { Checkbox } from "../checkbox/Checkbox";
 import { cn } from "../../lib/utils";
 import { DataTableColumnHeader } from "./DataTableColumnHeader";
 import { DataTableColumnMenu } from "./DataTableColumnMenu";
+import { useDataTableColumnResize } from "./useDataTableColumnResize";
 import type { DataTableApi, DataTableColumnDef, DataTableContentProps, DataTableFeatures, DataTableInstance, DataTableRow } from "./DataTable.types";
 
 type DataTableHeaderProps<T extends object> = Pick<DataTableContentProps<T>, "rowSelection"> & {
@@ -14,6 +15,7 @@ type DataTableHeaderProps<T extends object> = Pick<DataTableContentProps<T>, "ro
   headerHeight: number;
   totalWidth: number;
   isPrinting: boolean;
+  loading: boolean;
   showExpanders: boolean;
   expanderWidth: number;
   showCheckboxes: boolean;
@@ -31,6 +33,7 @@ export function DataTableHeader<T extends object>({
   headerHeight,
   totalWidth,
   isPrinting,
+  loading,
   showExpanders,
   expanderWidth,
   showCheckboxes,
@@ -42,10 +45,15 @@ export function DataTableHeader<T extends object>({
   columnStyle,
   widths,
 }: DataTableHeaderProps<T>) {
+  const disabled = isPrinting || loading;
+  const startResize = useDataTableColumnResize(disabled);
   return (
     <div
       role="row"
-      className="mtx-sticky mtx-top-0 mtx-z-30 mtx-flex mtx-rounded-t-[inherit] mtx-border-b mtx-border-gray-200 mtx-bg-primary-50 mtx-font-bold"
+      className={cn(
+        "mtx-sticky mtx-top-0 mtx-z-30 mtx-flex mtx-rounded-t-[inherit] mtx-border-b mtx-border-gray-200 mtx-bg-primary-50 mtx-font-bold",
+        loading && "mtx-opacity-80",
+      )}
       style={{ height: headerHeight, width: totalWidth, minWidth: "100%", position: isPrinting ? "relative" : "sticky" }}
     >
       {showExpanders && (
@@ -66,7 +74,7 @@ export function DataTableHeader<T extends object>({
             <Checkbox
               aria-label="Select all rows"
               className="mtx-bg-gray-0"
-              disabled={!selectionRows.length}
+              disabled={loading || !selectionRows.length}
               checked={selectionRows.length > 0 && selectedInScope === selectionRows.length ? true : selectedInScope > 0 ? "indeterminate" : false}
               onCheckedChange={checked => {
                 if (checked === true) api.selectAll(rowSelection.selectAll);
@@ -89,7 +97,7 @@ export function DataTableHeader<T extends object>({
             columnId={column.id}
             label={typeof definition.headerName === "string" ? definition.headerName : column.id}
             region={column.getIsPinned()}
-            disabled={isPrinting}
+            disabled={disabled}
             aria-sort={sorted === "asc" ? "ascending" : sorted === "desc" ? "descending" : "none"}
             className={cn(
               "mtx-relative mtx-flex mtx-min-w-0 mtx-items-center mtx-gap-1 mtx-px-3",
@@ -100,8 +108,8 @@ export function DataTableHeader<T extends object>({
             <button
               type="button"
               data-column-sort=""
-              disabled={isPrinting}
-              aria-disabled={!column.getCanSort() || undefined}
+              disabled={disabled}
+              aria-disabled={disabled || !column.getCanSort() || undefined}
               onClick={event => {
                 if (!event.defaultPrevented && column.getCanSort()) column.getToggleSortingHandler()?.(event);
               }}
@@ -119,20 +127,23 @@ export function DataTableHeader<T extends object>({
                 </span>
               )}
             </button>
-            {!isPrinting && <DataTableColumnMenu table={table} column={column} definition={definition} />}
+            {!isPrinting && <DataTableColumnMenu key={String(loading)} table={table} column={column} definition={definition} disabled={loading} />}
             {!isPrinting && column.getCanResize() && (
               <div
                 role="separator"
                 data-column-drag-ignore=""
                 aria-label={`Resize ${column.id}`}
                 aria-orientation="vertical"
-                tabIndex={0}
-                className="mtx-absolute mtx-inset-y-3 mtx-end-0 mtx-w-2 mtx-cursor-col-resize mtx-touch-none after:mtx-bg-gray-400/70 after:mtx-w-0.5 after:mtx-h-full after:mtx-block after:mtx-absolute after:mtx-start-1/2 after:-mtx-translate-x-1/2"
-                onMouseDown={header.getResizeHandler()}
-                onTouchStart={header.getResizeHandler()}
-                onDoubleClick={() => column.resetSize()}
+                aria-disabled={loading || undefined}
+                tabIndex={loading ? -1 : 0}
+                className={cn(
+                  "mtx-absolute mtx-inset-y-3 mtx-end-0 mtx-w-2 after:mtx-bg-gray-400/70 after:mtx-w-0.5 after:mtx-h-full after:mtx-block after:mtx-absolute after:mtx-start-1/2 after:-mtx-translate-x-1/2",
+                  !loading && "mtx-cursor-col-resize mtx-touch-none",
+                )}
+                onPointerDown={event => startResize(header, event)}
+                onDoubleClick={loading ? undefined : () => column.resetSize()}
                 onKeyDown={event => {
-                  if (event.key === "ArrowRight" || event.key === "ArrowLeft") {
+                  if (!loading && (event.key === "ArrowRight" || event.key === "ArrowLeft")) {
                     event.preventDefault();
                     table.setColumnSizing(previous => ({
                       ...previous,

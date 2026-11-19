@@ -231,7 +231,10 @@ test("confines loading to the rows and disables dimmed header and pagination con
   await expect.element(page.getByRole("grid").getByRole("status")).toHaveTextContent("Loading…");
   await expect.element(page.getByRole("button", { name: "Save", exact: true })).not.toBeInTheDocument();
   await expect.element(page.getByRole("button", { name: "Apply" })).not.toBeInTheDocument();
-  await expect.element(page.getByRole("separator", { name: "Resize name" })).not.toBeInTheDocument();
+  const resizeHandle = page.getByRole("separator", { name: "Resize name" });
+  await expect.element(resizeHandle).toBeVisible();
+  await expect.element(resizeHandle).toHaveAttribute("aria-disabled", "true");
+  await expect.element(resizeHandle).toHaveAttribute("tabindex", "-1");
   for (const control of [sort, menu, next, size, page.getByRole("checkbox", { name: "Select all rows" })]) {
     await expect.element(control).toBeDisabled();
   }
@@ -247,6 +250,102 @@ test("confines loading to the rows and disables dimmed header and pagination con
   await toggle.click();
   for (const control of [sort, menu, next, size]) {
     await expect.element(control).toBeEnabled();
+  }
+});
+
+const gestureColumns = [
+  { field: "name" as const, headerName: "Name", width: 140, resizable: true },
+  { field: "id" as const, headerName: "ID", width: 140 },
+];
+const gestureRows = [{ id: 1, name: "First" }];
+
+function mountHeaderGestureTable(
+  ref: React.RefObject<DataTableApi<Item>>,
+  options?: React.ComponentProps<typeof DataTableContent<Item>>["tableOptions"],
+) {
+  const render = (loading: boolean) => (
+    <DataTable style={{ width: 400, height: 200 }}>
+      <DataTableContent ref={ref} rowData={gestureRows} columnDefs={gestureColumns} tableOptions={options} loading={loading} />
+    </DataTable>
+  );
+  mount(render(false));
+  return (loading: boolean) => root.render(render(loading));
+}
+
+test.each([
+  { pointerType: "mouse", columnResizeMode: "onEnd", widthBeforeLoading: 140 },
+  { pointerType: "touch", columnResizeMode: "onChange", widthBeforeLoading: 160 },
+] as const)("cancels an active $pointerType resize in $columnResizeMode mode", async ({ pointerType, columnResizeMode, widthBeforeLoading }) => {
+  const ref = React.createRef<DataTableApi<Item>>();
+  const onColumnSizingChange = vi.fn();
+  const setLoading = mountHeaderGestureTable(ref, { columnResizeMode, onColumnSizingChange });
+  const handle = page.getByRole("separator", { name: "Resize name" });
+  await expect.element(handle).toBeInTheDocument();
+  const resize = (target: EventTarget, type: string, clientX: number) =>
+    target.dispatchEvent(new PointerEvent(type, { bubbles: true, pointerId: 1, pointerType, isPrimary: true, clientX }));
+  const size = () => ref.current!.table.getColumn("name")!.getSize();
+  resize(handle.element(), "pointerdown", 140);
+  expect(ref.current!.table.getColumn("name")!.getIsResizing()).toBe(true);
+  resize(document, "pointermove", 160);
+  await expect.poll(size).toBe(widthBeforeLoading);
+  onColumnSizingChange.mockClear();
+  setLoading(true);
+  await expect.element(handle).toHaveAttribute("aria-disabled", "true");
+  expect(ref.current!.table.getColumn("name")!.getIsResizing()).toBe(false);
+  resize(document, "pointermove", 180);
+  const disabledHandle = handle.element();
+  resize(disabledHandle, "pointerdown", 140);
+  expect(ref.current!.table.getColumn("name")!.getIsResizing()).toBe(false);
+  disabledHandle.dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowRight", bubbles: true }));
+  disabledHandle.dispatchEvent(new MouseEvent("dblclick", { bubbles: true }));
+  setLoading(false);
+  await expect.element(handle).not.toHaveAttribute("aria-disabled");
+  resize(document, "pointerup", 200);
+  expect(onColumnSizingChange).not.toHaveBeenCalled();
+  expect(size()).toBe(widthBeforeLoading);
+  resize(handle.element(), "pointerdown", 140);
+  resize(document, "pointerup", 170);
+  await expect.poll(size).toBe(widthBeforeLoading + 30);
+});
+
+test("clears an active pointer drag preview and discards the eventual drop", async () => {
+  const ref = React.createRef<DataTableApi<Item>>();
+  const setLoading = mountHeaderGestureTable(ref);
+  const name = page.getByRole("columnheader", { name: "Name" });
+  await expect.element(name).toBeInTheDocument();
+  const header = name.element();
+  const bounds = header.getBoundingClientRect();
+  const x = bounds.left + bounds.width / 2;
+  const dispatchPointer = (target: EventTarget, type: string, clientX: number) =>
+    target.dispatchEvent(
+      new PointerEvent(type, {
+        bubbles: true,
+        cancelable: true,
+        pointerId: 1,
+        pointerType: "mouse",
+        isPrimary: true,
+        clientX,
+        clientY: bounds.top + bounds.height / 2,
+      }),
+    );
+  const order = () => [...container.querySelectorAll("[role=columnheader]")].map(element => element.getAttribute("data-column-id"));
+  // Synthetic pointer events have no browser-managed pointer to capture.
+  const capture = vi.spyOn(document.body, "setPointerCapture").mockImplementation(() => {});
+  try {
+    dispatchPointer(header, "pointerdown", x);
+    dispatchPointer(header, "pointermove", x + 10);
+    await expect.element(name).toHaveAttribute("data-dragging", "true");
+    dispatchPointer(header, "pointermove", x + bounds.width);
+    await expect.poll(order).toEqual(["id", "name"]);
+    setLoading(true);
+    await expect.poll(order).toEqual(["name", "id"]);
+    await expect.element(name).not.toHaveAttribute("data-dragging");
+    setLoading(false);
+    await expect.element(page.getByRole("button", { name: "Sort Name" })).toBeEnabled();
+    dispatchPointer(document, "pointerup", x + bounds.width);
+    expect(ref.current!.table.getVisibleLeafColumns().map(column => column.id)).toEqual(["name", "id"]);
+  } finally {
+    capture.mockRestore();
   }
 });
 

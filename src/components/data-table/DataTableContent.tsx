@@ -192,7 +192,7 @@ function DataTableContentInner<T extends object>(
     pagination,
     serverPagination: tableOptions?.manualPagination === true,
   };
-  const columnDragHandlers = useDataTableColumnDrag({ runtime, viewportRef, contentRef, setColumnDrag });
+  const columnDragHandlers = useDataTableColumnDrag({ loading, runtime, viewportRef, contentRef, setColumnDrag });
   const api = useDataTableApi({ runtime, editRef, configRef, updateEdit, setPatches, contentRef, viewportRef, setPrinting });
   React.useImperativeHandle(forwardedRef, () => api, [api]);
 
@@ -400,7 +400,7 @@ function DataTableContentInner<T extends object>(
   ).rows.filter(row => row.getCanSelect());
   const selectedInScope = selectionRows.filter(row => row.getIsSelected()).length;
   return (
-    <DragDropProvider sensors={dataTableColumnSensors} {...columnDragHandlers}>
+    <DragDropProvider sensors={loading ? [] : dataTableColumnSensors} {...columnDragHandlers}>
       <DragOverlay dropAnimation={null} style={{ position: "fixed", pointerEvents: "none" }}>
         {source => {
           const definition = definitionsById.get(source.data.columnId);

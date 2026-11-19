@@ -524,8 +524,8 @@ export const SelectFilters: Story = {
 };
 
 const externalColumns: DataTableColumnDef<Vehicle>[] = columns.map(column => {
-  const { field } = column;
-  if (field !== "make" && field !== "bodyStyle" && field !== "color") return column;
+  const field = (["make", "bodyStyle", "color"] as const).find(field => field === column.field);
+  if (field === undefined) return column;
 
   const values = [...new Set(rows.map(row => row[field]))].sort();
   return {
@@ -624,21 +624,21 @@ export const ExternalData: Story = {
     const body = within(canvasElement.ownerDocument.body);
     await waitFor(() => expect(canvas.getByRole("grid")).toHaveAttribute("aria-busy", "true"));
     await waitFor(() => expect(canvas.getByRole("button", { name: "Next page" })).toBeEnabled());
-    await waitFor(() => expect(canvas.getByRole("gridcell", { name: "Model Y", exact: true })).toBeVisible());
+    await waitFor(() => expect(canvas.getByRole("gridcell", { name: "Model Y" })).toBeVisible());
     await userEvent.click(canvas.getByRole("button", { name: "Next page" }));
-    await waitFor(() => expect(canvas.getByRole("gridcell", { name: "Juke", exact: true })).toBeVisible());
+    await waitFor(() => expect(canvas.getByRole("gridcell", { name: "Juke" })).toBeVisible());
     await userEvent.click(canvas.getByRole("button", { name: "Sort Price" }));
-    await waitFor(() => expect(canvas.getByRole("gridcell", { name: "500", exact: true })).toBeVisible());
+    await waitFor(() => expect(canvas.getByRole("gridcell", { name: "500" })).toBeVisible());
     await expect(canvas.getByText("Page 1 of 6")).toBeVisible();
     await userEvent.click(canvas.getByRole("button", { name: "Column options make" }));
     await expect(body.getByRole("option", { name: "Tesla vehicles" })).toBeInTheDocument();
     await userEvent.selectOptions(body.getByRole("combobox", { name: "Filter value" }), "Tesla");
     await userEvent.click(body.getByRole("button", { name: "Apply" }));
-    await waitFor(() => expect(canvas.getByRole("gridcell", { name: "Model 3", exact: true })).toBeVisible());
-    await waitFor(() => expect(canvas.queryByRole("gridcell", { name: "500", exact: true })).not.toBeInTheDocument());
+    await waitFor(() => expect(canvas.getByRole("gridcell", { name: "Model 3" })).toBeVisible());
+    await waitFor(() => expect(canvas.queryByRole("gridcell", { name: "500" })).not.toBeInTheDocument());
     await userEvent.click(canvas.getByRole("button", { name: "Column options make" }));
     await userEvent.click(body.getByRole("button", { name: "Reset" }));
-    await waitFor(() => expect(canvas.getByRole("gridcell", { name: "500", exact: true })).toBeVisible());
+    await waitFor(() => expect(canvas.getByRole("gridcell", { name: "500" })).toBeVisible());
     await userEvent.type(canvas.getByRole("textbox", { name: "Search table" }), "Corolla");
     await waitFor(() => expect(canvas.getByText("Corolla")).toBeVisible());
     await waitFor(() => expect(canvas.queryByText("500")).not.toBeInTheDocument());
@@ -646,7 +646,7 @@ export const ExternalData: Story = {
     await userEvent.type(canvas.getByRole("textbox", { name: "Search table" }), "no matching vehicle");
     await waitFor(() => expect(canvas.getByText("No rows to display")).toBeVisible());
     await userEvent.click(canvas.getByRole("button", { name: "Clear search" }));
-    await waitFor(() => expect(canvas.getByRole("gridcell", { name: "500", exact: true })).toBeVisible());
+    await waitFor(() => expect(canvas.getByRole("gridcell", { name: "500" })).toBeVisible());
     await userEvent.selectOptions(canvas.getByRole("combobox", { name: "Rows per page" }), "10");
     await waitFor(() => expect(canvas.getByText("Page 1 of 3")).toBeVisible());
   },
