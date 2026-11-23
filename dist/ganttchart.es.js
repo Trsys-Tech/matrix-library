@@ -1,4 +1,4 @@
-import { jsxs as o, jsx as t, Fragment as it } from "react/jsx-runtime";
+import { jsxs as a, jsx as t, Fragment as it } from "react/jsx-runtime";
 import x from "react";
 import { Plus as xt } from "@trsys-tech/matrix-icons";
 import { cn as v } from "./utils.es.js";
@@ -39,7 +39,7 @@ const pt = {
     return n.observe(e), c.current.forEach((m) => n.observe(m)), () => n.disconnect();
   }, [l, s]), /* @__PURE__ */ t("div", { ref: u, className: "mtx-pointer-events-none mtx-absolute mtx-inset-0 mtx-z-20", children: l.map(({ marker: e, left: r }) => {
     const n = String(e.id);
-    return /* @__PURE__ */ o(x.Fragment, { children: [
+    return /* @__PURE__ */ a(x.Fragment, { children: [
       /* @__PURE__ */ t(
         "div",
         {
@@ -51,7 +51,7 @@ const pt = {
           "aria-hidden": "true"
         }
       ),
-      s ? /* @__PURE__ */ o(it, { children: [
+      s ? /* @__PURE__ */ a(it, { children: [
         /* @__PURE__ */ t(
           "div",
           {
@@ -103,8 +103,8 @@ const pt = {
       u.start.toISOString()
     ))
   }
-), yt = ({ intervals: l, groups: s, highlightedDate: u, nameColumnHeader: c, nameColumnWidth: f, headerHeight: e }) => /* @__PURE__ */ o("div", { className: "mtx-bg-primary-50", role: "rowgroup", children: [
-  /* @__PURE__ */ o(
+), yt = ({ intervals: l, groups: s, highlightedDate: u, nameColumnHeader: c, nameColumnWidth: f, headerHeight: e }) => /* @__PURE__ */ a("div", { className: "mtx-bg-primary-50", role: "rowgroup", children: [
+  /* @__PURE__ */ a(
     "div",
     {
       className: "mtx-grid mtx-border-b mtx-border-gray-200",
@@ -137,7 +137,7 @@ const pt = {
       ]
     }
   ),
-  /* @__PURE__ */ o(
+  /* @__PURE__ */ a(
     "div",
     {
       className: "mtx-grid",
@@ -163,7 +163,7 @@ const pt = {
   )
 ] }), I = ({ item: l, bar: s, intervals: u, formattedDateRange: c, renderBar: f }) => {
   const e = s ?? l, r = !s || s.progress !== void 0, n = bt(e.progress), m = ht(e, u);
-  return m && m.width > 0 ? /* @__PURE__ */ o(
+  return m && m.width > 0 ? /* @__PURE__ */ a(
     "div",
     {
       className: v(
@@ -190,9 +190,9 @@ const pt = {
           "div",
           {
             className: "mtx-absolute mtx-top-0 mtx-left-0 mtx-w-full mtx-text-center mtx-text-xs mtx-text-text-600 mtx-flex mtx-items-center mtx-h-full mtx-px-1",
-            children: f ? f(s ? { item: l, progress: n, bar: s } : { item: l, progress: n }) : /* @__PURE__ */ o("div", { className: "mtx-w-full mtx-flex mtx-items-center mtx-justify-between mtx-gap-0.5 mtx-rounded-l mtx-overflow-hidden", children: [
+            children: f ? f(s ? { item: l, progress: n, bar: s } : { item: l, progress: n }) : /* @__PURE__ */ a("div", { className: "mtx-w-full mtx-flex mtx-items-center mtx-justify-between mtx-gap-0.5 mtx-rounded-l mtx-overflow-hidden", children: [
               /* @__PURE__ */ t("span", { className: "mtx-truncate mtx-font-semibold mtx-block", children: s?.label ?? "Progress" }),
-              r ? /* @__PURE__ */ o("strong", { className: "mtx-block mtx-text-xs", children: [
+              r ? /* @__PURE__ */ a("strong", { className: "mtx-block mtx-text-xs", children: [
                 n,
                 "%"
               ] }) : null
@@ -233,29 +233,32 @@ const pt = {
     ...X
   }, Y) => {
     const L = x.useRef(null), [Z, tt] = x.useState(!1), [et, rt] = x.useState(u), E = s ?? et, C = x.useMemo(() => dt(l, r, n), [n, l, r]), h = x.useMemo(() => ut(C.start, C.end, E, p), [E, p, C.end, C.start]), S = x.useMemo(() => $ === null ? null : G($ ?? /* @__PURE__ */ new Date()), [$]), lt = { ...pt, ...f }, P = x.useMemo(
-      () => m.flatMap((a) => {
-        const T = G(a.date), R = T ? ft(T, h.intervals) : null;
-        return R === null ? [] : [{ marker: a, left: R }];
+      () => m.flatMap((o) => {
+        const T = G(o.date), R = T ? ft(T, h.intervals) : null;
+        return R === null ? [] : [{ marker: o, left: R }];
       }),
       [m, h.intervals]
-    ), nt = g?.[E] ?? gt[E], _ = h.intervals.length * nt, st = i + _, mt = x.useCallback((a) => {
-      L.current = a, a && typeof document < "u" && tt(
-        document.fullscreenEnabled !== !1 && typeof a.requestFullscreen == "function" && typeof document.exitFullscreen == "function"
+    ), nt = g?.[E] ?? gt[E], _ = h.intervals.length * nt, st = i + _, mt = x.useCallback((o) => {
+      L.current = o, o && typeof document < "u" && tt(
+        document.fullscreenEnabled !== !1 && typeof o.requestFullscreen == "function" && typeof document.exitFullscreen == "function"
       );
     }, []);
     x.useImperativeHandle(Y, () => L.current);
-    const at = (a) => {
-      s === void 0 && rt(a), e?.(a);
-    }, ot = () => {
+    const ot = (o) => {
+      s === void 0 && rt(o), e?.(o);
+    }, at = () => {
       !L.current || typeof document > "u" || (document.fullscreenElement === L.current ? document.exitFullscreen().catch(() => {
       }) : L.current.requestFullscreen().catch(() => {
       }));
     };
-    return /* @__PURE__ */ o(
+    return /* @__PURE__ */ a(
       "div",
       {
         ref: mt,
-        className: v("mtx-overflow-hidden mtx-rounded-lg mtx-border mtx-border-gray-200 mtx-bg-gray-0 mtx-[font-family:DMSans]", J),
+        className: v(
+          "mtx-overflow-hidden mtx-rounded-lg mtx-border mtx-border-gray-200 mtx-bg-gray-0 mtx-[font-family:DMSans] mtx-flex mtx-flex-col",
+          J
+        ),
         "aria-label": k,
         ...X,
         children: [
@@ -265,13 +268,13 @@ const pt = {
               activeView: E,
               views: c,
               viewLabels: lt,
-              onViewChange: at,
+              onViewChange: ot,
               onRefresh: H,
-              onToggleFullscreen: K && Z ? ot : void 0,
+              onToggleFullscreen: K && Z ? at : void 0,
               toolbarActions: U
             }
           ),
-          /* @__PURE__ */ t("div", { className: "mtx-overflow-auto", children: /* @__PURE__ */ o("div", { style: { minWidth: st }, role: "table", "aria-label": k, children: [
+          /* @__PURE__ */ t("div", { className: "mtx-overflow-auto mtx-flex-1", children: /* @__PURE__ */ a("div", { style: { minWidth: st }, role: "table", "aria-label": k, children: [
             /* @__PURE__ */ t(
               yt,
               {
@@ -283,14 +286,14 @@ const pt = {
                 headerHeight: y
               }
             ),
-            b ? /* @__PURE__ */ o("div", { className: "mtx-grid", style: { gridTemplateColumns: `${i}px minmax(${_}px, 1fr)` }, role: "row", children: [
+            b ? /* @__PURE__ */ a("div", { className: "mtx-grid", style: { gridTemplateColumns: `${i}px minmax(${_}px, 1fr)` }, role: "row", children: [
               /* @__PURE__ */ t(
                 "div",
                 {
                   className: "mtx-sticky mtx-left-0 mtx-z-30 mtx-flex mtx-items-center mtx-border-b mtx-border-r mtx-border-gray-200 mtx-bg-gray-0 mtx-px-2",
                   style: { minHeight: d },
                   role: "cell",
-                  children: /* @__PURE__ */ o(
+                  children: /* @__PURE__ */ a(
                     "button",
                     {
                       type: "button",
@@ -304,14 +307,14 @@ const pt = {
                   )
                 }
               ),
-              /* @__PURE__ */ o("div", { className: "mtx-relative mtx-border-b mtx-border-gray-200", style: { minHeight: d }, role: "cell", children: [
+              /* @__PURE__ */ a("div", { className: "mtx-relative mtx-border-b mtx-border-gray-200", style: { minHeight: d }, role: "cell", children: [
                 /* @__PURE__ */ t(q, { intervals: h.intervals, highlightedDate: S }),
                 /* @__PURE__ */ t(W, { markers: P, showLabels: !0 })
               ] })
             ] }) : null,
-            /* @__PURE__ */ t("div", { role: "rowgroup", children: l.map((a, T) => {
-              const R = Q?.(a) ?? O(a, p), j = /* @__PURE__ */ t(I, { item: a, intervals: h.intervals, formattedDateRange: R, renderBar: D });
-              return /* @__PURE__ */ o(
+            /* @__PURE__ */ t("div", { role: "rowgroup", children: l.map((o, T) => {
+              const R = Q?.(o) ?? O(o, p), j = /* @__PURE__ */ t(I, { item: o, intervals: h.intervals, formattedDateRange: R, renderBar: D });
+              return /* @__PURE__ */ a(
                 "div",
                 {
                   className: "mtx-grid",
@@ -324,13 +327,13 @@ const pt = {
                         className: "mtx-sticky mtx-left-0 mtx-z-30 mtx-flex mtx-items-center mtx-border-b mtx-border-r mtx-border-gray-200 mtx-bg-gray-0 mtx-px-2",
                         style: { minHeight: d },
                         role: "rowheader",
-                        children: B ? B({ item: a, formattedDateRange: R }) : /* @__PURE__ */ o("div", { className: "mtx-flex mtx-w-full mtx-min-w-0 mtx-items-center mtx-justify-between mtx-gap-3", children: [
-                          /* @__PURE__ */ t("span", { className: "mtx-truncate mtx-text-xs mtx-font-semibold mtx-text-text-500", children: a.name }),
+                        children: B ? B({ item: o, formattedDateRange: R }) : /* @__PURE__ */ a("div", { className: "mtx-flex mtx-w-full mtx-min-w-0 mtx-items-center mtx-justify-between mtx-gap-3", children: [
+                          /* @__PURE__ */ t("span", { className: "mtx-truncate mtx-text-xs mtx-font-semibold mtx-text-text-500", children: o.name }),
                           /* @__PURE__ */ t("span", { className: "mtx-shrink-0 mtx-text-xs mtx-text-text-300", children: R })
                         ] })
                       }
                     ),
-                    /* @__PURE__ */ o(
+                    /* @__PURE__ */ a(
                       "div",
                       {
                         className: "mtx-relative mtx-flex mtx-flex-col mtx-justify-center mtx-border-b mtx-border-gray-200",
@@ -339,12 +342,12 @@ const pt = {
                         children: [
                           /* @__PURE__ */ t(q, { intervals: h.intervals, highlightedDate: S }),
                           /* @__PURE__ */ t(W, { markers: P, showLabels: !b && T === 0 }),
-                          a.additionalBars?.length ? /* @__PURE__ */ o("div", { className: "mtx-flex mtx-flex-col mtx-gap-1 mtx-py-2", children: [
+                          o.additionalBars?.length ? /* @__PURE__ */ a("div", { className: "mtx-flex mtx-flex-col mtx-gap-1 mtx-py-2", children: [
                             /* @__PURE__ */ t("div", { className: "mtx-relative mtx-h-6", children: j }),
-                            a.additionalBars.map((F) => /* @__PURE__ */ t("div", { className: "mtx-relative mtx-h-6", children: /* @__PURE__ */ t(
+                            o.additionalBars.map((F) => /* @__PURE__ */ t("div", { className: "mtx-relative mtx-h-6", children: /* @__PURE__ */ t(
                               I,
                               {
-                                item: a,
+                                item: o,
                                 bar: F,
                                 intervals: h.intervals,
                                 formattedDateRange: O(F, p),
@@ -357,7 +360,7 @@ const pt = {
                     )
                   ]
                 },
-                a.id
+                o.id
               );
             }) })
           ] }) })

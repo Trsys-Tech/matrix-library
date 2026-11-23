@@ -1,10 +1,10 @@
-import { jsx as o, jsxs as n } from "react/jsx-runtime";
+import { jsx as o, jsxs as s } from "react/jsx-runtime";
 import * as r from "react";
 import { Command as e } from "cmdk";
 import { Magnifier as c } from "@trsys-tech/matrix-icons";
 import { cn as d } from "./utils.es.js";
 import { Dialog as u, DialogContent as g, DialogTitle as f } from "./dialog.es.js";
-const s = r.forwardRef(
+const p = r.forwardRef(
   ({ className: m, ...t }, a) => /* @__PURE__ */ o(
     e,
     {
@@ -17,26 +17,25 @@ const s = r.forwardRef(
     }
   )
 );
-s.displayName = e.displayName;
-const D = ({ children: m, ...t }) => /* @__PURE__ */ o(u, { ...t, children: /* @__PURE__ */ n(g, { className: "mtx-overflow-hidden mtx-p-0", children: [
+p.displayName = e.displayName;
+const D = ({ children: m, ...t }) => /* @__PURE__ */ o(u, { ...t, children: /* @__PURE__ */ s(g, { className: "mtx-overflow-hidden mtx-p-0", children: [
   /* @__PURE__ */ o(f, { className: "mtx-sr-only", children: "Command menu" }),
-  /* @__PURE__ */ o(s, { className: "[&_[cmdk-group-heading]]:mtx-px-2 [&_[cmdk-group-heading]]:mtx-font-medium [&_[cmdk-group-heading]]:mtx-text-muted-foreground [&_[cmdk-group]:not([hidden])_~[cmdk-group]]:mtx-pt-0 [&_[cmdk-group]]:mtx-px-2 [&_[cmdk-input-wrapper]_svg]:mtx-h-5 [&_[cmdk-input-wrapper]_svg]:mtx-w-5 [&_[cmdk-input]]:mtx-h-12 [&_[cmdk-item]]:mtx-px-2 [&_[cmdk-item]]:mtx-py-3 [&_[cmdk-item]_svg]:mtx-h-5 [&_[cmdk-item]_svg]:mtx-w-5", children: m })
-] }) }), h = r.forwardRef(
-  ({ className: m, ...t }, a) => /* @__PURE__ */ n("div", { className: "mtx-flex mtx-items-center mtx-border-b mtx-border-gray-200 mtx-px-3", "cmdk-input-wrapper": "", children: [
-    /* @__PURE__ */ o(c, { className: "mtx-mr-2 mtx-h-4 mtx-w-4 mtx-shrink-0 mtx-opacity-50" }),
-    /* @__PURE__ */ o(
-      e.Input,
-      {
-        ref: a,
-        className: d(
-          "mtx-flex mtx-h-10 mtx-w-full mtx-rounded-md mtx-bg-transparent mtx-py-3 mtx-text-sm mtx-outline-none placeholder:mtx-text-muted-foreground disabled:mtx-cursor-not-allowed disabled:mtx-opacity-50",
-          m
-        ),
-        ...t
-      }
-    )
-  ] })
-);
+  /* @__PURE__ */ o(p, { className: "[&_[cmdk-group-heading]]:mtx-px-2 [&_[cmdk-group-heading]]:mtx-font-medium [&_[cmdk-group-heading]]:mtx-text-muted-foreground [&_[cmdk-group]:not([hidden])_~[cmdk-group]]:mtx-pt-0 [&_[cmdk-group]]:mtx-px-2 [&_[cmdk-input-wrapper]_svg]:mtx-h-5 [&_[cmdk-input-wrapper]_svg]:mtx-w-5 [&_[cmdk-input]]:mtx-h-12 [&_[cmdk-item]]:mtx-px-2 [&_[cmdk-item]]:mtx-py-3 [&_[cmdk-item]_svg]:mtx-h-5 [&_[cmdk-item]_svg]:mtx-w-5", children: m })
+] }) }), h = r.forwardRef(({ className: m, endAdornment: t, ...a }, x) => /* @__PURE__ */ s("div", { className: "mtx-flex mtx-items-center mtx-border-b mtx-border-gray-200 mtx-px-3", "cmdk-input-wrapper": "", children: [
+  /* @__PURE__ */ o(c, { className: "mtx-mr-2 mtx-h-4 mtx-w-4 mtx-shrink-0 mtx-opacity-50" }),
+  /* @__PURE__ */ o(
+    e.Input,
+    {
+      ref: x,
+      className: d(
+        "mtx-flex mtx-h-10 mtx-w-full mtx-rounded-md mtx-bg-transparent mtx-py-3 mtx-text-sm mtx-outline-none placeholder:mtx-text-muted-foreground disabled:mtx-cursor-not-allowed disabled:mtx-opacity-50",
+        m
+      ),
+      ...a
+    }
+  ),
+  t
+] }));
 h.displayName = e.Input.displayName;
 const y = r.forwardRef(
   ({ className: m, ...t }, a) => /* @__PURE__ */ o(e.List, { ref: a, className: d("mtx-max-h-[300px] mtx-overflow-y-auto mtx-overflow-x-hidden", m), ...t })
@@ -62,10 +61,10 @@ const _ = r.forwardRef(
 _.displayName = e.Group.displayName;
 const k = r.forwardRef(({ className: m, ...t }, a) => /* @__PURE__ */ o(e.Separator, { ref: a, className: d("-mtx-mx-1 mtx-h-px mtx-bg-border", m), ...t }));
 k.displayName = e.Separator.displayName;
-const w = r.forwardRef(({ className: m, value: t, onSelect: a, ...p }, i) => {
+const w = r.forwardRef(({ className: m, value: t, onSelect: a, ...x }, i) => {
   const l = r.useCallback(
-    (x) => {
-      a?.(typeof t == "number" ? Number(x) : x);
+    (n) => {
+      a?.(typeof t == "number" ? Number(n) : n);
     },
     [t, a]
   );
@@ -79,7 +78,7 @@ const w = r.forwardRef(({ className: m, value: t, onSelect: a, ...p }, i) => {
       ),
       value: t !== void 0 ? String(t) : void 0,
       onSelect: l,
-      ...p
+      ...x
     }
   );
 });
@@ -87,7 +86,7 @@ w.displayName = e.Item.displayName;
 const v = ({ className: m, ...t }) => /* @__PURE__ */ o("span", { className: d("mtx-ml-auto mtx-text-xs mtx-tracking-widest mtx-text-muted-foreground", m), ...t });
 v.displayName = "CommandShortcut";
 export {
-  s as Command,
+  p as Command,
   D as CommandDialog,
   N as CommandEmpty,
   _ as CommandGroup,

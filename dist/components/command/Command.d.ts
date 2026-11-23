@@ -25,7 +25,9 @@ declare const CommandInput: React.ForwardRefExoticComponent<Omit<Omit<Pick<Pick<
 }, "key" | "asChild" | keyof React.InputHTMLAttributes<HTMLInputElement>>, "onChange" | "value" | "type"> & {
     value?: string;
     onValueChange?: (search: string) => void;
-} & React.RefAttributes<HTMLInputElement>, "ref"> & React.RefAttributes<HTMLInputElement>>;
+} & React.RefAttributes<HTMLInputElement>, "ref"> & {
+    endAdornment?: React.ReactNode;
+} & React.RefAttributes<HTMLInputElement>>;
 declare const CommandList: React.ForwardRefExoticComponent<Omit<{
     children?: React.ReactNode;
 } & Pick<Pick<React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>, "key" | keyof React.HTMLAttributes<HTMLDivElement>> & {

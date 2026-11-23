@@ -1,132 +1,160 @@
-import { jsxs as s, jsx as r } from "react/jsx-runtime";
-import a, { useRef as A, useMemo as B } from "react";
-import { XMark as M, ChevronDown as O, Check as S } from "@trsys-tech/matrix-icons";
-import { cn as b } from "./utils.es.js";
-import { Button as G } from "./button.es.js";
-import { Popover as T, PopoverTrigger as X, PopoverContent as q } from "./popover.es.js";
-import { Command as z, CommandInput as H, CommandList as J, CommandEmpty as Q, CommandItem as h, CommandGroup as U } from "./command.es.js";
-const rt = ({
-  onValueChange: o,
-  options: l,
-  value: e,
-  className: w,
-  clearable: y = !1,
-  closeOnSelect: x = !0,
-  loading: m,
-  disabled: v,
-  placeholder: i = "Select an option",
-  searchText: g = "Search...",
-  noResultsText: C = "No results found",
-  loadingText: u = "Loading...",
-  emptyOptionsText: k = "No Items",
-  showSearchInput: c = !0,
-  modalPopover: N,
-  extraContent: P,
-  ...L
+import { jsxs as c, jsx as a } from "react/jsx-runtime";
+import o, { useRef as W, useMemo as D } from "react";
+import { XMark as Y, ChevronDown as Z, Plus as $, Check as V } from "@trsys-tech/matrix-icons";
+import { cn as O } from "./utils.es.js";
+import { Button as tt } from "./button.es.js";
+import { Popover as et, PopoverTrigger as rt, PopoverContent as at } from "./popover.es.js";
+import { Command as ot, CommandInput as nt, CommandList as mt, CommandEmpty as st, CommandItem as E, CommandGroup as it } from "./command.es.js";
+const S = (e) => "keyword" in e ? e.keyword : e.label, u = (e) => e.trim().toLocaleLowerCase(), bt = ({
+  onValueChange: e,
+  options: f,
+  value: r,
+  className: j,
+  clearable: I = !1,
+  closeOnSelect: m = !0,
+  loading: i,
+  disabled: K,
+  placeholder: b = "Select an option",
+  searchText: L = "Search...",
+  noResultsText: R = "No results found",
+  loadingText: k = "Loading...",
+  emptyOptionsText: _ = "No Items",
+  showSearchInput: h = !0,
+  addOptionOnSearchNotFound: y = !1,
+  modalPopover: z,
+  extraContent: B,
+  ...M
 }) => {
-  const [p, n] = a.useState(!1), f = A(null), D = a.useCallback(
+  const [C, T] = o.useState(!1), g = W(null), [P, v] = o.useState(""), [N, q] = o.useState([]), l = D(
+    () => [...f, ...N.filter((t) => !f.some((s) => s.value === t.value))],
+    [f, N]
+  ), d = P.trim(), A = u(d), x = !!d && !l.some(
+    (t) => u(String(t.value)) === A || u(S(t)) === A
+  ), n = o.useCallback((t) => {
+    T(t), t || v("");
+  }, []), w = o.useCallback(() => {
+    if (!x) return;
+    const t = { label: d, value: d };
+    q((s) => [...s, t]), e?.(t.value), v(""), m && n(!1);
+  }, [x, d, e, m, n]), F = o.useCallback(
     (t) => {
-      t.key === "Enter" ? n(!0) : t.key === "Backspace" && !t.currentTarget.value && (o?.(e), x && n(!1));
+      if (t.key === "Enter" && y && x) {
+        if (t.nativeEvent.isComposing || t.keyCode === 229 || g.current?.querySelector('[cmdk-item][aria-selected="true"]:not([aria-disabled="true"])')) return;
+        t.preventDefault(), t.stopPropagation(), w();
+      } else t.key === "Backspace" && !t.currentTarget.value && (e?.(r), m && n(!1));
     },
-    [o, x, e]
-  ), j = a.useCallback(
+    [e, m, r, y, x, w, n]
+  ), G = o.useCallback(
     (t) => {
-      o?.(t), x && n(!1);
+      e?.(t), m && n(!1);
     },
-    [o, x]
-  ), E = a.useCallback(
+    [e, m, n]
+  ), X = o.useCallback(
     (t) => {
-      t.stopPropagation(), o?.(void 0);
+      t.stopPropagation(), e?.(void 0);
     },
-    [o]
-  ), I = a.useCallback((t, R, _ = [""]) => _.join("").toLocaleLowerCase().includes(R.toLocaleLowerCase()) ? 1 : 0, []), F = a.useCallback(
+    [e]
+  ), H = o.useCallback((t, s, U = [""]) => u(U.join("")).includes(u(s)) ? 1 : 0, []), J = o.useCallback(
     (t) => {
-      c || (t.preventDefault(), f.current?.focus());
+      h || (t.preventDefault(), g.current?.focus());
     },
-    [c]
-  ), d = e === void 0 || e === "", K = B(() => d && m ? u : d ? i : l.find((t) => t.value === e)?.label || i, [d, e, l, i, m, u]);
-  return /* @__PURE__ */ s(T, { open: p, onOpenChange: n, modal: N, children: [
-    /* @__PURE__ */ r(X, { asChild: !0, children: /* @__PURE__ */ s(
-      G,
+    [h]
+  ), p = r === void 0 || r === "", Q = D(() => p && i ? k : p ? b : l.find((t) => t.value === r)?.label || b, [p, r, l, b, i, k]);
+  return /* @__PURE__ */ c(et, { open: C, onOpenChange: n, modal: z, children: [
+    /* @__PURE__ */ a(rt, { asChild: !0, children: /* @__PURE__ */ c(
+      tt,
       {
         variant: "text",
         role: "combobox",
         type: "button",
-        "aria-expanded": p,
-        className: b(
+        "aria-expanded": C,
+        className: O(
           "mtx-group mtx-flex mtx-h-8 mtx-w-full mtx-items-center mtx-justify-between mtx-whitespace-nowrap mtx-overflow-hidden mtx-rounded-sm mtx-border mtx-border-input mtx-bg-transparent mtx-px-3 mtx-py-1.5 mtx-text-xs mtx-ring-offset-background data-[placeholder]:mtx-text-muted-foreground hover:mtx-border hover:mtx-border-primary hover:mtx-bg-transparent focus:mtx-border focus:mtx-border-primary focus:mtx-outline-none focus:mtx-ring focus:mtx-ring-primary-100 disabled:mtx-cursor-not-allowed disabled:mtx-bg-gray-100 disabled:mtx-text-text-300 disabled:mtx-border-gray-100 [&_svg]:disabled:mtx-text-text-300",
-          w
+          j
         ),
-        "data-value": e,
-        "data-placeholder": d ? "" : void 0,
-        loading: m,
-        disabled: v,
-        endIcon: /* @__PURE__ */ r(
-          O,
+        "data-value": r,
+        "data-placeholder": p ? "" : void 0,
+        loading: i,
+        disabled: K,
+        endIcon: /* @__PURE__ */ a(
+          Z,
           {
             role: "button",
             "aria-label": "Expand dropdown",
             className: "!mtx-h-4.5 !mtx-w-4.5 mtx-cursor-pointer group-data-[state=open]:mtx-rotate-180 mtx-transition-transform mtx-ms-auto"
           }
         ),
-        ...L,
+        ...M,
         children: [
-          /* @__PURE__ */ r("span", { className: "mtx-text-start mtx-text-ellipsis mtx-whitespace-nowrap mtx-overflow-hidden mtx-flex-1 mtx-max-w-[calc(100%-24px)]", children: K }),
-          y && e !== void 0 && e !== null ? /* @__PURE__ */ r(
+          /* @__PURE__ */ a("span", { className: "mtx-text-start mtx-text-ellipsis mtx-whitespace-nowrap mtx-overflow-hidden mtx-flex-1 mtx-max-w-[calc(100%-24px)]", children: Q }),
+          I && r !== void 0 && r !== null ? /* @__PURE__ */ a(
             "span",
             {
-              onClick: E,
+              onClick: X,
               className: "mtx-p-0 mtx-rounded-sm mtx-text-xs mtx-font-normal mtx-transition-colors focus-visible:mtx-outline-none disabled:mtx-pointer-events-none disabled:mtx-bg-muted disabled:mtx-text-gray-500 mtx-text-primary hover:mtx-bg-primary-50 focus:mtx-bg-transparent focus:mtx-ring active:mtx-bg-primary-50 active:mtx-text-primary-700 [&>svg]:mtx-h-4.5 [&>svg]:mtx-w-4.5",
               role: "button",
               "aria-label": "Clear selection",
-              children: /* @__PURE__ */ r(M, {})
+              children: /* @__PURE__ */ a(Y, {})
             }
           ) : null
         ]
       }
     ) }),
-    /* @__PURE__ */ r(
-      q,
+    /* @__PURE__ */ a(at, { className: "mtx-w-auto mtx-p-0", align: "start", onOpenAutoFocus: J, children: /* @__PURE__ */ c(
+      ot,
       {
-        className: "mtx-w-auto mtx-p-0",
-        align: "start",
-        onEscapeKeyDown: () => n(!1),
-        onOpenAutoFocus: F,
-        children: /* @__PURE__ */ s(
-          z,
-          {
-            className: "mtx-w-[--radix-popper-anchor-width] focus-visible:mtx-outline-none",
-            filter: I,
-            defaultValue: e != null ? String(e) : void 0,
-            ref: f,
-            children: [
-              c && /* @__PURE__ */ r(H, { placeholder: g, onKeyDown: D }),
-              P,
-              /* @__PURE__ */ s(J, { children: [
-                !m && /* @__PURE__ */ r(Q, { children: C }),
-                !m && !l.length ? /* @__PURE__ */ r(h, { value: "8fdcaeb67c8ad943c80fe54c3b1059b700d9254389a38a4a1fc39a6eee7564623", disabled: !0, children: k }) : null,
-                /* @__PURE__ */ r(U, { children: l.map((t) => /* @__PURE__ */ s(
-                  h,
-                  {
-                    value: t.value,
-                    keywords: "keyword" in t ? [t.keyword] : [t.label],
-                    onSelect: j,
-                    children: [
-                      t.label,
-                      /* @__PURE__ */ r(S, { className: b("mtx-ml-auto", e === t.value ? "mtx-opacity-100" : "mtx-opacity-0") })
-                    ]
+        className: "mtx-w-[--radix-popper-anchor-width] focus-visible:mtx-outline-none",
+        filter: H,
+        defaultValue: r != null ? String(r) : void 0,
+        ref: g,
+        children: [
+          h && /* @__PURE__ */ a(
+            nt,
+            {
+              placeholder: L,
+              onKeyDown: F,
+              value: P,
+              onValueChange: v,
+              endAdornment: y && /* @__PURE__ */ a(
+                "button",
+                {
+                  type: "button",
+                  "aria-label": "Add option",
+                  disabled: !x,
+                  onClick: w,
+                  onKeyDown: (t) => {
+                    t.key === "Enter" && t.stopPropagation();
                   },
-                  String(t.value)
-                )) })
-              ] })
-            ]
-          }
-        )
+                  className: "mtx-shrink-0 mtx-text-primary disabled:mtx-opacity-50",
+                  children: /* @__PURE__ */ a($, { className: "mtx-h-4 mtx-w-4", "aria-hidden": "true" })
+                }
+              )
+            }
+          ),
+          B,
+          /* @__PURE__ */ c(mt, { children: [
+            !i && /* @__PURE__ */ a(st, { children: R }),
+            !i && !l.length ? /* @__PURE__ */ a(E, { value: "8fdcaeb67c8ad943c80fe54c3b1059b700d9254389a38a4a1fc39a6eee7564623", disabled: !0, children: _ }) : null,
+            /* @__PURE__ */ a(it, { children: l.map((t) => /* @__PURE__ */ c(
+              E,
+              {
+                value: t.value,
+                keywords: [S(t)],
+                onSelect: G,
+                children: [
+                  t.label,
+                  /* @__PURE__ */ a(V, { className: O("mtx-ml-auto", r === t.value ? "mtx-opacity-100" : "mtx-opacity-0") })
+                ]
+              },
+              String(t.value)
+            )) })
+          ] })
+        ]
       }
-    )
+    ) })
   ] });
 };
 export {
-  rt as Combobox
+  bt as Combobox
 };
 //# sourceMappingURL=combobox.es.js.map

@@ -75,6 +75,12 @@ type ComboboxProps<T extends string | number> = React.HTMLAttributes<HTMLButtonE
      */
     showSearchInput?: boolean;
     /**
+     * Allow creating and selecting a new option from the search text.
+     * Created values are strings, including when existing option values are numbers.
+     * @default false
+     */
+    addOptionOnSearchNotFound?: boolean;
+    /**
      * Whether to show the clear button.
      * @default false
      */
@@ -84,6 +90,6 @@ type ComboboxProps<T extends string | number> = React.HTMLAttributes<HTMLButtonE
      */
     extraContent?: React.ReactNode;
 };
-declare const Combobox: <T extends string | number>({ onValueChange, options, value, className, clearable, closeOnSelect, loading, disabled, placeholder, searchText, noResultsText, loadingText, emptyOptionsText, showSearchInput, modalPopover, extraContent, ...props }: ComboboxProps<T>) => React.JSX.Element;
+declare const Combobox: <T extends string | number>({ onValueChange, options, value, className, clearable, closeOnSelect, loading, disabled, placeholder, searchText, noResultsText, loadingText, emptyOptionsText, showSearchInput, addOptionOnSearchNotFound, modalPopover, extraContent, ...props }: ComboboxProps<T>) => React.JSX.Element;
 export { Combobox, type ComboboxProps };
 //# sourceMappingURL=Combobox.d.ts.map
