@@ -35,21 +35,23 @@ const CommandDialog = ({ children, ...props }: DialogProps) => {
   );
 };
 
-const CommandInput = React.forwardRef<React.ElementRef<typeof CommandPrimitive.Input>, React.ComponentPropsWithoutRef<typeof CommandPrimitive.Input>>(
-  ({ className, ...props }, ref) => (
-    <div className="mtx-flex mtx-items-center mtx-border-b mtx-border-gray-200 mtx-px-3" cmdk-input-wrapper="">
-      <Magnifier className="mtx-mr-2 mtx-h-4 mtx-w-4 mtx-shrink-0 mtx-opacity-50" />
-      <CommandPrimitive.Input
-        ref={ref}
-        className={cn(
-          "mtx-flex mtx-h-10 mtx-w-full mtx-rounded-md mtx-bg-transparent mtx-py-3 mtx-text-sm mtx-outline-none placeholder:mtx-text-muted-foreground disabled:mtx-cursor-not-allowed disabled:mtx-opacity-50",
-          className,
-        )}
-        {...props}
-      />
-    </div>
-  ),
-);
+const CommandInput = React.forwardRef<
+  React.ElementRef<typeof CommandPrimitive.Input>,
+  React.ComponentPropsWithoutRef<typeof CommandPrimitive.Input> & { endAdornment?: React.ReactNode }
+>(({ className, endAdornment, ...props }, ref) => (
+  <div className="mtx-flex mtx-items-center mtx-border-b mtx-border-gray-200 mtx-px-3" cmdk-input-wrapper="">
+    <Magnifier className="mtx-mr-2 mtx-h-4 mtx-w-4 mtx-shrink-0 mtx-opacity-50" />
+    <CommandPrimitive.Input
+      ref={ref}
+      className={cn(
+        "mtx-flex mtx-h-10 mtx-w-full mtx-rounded-md mtx-bg-transparent mtx-py-3 mtx-text-sm mtx-outline-none placeholder:mtx-text-muted-foreground disabled:mtx-cursor-not-allowed disabled:mtx-opacity-50",
+        className,
+      )}
+      {...props}
+    />
+    {endAdornment}
+  </div>
+));
 
 CommandInput.displayName = CommandPrimitive.Input.displayName;
 

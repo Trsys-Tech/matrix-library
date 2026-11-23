@@ -67,6 +67,14 @@ export const Default: StringStory = {
   },
 };
 
+export const AddOptionOnSearchNotFound: StringStory = {
+  args: { addOptionOnSearchNotFound: true, closeOnSelect: false },
+  render: args => {
+    const [value, setValue] = useState<string | undefined>(undefined);
+    return <Combobox {...args} value={value} onValueChange={setValue} />;
+  },
+};
+
 export const WithoutSearchInput: StringStory = {
   render: args => {
     const [value, setValue] = useState<string | undefined>(undefined);

@@ -451,7 +451,10 @@ const GanttChart = React.forwardRef<HTMLDivElement, GanttChartProps>(
     return (
       <div
         ref={handleRootRef}
-        className={cn("mtx-overflow-hidden mtx-rounded-lg mtx-border mtx-border-gray-200 mtx-bg-gray-0 mtx-[font-family:DMSans]", className)}
+        className={cn(
+          "mtx-overflow-hidden mtx-rounded-lg mtx-border mtx-border-gray-200 mtx-bg-gray-0 mtx-[font-family:DMSans] mtx-flex mtx-flex-col",
+          className,
+        )}
         aria-label={ariaLabel}
         {...props}
       >
@@ -465,7 +468,7 @@ const GanttChart = React.forwardRef<HTMLDivElement, GanttChartProps>(
           toolbarActions={toolbarActions}
         />
 
-        <div className="mtx-overflow-auto">
+        <div className="mtx-overflow-auto mtx-flex-1">
           <div style={{ minWidth: chartWidth }} role="table" aria-label={ariaLabel}>
             <TimelineHeader
               intervals={timeline.intervals}

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useMemo, useRef } from "react";
-import { Check, ChevronDown, XMark } from "@trsys-tech/matrix-icons";
+import { Check, ChevronDown, Plus, XMark } from "@trsys-tech/matrix-icons";
 
 import { cn } from "../../lib/utils";
 import { Button } from "../button/Button";
@@ -90,6 +90,13 @@ type ComboboxProps<T extends string | number> = React.HTMLAttributes<HTMLButtonE
   showSearchInput?: boolean;
 
   /**
+   * Allow creating and selecting a new option from the search text.
+   * Created values are strings, including when existing option values are numbers.
+   * @default false
+   */
+  addOptionOnSearchNotFound?: boolean;
+
+  /**
    * Whether to show the clear button.
    * @default false
    */
@@ -100,6 +107,9 @@ type ComboboxProps<T extends string | number> = React.HTMLAttributes<HTMLButtonE
    */
   extraContent?: React.ReactNode;
 };
+
+const getOptionKeyword = (option: ComboboxProps<string | number>["options"][number]) => ("keyword" in option ? option.keyword : option.label);
+const normalizeSearchText = (text: string) => text.trim().toLocaleLowerCase();
 
 const Combobox = <T extends string | number>({
   onValueChange,
@@ -116,31 +126,66 @@ const Combobox = <T extends string | number>({
   loadingText = "Loading...",
   emptyOptionsText = "No Items",
   showSearchInput = true,
+  addOptionOnSearchNotFound = false,
   modalPopover,
   extraContent,
   ...props
 }: ComboboxProps<T>) => {
   const [isPopoverOpen, setIsPopoverOpen] = React.useState(false);
   const commandRef = useRef<HTMLDivElement>(null);
+  const [searchValue, setSearchValue] = React.useState("");
+  const [addedOptions, setAddedOptions] = React.useState<{ label: string; value: T }[]>([]);
+  const allOptions = useMemo(
+    () => [...options, ...addedOptions.filter(added => !options.some(option => option.value === added.value))],
+    [options, addedOptions],
+  );
+  const newValue = searchValue.trim();
+  const normalizedSearch = normalizeSearchText(newValue);
+  const canAddOption =
+    !!newValue &&
+    !allOptions.some(
+      option => normalizeSearchText(String(option.value)) === normalizedSearch || normalizeSearchText(getOptionKeyword(option)) === normalizedSearch,
+    );
+
+  const handleOpenChange = React.useCallback((open: boolean) => {
+    setIsPopoverOpen(open);
+    if (!open) setSearchValue("");
+  }, []);
+
+  const handleAddOption = React.useCallback(() => {
+    if (!canAddOption) return;
+    const newOption = { label: newValue, value: newValue as T };
+    setAddedOptions(prev => [...prev, newOption]);
+    onValueChange?.(newOption.value);
+    setSearchValue("");
+    if (closeOnSelect) handleOpenChange(false);
+  }, [canAddOption, newValue, onValueChange, closeOnSelect, handleOpenChange]);
 
   const handleInputKeyDown = React.useCallback(
     (event: React.KeyboardEvent<HTMLInputElement>) => {
-      if (event.key === "Enter") {
-        setIsPopoverOpen(true);
+      if (event.key === "Enter" && addOptionOnSearchNotFound && canAddOption) {
+        if (event.nativeEvent.isComposing || event.keyCode === 229) return;
+
+        const highlightedOption = commandRef.current?.querySelector('[cmdk-item][aria-selected="true"]:not([aria-disabled="true"])');
+        if (highlightedOption) return;
+
+        event.preventDefault();
+        event.stopPropagation();
+        handleAddOption();
       } else if (event.key === "Backspace" && !event.currentTarget.value) {
         onValueChange?.(value!);
-        if (closeOnSelect) setIsPopoverOpen(false);
+        if (closeOnSelect) handleOpenChange(false);
       }
     },
-    [onValueChange, closeOnSelect, value],
+    [onValueChange, closeOnSelect, value, addOptionOnSearchNotFound, canAddOption, handleAddOption, handleOpenChange],
   );
 
   const handleSelect = React.useCallback(
     (currentValue: T) => {
       onValueChange?.(currentValue);
-      if (closeOnSelect) setIsPopoverOpen(false);
+      if (closeOnSelect) handleOpenChange(false);
     },
-    [onValueChange, closeOnSelect],
+    [onValueChange, closeOnSelect, handleOpenChange],
   );
 
   const handleClear = React.useCallback(
@@ -152,7 +197,7 @@ const Combobox = <T extends string | number>({
   );
 
   const handleFilter = React.useCallback((value: string, search: string, keywords: string[] = [""]) => {
-    return keywords.join("").toLocaleLowerCase().includes(search.toLocaleLowerCase()) ? 1 : 0;
+    return normalizeSearchText(keywords.join("")).includes(normalizeSearchText(search)) ? 1 : 0;
   }, []);
 
   // when search input is not shown, we need to focus on the command manually to enable keyboard navigation
@@ -171,11 +216,11 @@ const Combobox = <T extends string | number>({
   const label = useMemo(() => {
     if (showPlaceholder && loading) return loadingText;
     if (showPlaceholder) return placeholder;
-    return options.find(option => option.value === value)?.label || placeholder;
-  }, [showPlaceholder, value, options, placeholder, loading, loadingText]);
+    return allOptions.find(option => option.value === value)?.label || placeholder;
+  }, [showPlaceholder, value, allOptions, placeholder, loading, loadingText]);
 
   return (
-    <Popover open={isPopoverOpen} onOpenChange={setIsPopoverOpen} modal={modalPopover}>
+    <Popover open={isPopoverOpen} onOpenChange={handleOpenChange} modal={modalPopover}>
       <PopoverTrigger asChild>
         <Button
           variant="text"
@@ -214,33 +259,51 @@ const Combobox = <T extends string | number>({
           ) : null}
         </Button>
       </PopoverTrigger>
-      <PopoverContent
-        className="mtx-w-auto mtx-p-0"
-        align="start"
-        onEscapeKeyDown={() => setIsPopoverOpen(false)}
-        onOpenAutoFocus={handleOpenAutoFocus}
-      >
+      <PopoverContent className="mtx-w-auto mtx-p-0" align="start" onOpenAutoFocus={handleOpenAutoFocus}>
         <Command
           className="mtx-w-[--radix-popper-anchor-width] focus-visible:mtx-outline-none"
           filter={handleFilter}
           defaultValue={value !== undefined && value !== null ? String(value) : undefined} // highlight selected value on open
           ref={commandRef}
         >
-          {showSearchInput && <CommandInput placeholder={searchText} onKeyDown={handleInputKeyDown} />}
+          {showSearchInput && (
+            <CommandInput
+              placeholder={searchText}
+              onKeyDown={handleInputKeyDown}
+              value={searchValue}
+              onValueChange={setSearchValue}
+              endAdornment={
+                addOptionOnSearchNotFound && (
+                  <button
+                    type="button"
+                    aria-label="Add option"
+                    disabled={!canAddOption}
+                    onClick={handleAddOption}
+                    onKeyDown={event => {
+                      if (event.key === "Enter") event.stopPropagation();
+                    }}
+                    className="mtx-shrink-0 mtx-text-primary disabled:mtx-opacity-50"
+                  >
+                    <Plus className="mtx-h-4 mtx-w-4" aria-hidden="true" />
+                  </button>
+                )
+              }
+            />
+          )}
           {extraContent}
           <CommandList>
             {!loading && <CommandEmpty>{noResultsText}</CommandEmpty>}
-            {!loading && !options.length ? (
+            {!loading && !allOptions.length ? (
               <CommandItem value="8fdcaeb67c8ad943c80fe54c3b1059b700d9254389a38a4a1fc39a6eee7564623" disabled>
                 {emptyOptionsText}
               </CommandItem>
             ) : null}
             <CommandGroup>
-              {options.map(option => (
+              {allOptions.map(option => (
                 <CommandItem
                   key={String(option.value)}
                   value={option.value}
-                  keywords={"keyword" in option ? [option.keyword] : [option.label]}
+                  keywords={[getOptionKeyword(option)]}
                   onSelect={handleSelect as React.ComponentProps<typeof CommandItem>["onSelect"]}
                 >
                   {option.label}
