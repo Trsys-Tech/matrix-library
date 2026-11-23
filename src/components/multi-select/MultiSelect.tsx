@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { tv, type VariantProps } from "tailwind-variants";
-import { Check, ChevronDown, CircleXmark, XMark } from "@trsys-tech/matrix-icons";
+import { Check, ChevronDown, CircleXmark, Plus, XMark } from "@trsys-tech/matrix-icons";
 
 import { cn } from "../../lib/utils";
 import { Status } from "../status/Status";
@@ -185,37 +185,33 @@ const MultiSelect = <T extends string | number>(
     return mergedOptions;
   }, [addedOptions, propOptions]);
 
+  const canAddOption = !!searchValue && !options.has(searchValue as T);
+  const handleAddOption = React.useCallback(() => {
+    if (!canAddOption) return;
+    const newOption = { value: searchValue as T, label: searchValue };
+    setAddedOptions(prev => new Map(prev).set(newOption.value, newOption));
+    const newSelectedValues = [...selectedValues, newOption.value];
+    if (!isControlled) setInternalSelectedValues(newSelectedValues);
+    onValueChange(newSelectedValues);
+    setSearchValue("");
+  }, [canAddOption, searchValue, selectedValues, isControlled, onValueChange]);
+
   const handleInputKeyDown = React.useCallback(
     (event: React.KeyboardEvent<HTMLInputElement>) => {
-      if (event.key === "Enter" && addOptionOnSearchNotFound) {
-        setIsPopoverOpen(true);
+      if (event.key === "Enter" && addOptionOnSearchNotFound && (canAddOption || !searchValue)) {
         event.preventDefault();
         event.stopPropagation();
-        if (!event.currentTarget.value) return;
-        const newOption = { value: event.currentTarget.value as T, label: event.currentTarget.value };
-        if (options.get(newOption.value) === undefined) {
-          setAddedOptions(prev => {
-            return new Map(prev).set(newOption.value, newOption);
-          });
-          const newSelectedValues = [...selectedValues, newOption.value];
-          if (!isControlled) {
-            setInternalSelectedValues(newSelectedValues);
-          }
-          onValueChange(newSelectedValues);
-          setSearchValue("");
-        }
+        if (canAddOption) handleAddOption();
       } else if (event.key === "Enter") {
         setIsPopoverOpen(true);
       } else if (event.key === "Backspace" && !event.currentTarget.value) {
         const newSelectedValues = [...selectedValues];
         newSelectedValues.pop();
-        if (!isControlled) {
-          setInternalSelectedValues(newSelectedValues);
-        }
+        if (!isControlled) setInternalSelectedValues(newSelectedValues);
         onValueChange(newSelectedValues);
       }
     },
-    [addOptionOnSearchNotFound, onValueChange, options, selectedValues, isControlled],
+    [addOptionOnSearchNotFound, canAddOption, handleAddOption, onValueChange, selectedValues, isControlled, searchValue],
   );
 
   const toggleOption = React.useCallback(
@@ -355,7 +351,28 @@ const MultiSelect = <T extends string | number>(
       </PopoverTrigger>
       <PopoverContent className="mtx-w-auto mtx-p-0" align="start" onEscapeKeyDown={() => setIsPopoverOpen(false)}>
         <Command className="mtx-w-[--radix-popper-anchor-width] mtx-max-h-[--radix-popper-available-height]">
-          <CommandInput placeholder={searchText} onKeyDown={handleInputKeyDown} value={searchValue} onValueChange={setSearchValue} />
+          <CommandInput
+            placeholder={searchText}
+            onKeyDown={handleInputKeyDown}
+            value={searchValue}
+            onValueChange={setSearchValue}
+            endAdornment={
+              addOptionOnSearchNotFound && (
+                <button
+                  type="button"
+                  aria-label="Add option"
+                  disabled={!canAddOption}
+                  onClick={handleAddOption}
+                  onKeyDown={event => {
+                    if (event.key === "Enter") event.stopPropagation();
+                  }}
+                  className="mtx-shrink-0 mtx-text-primary disabled:mtx-opacity-50"
+                >
+                  <Plus className="mtx-h-4 mtx-w-4" aria-hidden="true" />
+                </button>
+              )
+            }
+          />
           <CommandList className="">
             <CommandEmpty>{noResultsText}</CommandEmpty>
             <CommandGroup>
