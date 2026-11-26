@@ -1,29 +1,39 @@
 import { jsx as r, jsxs as s } from "react/jsx-runtime";
-import { FormField as u, FormItem as F, FormLabel as P, FormControl as b, FormMessage as g } from "./form.es.js";
-import { Textarea as h } from "./textarea.es.js";
-const I = (a) => {
-  const { name: m, control: l, defaultValue: n, disabled: o, readOnly: d, rules: i, shouldUnregister: p, label: x, slotProps: e, required: t, ...c } = a;
+import { FormField as P, FormItem as F, FormLabel as b, FormControl as g, FormMessage as h } from "./form.es.js";
+import { Textarea as M } from "./textarea.es.js";
+const j = (l) => {
+  const { name: m, control: d, defaultValue: n, disabled: o, readOnly: t, voiceMode: i, rules: p, shouldUnregister: x, label: c, slotProps: e, required: a, ...f } = l;
   return /* @__PURE__ */ r(
-    u,
+    P,
     {
-      control: l,
+      control: d,
       name: m,
       defaultValue: n,
       disabled: o,
-      rules: i,
-      shouldUnregister: p,
-      render: ({ field: f }) => /* @__PURE__ */ s(F, { ...c, children: [
-        /* @__PURE__ */ s(P, { ...e?.formLabelProps ?? {}, children: [
-          x,
-          t && /* @__PURE__ */ r("span", { className: "mtx-text-danger mtx-text-sm mtx-leading-4", children: "*" })
+      rules: p,
+      shouldUnregister: x,
+      render: ({ field: u }) => /* @__PURE__ */ s(F, { ...f, children: [
+        /* @__PURE__ */ s(b, { ...e?.formLabelProps ?? {}, children: [
+          c,
+          a && /* @__PURE__ */ r("span", { className: "mtx-text-danger mtx-text-sm mtx-leading-4", children: "*" })
         ] }),
-        /* @__PURE__ */ r(b, { ...e?.formControlProps ?? {}, children: /* @__PURE__ */ r(h, { "aria-required": t, disabled: o || d, ...e?.textareaProps ?? {}, ...f }) }),
-        /* @__PURE__ */ r(g, { ...e?.formMessageProps ?? {} })
+        /* @__PURE__ */ r(g, { ...e?.formControlProps ?? {}, children: /* @__PURE__ */ r(
+          M,
+          {
+            "aria-required": a,
+            disabled: o || t,
+            ...e?.textareaProps ?? {},
+            ...u,
+            readOnly: t || e?.textareaProps?.readOnly,
+            voiceMode: i ?? e?.textareaProps?.voiceMode
+          }
+        ) }),
+        /* @__PURE__ */ r(h, { ...e?.formMessageProps ?? {} })
       ] })
     }
   );
 };
 export {
-  I as FormTextarea
+  j as FormTextarea
 };
 //# sourceMappingURL=formtextarea.es.js.map

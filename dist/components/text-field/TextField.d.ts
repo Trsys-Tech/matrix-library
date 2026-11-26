@@ -47,6 +47,8 @@ declare const textFieldVariants: TVReturnType<{
 interface TextFieldProps extends React.HTMLAttributes<HTMLDivElement>, VariantProps<typeof textFieldVariants> {
     type?: React.HTMLInputTypeAttribute;
     disabled?: boolean;
+    /** Show a dictation button for text, search, tel, and url inputs when the browser supports speech recognition. */
+    voiceMode?: boolean;
     suffix?: React.ReactNode;
     endAdornment?: React.ReactNode;
     startAdornment?: React.ReactNode;
@@ -54,7 +56,7 @@ interface TextFieldProps extends React.HTMLAttributes<HTMLDivElement>, VariantPr
     value?: string | number;
     defaultValue?: string | number;
     slotProps?: {
-        inputProps?: React.InputHTMLAttributes<HTMLInputElement>;
+        inputProps?: React.ComponentPropsWithRef<"input">;
     };
 }
 declare const TextField: React.ForwardRefExoticComponent<TextFieldProps & React.RefAttributes<HTMLInputElement>>;

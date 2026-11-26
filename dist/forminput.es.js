@@ -1,39 +1,43 @@
-import { jsx as e, jsxs as l } from "react/jsx-runtime";
-import { FormField as F, FormItem as c, FormLabel as f, FormControl as b, FormMessage as g } from "./form.es.js";
-import { TextField as h } from "./textfield.es.js";
-const C = (m) => {
-  const { name: d, control: i, defaultValue: n, disabled: o, readOnly: s, rules: a, shouldUnregister: p, label: u, slotProps: r, required: t, ...x } = m;
-  return /* @__PURE__ */ e(
-    F,
+import { jsx as r, jsxs as d } from "react/jsx-runtime";
+import { FormField as b, FormItem as f, FormLabel as g, FormControl as h, FormMessage as M } from "./form.es.js";
+import { TextField as v } from "./textfield.es.js";
+const C = (i) => {
+  const { name: m, control: n, defaultValue: a, disabled: o, readOnly: p, voiceMode: c, rules: x, shouldUnregister: P, label: u, slotProps: e, required: s, ...F } = i;
+  return /* @__PURE__ */ r(
+    b,
     {
-      control: i,
-      name: d,
-      defaultValue: n,
+      control: n,
+      name: m,
+      defaultValue: a,
       disabled: o,
-      rules: a,
-      shouldUnregister: p,
-      render: ({ field: P }) => /* @__PURE__ */ l(c, { ...x, children: [
-        /* @__PURE__ */ l(f, { ...r?.formLabelProps ?? {}, children: [
-          u,
-          t && /* @__PURE__ */ e("span", { className: "mtx-text-danger mtx-text-sm mtx-leading-4", children: "*" })
-        ] }),
-        /* @__PURE__ */ e(b, { ...r?.formControlProps ?? {}, children: /* @__PURE__ */ e(
-          h,
-          {
-            ...r?.textFieldProps ?? {},
-            disabled: o || s,
-            slotProps: {
-              inputProps: {
-                ...r?.textFieldProps?.slotProps?.inputProps,
-                ...P,
-                "aria-required": t,
-                disabled: o || s
+      rules: x,
+      shouldUnregister: P,
+      render: ({ field: t }) => {
+        const l = t.disabled || o || p;
+        return /* @__PURE__ */ d(f, { ...F, children: [
+          /* @__PURE__ */ d(g, { ...e?.formLabelProps ?? {}, children: [
+            u,
+            s && /* @__PURE__ */ r("span", { className: "mtx-text-danger mtx-text-sm mtx-leading-4", children: "*" })
+          ] }),
+          /* @__PURE__ */ r(h, { ...e?.formControlProps ?? {}, children: /* @__PURE__ */ r(
+            v,
+            {
+              ...e?.textFieldProps ?? {},
+              disabled: l,
+              voiceMode: c ?? e?.textFieldProps?.voiceMode,
+              slotProps: {
+                inputProps: {
+                  ...e?.textFieldProps?.slotProps?.inputProps,
+                  ...t,
+                  "aria-required": s,
+                  disabled: l
+                }
               }
             }
-          }
-        ) }),
-        /* @__PURE__ */ e(g, { ...r?.formMessageProps ?? {} })
-      ] })
+          ) }),
+          /* @__PURE__ */ r(M, { ...e?.formMessageProps ?? {} })
+        ] });
+      }
     }
   );
 };

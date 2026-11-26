@@ -7,6 +7,7 @@ type FormTextareaProps<TFieldValues extends FieldValues, TName extends FieldPath
     control: Control<TFieldValues>;
     required?: boolean;
     readOnly?: boolean;
+    voiceMode?: TextareaProps["voiceMode"];
     slotProps?: {
         formLabelProps?: React.HTMLAttributes<HTMLLabelElement> & React.RefAttributes<HTMLLabelElement>;
         formMessageProps?: React.HTMLAttributes<HTMLParagraphElement> & React.RefAttributes<HTMLParagraphElement>;
