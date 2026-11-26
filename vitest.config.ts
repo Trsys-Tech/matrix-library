@@ -8,7 +8,7 @@ export default defineConfig({
     projects: [
       "./vitest.unit.config.ts",
       {
-        optimizeDeps: { include: ["react/jsx-dev-runtime"] },
+        optimizeDeps: { include: ["react/jsx-dev-runtime", "react-hook-form"] },
         test: {
           name: "storybook-browser",
           include: ["tests/browser/**/*.test.tsx"],

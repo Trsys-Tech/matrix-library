@@ -11,6 +11,7 @@ type FormInputProps<TFieldValues extends FieldValues, TName extends FieldPath<TF
     control: Control<TFieldValues>;
     required?: boolean;
     readOnly?: boolean;
+    voiceMode?: TextFieldProps["voiceMode"];
     slotProps?: {
       formLabelProps?: React.HTMLAttributes<HTMLLabelElement> & React.RefAttributes<HTMLLabelElement>;
       formMessageProps?: React.HTMLAttributes<HTMLParagraphElement> & React.RefAttributes<HTMLParagraphElement>;
@@ -20,7 +21,7 @@ type FormInputProps<TFieldValues extends FieldValues, TName extends FieldPath<TF
   };
 
 const FormInput = <TFieldValues extends FieldValues, TName extends FieldPath<TFieldValues>>(props: FormInputProps<TFieldValues, TName>) => {
-  const { name, control, defaultValue, disabled, readOnly, rules, shouldUnregister, label, slotProps, required, ...formItemProps } = props;
+  const { name, control, defaultValue, disabled, readOnly, voiceMode, rules, shouldUnregister, label, slotProps, required, ...formItemProps } = props;
 
   return (
     <FormField
@@ -31,6 +32,8 @@ const FormInput = <TFieldValues extends FieldValues, TName extends FieldPath<TFi
       rules={rules}
       shouldUnregister={shouldUnregister}
       render={({ field }) => {
+        const isDisabled = field.disabled || disabled || readOnly;
+
         return (
           <FormItem {...formItemProps}>
             <FormLabel {...(slotProps?.formLabelProps ?? {})}>
@@ -40,13 +43,14 @@ const FormInput = <TFieldValues extends FieldValues, TName extends FieldPath<TFi
             <FormControl {...(slotProps?.formControlProps ?? {})}>
               <TextField
                 {...(slotProps?.textFieldProps ?? {})}
-                disabled={disabled || readOnly}
+                disabled={isDisabled}
+                voiceMode={voiceMode ?? slotProps?.textFieldProps?.voiceMode}
                 slotProps={{
                   inputProps: {
                     ...slotProps?.textFieldProps?.slotProps?.inputProps,
                     ...field,
                     "aria-required": required,
-                    disabled: disabled || readOnly,
+                    disabled: isDisabled,
                   },
                 }}
               />

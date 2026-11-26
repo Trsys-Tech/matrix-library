@@ -33,4 +33,13 @@ export const Default: Story = {
   },
 };
 
+export const VoiceDictation: Story = {
+  args: {
+    rows: 4,
+    voiceMode: true,
+    placeholder: "Type or dictate a note",
+    "aria-label": "Note",
+  },
+};
+
 export default meta;
