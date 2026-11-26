@@ -30,6 +30,12 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
 
+export const VoiceDictation: Story = {
+  args: {
+    voiceMode: true,
+  },
+};
+
 export const WithSuffix: Story = {
   args: {
     suffix: "SUFFIX",

@@ -4,6 +4,7 @@ import * as React from "react";
 import { tv, VariantProps } from "tailwind-variants";
 
 import { cn } from "../../lib/utils";
+import { isDictationInputType, useVoiceDictation, VoiceDictationButton } from "../voice-dictation/VoiceDictationButton";
 
 const textFieldVariants = tv({
   base: [
@@ -26,6 +27,8 @@ const textFieldVariants = tv({
 interface TextFieldProps extends React.HTMLAttributes<HTMLDivElement>, VariantProps<typeof textFieldVariants> {
   type?: React.HTMLInputTypeAttribute;
   disabled?: boolean;
+  /** Show a dictation button for text, search, tel, and url inputs when the browser supports speech recognition. */
+  voiceMode?: boolean;
   suffix?: React.ReactNode;
   endAdornment?: React.ReactNode;
   startAdornment?: React.ReactNode;
@@ -33,7 +36,7 @@ interface TextFieldProps extends React.HTMLAttributes<HTMLDivElement>, VariantPr
   value?: string | number;
   defaultValue?: string | number;
   slotProps?: {
-    inputProps?: React.InputHTMLAttributes<HTMLInputElement>;
+    inputProps?: React.ComponentPropsWithRef<"input">;
   };
 }
 
@@ -51,6 +54,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
       defaultValue,
       type,
       disabled,
+      voiceMode,
       onWheel,
       id,
       "aria-describedby": ariaDescribedby,
@@ -59,6 +63,11 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
     },
     ref,
   ) => {
+    const { ref: forwardedInputRef, ...inputProps } = { ref, type, disabled, ...slotProps?.inputProps };
+    const inputRef = React.useRef<HTMLInputElement>(null);
+    const buttonProps = useVoiceDictation(voiceMode && isDictationInputType(inputProps.type), inputProps.disabled || inputProps.readOnly, inputRef);
+    React.useImperativeHandle(forwardedInputRef, () => inputRef.current!, []);
+
     const handleWheel = (event: React.WheelEvent<HTMLInputElement>) => {
       if (type === "number") {
         // Prevents the number input from changing value when scrolling
@@ -73,21 +82,19 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
       <div {...props} className={cn(textFieldVariants({ size, className }))} aria-disabled={disabled}>
         {startAdornment}
         <input
-          type={type}
           onWheel={handleWheel}
-          ref={ref}
+          ref={inputRef}
           id={id}
           aria-describedby={ariaDescribedby}
           aria-invalid={ariaInvalid}
           onChange={onChange}
           value={value}
           defaultValue={defaultValue}
-          disabled={disabled}
-          {...(slotProps?.inputProps ?? {})}
+          {...inputProps}
           className={cn(
             "focus:mtx-outline-none mtx-w-full mtx-h-full mtx-py-1 mtx-rounded-sm file:mtx-border-0 mtx-bg-transparent file:mtx-text-sm file:mtx-font-medium file:mtx-text-foreground placeholder:mtx-text-text-300",
             !startAdornment ? "mtx-px-3" : "mtx-ps-1 mtx-pe-3",
-            slotProps?.inputProps?.className,
+            inputProps.className,
           )}
         />
         {typeof suffix === "string" || typeof suffix === "number" ? (
@@ -98,6 +105,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
           suffix
         )}
         {endAdornment}
+        {buttonProps && <VoiceDictationButton {...buttonProps} className="mtx-me-1 mtx-shrink-0" />}
       </div>
     );
   },
